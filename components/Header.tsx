@@ -9,21 +9,28 @@ import {
   studentHeaderButton,
 } from "@/constants/header-br";
 import Button from "./Button";
+import useHeaderStore from "@/stores/useHeaderStore";
 
 const Header = () => {
+  const { isMobileMenuOpen, openMobileMenu } = useHeaderStore();
+
   return (
     <header className="lg:container mx-auto py-5 px-6 md:px-16 flex justify-between items-center w-full lg:w-auto">
       <Image
-        src="/assets/images/logo-test.png"
+        src="/assets/images/logo-colored.svg"
         alt="O Sapiente"
-        width={145}
+        width={160}
         height={30}
+        priority
         className="object-contain"
       />
 
       <button
         type="button"
-        className="flex lg:hidden items-center justify-center cursor-pointer"
+        onClick={openMobileMenu}
+        className={`flex lg:hidden ${
+          isMobileMenuOpen && "opacity-0 pointer-events-none"
+        } items-center justify-center cursor-pointer`}
       >
         <IoIosMenu size={35} className="text-green-primary" />
       </button>

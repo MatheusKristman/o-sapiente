@@ -10,10 +10,14 @@
 
 :root {
   @apply h-full;
+  @apply overflow-x-hidden;
+  @apply relative;
 }
 
 body {
   background-color: #f0f5f8;
 
   @apply h-full;
+  @apply overflow-x-hidden;
+  @apply relative;
 }

@@ -1,6 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
 
+import Header from "../components/Header";
+import HeaderMobile from "@/components/HeaderMobile";
+
 export const metadata: Metadata = {
   title: "O Sapiente",
   description:
@@ -14,7 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        <Header />
+        <HeaderMobile />
+        {children}
+      </body>
     </html>
   );
 }
