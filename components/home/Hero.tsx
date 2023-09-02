@@ -13,14 +13,14 @@ import {
 const Hero = () => {
   return (
     <AnimatePresence>
-      <div className="w-full lg:h-4/5 mt-12 relative">
+      <main className="w-full lg:h-4/5 mt-12 relative">
         <div className="lg:container mx-auto w-full h-full flex flex-col lg:flex-row items-center justify-between lg:gap-x-10">
           <motion.div
             transition={{ staggerChildren: 0.4 }}
             initial="offscreen"
             whileInView="onscreen"
             viewport={{ once: true, amount: 0.1 }}
-            className="flex flex-col items-center lg:items-start gap-y-9 w-full lg:w-2/5 px-6 md:px-16 lg:pl-16 lg:pr-0 relative z-[9]"
+            className="flex flex-col items-center lg:items-start gap-y-9 w-full lg:w-2/5 px-6 md:px-16 lg:pl-16 lg:pr-0 relative z-[99]"
           >
             <motion.h1
               variants={heroInfoAnimation}
@@ -64,7 +64,7 @@ const Hero = () => {
             />
           </motion.div>
         </div>
-      </div>
+      </main>
     </AnimatePresence>
   );
 };

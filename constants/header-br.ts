@@ -5,8 +5,8 @@ export const navLinks = [
 ];
 
 export const professorHeaderButton = {
-  label: "Professor",
+  label: "PROFESSOR",
   href: "/cadastro-professor",
 };
 
-export const studentHeaderButton = { label: "Aluno", href: "/cadastro-aluno" };
+export const studentHeaderButton = { label: "ALUNO", href: "/cadastro-aluno" };
