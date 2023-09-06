@@ -3,13 +3,10 @@
 import { useEffect } from "react";
 import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
+import { scroller } from "react-scroll";
 
 import Button from "./Button";
-import {
-  navLinks,
-  professorHeaderButton,
-  studentHeaderButton,
-} from "@/constants/header-br";
+import { navLinks, professorHeaderButton, studentHeaderButton } from "@/constants/header-br";
 import { mobileMenuAnimation } from "@/constants/framer-animations/header";
 import useHeaderStore from "@/stores/useHeaderStore";
 
@@ -18,13 +15,24 @@ const HeaderMobile = () => {
 
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflowY = "hidden";
     } else {
       setTimeout(() => {
-        document.body.style.overflow = "unset";
+        document.body.style.overflowY = "unset";
       }, 450);
     }
   }, [isMobileMenuOpen]);
+
+  function scrollTo(id: string) {
+    closeMobileMenu();
+    const element = document.getElementById(id);
+
+    if (element) {
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+    }
+  }
 
   return (
     <>
@@ -35,13 +43,8 @@ const HeaderMobile = () => {
             initial="offscreen"
             animate="onscreen"
             exit="exit"
-            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex lg:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999]"
-          >
-            <button
-              type="button"
-              onClick={closeMobileMenu}
-              className="text-white cursor-pointer"
-            >
+            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex lg:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999]">
+            <button type="button" onClick={closeMobileMenu} className="text-white cursor-pointer">
               <BsXLg size={26} />
             </button>
 
@@ -50,11 +53,9 @@ const HeaderMobile = () => {
                 {navLinks.map((link) => (
                   <li
                     key={link.href}
-                    className="text-white cursor-pointer text-lg whitespace-nowrap"
-                  >
-                    <a href={link.href} className="no-underline">
-                      {link.label}
-                    </a>
+                    onClick={() => scrollTo(link.href)}
+                    className="text-white cursor-pointer text-lg whitespace-nowrap">
+                    {link.label}
                   </li>
                 ))}
               </ul>

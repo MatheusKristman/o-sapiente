@@ -8,6 +8,21 @@
   font-family: "Poppins", sans-serif;
 }
 
+.swiper {
+  overflow: visible !important;
+}
+
+@media screen and (max-width: 640px) {
+  .swiper {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+/* .swiper-slide {
+  width: fit-content !important;
+} */
+
 :root {
   @apply h-full;
   @apply overflow-x-hidden;

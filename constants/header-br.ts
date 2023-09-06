@@ -1,7 +1,7 @@
 export const navLinks = [
-  { href: "#steps", label: "Como funciona" },
-  { href: "#benefits", label: "Benefícios" },
-  { href: "#contact", label: "Contato" },
+  { href: "como-funciona", label: "Como funciona" },
+  { href: "beneficios", label: "Benefícios" },
+  { href: "contato", label: "Contato" },
 ];
 
 export const professorHeaderButton = {
