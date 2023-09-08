@@ -2,14 +2,19 @@
 
 import Image from "next/image";
 import { IoIosMenu } from "react-icons/io";
-import { Link } from "react-scroll";
 
-import { navLinks, professorHeaderButton, studentHeaderButton } from "@/constants/header-br";
+import {
+  navLinks,
+  professorHeaderButton,
+  studentHeaderButton,
+} from "@/constants/header-br";
 import Button from "./Button";
 import useHeaderStore from "@/stores/useHeaderStore";
+import useStudentModalStore from "@/stores/useStudentModalStore";
 
 const Header = () => {
   const { isMobileMenuOpen, openMobileMenu } = useHeaderStore();
+  const { openModal, setToRegister } = useStudentModalStore();
 
   function scrollTo(id: string) {
     const element = document.getElementById(id);
@@ -17,6 +22,11 @@ const Header = () => {
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "center" });
     }
+  }
+
+  function openStudentRegisterModal() {
+    openModal();
+    setToRegister();
   }
 
   return (
@@ -35,7 +45,8 @@ const Header = () => {
         onClick={openMobileMenu}
         className={`flex lg:hidden ${
           isMobileMenuOpen && "opacity-0 pointer-events-none"
-        } items-center justify-center cursor-pointer`}>
+        } items-center justify-center cursor-pointer`}
+      >
         <IoIosMenu size={35} className="text-green-primary" />
       </button>
 
@@ -44,16 +55,25 @@ const Header = () => {
           <li
             key={link.href}
             onClick={() => scrollTo(link.href)}
-            className="text-gray-primary cursor-pointer text-base xl:text-lg hover:opacity-70 transition duration-200 whitespace-nowrap">
+            className="text-gray-primary cursor-pointer text-base xl:text-lg hover:opacity-70 transition duration-200 whitespace-nowrap"
+          >
             {link.label}
           </li>
         ))}
       </ul>
 
       <div className="hidden lg:flex items-center justify-center gap-x-6">
-        <Button secondary label={professorHeaderButton.label} onClick={() => {}} />
+        <Button
+          secondary
+          label={professorHeaderButton.label}
+          onClick={() => {}}
+        />
 
-        <Button primary label={studentHeaderButton.label} onClick={() => {}} />
+        <Button
+          primary
+          label={studentHeaderButton.label}
+          onClick={openStudentRegisterModal}
+        />
       </div>
     </header>
   );

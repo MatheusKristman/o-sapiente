@@ -8,9 +8,20 @@ import { heroInfos } from "@/constants/hero-br";
 import {
   heroInfoAnimation,
   heroImageAnimation,
+  heroImageMobileAnimation,
 } from "@/constants/framer-animations/hero";
+import useStudentModalStore from "@/stores/useStudentModalStore";
 
 const Hero = () => {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+
+  const { openModal, setToRequest } = useStudentModalStore();
+
+  function openRequestModal() {
+    openModal();
+    setToRequest();
+  }
+
   return (
     <AnimatePresence>
       <main className="w-full lg:h-4/5 mt-12 relative">
@@ -40,12 +51,16 @@ const Hero = () => {
             </motion.p>
 
             <motion.div variants={heroInfoAnimation}>
-              <Button primary label={heroInfos.btn} onClick={() => {}} />
+              <Button
+                primary
+                label={heroInfos.btn}
+                onClick={openRequestModal}
+              />
             </motion.div>
           </motion.div>
 
           <motion.div
-            variants={heroImageAnimation}
+            variants={isMobile ? heroImageMobileAnimation : heroImageAnimation}
             initial="offscreen"
             animate="onscreen"
             className="select-none pointer-events-none w-full sm:max-w-[550px] lg:max-w-none lg:w-1/2 h-[440px] lg:h-4/5 xl:h-full relative lg:absolute lg:right-0 -top-14 lg:top-auto"

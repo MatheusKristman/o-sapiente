@@ -19,8 +19,28 @@ export const benefitsContainerAnimation = {
 
 export const benefitsEvenCardAnimation = {
   offscreen: {
-    x: window.innerWidth < 1280 ? 100 : 0,
-    y: window.innerWidth >= 1280 ? -100 : 0,
+    y: -100,
+    x: 0,
+    opacity: 0,
+  },
+  onscreen: {
+    y: 0,
+    x: 0,
+    opacity: 1,
+    transition: { delay: 0.3, type: "spring", stiffness: 100 },
+  },
+  exit: {
+    y: -100,
+    x: 0,
+    opacity: 0,
+    transition: { duration: 0.4 },
+  },
+};
+
+export const benefitsEvenCardMobileAnimation = {
+  offscreen: {
+    x: 100,
+    y: 0,
     opacity: 0,
   },
   onscreen: {
@@ -30,8 +50,8 @@ export const benefitsEvenCardAnimation = {
     transition: { delay: 0.3, type: "spring", stiffness: 100 },
   },
   exit: {
-    x: window.innerWidth < 1280 ? 100 : 0,
-    y: window.innerWidth >= 1280 ? -100 : 0,
+    x: 100,
+    y: 0,
     opacity: 0,
     transition: { duration: 0.4 },
   },
@@ -39,8 +59,28 @@ export const benefitsEvenCardAnimation = {
 
 export const benefitsOddCardAnimation = {
   offscreen: {
-    x: window.innerWidth < 1280 ? -100 : 0,
-    y: window.innerWidth >= 1280 ? 100 : 0,
+    y: 100,
+    x: 0,
+    opacity: 0,
+  },
+  onscreen: {
+    y: 0,
+    x: 0,
+    opacity: 1,
+    transition: { delay: 0.3, type: "spring", stiffness: 100 },
+  },
+  exit: {
+    y: 100,
+    x: 0,
+    opacity: 0,
+    transition: { duration: 0.4 },
+  },
+};
+
+export const benefitsOddCardMobileAnimation = {
+  offscreen: {
+    x: -100,
+    y: 0,
     opacity: 0,
   },
   onscreen: {
@@ -50,8 +90,8 @@ export const benefitsOddCardAnimation = {
     transition: { delay: 0.3, type: "spring", stiffness: 100 },
   },
   exit: {
-    x: window.innerWidth < 1280 ? -100 : 0,
-    y: window.innerWidth >= 1280 ? 100 : 0,
+    x: -100,
+    y: 0,
     opacity: 0,
     transition: { duration: 0.4 },
   },

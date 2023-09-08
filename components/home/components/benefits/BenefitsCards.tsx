@@ -9,13 +9,13 @@ interface BenefitsCardsProps {
   desc: string;
   animationVariant: {
     offscreen: {
-      x: number;
-      y: number;
+      x?: number;
+      y?: number;
       opacity: number;
     };
     onscreen: {
-      x: number;
-      y: number;
+      x?: number;
+      y?: number;
       opacity: number;
       transition: {
         type: string;
@@ -23,8 +23,8 @@ interface BenefitsCardsProps {
       };
     };
     exit: {
-      x: number;
-      y: number;
+      x?: number;
+      y?: number;
       opacity: number;
       transition: {
         duration: number;

@@ -1,11 +1,23 @@
 export const contactRightSideAnimation = {
   offscreen: {
-    x: window.innerWidth >= 1024 ? -100 : 0,
-    y: window.innerWidth < 1024 ? -50 : 0,
+    x: -100,
     opacity: 0,
   },
   onscreen: {
     x: 0,
+    opacity: 1,
+    transition: {
+      duration: 1,
+    },
+  },
+};
+
+export const contactRightSideMobileAnimation = {
+  offscreen: {
+    y: -50,
+    opacity: 0,
+  },
+  onscreen: {
     y: 0,
     opacity: 1,
     transition: {
@@ -16,12 +28,24 @@ export const contactRightSideAnimation = {
 
 export const contactLeftSideAnimation = {
   offscreen: {
-    x: window.innerWidth >= 1024 ? 100 : 0,
-    y: window.innerWidth < 1024 ? -50 : 0,
+    x: 100,
     opacity: 0,
   },
   onscreen: {
     x: 0,
+    opacity: 1,
+    transition: {
+      duration: 1,
+    },
+  },
+};
+
+export const contactLeftSideMobileAnimation = {
+  offscreen: {
+    y: -50,
+    opacity: 0,
+  },
+  onscreen: {
     y: 0,
     opacity: 1,
     transition: {

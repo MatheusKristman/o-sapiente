@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
-import { scroller } from "react-scroll";
 
 import Button from "./Button";
 import {
@@ -13,9 +12,11 @@ import {
 } from "@/constants/header-br";
 import { mobileMenuAnimation } from "@/constants/framer-animations/header";
 import useHeaderStore from "@/stores/useHeaderStore";
+import useStudentModalStore from "@/stores/useStudentModalStore";
 
 const HeaderMobile = () => {
   const { isMobileMenuOpen, closeMobileMenu } = useHeaderStore();
+  const { openModal, setToRegister } = useStudentModalStore();
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -36,6 +37,15 @@ const HeaderMobile = () => {
         element.scrollIntoView({ behavior: "smooth" });
       }, 500);
     }
+  }
+
+  function openStudentRegisterModal() {
+    closeMobileMenu();
+
+    setTimeout(() => {
+      openModal();
+      setToRegister();
+    }, 500);
   }
 
   return (
@@ -83,7 +93,7 @@ const HeaderMobile = () => {
                 primaryMobile
                 fullWidth
                 label={studentHeaderButton.label}
-                onClick={() => {}}
+                onClick={openStudentRegisterModal}
               />
             </div>
           </motion.div>

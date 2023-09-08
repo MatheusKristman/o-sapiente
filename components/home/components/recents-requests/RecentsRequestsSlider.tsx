@@ -32,8 +32,7 @@ const RecentsRequestsSlider = () => {
         },
       }}
       modules={[Autoplay]}
-      onSlideChange={() => console.log("slide change")}
-      onSwiper={(swiper) => console.log(swiper)}>
+    >
       <SwiperSlide>
         <RecentsRequestsCard />
       </SwiperSlide>
