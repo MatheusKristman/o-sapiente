@@ -2,6 +2,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { useState } from "react";
 
 import { studentRegisterInfo } from "@/constants/studentModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
@@ -11,7 +13,10 @@ import { studentRegisterSchemaType } from "@/constants/schemas/studentRegisterSc
 import React from "react";
 
 const StudentRegisterForm = () => {
-  const { setToLogin, setToNotRegister } = useStudentModalStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { setToLogin, setToNotRegister, theme, message } =
+    useStudentModalStore();
 
   const {
     register,
@@ -55,7 +60,25 @@ const StudentRegisterForm = () => {
   }
 
   function onSubmit(data: studentRegisterSchemaType) {
-    console.log(data);
+    setIsSubmitting(true);
+
+    if (theme && message) {
+      const formData = { ...data, theme, message };
+
+      axios
+        .post("/api/register/student", formData)
+        .then((res) => console.log(res.data))
+        .catch((error) => console.error(error))
+        .finally(() => setIsSubmitting(false));
+
+      return;
+    }
+
+    axios
+      .post("/api/register/student", data)
+      .then((res) => console.log(res.data))
+      .catch((error) => console.error(error))
+      .finally(() => setIsSubmitting(false));
   }
 
   return (
@@ -201,7 +224,8 @@ const StudentRegisterForm = () => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter]"
+          disabled={isSubmitting}
+          className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter] disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75"
         >
           {studentRegisterInfo.nextButton}
         </motion.button>

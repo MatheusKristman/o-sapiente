@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 import { studentRequestInfo } from "@/constants/studentModal-br";
@@ -5,6 +6,8 @@ import { studentFormAnimation } from "@/constants/framer-animations/student-moda
 import useStudentModalStore from "@/stores/useStudentModalStore";
 
 const StudentRequestForm = () => {
+  const [isNextEnabled, setIsNextEnabled] = useState(true);
+
   const {
     setToNotRequest,
     setToRegister,
@@ -14,6 +17,14 @@ const StudentRequestForm = () => {
     setMessage,
     activateBackBtn,
   } = useStudentModalStore();
+
+  useEffect(() => {
+    if (theme !== "" && message.length > 100) {
+      setIsNextEnabled(false);
+    } else {
+      setIsNextEnabled(true);
+    }
+  }, [theme, message, setIsNextEnabled]);
 
   function handleNextButton() {
     setToNotRequest();
@@ -59,9 +70,10 @@ const StudentRequestForm = () => {
         initial="initial"
         animate="animate"
         exit="exit"
+        disabled={isNextEnabled}
         type="button"
         onClick={handleNextButton}
-        className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter]"
+        className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter] disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75"
       >
         {studentRequestInfo.nextButton}
       </motion.button>

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import Header from "../components/Header";
 import HeaderMobile from "@/components/HeaderMobile";
+import AuthContext from "@/context/AuthContext";
 
 export const metadata: Metadata = {
   title: "O Sapiente",
@@ -18,9 +19,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
-        <Header />
-        <HeaderMobile />
-        {children}
+        <AuthContext>
+          <Header />
+          <HeaderMobile />
+          {children}
+        </AuthContext>
       </body>
     </html>
   );

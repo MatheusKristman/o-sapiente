@@ -30,12 +30,18 @@ const config: Config = {
         bannerMobile: "url('/assets/images/banner-mobile.png')",
         homeLeftShape: "url('/assets/images/home-left-shape.svg')",
         homeRightShape: "url('/assets/images/home-right-shape.svg')",
-        benefitsStudentsDesktop: "url('/assets/images/benefits-line-students-desktop.svg')",
-        benefitsStudentsTablet: "url('/assets/images/benefits-line-students-tablet.svg')",
-        benefitsStudentsMobile: "url('/assets/images/benefits-line-students-mobile.svg')",
-        benefitsProfessorDesktop: "url('/assets/images/benefits-line-professor-desktop.svg')",
-        benefitsProfessorTablet: "url('/assets/images/benefits-line-professor-tablet.svg')",
-        benefitsProfessorMobile: "url('/assets/images/benefits-line-professor-mobile.svg')",
+        benefitsStudentsDesktop:
+          "url('/assets/images/benefits-line-students-desktop.svg')",
+        benefitsStudentsTablet:
+          "url('/assets/images/benefits-line-students-tablet.svg')",
+        benefitsStudentsMobile:
+          "url('/assets/images/benefits-line-students-mobile.svg')",
+        benefitsProfessorDesktop:
+          "url('/assets/images/benefits-line-professor-desktop.svg')",
+        benefitsProfessorTablet:
+          "url('/assets/images/benefits-line-professor-tablet.svg')",
+        benefitsProfessorMobile:
+          "url('/assets/images/benefits-line-professor-mobile.svg')",
         paperAirplane: "url('/assets/images/paper-airplane.svg')",
         contactDesktop: "url('/assets/images/contact-bg-desktop.png')",
         contactTablet: "url('/assets/images/contact-bg-tablet.png')",
@@ -45,6 +51,12 @@ const config: Config = {
         hat: "url('/assets/icons/hat.svg')",
         menu: "url('/assets/icons/menu.svg')",
       },
+    },
+  },
+  variants: {
+    extend: {
+      brightness: ["disabled"],
+      cursor: ["disabled"],
     },
   },
   plugins: [],
