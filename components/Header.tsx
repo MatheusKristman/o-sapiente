@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { IoIosMenu } from "react-icons/io";
 
 import {
@@ -31,14 +32,16 @@ const Header = () => {
 
   return (
     <header className="lg:container mx-auto py-5 px-6 md:px-16 flex justify-between items-center w-full lg:w-auto">
-      <Image
-        src="/assets/images/logo-colored.svg"
-        alt="O Sapiente"
-        width={160}
-        height={30}
-        priority
-        className="object-contain"
-      />
+      <Link href="/">
+        <Image
+          src="/assets/images/logo-colored.svg"
+          alt="O Sapiente"
+          width={160}
+          height={30}
+          priority
+          className="object-contain"
+        />
+      </Link>
 
       <button
         type="button"

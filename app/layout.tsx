@@ -1,8 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
 
 import Header from "../components/Header";
 import HeaderMobile from "@/components/HeaderMobile";
+import Footer from "@/components/Footer";
 import AuthContext from "@/context/AuthContext";
 
 export const metadata: Metadata = {
@@ -22,7 +24,13 @@ export default function RootLayout({
         <AuthContext>
           <Header />
           <HeaderMobile />
+          <Toaster
+            position="top-center"
+            reverseOrder
+            containerStyle={{ zIndex: "99999" }}
+          />
           {children}
+          <Footer />
         </AuthContext>
       </body>
     </html>

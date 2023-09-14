@@ -15,6 +15,16 @@ export async function POST(request: Request) {
       );
     }
 
+    const userExists = await prisma.student.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (userExists) {
+      return new NextResponse("Usuário já cadastrado!", { status: 405 });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = await prisma.student.create({
@@ -45,6 +55,8 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.log(error, "REGISTER_ERROR");
 
-    return new NextResponse("Internal Error", { status: 400 });
+    return new NextResponse("Ocorreu um erro, tente novamente!", {
+      status: 400,
+    });
   }
 }

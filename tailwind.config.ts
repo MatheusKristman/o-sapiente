@@ -50,6 +50,8 @@ const config: Config = {
         close: "url('/assets/icons/close.svg')",
         hat: "url('/assets/icons/hat.svg')",
         menu: "url('/assets/icons/menu.svg')",
+        camera: "url('/assets/icons/camera.svg')",
+        uploadIcon: "url('/assets/icons/upload.svg')",
       },
     },
   },

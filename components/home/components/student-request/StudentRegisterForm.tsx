@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 import { studentRegisterInfo } from "@/constants/studentModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
@@ -34,6 +36,8 @@ const StudentRegisterForm = () => {
     },
     resolver: yupResolver(studentRegisterSchema),
   });
+
+  const router = useRouter();
 
   function handleTelFormat(event: React.ChangeEvent<HTMLInputElement>) {
     let tel = event.target.value.replace(/\D/g, "");
@@ -67,8 +71,16 @@ const StudentRegisterForm = () => {
 
       axios
         .post("/api/register/student", formData)
-        .then((res) => console.log(res.data))
-        .catch((error) => console.error(error))
+        .then((res) => {
+          console.log(res.data);
+
+          router.replace(`/cadastro/aluno/finalizacao/${res.data.id}`);
+        })
+        .catch((error) => {
+          console.error(error);
+
+          toast.error(error.response.data);
+        })
         .finally(() => setIsSubmitting(false));
 
       return;

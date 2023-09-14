@@ -5,8 +5,6 @@ import Steps from "@/components/home/Steps";
 import Benefits from "@/components/home/Benefits";
 import RecentsRequests from "@/components/home/RecentsRequests";
 import Contact from "@/components/home/Contact";
-import Footer from "@/components/Footer";
-import useStudentModalStore from "@/stores/useStudentModalStore";
 
 export default function Home() {
   return (
@@ -20,7 +18,6 @@ export default function Home() {
       </div>
       <RecentsRequests />
       <Contact />
-      <Footer />
     </>
   );
 }
