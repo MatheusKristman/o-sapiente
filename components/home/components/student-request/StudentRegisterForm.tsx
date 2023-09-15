@@ -70,7 +70,7 @@ const StudentRegisterForm = () => {
       const formData = { ...data, theme, message };
 
       axios
-        .post("/api/register/student", formData)
+        .post("/api/register/student/pre-register", formData)
         .then((res) => {
           console.log(res.data);
 
@@ -87,7 +87,7 @@ const StudentRegisterForm = () => {
     }
 
     axios
-      .post("/api/register/student", data)
+      .post("/api/register/student/pre-register", data)
       .then((res) => console.log(res.data))
       .catch((error) => console.error(error))
       .finally(() => setIsSubmitting(false));

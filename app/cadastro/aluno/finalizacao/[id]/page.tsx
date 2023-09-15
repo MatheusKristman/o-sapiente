@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 import StepBar from "@/components/register/student/StepBar";
 import ProfilePhotoStep from "@/components/register/ProfilePhotoStep";
+import ConfirmAccountStep from "@/components/register/ConfirmAccountStep";
 import { StepType } from "@/types";
 
 interface CompleteRegisterProps {
@@ -17,15 +18,14 @@ const CompleteRegisterPage: React.FC<CompleteRegisterProps> = ({ params }) => {
 
   const { id } = params;
 
-  useEffect(() => {
-    console.log(steps);
-  }, [steps]);
-
   return (
-    <section className="w-full pb-12 md:h-4/5">
+    <section className="w-full md:h-4/5">
       <StepBar actualStep={steps} />
 
-      <ProfilePhotoStep actualStep={steps} setSteps={setSteps} id={id} />
+      {steps === 1 && (
+        <ProfilePhotoStep actualStep={steps} setSteps={setSteps} id={id} />
+      )}
+      {steps === 2 && <ConfirmAccountStep />}
     </section>
   );
 };

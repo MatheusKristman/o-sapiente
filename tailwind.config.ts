@@ -52,6 +52,7 @@ const config: Config = {
         menu: "url('/assets/icons/menu.svg')",
         camera: "url('/assets/icons/camera.svg')",
         uploadIcon: "url('/assets/icons/upload.svg')",
+        highlight: "url('/assets/icons/highlight.svg')",
       },
     },
   },
