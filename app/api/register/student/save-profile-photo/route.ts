@@ -25,12 +25,16 @@ export async function POST(req: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    let errorOnS3 = false;
+
     const fileParams = {
       Bucket: `${process.env.NEXT_S3_PUBLIC_BUCKET_NAME}/profile`,
       Key: file.name,
       Expires: 600,
       ContentType: file.type,
     };
+
+    const url = await s3.getSignedUrlPromise("putObject", fileParams);
 
     const user = await prisma.student.update({
       where: {
@@ -45,13 +49,36 @@ export async function POST(req: Request) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
     }
 
-    const url = await s3.getSignedUrlPromise("putObject", fileParams);
+    await axios
+      .put(url, buffer, {
+        headers: {
+          "Content-type": String(file.type),
+        },
+      })
+      .then(() => {
+        errorOnS3 = false;
+      })
+      .catch((error) => {
+        if (error) {
+          errorOnS3 = true;
+        }
+      });
 
-    await axios.put(url, buffer, {
-      headers: {
-        "Content-type": String(file.type),
-      },
-    });
+    if (errorOnS3) {
+      await prisma.student.update({
+        where: {
+          id,
+        },
+        data: {
+          profilePhoto: "",
+        },
+      });
+
+      return new NextResponse(
+        "Ocorreu um erro durante o envio, tente novamente!",
+        { status: 424 },
+      );
+    }
 
     return new NextResponse("Foto enviada com sucesso", { status: 200 });
   } catch (error: any) {
