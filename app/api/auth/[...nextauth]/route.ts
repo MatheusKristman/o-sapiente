@@ -1,10 +1,13 @@
-import NextAuth from "next-auth";
+import NextAuth, { User } from "next-auth";
+import { JWT } from "next-auth/jwt";
+import { AdapterUser } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import bcrypt from "bcrypt";
 
 import { prisma } from "@/libs/prismadb";
+import { IUser } from "@/types";
 
 const handler = NextAuth({
   providers: [
@@ -21,7 +24,9 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("E-mail ou Senha invalidos");
+          throw new Error(
+            "Credenciais inválidas! Verifique e tente novamente!",
+          );
         }
 
         let user;
@@ -43,7 +48,10 @@ const handler = NextAuth({
         }
 
         if (!user || !user?.password) {
-          throw new Error("E-mail ou Senha Invalidos");
+          console.log("erro no usuário não encontrado");
+          throw new Error(
+            "Credenciais inválidas! Verifique e tente novamente!",
+          );
         }
 
         const isCorrectPassword = await bcrypt.compare(
@@ -52,7 +60,9 @@ const handler = NextAuth({
         );
 
         if (!isCorrectPassword) {
-          throw new Error("E-mail ou Senha Invalidos");
+          throw new Error(
+            "Credenciais inválidas! Verifique e tente novamente!",
+          );
         }
 
         return user;

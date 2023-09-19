@@ -17,8 +17,16 @@ import React from "react";
 const StudentRegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { setToLogin, setToNotRegister, theme, message } =
-    useStudentModalStore();
+  const {
+    setToLogin,
+    setToNotRegister,
+    theme,
+    message,
+    closeModal,
+    setTheme,
+    setMessage,
+    deactivateBackBtn,
+  } = useStudentModalStore();
 
   const {
     register,
@@ -63,6 +71,14 @@ const StudentRegisterForm = () => {
     }, 350);
   }
 
+  function handleClose() {
+    closeModal();
+    setToNotRegister();
+    setTheme("");
+    setMessage("");
+    deactivateBackBtn();
+  }
+
   function onSubmit(data: studentRegisterSchemaType) {
     setIsSubmitting(true);
 
@@ -72,7 +88,7 @@ const StudentRegisterForm = () => {
       axios
         .post("/api/register/student/pre-register", formData)
         .then((res) => {
-          console.log(res.data);
+          handleClose();
 
           router.replace(`/cadastro/aluno/finalizacao/${res.data.id}`);
         })

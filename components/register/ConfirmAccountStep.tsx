@@ -1,17 +1,22 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { confirmAccountStepInfo } from "@/constants/confirmAccountStep-br";
 import Button from "@/components/Button";
 
 const ConfirmAccountStep = () => {
+  const router = useRouter();
+
+  function handleBackBtn() {
+    router.replace("/");
+  }
+
   return (
     <section className="w-full h-full pb-12 flex  flex-col justify-center">
       <div className="w-full mx-auto px-6 pt-24 flex flex-col items-center justify-center md:px-16 lg:container">
         <h2 className="w-full text-2xl text-gray-primary font-semibold text-center mb-9 max-w-md md:text-3xl md:max-w-xl">
           {confirmAccountStepInfo.title[0] + " "}
-          <span className="text-green-primary">
-            {confirmAccountStepInfo.titleColored[0] + " "}
-          </span>
+          <span className="text-green-primary">{confirmAccountStepInfo.titleColored[0] + " "}</span>
           {confirmAccountStepInfo.title[1] + " "}
           <span className="text-green-primary relative after:content-[''] after:w-4 after:h-4 after:block after:bg-highlight after:bg-contain after:bg-no-repeat after:absolute after:top-1 after:-right-3">
             {confirmAccountStepInfo.titleColored[1]}
@@ -29,9 +34,7 @@ const ConfirmAccountStep = () => {
               />
             </div>
 
-            <span className="text-xl font-semibold text-gray-primary">
-              Nome teste
-            </span>
+            <span className="text-xl font-semibold text-gray-primary">Nome teste</span>
           </div>
 
           <div>
@@ -49,11 +52,7 @@ const ConfirmAccountStep = () => {
           {confirmAccountStepInfo.description}
         </p>
 
-        <Button
-          label={confirmAccountStepInfo.backBtn}
-          onClick={() => {}}
-          primary
-        />
+        <Button label={confirmAccountStepInfo.backBtn} onClick={handleBackBtn} primary />
       </div>
     </section>
   );

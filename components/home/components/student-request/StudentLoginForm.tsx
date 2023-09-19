@@ -1,15 +1,27 @@
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { signIn } from "next-auth/react";
+import { toast } from "react-hot-toast";
 
 import { studentLoginInfo } from "@/constants/studentModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 import studentLoginSchema from "@/constants/schemas/studentLoginSchema";
 import { studentLoginType } from "@/constants/schemas/studentLoginSchema";
+import axios from "axios";
 
 const StudentLoginForm = () => {
-  const { setToNotLogin, setToRegister } = useStudentModalStore();
+  const {
+    setToNotLogin,
+    setToRegister,
+    closeModal,
+    theme,
+    setTheme,
+    message,
+    setMessage,
+    deactivateBackBtn,
+  } = useStudentModalStore();
 
   const {
     register,
@@ -31,8 +43,54 @@ const StudentLoginForm = () => {
     }, 350);
   }
 
-  function onSubmit(data: studentLoginType) {
-    console.log(data);
+  function handleClose() {
+    closeModal();
+    setToNotLogin();
+    setTheme("");
+    setMessage("");
+    deactivateBackBtn();
+  }
+
+  function handleSignin(email: string, password: string) {
+    signIn("credentials", {
+      email,
+      password,
+      type: "student",
+      redirect: false,
+    })
+      .then((res) => {
+        console.log(res);
+        if (res && res.error) {
+          toast.error(res.error);
+        } else {
+          handleClose();
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
+  async function onSubmit(data: studentLoginType) {
+    if (theme && message) {
+      await axios
+        .post("/api/login/student/has-theme-and-message", {
+          email: data.email,
+          password: data.password,
+          theme,
+          message,
+        })
+        .then((res) => {
+          toast.success(res.data.message);
+
+          handleSignin(res.data.email, res.data.password);
+        })
+        .catch((error) => {
+          console.log(error);
+
+          toast.error(error.response.data);
+        });
+    } else {
+      handleSignin(data.email, data.password);
+    }
   }
 
   return (

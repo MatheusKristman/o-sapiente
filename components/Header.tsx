@@ -1,8 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { IoIosMenu } from "react-icons/io";
+import { useSession, signOut } from "next-auth/react";
+import axios from "axios";
 
 import {
   navLinks,
@@ -14,8 +17,23 @@ import useHeaderStore from "@/stores/useHeaderStore";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 
 const Header = () => {
+  const [accountType, setAccountType] = useState("");
+
   const { isMobileMenuOpen, openMobileMenu } = useHeaderStore();
   const { openModal, setToRegister } = useStudentModalStore();
+
+  const session = useSession();
+
+  console.log(session);
+
+  useEffect(() => {
+    if (session) {
+      axios
+        .get("/api/user/get-user")
+        .then((res) => setAccountType(res.data.type))
+        .catch((error) => console.error(error));
+    }
+  }, [session]);
 
   function scrollTo(id: string) {
     const element = document.getElementById(id);
@@ -66,17 +84,53 @@ const Header = () => {
       </ul>
 
       <div className="hidden lg:flex items-center justify-center gap-x-6">
-        <Button
-          secondary
-          label={professorHeaderButton.label}
-          onClick={() => {}}
-        />
+        {session.status === "authenticated" ? (
+          accountType === "Student" ? (
+            <button
+              type="button"
+              onClick={() => signOut()}
+              className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
+            >
+              <Image
+                src="/assets/icons/user.svg"
+                alt="Usuário"
+                width={24}
+                height={24}
+                className="object-contain"
+              />
+              Área do Aluno
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => signOut()}
+              className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
+            >
+              <Image
+                src="/assets/icons/user.svg"
+                alt="Usuário"
+                width={24}
+                height={24}
+                className="object-contain"
+              />
+              Área do Professor
+            </button>
+          )
+        ) : (
+          <>
+            <Button
+              secondary
+              label={professorHeaderButton.label}
+              onClick={() => {}}
+            />
 
-        <Button
-          primary
-          label={studentHeaderButton.label}
-          onClick={openStudentRegisterModal}
-        />
+            <Button
+              primary
+              label={studentHeaderButton.label}
+              onClick={openStudentRegisterModal}
+            />
+          </>
+        )}
       </div>
     </header>
   );

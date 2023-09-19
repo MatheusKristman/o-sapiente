@@ -26,6 +26,7 @@ model Student {
   complement String?
   password String
   profilePhoto String?
+  accountType String @default("Student")
   requests Request[]
 }
 
@@ -47,6 +48,7 @@ model Professor {
   password String
   themes String[]
   resume String
+  accountType String @default("Professor")
   profilePhoto String?
 }
 
