@@ -6,6 +6,7 @@ import Link from "next/link";
 import { IoIosMenu } from "react-icons/io";
 import { useSession, signOut } from "next-auth/react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 import {
   navLinks,
@@ -17,12 +18,11 @@ import useHeaderStore from "@/stores/useHeaderStore";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 
 const Header = () => {
-  const [accountType, setAccountType] = useState("");
-
-  const { isMobileMenuOpen, openMobileMenu } = useHeaderStore();
+  const { isMobileMenuOpen, openMobileMenu, accountType, setAccountType, userId, setUserId } = useHeaderStore();
   const { openModal, setToRegister } = useStudentModalStore();
 
   const session = useSession();
+  const router = useRouter();
 
   console.log(session);
 
@@ -30,7 +30,11 @@ const Header = () => {
     if (session) {
       axios
         .get("/api/user/get-user")
-        .then((res) => setAccountType(res.data.type))
+        .then((res) => {
+          setAccountType(res.data.type);
+          setUserId(res.data.id);
+          console.log(res);
+        })
         .catch((error) => console.error(error));
     }
   }, [session]);
@@ -46,6 +50,12 @@ const Header = () => {
   function openStudentRegisterModal() {
     openModal();
     setToRegister();
+  }
+
+  function handleDashboardStudentBtn() {
+    if (session.status === "authenticated" && userId) {
+      router.push(`/painel-de-controle/aluno/resumo/${userId}`);
+    }
   }
 
   return (
@@ -64,9 +74,8 @@ const Header = () => {
       <button
         type="button"
         onClick={openMobileMenu}
-        className={`flex lg:hidden ${
-          isMobileMenuOpen && "opacity-0 pointer-events-none"
-        } items-center justify-center cursor-pointer`}
+        className={`flex lg:hidden ${isMobileMenuOpen && "opacity-0 pointer-events-none"
+          } items-center justify-center cursor-pointer`}
       >
         <IoIosMenu size={35} className="text-green-primary" />
       </button>
@@ -88,7 +97,7 @@ const Header = () => {
           accountType === "Student" ? (
             <button
               type="button"
-              onClick={() => signOut()}
+              onClick={handleDashboardStudentBtn}
               className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
             >
               <Image
@@ -100,7 +109,7 @@ const Header = () => {
               />
               Área do Aluno
             </button>
-          ) : (
+          ) : accountType === "Professor" ? (
             <button
               type="button"
               onClick={() => signOut()}
@@ -115,13 +124,13 @@ const Header = () => {
               />
               Área do Professor
             </button>
-          )
+          ) : null
         ) : (
           <>
             <Button
               secondary
               label={professorHeaderButton.label}
-              onClick={() => {}}
+              onClick={() => { }}
             />
 
             <Button

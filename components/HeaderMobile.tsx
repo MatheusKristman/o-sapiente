@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import Button from "./Button";
 import {
@@ -15,8 +18,11 @@ import useHeaderStore from "@/stores/useHeaderStore";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 
 const HeaderMobile = () => {
-  const { isMobileMenuOpen, closeMobileMenu } = useHeaderStore();
+  const { isMobileMenuOpen, closeMobileMenu, accountType, userId } = useHeaderStore();
   const { openModal, setToRegister } = useStudentModalStore();
+
+  const session = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -45,6 +51,14 @@ const HeaderMobile = () => {
     setTimeout(() => {
       openModal();
       setToRegister();
+    }, 500);
+  }
+
+  function handleDashboardStudentBtn() {
+    closeMobileMenu();
+
+    setTimeout(() => {
+      router.push(`/painel-de-controle/aluno/resumo/${userId}`)
     }, 500);
   }
 
@@ -82,19 +96,55 @@ const HeaderMobile = () => {
             </nav>
 
             <div className="lg:hidden flex flex-col items-center justify-center gap-y-4 w-full">
-              <Button
-                secondaryMobile
-                fullWidth
-                label={professorHeaderButton.label}
-                onClick={() => {}}
-              />
+              {session.status === "authenticated" ? (
+                accountType === "Student" ? (
+                  <button
+                    type="button"
+                    onClick={handleDashboardStudentBtn}
+                    className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer"
+                  >
+                    <Image
+                      src="/assets/icons/user-green.svg"
+                      alt="Usuário"
+                      width={24}
+                      height={24}
+                      className="object-contain"
+                    />
+                    Área do Aluno
+                  </button>
+                ) : accountType === "Professor" ? (
+                  <button
+                    type="button"
+                    onClick={() => signOut()}
+                    className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer"
+                  >
+                    <Image
+                      src="/assets/icons/user-green.svg"
+                      alt="Usuário"
+                      width={24}
+                      height={24}
+                      className="object-contain"
+                    />
+                    Área do Professor
+                  </button>
+                ) : null
+              ) : (
+                <>
+                  <Button
+                    secondaryMobile
+                    fullWidth
+                    label={professorHeaderButton.label}
+                    onClick={() => { }}
+                  />
 
-              <Button
-                primaryMobile
-                fullWidth
-                label={studentHeaderButton.label}
-                onClick={openStudentRegisterModal}
-              />
+                  <Button
+                    primaryMobile
+                    fullWidth
+                    label={studentHeaderButton.label}
+                    onClick={openStudentRegisterModal}
+                  />
+                </>
+              )}
             </div>
           </motion.div>
         )}

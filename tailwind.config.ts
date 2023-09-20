@@ -62,6 +62,8 @@ const config: Config = {
       cursor: ["disabled"],
     },
   },
-  plugins: [],
+  plugins: [
+    require("tailwind-scrollbar")
+  ],
 };
 export default config;
