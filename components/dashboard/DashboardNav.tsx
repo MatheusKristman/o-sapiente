@@ -42,7 +42,7 @@ const DashboardNav = () => {
           {menuItems.map((item, index) => (
             <li onClick={() => handleNavigation(accountType!, index)} className={`p-4 flex itens-center gap-2 cursor-pointer transition-colors ${pathname.includes(item.studentHref) && item.studentHref !== "" ? linkActiveClass : linkInactiveClass} hover:bg-white hover:text-green-primary`}>
               <item.icon />
-              <span>{item.label}</span>
+              <span class="hidden md:block">{item.label}</span>
             </li>
           ))}
         </ul>
