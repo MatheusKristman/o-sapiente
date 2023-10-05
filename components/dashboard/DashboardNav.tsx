@@ -17,9 +17,9 @@ const DashboardNav = () => {
 
   console.log(pathname);
 
-  function handleNavigation(type: string, index: number) {
+  function handleNavigation(type: string, index: number, pathname: string) {
     if (type === "Student") {
-      const href = menuItems[index].studentHref; 
+      const href = menuItems[index].studentHref;
 
       if (href !== "") {
         router.push(href + userId);
@@ -40,15 +40,22 @@ const DashboardNav = () => {
       <div className="w-full px-6 mx-auto md:px-16 lg:container">
         <ul className="w-full flex items-center justify-between">
           {menuItems.map((item, index) => (
-            <li onClick={() => handleNavigation(accountType!, index)} className={`p-4 flex itens-center gap-2 cursor-pointer transition-colors ${pathname.includes(item.studentHref) && item.studentHref !== "" ? linkActiveClass : linkInactiveClass} hover:bg-white hover:text-green-primary`}>
+            <li
+              onClick={() => handleNavigation(accountType!, index)}
+              className={`p-4 flex itens-center gap-2 cursor-pointer transition-colors ${
+                pathname.includes(item.studentHref) && item.studentHref !== ""
+                  ? linkActiveClass
+                  : linkInactiveClass
+              } hover:bg-white hover:text-green-primary`}
+            >
               <item.icon />
               <span class="hidden md:block">{item.label}</span>
             </li>
           ))}
         </ul>
       </div>
-    </nav> 
+    </nav>
   );
-}
+};
 
 export default DashboardNav;
