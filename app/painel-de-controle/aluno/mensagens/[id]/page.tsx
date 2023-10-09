@@ -59,9 +59,29 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <div className="lg:flex lg:w-8/12"></div>
+      <div className="hidden lg:flex lg:w-8/12">
+        <div className="w-full bg-[#2C383F] h-fit p-2">
+          <div className="flex flex-row w-full">
+            <div className="flex justify-start w-2/12 px-4 py-2">
+              <Image
+                src="/assets/images/profile-test.png"
+                alt="Perfil"
+                width={50}
+                height={50}
+                className="object-cover rounded-3xl lg:w-12 lg:h-12"
+              />
+            </div>
+            <div className="flex flex-col text-white py-2  w-6/12">
+              <span className="text-md font-medium"> John Doe</span>
+              <span className="text-xs">Online</span>
+            </div>
+            <div className="flex justify-end w-4/12 px-4 py-2">
+              <Button label="Confirmar Finalização" fullWidth primary />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
-
 export default DashboardPage;
