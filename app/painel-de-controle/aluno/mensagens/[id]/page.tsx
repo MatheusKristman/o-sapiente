@@ -59,10 +59,10 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <div className="hidden lg:flex lg:w-8/12">
-        <div className="w-full bg-[#2C383F] h-fit p-2">
+      <div className="hidden lg:flex lg:flex-col lg:w-8/12">
+        <div className="w-full bg-[#2C383F] h-fit px-6 py-2">
           <div className="flex flex-row w-full">
-            <div className="flex justify-start w-2/12 px-4 py-2">
+            <div className="flex justify-start w-1/12 py-2">
               <Image
                 src="/assets/images/profile-test.png"
                 alt="Perfil"
@@ -71,7 +71,7 @@ const DashboardPage = () => {
                 className="object-cover rounded-3xl lg:w-12 lg:h-12"
               />
             </div>
-            <div className="flex flex-col text-white py-2  w-6/12">
+            <div className="flex flex-col text-white py-2  w-7/12">
               <span className="text-md font-medium"> John Doe</span>
               <span className="text-xs">Online</span>
             </div>
@@ -80,6 +80,7 @@ const DashboardPage = () => {
             </div>
           </div>
         </div>
+        <div className="w-full flex bg-[#2C383F] h-28 mt-auto"></div>
       </div>
     </div>
   );
