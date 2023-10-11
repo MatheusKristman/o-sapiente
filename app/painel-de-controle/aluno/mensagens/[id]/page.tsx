@@ -1,11 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { Dot, Search, ImageIcon, Mic } from "lucide-react";
+import {
+  Dot,
+  Search,
+  ImageIcon,
+  Mic,
+  ChevronLeft,
+  MoreHorizontal,
+  Plus,
+  Video,
+} from "lucide-react";
 
 import Button from "@/components/Button";
 
+import { usePathname, useRouter } from "next/navigation";
+
 const DashboardPage = () => {
+  const router = useRouter();
+
+  function handleNavigation() {
+    router.push("/painel-de-controle/aluno/mensagem-individual/");
+  }
+
   return (
     <div className="flex-1 w-full mx-auto flex flex-col  lg:flex-row ">
       <div className="flex-1 w-full flex flex-col bg-white lg:w-5/12 pt-9">
@@ -27,7 +44,10 @@ const DashboardPage = () => {
           </div>
         </div>
         <div className="w-full h-56 scrollbar scrollbar-thumb-slate-100 mt-9">
-          <div className="w-full bg-white hover:bg-green-primary transition ease-in-out delay-150 py-6 group">
+          <div
+            className="w-full bg-white hover:bg-green-primary transition ease-in-out delay-150 py-6 group"
+            onClick={handleNavigation}
+          >
             <div className="flex flex-row w-full">
               <div className="flex justify-start px-6 w-3/12 md:w-2/12 lg:w-4/12 xl:w-3/12 2xl:w-2/12">
                 <Image
@@ -59,36 +79,46 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <div className="hidden lg:flex lg:flex-col lg:w-8/12">
-        <div className="w-full bg-[#2C383F] h-fit px-6 py-2">
+      <div className="hidden lg:flex flex-col lg:w-8/12">
+        <div className="w-full bg-[#2C383F] h-fit px-2 lg:px-6 py-2">
           <div className="flex flex-row w-full">
-            <div className="flex justify-start w-1/12 py-2">
+            <button className="text-green-primary px-3 block md:hidden">
+              <ChevronLeft size={35} />
+            </button>
+            <div className="flex justify-start  md:px-6 py-2">
               <Image
                 src="/assets/images/profile-test.png"
                 alt="Perfil"
                 width={50}
                 height={50}
-                className="object-cover rounded-3xl lg:w-12 lg:h-12"
+                className="object-cover rounded-full w-12 h-12"
               />
             </div>
-            <div className="flex flex-col text-white py-2  w-7/12">
+            <div className="flex flex-col text-white py-2 px-3">
               <span className="text-md font-medium"> John Doe</span>
               <span className="text-xs">Online</span>
             </div>
-            <div className="flex justify-end w-4/12 px-4 py-2">
+            <button className="text-green-primary px-4 flex items-center ml-auto md:hidden">
+              <MoreHorizontal size={35} />
+            </button>
+
+            <div className="hidden md:flex justify-end ml-auto px-4 py-2">
               <Button label="Confirmar Finalização" fullWidth primary />
             </div>
           </div>
         </div>
         <div className="w-full flex bg-[#2C383F] h-28 mt-auto">
           <div className="w-full flex flex-row px-4 py-4 gap-8">
-            <div className="flex flex-row items-center justify-start gap-3.5 pl-11">
-              <button className="rounded-xl w-12 h-12 bg-green-primary text-white flex justify-center items-center">
+            <div className="flex flex-row items-center justify-start gap-3.5 md:pl-11">
+              <button className="flex rounded-xl w-12 h-12 bg-green-primary text-white md:hidden justify-center items-center">
+                <Plus />
+              </button>
+              <button className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">
                 <ImageIcon />
               </button>
 
-              <button className="rounded-xl w-12 h-12 bg-green-primary text-white flex justify-center items-center">
-                <ImageIcon />
+              <button className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">
+                <Video />
               </button>
             </div>
 
@@ -101,10 +131,10 @@ const DashboardPage = () => {
               />
             </div>
 
-            <div className="flex flex-row items-center justify-start pr-11">
-              <button className="rounded-xl w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold">
+            <div className="flex flex-row items-center justify-start md:pr-11">
+              <button className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold">
                 <Mic />
-                Gravar
+                <span className="hidden md:block">Gravar</span>
               </button>
             </div>
           </div>
