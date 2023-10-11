@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Dot, Search } from "lucide-react";
+import { Dot, Search, ImageIcon, Mic } from "lucide-react";
 
 import Button from "@/components/Button";
 
@@ -80,7 +80,35 @@ const DashboardPage = () => {
             </div>
           </div>
         </div>
-        <div className="w-full flex bg-[#2C383F] h-28 mt-auto"></div>
+        <div className="w-full flex bg-[#2C383F] h-28 mt-auto">
+          <div className="w-full flex flex-row px-4 py-4 gap-8">
+            <div className="flex flex-row items-center justify-start gap-3.5 pl-11">
+              <button className="rounded-xl w-12 h-12 bg-green-primary text-white flex justify-center items-center">
+                <ImageIcon />
+              </button>
+
+              <button className="rounded-xl w-12 h-12 bg-green-primary text-white flex justify-center items-center">
+                <ImageIcon />
+              </button>
+            </div>
+
+            <div className="w-full flex items-center">
+              <input
+                type="search"
+                name="search"
+                placeholder="Digite a sua mensagem"
+                className="w-full border-2 border-[#40535D] bg-[#40535D] h-12 pl-5 pr-5 rounded-xl text-md text-white focus:outline-none"
+              />
+            </div>
+
+            <div className="flex flex-row items-center justify-start pr-11">
+              <button className="rounded-xl w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold">
+                <Mic />
+                Gravar
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
