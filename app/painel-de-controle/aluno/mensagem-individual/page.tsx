@@ -35,17 +35,13 @@ const DashboardPage = () => {
   }
 
   useEffect(() => {
-    // Função para verificar a largura da tela e atualizar o estado
     function handleResize() {
       if (window.innerWidth >= 768) {
         setIsModalOpen(false);
       }
     }
-
-    // Adicione um ouvinte de redimensionamento quando o componente montar
     window.addEventListener("resize", handleResize);
 
-    // Remove o ouvinte de redimensionamento quando o componente desmontar
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -92,7 +88,7 @@ const DashboardPage = () => {
 
         {isModalOpen && (
           <div className="flex w-full">
-            <div className="flex w-full justify-end  mt-1 mr-6">
+            <div className="flex w-full justify-end ">
               <div className="flex justify-center items-center w-72 h-24 bg-white rounded-l-lg rounded-br-lg">
                 <Button label="Confirmar Finalização" primary />
               </div>
