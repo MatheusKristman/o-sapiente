@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 import Button from "@/components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const DashboardPage = () => {
@@ -33,6 +33,23 @@ const DashboardPage = () => {
   function closeModal() {
     setIsModalOpen(false);
   }
+
+  useEffect(() => {
+    // Função para verificar a largura da tela e atualizar o estado
+    function handleResize() {
+      if (window.innerWidth >= 768) {
+        setIsModalOpen(false);
+      }
+    }
+
+    // Adicione um ouvinte de redimensionamento quando o componente montar
+    window.addEventListener("resize", handleResize);
+
+    // Remove o ouvinte de redimensionamento quando o componente desmontar
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="flex-1 w-full mx-auto flex flex-row ">
