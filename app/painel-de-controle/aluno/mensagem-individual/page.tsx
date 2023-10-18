@@ -17,27 +17,26 @@ import { useRouter } from "next/navigation";
 
 const DashboardPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  console.log(isModalOpen);
+  const [isModalFooterOpen, setIsModalFooterOpen] = useState(false);
 
   const router = useRouter();
   function handleNavigation() {
     router.push("/painel-de-controle/aluno/mensagens/651c6e6d60387a3209064589");
   }
 
-  function openModal() {
-    console.log("CLICK");
-    setIsModalOpen(true);
-  }
+  const toggleModalNav = () => {
+    setIsModalOpen(!isModalOpen); // Inverte o estado atual da modal
+  };
 
-  function closeModal() {
-    setIsModalOpen(false);
-  }
+  const toggleModalFooter = () => {
+    setIsModalFooterOpen(!isModalFooterOpen); // Inverte o estado atual da modal
+  };
 
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth >= 768) {
         setIsModalOpen(false);
+        setIsModalFooterOpen(false);
       }
     }
     window.addEventListener("resize", handleResize);
@@ -74,9 +73,9 @@ const DashboardPage = () => {
 
             <button className="text-green-primary px-4 flex items-center ml-auto md:hidden">
               {isModalOpen ? (
-                <XCircleIcon onClick={closeModal} size={35} />
+                <XCircleIcon onClick={toggleModalNav} size={35} />
               ) : (
-                <MoreHorizontal onClick={openModal} size={35} />
+                <MoreHorizontal onClick={toggleModalNav} size={35} />
               )}
             </button>
 
@@ -96,11 +95,32 @@ const DashboardPage = () => {
           </div>
         )}
 
+        {isModalFooterOpen && (
+          <div className="flex flex-col justify-end h-screen">
+            <div className="flex justify-start w-full">
+              <div className="flex flex-col gap-4 items-start  h-fit bg-white rounded-r-lg rounded-tl-lg p-6">
+                <button className=" rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center">
+                  <ImageIcon />
+                  Enviar Imagem
+                </button>
+                <button className="rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center">
+                  <Video />
+                  Enviar Video
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="w-full flex bg-[#2C383F] h-28 mt-auto">
           <div className="w-full flex flex-row px-4 py-4 gap-8">
             <div className="flex flex-row items-center justify-start gap-3.5 md:pl-11">
               <button className="flex rounded-xl w-12 h-12 bg-green-primary text-white md:hidden justify-center items-center">
-                <Plus />
+                {isModalFooterOpen ? (
+                  <XCircleIcon onClick={toggleModalFooter} />
+                ) : (
+                  <Plus onClick={toggleModalFooter} />
+                )}
               </button>
               <button className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">
                 <ImageIcon />
