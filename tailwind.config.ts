@@ -30,22 +30,17 @@ const config: Config = {
         bannerMobile: "url('/assets/images/banner-mobile.png')",
         homeLeftShape: "url('/assets/images/home-left-shape.svg')",
         homeRightShape: "url('/assets/images/home-right-shape.svg')",
-        benefitsStudentsDesktop:
-          "url('/assets/images/benefits-line-students-desktop.svg')",
-        benefitsStudentsTablet:
-          "url('/assets/images/benefits-line-students-tablet.svg')",
-        benefitsStudentsMobile:
-          "url('/assets/images/benefits-line-students-mobile.svg')",
-        benefitsProfessorDesktop:
-          "url('/assets/images/benefits-line-professor-desktop.svg')",
-        benefitsProfessorTablet:
-          "url('/assets/images/benefits-line-professor-tablet.svg')",
-        benefitsProfessorMobile:
-          "url('/assets/images/benefits-line-professor-mobile.svg')",
+        benefitsStudentsDesktop: "url('/assets/images/benefits-line-students-desktop.svg')",
+        benefitsStudentsTablet: "url('/assets/images/benefits-line-students-tablet.svg')",
+        benefitsStudentsMobile: "url('/assets/images/benefits-line-students-mobile.svg')",
+        benefitsProfessorDesktop: "url('/assets/images/benefits-line-professor-desktop.svg')",
+        benefitsProfessorTablet: "url('/assets/images/benefits-line-professor-tablet.svg')",
+        benefitsProfessorMobile: "url('/assets/images/benefits-line-professor-mobile.svg')",
         paperAirplane: "url('/assets/images/paper-airplane.svg')",
         contactDesktop: "url('/assets/images/contact-bg-desktop.png')",
         contactTablet: "url('/assets/images/contact-bg-tablet.png')",
         contactMobile: "url('/assets/images/contact-bg-mobile.png')",
+        registerLeftShape: "url('/assets/images/register-left-shape.svg')",
         briefcase: "url('/assets/icons/briefcase.svg')",
         close: "url('/assets/icons/close.svg')",
         hat: "url('/assets/icons/hat.svg')",
@@ -53,6 +48,7 @@ const config: Config = {
         camera: "url('/assets/icons/camera.svg')",
         uploadIcon: "url('/assets/icons/upload.svg')",
         highlight: "url('/assets/icons/highlight.svg')",
+        registerStepShadow: "url('/assets/icons/register-about-shadow-step.svg')",
       },
     },
   },
@@ -62,8 +58,6 @@ const config: Config = {
       cursor: ["disabled"],
     },
   },
-  plugins: [
-    require("tailwind-scrollbar")
-  ],
+  plugins: [require("tailwind-scrollbar")],
 };
 export default config;

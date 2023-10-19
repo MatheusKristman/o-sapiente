@@ -8,17 +8,14 @@ import { useSession, signOut } from "next-auth/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-import {
-  navLinks,
-  professorHeaderButton,
-  studentHeaderButton,
-} from "@/constants/header-br";
+import { navLinks, professorHeaderButton, studentHeaderButton } from "@/constants/header-br";
 import Button from "./Button";
 import useHeaderStore from "@/stores/useHeaderStore";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 
 const Header = () => {
-  const { isMobileMenuOpen, openMobileMenu, accountType, setAccountType, userId, setUserId } = useHeaderStore();
+  const { isMobileMenuOpen, openMobileMenu, accountType, setAccountType, userId, setUserId } =
+    useHeaderStore();
   const { openModal, setToRegister } = useStudentModalStore();
 
   const session = useSession();
@@ -52,6 +49,10 @@ const Header = () => {
     setToRegister();
   }
 
+  function openProfessorRegisterPage() {
+    router.push("/cadastro/professor");
+  }
+
   function handleDashboardStudentBtn() {
     if (session.status === "authenticated" && userId) {
       router.push(`/painel-de-controle/aluno/resumo/${userId}`);
@@ -74,8 +75,9 @@ const Header = () => {
       <button
         type="button"
         onClick={openMobileMenu}
-        className={`flex lg:hidden ${isMobileMenuOpen && "opacity-0 pointer-events-none"
-          } items-center justify-center cursor-pointer`}
+        className={`flex lg:hidden ${
+          isMobileMenuOpen && "opacity-0 pointer-events-none"
+        } items-center justify-center cursor-pointer`}
       >
         <IoIosMenu size={35} className="text-green-primary" />
       </button>
@@ -130,14 +132,10 @@ const Header = () => {
             <Button
               secondary
               label={professorHeaderButton.label}
-              onClick={() => { }}
+              onClick={openProfessorRegisterPage}
             />
 
-            <Button
-              primary
-              label={studentHeaderButton.label}
-              onClick={openStudentRegisterModal}
-            />
+            <Button primary label={studentHeaderButton.label} onClick={openStudentRegisterModal} />
           </>
         )}
       </div>
