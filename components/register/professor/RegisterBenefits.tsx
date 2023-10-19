@@ -9,7 +9,12 @@ const RegisterBenefits = () => {
       </h2>
       <div className="w-full flex flex-wrap gap-10 items-start justify-evenly lg:flex-nowrap">
         {professorRegisterBenefitsInfo.benefits.map((benefit, index) => (
-          <RegisterBenefitsCard key={benefit.title} title={benefit.title} desc={benefit.desc} index={index} />
+          <RegisterBenefitsCard
+            key={benefit.title}
+            title={benefit.title}
+            desc={benefit.desc}
+            index={index}
+          />
         ))}
       </div>
     </section>
