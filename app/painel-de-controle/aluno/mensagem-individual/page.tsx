@@ -115,12 +115,11 @@ const DashboardPage = () => {
         <div className="w-full flex bg-[#2C383F] h-28 mt-auto">
           <div className="w-full flex flex-row px-4 py-4 gap-8">
             <div className="flex flex-row items-center justify-start gap-3.5 md:pl-11">
-              <button className="flex rounded-xl w-12 h-12 bg-green-primary text-white md:hidden justify-center items-center">
-                {isModalFooterOpen ? (
-                  <XCircleIcon onClick={toggleModalFooter} />
-                ) : (
-                  <Plus onClick={toggleModalFooter} />
-                )}
+              <button
+                onClick={toggleModalFooter}
+                className="flex rounded-xl w-12 h-12 bg-green-primary text-white md:hidden justify-center items-center"
+              >
+                {isModalFooterOpen ? <XCircleIcon /> : <Plus />}
               </button>
               <button className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">
                 <ImageIcon />
