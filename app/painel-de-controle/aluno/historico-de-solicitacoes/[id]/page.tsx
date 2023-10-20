@@ -45,6 +45,37 @@ const DashboardPage = () => {
       <div className="flex mt-5 px-6">
         <Button label="Consultar Certificado" fullWidth primary />
       </div>
+
+      <table className="w-full">
+        <thead>
+          <tr>
+            <th>Professor</th>
+            <th>Data Início</th>
+            <th>Data Finalização</th>
+            <th>Status</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="bg-green-primary">
+            <td>
+              <p>Professor</p>
+            </td>
+            <td>
+              <p>Data Início</p>
+            </td>
+            <td>
+              <p>Data Finalização</p>
+            </td>
+            <td>
+              <p>Status</p>
+            </td>
+            <td>
+              <p>Valor</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </>
   );
 };
