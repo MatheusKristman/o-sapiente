@@ -50,12 +50,16 @@ const config: Config = {
         highlight: "url('/assets/icons/highlight.svg')",
         registerStepShadow: "url('/assets/icons/register-about-shadow-step.svg')",
       },
+      transitionProperty: {
+        "max-height": "max-height",
+      },
     },
   },
   variants: {
     extend: {
       brightness: ["disabled"],
       cursor: ["disabled"],
+      "max-height": ["responsive"],
     },
   },
   plugins: [require("tailwind-scrollbar")],
