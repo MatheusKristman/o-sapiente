@@ -56,25 +56,38 @@ const config: Config = {
       },
     },
     borderWidth: {
-      DEFAULT: '1px',
-      '0': '0',
-      '2': '2px',
-      '3': '3px',
-      '4': '4px',
-      '6': '6px',
-      '8': '8px',
-      '20': '20px',
-      '30': '30px',
-    }
+      DEFAULT: "1px",
+      "0": "0",
+      "2": "2px",
+      "3": "3px",
+      "4": "4px",
+      "6": "6px",
+      "8": "8px",
+      "20": "20px",
+      "30": "30px",
+    },
+
+    screens: {
+      sm: "640px",
+
+      md: "768px",
+
+      lg: "1024px",
+
+      xl: "1280px",
+
+      desktop: "1440px",
+
+      "2xl": "1536px",
+    },
   },
+
   variants: {
     extend: {
       brightness: ["disabled"],
       cursor: ["disabled"],
     },
   },
-  plugins: [
-    require("tailwind-scrollbar")
-  ],
+  plugins: [require("tailwind-scrollbar")],
 };
 export default config;
