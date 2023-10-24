@@ -5,7 +5,35 @@ import { Dot, Search } from "lucide-react";
 
 import Button from "@/components/Button";
 
+import ResponsiveTable from "@/components/table/ResponsiveTable";
+
 const DashboardPage = () => {
+  const tableData = [
+    {
+      imageSrc: "/assets/images/profile-test.png",
+      name: "John Doe",
+      startDate: "18/08/2023",
+      endDate: "23/08/2023",
+      status: "Finalizado",
+      value: "R$100.00",
+    },
+    {
+      imageSrc: "/assets/images/profile-test.png",
+      name: "Mary Doe",
+      startDate: "",
+      endDate: "",
+      status: "A Finalizar",
+      value: "R$300.00",
+    },
+    {
+      imageSrc: "/assets/images/profile-test.png",
+      name: "John Doe",
+      startDate: "18/08/2023",
+      endDate: "23/08/2023",
+      status: "Suporte",
+      value: "R$200.00",
+    },
+  ];
   return (
     <>
       <div className="flex flex-col mt-8 gap-6 items-center">
@@ -46,119 +74,7 @@ const DashboardPage = () => {
         <Button label="Consultar Certificado" fullWidth primary />
       </div>
 
-      <div className="px-5 py-10">
-        <div className="overflow-x-auto ">
-          <table className="w-full border-separate border-spacing-y-5">
-            <thead>
-              <tr>
-                <th className="w-40 min-w-[300px] p-3 text-base font-medium tracking-wide text-left text-[#879298] whitespace-nowrap">
-                  Professor
-                </th>
-                <th className="w-24 p-3 text-base font-medium tracking-wide text-left text-[#879298] whitespace-nowrap">
-                  Data Início
-                </th>
-                <th className="w-24 p-3 text-base font-medium tracking-wide text-left text-[#879298] whitespace-nowrap">
-                  Data Finalização
-                </th>
-                <th className="w-24 p-3 text-base font-medium tracking-wide text-left text-[#879298]">
-                  Status
-                </th>
-                <th className="w-32 p-3 text-base font-medium tracking-wide text-left text-[#879298]">
-                  Valor
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="bg-white ">
-                <td className="px-8 py-9   text-lg text-black whitespace-nowrap rounded-l-lg">
-                  <div className="flex items-center gap-4">
-                    <Image
-                      src="/assets/images/profile-test.png"
-                      alt="Perfil"
-                      width={50}
-                      height={50}
-                      className="object-cover rounded-full w-20 h-20"
-                    />
-                    <span className="font-bold text-center">John Doe</span>
-                  </div>
-                </td>
-                <td className="p-3 text-base text-[#879298] whitespace-nowrap">
-                  16/10/2021
-                </td>
-                <td className="p-3 text-base text-[#879298] whitespace-nowrap">
-                  16/10/2021
-                </td>
-                <td className="p-3 text-sm ">
-                  <span className="p-2 text-base  font-medium  text-green-800 bg-green-200 rounded-lg bg-opacity-50 whitespace-nowrap">
-                    Finalizado
-                  </span>
-                </td>
-                <td className="p-3 text-lg text-black  font-bold rounded-r-lg whitespace-nowrap">
-                  R$200.00
-                </td>
-              </tr>
-
-              <tr className="bg-white ">
-                <td className="px-8 py-9   text-lg text-black whitespace-nowrap rounded-l-lg">
-                  <div className="flex items-center gap-4">
-                    <Image
-                      src="/assets/images/profile-test.png"
-                      alt="Perfil"
-                      width={50}
-                      height={50}
-                      className="object-cover rounded-full w-20 h-20"
-                    />
-                    <span className="font-bold text-center">John Doe</span>
-                  </div>
-                </td>
-                <td className="p-3 text-base text-[#879298] whitespace-nowrap">
-                  16/10/2021
-                </td>
-                <td className="p-3 text-base text-[#879298] whitespace-nowrap">
-                  16/10/2021
-                </td>
-                <td className="p-3 text-sm ">
-                  <span className="p-2 text-base  font-medium  text-[#8A8A8A] bg-[#E8E8E8] rounded-lg bg-opacity-50 whitespace-nowrap">
-                    A Finalizar
-                  </span>
-                </td>
-                <td className="p-3 text-lg text-black  font-bold rounded-r-lg whitespace-nowrap">
-                  Combinado
-                </td>
-              </tr>
-
-              <tr className="bg-white ">
-                <td className="px-8 py-9   text-lg text-black whitespace-nowrap rounded-l-lg">
-                  <div className="flex items-center gap-4">
-                    <Image
-                      src="/assets/images/profile-test.png"
-                      alt="Perfil"
-                      width={50}
-                      height={50}
-                      className="object-cover rounded-full w-20 h-20"
-                    />
-                    <span className="font-bold text-center">John Doe</span>
-                  </div>
-                </td>
-                <td className="p-3 text-base text-[#879298] whitespace-nowrap">
-                  16/10/2021
-                </td>
-                <td className="p-3 text-base text-[#879298] whitespace-nowrap">
-                  16/10/2021
-                </td>
-                <td className="p-3 text-sm ">
-                  <span className="p-2 text-base  font-medium  text-[#B93737] bg-[#FFD1D1] rounded-lg bg-opacity-50 whitespace-nowrap">
-                    Suporte
-                  </span>
-                </td>
-                <td className="p-3 text-lg text-black  font-bold rounded-r-lg whitespace-nowrap">
-                  R$200.00
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <ResponsiveTable data={tableData} />
     </>
   );
 };
