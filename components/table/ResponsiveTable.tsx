@@ -16,7 +16,7 @@ interface ResponsiveTableProps {
 
 const ResponsiveTable: React.FC<ResponsiveTableProps> = ({ data }) => {
   return (
-    <div className="px-5 py-10">
+    <div className="px-5 py-10 md:px-14 desktop:px-[120px]">
       <div className="overflow-x-auto">
         <table className="w-full border-separate border-spacing-y-5">
           <thead>
