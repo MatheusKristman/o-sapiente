@@ -10,6 +10,7 @@ import Button from "@/components/Button";
 import { ThemeStepInfos } from "@/constants/register/theme-step-br";
 
 // TODO finalizar função de busca e submit para proxima etapa
+// TODO criar função para se marcar o matéria como Matemática, adicionar todos os temas da matéria, adicionar função na api também
 
 const ThemeStep = () => {
   const [options, setOptions] = useState<string[]>([]);

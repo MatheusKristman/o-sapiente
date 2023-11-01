@@ -1,10 +1,18 @@
 import { prisma } from "@/libs/prismadb";
 import { NextResponse } from "next/server";
 
+function checkIfArrayIsUnique(arr: string[]) {
+  return arr.length !== new Set(arr).size;
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { main, lang, subs } = body;
+
+    if (checkIfArrayIsUnique(subs)) {
+      return new NextResponse("Opções tem itens duplicados, verifique e tente novamente");
+    }
 
     // TODO verificar erro de subs duplicadas tanto quando é enviado quanto para ver se ja tem cadastrado
 
@@ -18,8 +26,20 @@ export async function POST(req: Request) {
       },
     });
 
+    const optionsExists = await prisma.subject.findFirst({
+      where: {
+        subs: {
+          hasSome: subs,
+        },
+      },
+    });
+
     if (subjectExists) {
       return new NextResponse("Matéria já está cadastrada");
+    }
+
+    if (optionsExists) {
+      return new NextResponse("Opções já estão cadastradas");
     }
 
     const newSubject = await prisma.subject.create({
