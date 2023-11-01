@@ -88,6 +88,6 @@ const config: Config = {
       "max-height": ["responsive"],
     },
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
 };
 export default config;

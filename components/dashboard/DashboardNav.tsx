@@ -41,13 +41,13 @@ const DashboardNav = () => {
         <ul className="w-full flex items-center justify-between">
           {menuItems.map((item, index) => (
             <li
+              key={item.label}
               onClick={() => handleNavigation(accountType!, index)}
               className={`p-4 flex itens-center gap-2 cursor-pointer transition-colors ${
                 pathname.includes(item.studentHref) && item.studentHref !== ""
                   ? linkActiveClass
                   : linkInactiveClass
-              } hover:bg-white hover:text-green-primary`}
-            >
+              } hover:bg-white hover:text-green-primary`}>
               <item.icon />
               <span class="hidden md:block">{item.label}</span>
             </li>

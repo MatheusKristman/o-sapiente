@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
+import { NextResponse } from "next/server";
 
 import { prisma } from "@/libs/prismadb";
-import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
@@ -9,10 +9,9 @@ export async function POST(request: Request) {
     const { firstName, lastName, email, password } = body;
 
     if (!firstName || !lastName || !email || !password) {
-      return new NextResponse(
-        "Informação incompleta, verifique e tente novamente",
-        { status: 406 },
-      );
+      return new NextResponse("Informação incompleta, verifique e tente novamente", {
+        status: 406,
+      });
     }
 
     const userExists = await prisma.student.findFirst({
@@ -51,9 +50,9 @@ export async function POST(request: Request) {
       });
     }
 
-    return NextResponse.json(user);
+    return NextResponse.json({ id: user.id });
   } catch (error: any) {
-    console.log(error, "REGISTER_ERROR");
+    console.log("[STUDENT_PRE_REGISTER_ERROR]", error);
 
     return new NextResponse("Ocorreu um erro, tente novamente!", {
       status: 400,

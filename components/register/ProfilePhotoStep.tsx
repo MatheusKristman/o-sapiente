@@ -13,13 +13,10 @@ interface ProfilePhotoStepProps {
   actualStep: StepType;
   setSteps: React.Dispatch<React.SetStateAction<number>>;
   id: string;
+  type: string;
 }
 
-const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
-  actualStep,
-  setSteps,
-  id,
-}) => {
+const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({ actualStep, setSteps, id, type }) => {
   const [profilePhotoUrl, setProfilePhotoUrl] = useState<string>("");
   const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
   const [isSendingImage, setSendingImage] = useState(false);
@@ -87,7 +84,7 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
     data.set("id", id);
 
     axios
-      .post("/api/register/student/save-profile-photo", data)
+      .post(`/api/register/${type}/save-profile-photo`, data)
       .then((res) => {
         console.log(res.data);
 
@@ -105,24 +102,19 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
     <div className="w-full h-full pb-12 pt-12 flex flex-col justify-center">
       <div className="w-full mx-auto px-6 flex flex-col justify-center gap-9 md:px-16 md:flex-row md:justify-between md:gap-24 lg:container">
         <div className="w-full px-6 py-9 rounded-2xl bg-green-primary h-fit md:w-2/5">
-          <p className="w-full text-white text-lg">
-            {profilePhotoStepsInfo.boxMessage}
-          </p>
+          <p className="w-full text-white text-lg">{profilePhotoStepsInfo.boxMessage}</p>
         </div>
 
         <div className="w-full md:w-3/5">
           <h2 className="text-2xl text-gray-primary font-semibold mb-6 md:text-3xl">
-            <span className="text-green-primary">
-              {profilePhotoStepsInfo.titleColored}
-            </span>{" "}
+            <span className="text-green-primary">{profilePhotoStepsInfo.titleColored}</span>{" "}
             {profilePhotoStepsInfo.title}
           </h2>
 
           <div className="w-full flex flex-col items-center justify-center gap-6 mb-8 md:mb-24 relative">
             <label
               htmlFor="profilePhoto"
-              className="w-[200px] h-[200px] rounded-lg bg-[#C8D6DF] block cursor-pointer relative overflow-hidden shadow-md shadow-[rgba(0,0,0,0.25)]"
-            >
+              className="w-[200px] h-[200px] rounded-lg bg-[#C8D6DF] block cursor-pointer relative overflow-hidden shadow-md shadow-[rgba(0,0,0,0.25)]">
               {profilePhotoUrl ? (
                 <Image
                   src={profilePhotoUrl}
@@ -160,8 +152,7 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
               <button
                 type="button"
                 onClick={handleDeleteButton}
-                className="bg-green-primary border-green-primary text-white hover:brightness-90 transition py-1.5 px-8 text-base rounded-lg border-2 font-medium flex items-center justify-center gap-2 disabled:brightness-75 disabled:hover:brightness-75"
-              >
+                className="bg-green-primary border-green-primary text-white hover:brightness-90 transition py-1.5 px-8 text-base rounded-lg border-2 font-medium flex items-center justify-center gap-2 disabled:brightness-75 disabled:hover:brightness-75">
                 {profilePhotoStepsInfo.removeImageButton} <Trash2 size={20} />
               </button>
             )}

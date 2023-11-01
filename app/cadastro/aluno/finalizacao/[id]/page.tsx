@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import StepBar from "@/components/register/student/StepBar";
 import ProfilePhotoStep from "@/components/register/ProfilePhotoStep";
@@ -23,7 +23,7 @@ const CompleteRegisterPage: React.FC<CompleteRegisterProps> = ({ params }) => {
       <StepBar actualStep={steps} />
 
       {steps === 1 && (
-        <ProfilePhotoStep actualStep={steps} setSteps={setSteps} id={id} />
+        <ProfilePhotoStep actualStep={steps} setSteps={setSteps} id={id} type="student" />
       )}
       {steps === 2 && <ConfirmAccountStep />}
     </section>
