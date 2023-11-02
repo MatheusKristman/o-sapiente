@@ -31,6 +31,7 @@ model Student {
   password      String
   profilePhoto  String?
   accountType   String    @default("Student")
+  isConfirmed   Boolean   @default(false)
   requests      Request[]
 }
 
@@ -52,6 +53,8 @@ model Professor {
   themes        String[]
   resume        String?
   accountType   String   @default("Professor")
+  isCompleted   Boolean  @default(false)
+  isConfirmed   Boolean  @default(false)
   profilePhoto  String?
 }
 

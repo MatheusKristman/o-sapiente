@@ -3,24 +3,42 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 import { prisma } from "@/libs/prismadb";
 
-export async function POST(req: Request) {
-  const s3 = new S3({
-    region: "sa-east-1",
-    accessKeyId: process.env.NEXT_S3_PUBLIC_ACCESS_KEY,
-    secretAccessKey: process.env.NEXT_S3_PUBLIC_SECRET_KEY,
-    signatureVersion: "v4",
-  });
-
+export async function PATCH(req: Request) {
   try {
     const data = await req.formData();
-    const file: File | null = data.get("ProfilePhoto") as unknown as File;
+    const file: File | null = data.get("profilePhoto") as unknown as File;
     const id: string = data.get("id") as string;
 
+    console.log(file);
+
     if (!file) {
-      return new NextResponse("Foto de perfil não enviada, tente novamente", {
-        status: 404,
+      console.log("sem foto");
+      const student = await prisma.student.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      if (!student) {
+        return new NextResponse("Aluno não encontrado, verifique e tente novamente", {
+          status: 404,
+        });
+      }
+
+      return NextResponse.json({
+        firstName: student.firstName,
+        lastName: student.lastName,
+        profilePhoto: student.profilePhoto,
+        type: "student",
       });
     }
+
+    const s3 = new S3({
+      region: "sa-east-1",
+      accessKeyId: process.env.NEXT_S3_PUBLIC_ACCESS_KEY,
+      secretAccessKey: process.env.NEXT_S3_PUBLIC_SECRET_KEY,
+      signatureVersion: "v4",
+    });
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
@@ -36,7 +54,7 @@ export async function POST(req: Request) {
 
     const url = await s3.getSignedUrlPromise("putObject", fileParams);
 
-    const user = await prisma.student.update({
+    const student = await prisma.student.update({
       where: {
         id,
       },
@@ -45,7 +63,7 @@ export async function POST(req: Request) {
       },
     });
 
-    if (!user) {
+    if (!student) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
     }
 
@@ -65,6 +83,7 @@ export async function POST(req: Request) {
       });
 
     if (errorOnS3) {
+      console.log("erro no s3");
       await prisma.student.update({
         where: {
           id,
@@ -74,13 +93,15 @@ export async function POST(req: Request) {
         },
       });
 
-      return new NextResponse(
-        "Ocorreu um erro durante o envio, tente novamente!",
-        { status: 424 },
-      );
+      return new NextResponse("Ocorreu um erro durante o envio, tente novamente!", { status: 424 });
     }
 
-    return new NextResponse("Foto enviada com sucesso", { status: 200 });
+    return NextResponse.json({
+      firstName: student.firstName,
+      lastName: student.lastName,
+      profilePhoto: student.profilePhoto,
+      type: "student",
+    });
   } catch (error: any) {
     console.log(error, "PROFILE_PHOTO");
 

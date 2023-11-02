@@ -16,8 +16,6 @@ interface ThemeStepProps {
   setSteps: Dispatch<SetStateAction<number>>;
 }
 
-// TODO finalizar função de busca e submit para proxima etapa
-
 const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepProps) => {
   const [themes, setThemes] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -156,7 +154,7 @@ const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepP
   }
 
   return (
-    <div className="w-full h-full py-12 flex flex-col justify-center lg:py-24">
+    <div className="w-full h-full py-12 lg:py-24">
       <div className="w-full mx-auto px-6 flex flex-col justify-center items-center gap-9 md:px-16 lg:flex-row lg:justify-between lg:items-start lg:gap-24 lg:container">
         <div className="w-full px-6 py-9 rounded-2xl bg-green-primary h-fit lg:w-2/5">
           <p className="w-full text-white text-lg">{ThemeStepInfos.boxMessage}</p>
