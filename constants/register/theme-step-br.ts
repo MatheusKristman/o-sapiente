@@ -4,8 +4,10 @@ export const ThemeStepInfos = {
   firstTitleColored: "Temas",
   title: "que você tem",
   secondTitleColored: "domínio",
+  inputPlaceholder: "Pesquise aqui por temas ou matérias",
   selectedText: "Selecionados",
-  themesText: "Temas / Matérias",
+  themesText: "Temas",
+  subjectsText: "Matérias",
   nextButton: "Próximo",
   backButton: "Voltar",
 };

@@ -1,23 +1,30 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Loader2, Plus, X } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 import Button from "@/components/Button";
 import { ThemeStepInfos } from "@/constants/register/theme-step-br";
+import { Subject } from "@prisma/client";
+
+interface ThemeStepProps {
+  selectedOptions: string[];
+  setSelectedOptions: Dispatch<SetStateAction<string[]>>;
+  setSteps: Dispatch<SetStateAction<number>>;
+}
 
 // TODO finalizar função de busca e submit para proxima etapa
-// TODO criar função para se marcar o matéria como Matemática, adicionar todos os temas da matéria, adicionar função na api também
 
-const ThemeStep = () => {
-  const [options, setOptions] = useState<string[]>([]);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepProps) => {
+  const [themes, setThemes] = useState<string[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isNextAvailable, setIsNextAvailable] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -26,9 +33,17 @@ const ThemeStep = () => {
       setIsLoading(true);
 
       axios
-        .get("/api/subject/subs?lang=br")
+        .get("/api/subject?lang=br")
         .then((res) => {
-          setOptions(res.data);
+          let allThemes: string[] = [];
+          const data = res.data;
+
+          data.map((sub: Subject) => {
+            allThemes.push(...sub.subs);
+          });
+
+          setThemes(allThemes);
+          setSubjects(data);
           console.log(res.data);
         })
         .catch((error) => {
@@ -44,11 +59,47 @@ const ThemeStep = () => {
     }
 
     getAllSubjectsOptions();
-  }, [setOptions, router]);
+  }, [setThemes, router]);
 
   useEffect(() => {
     if (searchValue.length > 3) {
-      const filteredOpt = options.filter(
+      let filteredSubjects = subjects.filter(
+        (option) =>
+          !selectedOptions.some((opt) =>
+            opt
+              .toLowerCase()
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .includes(
+                searchValue
+                  .toLowerCase()
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, ""),
+              ),
+          ) &&
+          option.main
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .includes(
+              searchValue
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, ""),
+            ),
+      );
+
+      if (filteredSubjects.length > 0) {
+        const filteredOpt = filteredSubjects[0].subs.filter(
+          (sub) => !selectedOptions.includes(sub),
+        );
+
+        setFilteredOptions(filteredOpt);
+
+        return;
+      }
+
+      const filteredOpt = themes.filter(
         (option) =>
           !selectedOptions.includes(option) &&
           option
@@ -65,7 +116,15 @@ const ThemeStep = () => {
 
       setFilteredOptions(filteredOpt);
     }
-  }, [searchValue, options, selectedOptions]);
+  }, [searchValue, themes, selectedOptions, subjects]);
+
+  useEffect(() => {
+    if (selectedOptions.length > 0) {
+      setIsNextAvailable(true);
+    } else {
+      setIsNextAvailable(false);
+    }
+  }, [selectedOptions, setIsNextAvailable]);
 
   function handleOptionSelect(option: string) {
     let allOptions = [...selectedOptions];
@@ -90,6 +149,12 @@ const ThemeStep = () => {
     setSearchValue(value);
   }
 
+  function handleNextBtn() {
+    if (isNextAvailable && selectedOptions.length > 0) {
+      setSteps(2);
+    }
+  }
+
   return (
     <div className="w-full h-full py-12 flex flex-col justify-center lg:py-24">
       <div className="w-full mx-auto px-6 flex flex-col justify-center items-center gap-9 md:px-16 lg:flex-row lg:justify-between lg:items-start lg:gap-24 lg:container">
@@ -110,7 +175,7 @@ const ThemeStep = () => {
             onChange={handleSearch}
             value={searchValue}
             className="w-full h-12 mb-9 bg-[#C8D6DF] rounded-lg px-4 text-base text-gray-primary placeholder:text-[#96A3AB] placeholder:font-medium border-2 border-[#C8D6DF] focus:border-[#96A3AB] outline-none transition-[border]"
-            placeholder="Pesquise aqui"
+            placeholder={ThemeStepInfos.inputPlaceholder}
           />
 
           <div className="w-full flex flex-col gap-y-1 mb-9">
@@ -155,7 +220,7 @@ const ThemeStep = () => {
                     </span>
                   </div>
                 ) : (
-                  options
+                  themes
                     .filter((option) => !selectedOptions.includes(option))
                     .map((option, index) => (
                       <li
@@ -177,15 +242,15 @@ const ThemeStep = () => {
               onClick={() => {}}
               fullWidth
               secondary
-              // disabled={isSkipAvailable || isSubmitting}
+              disabled={true}
             />
 
             <Button
               label={ThemeStepInfos.nextButton}
-              onClick={() => {}}
+              onClick={handleNextBtn}
               fullWidth
               primary
-              // disabled={!isSkipAvailable || isSubmitting}
+              disabled={!isNextAvailable || isLoading}
             />
           </div>
         </div>
