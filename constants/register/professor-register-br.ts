@@ -84,3 +84,10 @@ export const professorRegisterFaqInfo = {
     },
   ],
 };
+
+export const professorLoginInfo = {
+  title: "Entre na sua conta",
+  email: "E-mail",
+  password: "Senha",
+  loginButton: "Entrar",
+};

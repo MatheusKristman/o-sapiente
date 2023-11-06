@@ -14,9 +14,12 @@ import professorRegisterSchema, {
   professorRegisterSchemaType,
 } from "@/constants/schemas/professorRegisterSchema";
 import { professorRegisterFormInfo } from "@/constants/register/professor-register-br";
+import useProfessorModalStore from "@/stores/useProfessorModalStore";
 
 const RegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { openModal } = useProfessorModalStore();
 
   const router = useRouter();
 
@@ -57,6 +60,10 @@ const RegisterForm = () => {
     setValue("tel", tel);
   }
 
+  function handleOpenLoginModal() {
+    openModal();
+  }
+
   function onSubmit(data: professorRegisterSchemaType) {
     setIsSubmitting(true);
 
@@ -93,7 +100,8 @@ const RegisterForm = () => {
 
           <form
             onSubmit={handleSubmit(onSubmit, (error) => console.log(error))} // TODO temporário, remover depois de configurado
-            className="w-full flex flex-col gap-6 mb-6">
+            className="w-full flex flex-col gap-6 mb-6"
+          >
             <div className="w-full flex flex-col gap-4">
               <input
                 {...register("firstName")}
@@ -183,7 +191,8 @@ const RegisterForm = () => {
             <button
               type="submit"
               className="w-full h-11 bg-green-primary rounded-md flex items-center justify-center text-white text-base font-semibold transition disabled:brightness-75 disabled:hover:brightness-75 lg:hover:brightness-90"
-              disabled={isSubmitting}>
+              disabled={isSubmitting}
+            >
               {isSubmitting ? (
                 <>
                   {professorRegisterFormInfo.registerBtn}{" "}
@@ -199,7 +208,9 @@ const RegisterForm = () => {
               {professorRegisterFormInfo.alreadyHasAccount.desc + " "}
               <button
                 type="button"
-                className="text-green-primary cursor-pointer lg:hover:underline">
+                onClick={handleOpenLoginModal}
+                className="text-green-primary cursor-pointer lg:hover:underline"
+              >
                 {professorRegisterFormInfo.alreadyHasAccount.link}
               </button>
             </span>
@@ -208,7 +219,8 @@ const RegisterForm = () => {
               {professorRegisterFormInfo.privacy.text + " "}
               <Link
                 className="underline text-gray-primary/80"
-                href={professorRegisterFormInfo.privacy.link.href}>
+                href={professorRegisterFormInfo.privacy.link.href}
+              >
                 {professorRegisterFormInfo.privacy.link.text}
               </Link>
             </span>
