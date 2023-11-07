@@ -1,11 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 import { footerLinks } from "@/constants/footer-br";
 
 const FooterLinks = () => {
   const router = useRouter();
+  const pathname = usePathname();
 
   function scrollTo(id: string) {
     if (id.includes("/")) {
@@ -13,15 +14,21 @@ const FooterLinks = () => {
       return;
     }
 
-    const element = document.getElementById(id);
-
-    if (element) {
-      if (window.innerWidth >= 1024) {
-        element.scrollIntoView({ behavior: "smooth", block: "center" });
-      } else {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
+    if (pathname !== "/") {
+      router.push("/");
     }
+
+    setTimeout(() => {
+      const element = document.getElementById(id);
+
+      if (element) {
+        if (window.innerWidth >= 1024) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }, 100);
   }
 
   return (
@@ -30,7 +37,8 @@ const FooterLinks = () => {
         <li
           key={item.label}
           onClick={() => scrollTo(item.href)}
-          className="text-lg text-white text-center hover:opacity-70 transition-opacity cursor-pointer">
+          className="text-lg text-white text-center hover:opacity-70 transition-opacity cursor-pointer"
+        >
           {item.label}
         </li>
       ))}

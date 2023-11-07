@@ -90,4 +90,6 @@ export const professorLoginInfo = {
   email: "E-mail",
   password: "Senha",
   loginButton: "Entrar",
+  noAccountText: "Você não possui uma conta?",
+  noAccountLink: "Cadastre-se aqui",
 };
