@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="w-full min-h-full flex flex-col">
+    <div className="w-full flex flex-col">
       <DashboardNav />
       {children}
     </div>
