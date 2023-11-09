@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import useHeaderStore from "@/stores/useHeaderStore";
+import { cn } from "@/libs/utils";
 
 const DashboardNav = () => {
   const { accountType, userId } = useHeaderStore();
@@ -43,13 +44,22 @@ const DashboardNav = () => {
             <li
               key={item.label}
               onClick={() => handleNavigation(accountType!, index)}
-              className={`p-4 flex itens-center gap-2 cursor-pointer transition-colors ${
+              className={cn(
+                "p-4 flex items-center gap-2 cursor-pointer transition-colors hover:bg-white hover:text-green-primary",
                 pathname.includes(item.studentHref) && item.studentHref !== ""
                   ? linkActiveClass
-                  : linkInactiveClass
-              } hover:bg-white hover:text-green-primary`}>
-              <item.icon />
-              <span class="hidden md:block">{item.label}</span>
+                  : linkInactiveClass,
+              )}>
+              <item.icon className="h-fit w-fit" />
+              <span
+                className={cn(
+                  "hidden md:block",
+                  pathname.includes(item.studentHref) && item.studentHref !== ""
+                    ? "md:block lg:block"
+                    : "md:hidden lg:block",
+                )}>
+                {item.label}
+              </span>
             </li>
           ))}
         </ul>

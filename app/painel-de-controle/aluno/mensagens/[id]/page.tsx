@@ -46,8 +46,7 @@ const DashboardPage = () => {
         <div className="w-full h-56 scrollbar scrollbar-thumb-slate-100 mt-9">
           <div
             className="w-full bg-white hover:bg-green-primary transition ease-in-out delay-150 py-6 group"
-            onClick={handleNavigation}
-          >
+            onClick={handleNavigation}>
             <div className="flex flex-row w-full">
               <div className="flex justify-start px-6 w-3/12 md:w-2/12 lg:w-4/12 xl:w-3/12 2xl:w-2/12">
                 <Image
@@ -61,8 +60,9 @@ const DashboardPage = () => {
 
               <div className="flex flex-col w-5/12 md:w-6/12 lg:w-4/12 group-hover:text-white transition ease-in-out delay-150">
                 <span className="font-semibold">John Doe</span>
-                <span className="text-sm whitespace-nowrap">
-                  Gostei das aulas, muito...
+                <span className="text-sm whitespace-nowrap truncate">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae optio voluptatibus
+                  molestiae praesentium qui nisi quod, ipsa animi voluptate quas!
                 </span>
               </div>
 
@@ -75,10 +75,11 @@ const DashboardPage = () => {
           </div>
         </div>
         <div className="flex px-6 pb-6 mt-auto">
-          <Button label="Suporte" fullWidth primary />
+          <Button onClick={() => {}} label="Suporte" fullWidth primary />
         </div>
       </div>
 
+      {/* transformar em componente */}
       <div className="hidden lg:flex flex-col lg:w-8/12">
         <div className="w-full bg-[#2C383F] h-fit px-2 lg:px-6 py-2">
           <div className="flex flex-row w-full">
@@ -103,7 +104,7 @@ const DashboardPage = () => {
             </button>
 
             <div className="hidden md:flex justify-end ml-auto px-4 py-2">
-              <Button label="Confirmar Finalização" fullWidth primary />
+              <Button onClick={() => {}} label="Confirmar Finalização" fullWidth primary />
             </div>
           </div>
         </div>

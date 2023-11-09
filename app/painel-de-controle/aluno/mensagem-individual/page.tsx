@@ -51,10 +51,7 @@ const DashboardPage = () => {
       <div className="flex flex-col w-full">
         <div className="w-full bg-[#2C383F] h-fit px-2 lg:px-6 py-2">
           <div className="flex flex-row w-full">
-            <button
-              className="text-green-primary px-3 block md:hidden"
-              onClick={handleNavigation}
-            >
+            <button className="text-green-primary px-3 block lg:hidden" onClick={handleNavigation}>
               <ChevronLeft size={35} />
             </button>
             <div className="flex justify-start  md:px-6 py-2">
@@ -80,7 +77,7 @@ const DashboardPage = () => {
             </button>
 
             <div className="hidden md:flex justify-end ml-auto px-4 py-2">
-              <Button label="Confirmar Finalização" fullWidth primary />
+              <Button onClick={() => {}} label="Confirmar Finalização" fullWidth primary />
             </div>
           </div>
         </div>
@@ -89,7 +86,7 @@ const DashboardPage = () => {
           <div className="flex w-full">
             <div className="flex w-full justify-end ">
               <div className="flex justify-center items-center w-72 h-24 bg-white rounded-l-lg rounded-br-lg">
-                <Button label="Confirmar Finalização" primary />
+                <Button onClick={() => {}} label="Confirmar Finalização" primary />
               </div>
             </div>
           </div>
@@ -117,8 +114,7 @@ const DashboardPage = () => {
             <div className="flex flex-row items-center justify-start gap-3.5 md:pl-11">
               <button
                 onClick={toggleModalFooter}
-                className="flex rounded-xl w-12 h-12 bg-green-primary text-white md:hidden justify-center items-center"
-              >
+                className="flex rounded-xl w-12 h-12 bg-green-primary text-white md:hidden justify-center items-center">
                 {isModalFooterOpen ? <XCircleIcon /> : <Plus />}
               </button>
               <button className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">

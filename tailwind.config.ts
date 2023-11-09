@@ -46,6 +46,7 @@ const config: Config = {
         hat: "url('/assets/icons/hat.svg')",
         menu: "url('/assets/icons/menu.svg')",
         camera: "url('/assets/icons/camera.svg')",
+        "camera-white": "url('/assets/icons/camera-white.svg')",
         uploadIcon: "url('/assets/icons/upload.svg')",
         highlight: "url('/assets/icons/highlight.svg')",
         registerStepShadow: "url('/assets/icons/register-about-shadow-step.svg')",
