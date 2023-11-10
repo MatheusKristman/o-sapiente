@@ -6,23 +6,25 @@ import Link from "next/link";
 import { IoIosMenu } from "react-icons/io";
 import { useSession, signOut } from "next-auth/react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { LogOut } from "lucide-react";
 
-import {
-  navLinks,
-  professorHeaderButton,
-  studentHeaderButton,
-} from "@/constants/header-br";
+import { navLinks, professorHeaderButton, studentHeaderButton } from "@/constants/header-br";
 import Button from "./Button";
 import useHeaderStore from "@/stores/useHeaderStore";
 import useStudentModalStore from "@/stores/useStudentModalStore";
+import useProfessorModalStore from "@/stores/useProfessorModalStore";
+import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 
 const Header = () => {
-  const { isMobileMenuOpen, openMobileMenu, accountType, setAccountType, userId, setUserId } = useHeaderStore();
-  const { openModal, setToRegister } = useStudentModalStore();
+  const { isMobileMenuOpen, openMobileMenu, accountType, setAccountType, userId, setUserId } =
+    useHeaderStore();
+  const { openModal: openStudentModal, setToRegister } = useStudentModalStore();
+  const { openModal: openProfessorModal } = useProfessorModalStore();
 
   const session = useSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   console.log(session);
 
@@ -37,24 +39,40 @@ const Header = () => {
         })
         .catch((error) => console.error(error));
     }
-  }, [session]);
+  }, [session, setAccountType, setUserId]);
 
   function scrollTo(id: string) {
-    const element = document.getElementById(id);
-
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (pathname !== "/") {
+      router.push("/");
     }
+
+    setTimeout(() => {
+      const element = document.getElementById(id);
+
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 100);
   }
 
   function openStudentRegisterModal() {
-    openModal();
+    openStudentModal();
     setToRegister();
+  }
+
+  function openProfessorLoginModal() {
+    openProfessorModal();
   }
 
   function handleDashboardStudentBtn() {
     if (session.status === "authenticated" && userId) {
-      router.push(`/painel-de-controle/aluno/resumo/${userId}`);
+      router.push(`${menuItems[0].studentHref}${userId}`);
+    }
+  }
+
+  function handleDashboardProfessorBtn() {
+    if (session.status === "authenticated" && userId) {
+      router.push(`${menuItems[0].professorHref}${userId}`);
     }
   }
 
@@ -74,9 +92,9 @@ const Header = () => {
       <button
         type="button"
         onClick={openMobileMenu}
-        className={`flex lg:hidden ${isMobileMenuOpen && "opacity-0 pointer-events-none"
-          } items-center justify-center cursor-pointer`}
-      >
+        className={`flex lg:hidden ${
+          isMobileMenuOpen && "opacity-0 pointer-events-none"
+        } items-center justify-center cursor-pointer`}>
         <IoIosMenu size={35} className="text-green-primary" />
       </button>
 
@@ -85,8 +103,7 @@ const Header = () => {
           <li
             key={link.href}
             onClick={() => scrollTo(link.href)}
-            className="text-gray-primary cursor-pointer text-base xl:text-lg hover:opacity-70 transition duration-200 whitespace-nowrap"
-          >
+            className="text-gray-primary cursor-pointer text-base xl:text-lg hover:opacity-70 transition duration-200 whitespace-nowrap">
             {link.label}
           </li>
         ))}
@@ -95,49 +112,63 @@ const Header = () => {
       <div className="hidden lg:flex items-center justify-center gap-x-6">
         {session.status === "authenticated" ? (
           accountType === "Student" ? (
-            <button
-              type="button"
-              onClick={handleDashboardStudentBtn}
-              className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
-            >
-              <Image
-                src="/assets/icons/user.svg"
-                alt="Usuário"
-                width={24}
-                height={24}
-                className="object-contain"
-              />
-              Área do Aluno
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="flex gap-2 items-center justify-center text-green-primary text-lg">
+                <LogOut className="h-6 w-6" />
+                Sair
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDashboardStudentBtn}
+                className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90">
+                <Image
+                  src="/assets/icons/user.svg"
+                  alt="Usuário"
+                  width={24}
+                  height={24}
+                  className="object-contain"
+                />
+                Área do Aluno
+              </button>
+            </>
           ) : accountType === "Professor" ? (
-            <button
-              type="button"
-              onClick={() => signOut()}
-              className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
-            >
-              <Image
-                src="/assets/icons/user.svg"
-                alt="Usuário"
-                width={24}
-                height={24}
-                className="object-contain"
-              />
-              Área do Professor
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="flex gap-2 items-center justify-center text-green-primary text-lg">
+                <LogOut className="h-6 w-6" />
+                Sair
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDashboardProfessorBtn}
+                className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90">
+                <Image
+                  src="/assets/icons/user.svg"
+                  alt="Usuário"
+                  width={24}
+                  height={24}
+                  className="object-contain"
+                />
+                Área do Professor
+              </button>
+            </>
           ) : null
         ) : (
           <>
             <Button
               secondary
               label={professorHeaderButton.label}
-              onClick={() => { }}
+              onClick={openProfessorLoginModal}
             />
 
-            <Button
-              primary
-              label={studentHeaderButton.label}
-              onClick={openStudentRegisterModal}
-            />
+            <Button primary label={studentHeaderButton.label} onClick={openStudentRegisterModal} />
           </>
         )}
       </div>

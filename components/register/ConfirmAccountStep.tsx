@@ -3,8 +3,13 @@ import { useRouter } from "next/navigation";
 
 import { confirmAccountStepInfo } from "@/constants/confirmAccountStep-br";
 import Button from "@/components/Button";
+import { IProfileData } from "@/app/cadastro/professor/finalizacao/[id]/page";
 
-const ConfirmAccountStep = () => {
+interface ConfirmAccountStepProps {
+  profileData: IProfileData | null;
+}
+
+const ConfirmAccountStep = ({ profileData }: ConfirmAccountStepProps) => {
   const router = useRouter();
 
   function handleBackBtn() {
@@ -25,16 +30,26 @@ const ConfirmAccountStep = () => {
 
         <div className="w-full bg-white rounded-lg px-9 py-5 shadow-lg shadow-[rgba(0,0,0,0.25)] flex items-center justify-between mb-16 sm:max-w-lg">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-            <div className="relative w-14 h-14 rounded-full">
+            <div className="relative w-14 h-14 min-w-[56px] min-h-[56px] rounded-full overflow-hidden">
+              {/* TODO depois adicionar foto padrão caso o perfil não possua foto */}
               <Image
-                src="/assets/images/avatar-example.png"
+                src={profileData?.profilePhoto || "/assets/images/avatar-example.png"}
                 alt="Perfil"
                 fill
-                className="object-cover"
+                className="object-cover w-full h-full"
               />
             </div>
 
-            <span className="text-xl font-semibold text-gray-primary">Nome teste</span>
+            <div className="flex flex-col gap-2">
+              <span className="text-xl font-semibold text-gray-primary">{`${
+                profileData!.firstName
+              } ${profileData!.lastName}`}</span>
+              {profileData!.type === "professor" && (
+                <span className="text-base text-gray-primary font-medium">
+                  {profileData!.themes.join(", ")}
+                </span>
+              )}
+            </div>
           </div>
 
           <div>

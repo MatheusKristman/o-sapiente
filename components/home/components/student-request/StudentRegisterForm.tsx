@@ -15,7 +15,7 @@ import { studentRegisterSchemaType } from "@/constants/schemas/studentRegisterSc
 import React from "react";
 
 const StudentRegisterForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const {
     setToLogin,
@@ -64,11 +64,13 @@ const StudentRegisterForm = () => {
   }
 
   function handleLoginLink() {
-    setToNotRegister();
+    if (!isSubmitting) {
+      setToNotRegister();
 
-    setTimeout(() => {
-      setToLogin();
-    }, 350);
+      setTimeout(() => {
+        setToLogin();
+      }, 350);
+    }
   }
 
   function handleClose() {
@@ -104,24 +106,28 @@ const StudentRegisterForm = () => {
 
     axios
       .post("/api/register/student/pre-register", data)
-      .then((res) => console.log(res.data))
-      .catch((error) => console.error(error))
+      .then((res) => {
+        handleClose();
+
+        router.replace(`/cadastro/aluno/finalizacao/${res.data.id}`);
+      })
+      .catch((error) => {
+        console.error(error);
+
+        toast.error(error.response.data);
+      })
       .finally(() => setIsSubmitting(false));
   }
 
   return (
     <div className="w-full flex flex-col gap-9">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full overflow-x-hidden"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full overflow-x-hidden">
         <motion.div
           variants={studentFormAnimation}
           initial="initial"
           animate="animate"
           exit="exit"
-          className="grid grid-cols-2 grid-rows-4 gap-4 mb-6"
-        >
+          className="grid grid-cols-2 grid-rows-4 gap-4 mb-6">
           <div className="w-full col-start-1 col-end-2 flex flex-col gap-1">
             <input
               {...register("firstName")}
@@ -130,7 +136,8 @@ const StudentRegisterForm = () => {
               name="firstName"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.firstName && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -150,7 +157,8 @@ const StudentRegisterForm = () => {
               name="lastName"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.lastName && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -170,7 +178,8 @@ const StudentRegisterForm = () => {
               name="email"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.email && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -192,7 +201,8 @@ const StudentRegisterForm = () => {
               autoComplete="off"
               autoCorrect="off"
               maxLength={15}
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.tel && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -212,7 +222,8 @@ const StudentRegisterForm = () => {
               name="password"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.password && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -232,9 +243,9 @@ const StudentRegisterForm = () => {
               name="passwordConfirm"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
-                errors.passwordConfirm &&
-                "border-[#FF7373] border-2 border-solid"
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
+                errors.passwordConfirm && "border-[#FF7373] border-2 border-solid"
               }`}
             />
 
@@ -253,8 +264,7 @@ const StudentRegisterForm = () => {
           animate="animate"
           exit="exit"
           disabled={isSubmitting}
-          className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter] disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75"
-        >
+          className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter] disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75">
           {studentRegisterInfo.nextButton}
         </motion.button>
       </form>
@@ -264,10 +274,7 @@ const StudentRegisterForm = () => {
       <div className="w-full flex flex-col items-center justify-center gap-4">
         <p className="text-base font-semibold text-[#2C383F]">
           {studentRegisterInfo.hasAccountText}{" "}
-          <span
-            onClick={handleLoginLink}
-            className="text-green-primary cursor-pointer"
-          >
+          <span onClick={handleLoginLink} className="text-green-primary cursor-pointer">
             {studentRegisterInfo.hasAccountLink}
           </span>
         </p>
