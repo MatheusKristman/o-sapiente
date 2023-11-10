@@ -2,12 +2,18 @@ import Image from "next/image";
 import { Dot } from "lucide-react";
 
 import Button from "@/components/Button";
+import { professorResumeInfos } from "@/constants/dashboard/resume-br";
 
-const ResumeRequestBox = () => {
+interface ResumeRequestBoxProps {
+  type: string;
+}
+
+const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
   return (
     <div className="w-full rounded-lg bg-green-primary p-9 mb-5 shadow-md shadow-[rgba(0,0,0,0.25)]">
       <h2 className="text-white text-2xl font-semibold mb-5 md:text-3xl lg:whitespace-nowrap whitespace-normal">
-        Solicitações Pendentes
+        {type === "Professor" ? professorResumeInfos.requestBoxTitle : null}
+        {type === "Student" ? "Solicitações Pendentes" : null}
       </h2>
 
       <div className="relative w-full max-h-[300px] overflow-auto scrollbar scrollbar-thumb-slate-100">

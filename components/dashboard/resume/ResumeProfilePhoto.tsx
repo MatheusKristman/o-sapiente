@@ -1,13 +1,43 @@
 import Image from "next/image";
 
-const ResumeProfilePhoto = () => {
+import Button from "@/components/Button";
+import { professorResumeInfos } from "@/constants/dashboard/resume-br";
+
+interface ResumeProfilePhotoProps {
+  type: string;
+}
+
+const ResumeProfilePhoto = ({ type }: ResumeProfilePhotoProps) => {
   return (
     <div className="w-full flex flex-col gap-5 bg-white rounded-2xl p-9 shadow-md shadow-[rgba(0,0,0,0.25)]">
       <div className="relative aspect-square overflow-hidden rounded-2xl">
         <Image src="/assets/images/profile-test.jpg" alt="Perfil" fill className="object-cover" />
       </div>
 
-      <span className="w-full text-center text-xl text-gray-primary font-semibold">John Doe</span>
+      {type === "Student" && (
+        <span className="w-full text-center text-xl text-gray-primary font-semibold">John Doe</span>
+      )}
+      {type === "Professor" && (
+        <div className="w-full flex flex-col gap-y-6">
+          <div className="w-full flex flex-col items-center justify-center gap-y-4">
+            <span className="text-xl text-gray-primary text-center font-semibold">Mary Doe</span>
+            <span className="text-base text-gray-primary text-center font-medium">
+              Matemática | Química
+            </span>
+          </div>
+
+          <div className="w-full h-[2px] bg-green-primary" />
+
+          <div className="w-full flex flex-col items-center gap-y-6">
+            {/* caso de não ter plano */}
+            <span className="text-xl text-gray-primary text-center font-semibold">
+              {professorResumeInfos.noPlanText}
+            </span>
+
+            <Button primary fullWidth onClick={() => {}} label={professorResumeInfos.buyPlanBtn} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

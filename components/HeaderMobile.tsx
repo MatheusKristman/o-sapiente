@@ -14,6 +14,7 @@ import useHeaderStore from "@/stores/useHeaderStore";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 import { LogOut } from "lucide-react";
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
+import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 
 const HeaderMobile = () => {
   const { isMobileMenuOpen, closeMobileMenu, accountType, userId } = useHeaderStore();
@@ -57,7 +58,7 @@ const HeaderMobile = () => {
     closeMobileMenu();
 
     setTimeout(() => {
-      router.push(`/painel-de-controle/aluno/resumo/${userId}`);
+      router.push(`${menuItems[0].studentHref}${userId}`);
     }, 500);
   }
 
@@ -66,6 +67,14 @@ const HeaderMobile = () => {
 
     setTimeout(() => {
       openProfessorModal();
+    }, 500);
+  }
+
+  function handleDashboardProfessorBtn() {
+    closeMobileMenu();
+
+    setTimeout(() => {
+      router.push(`${menuItems[0].professorHref}${userId}`);
     }, 500);
   }
 
@@ -78,8 +87,7 @@ const HeaderMobile = () => {
             initial="offscreen"
             animate="onscreen"
             exit="exit"
-            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex lg:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999]"
-          >
+            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex lg:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999]">
             <button type="button" onClick={closeMobileMenu} className="text-white cursor-pointer">
               <BsXLg size={26} />
             </button>
@@ -90,8 +98,7 @@ const HeaderMobile = () => {
                   <li
                     key={link.href}
                     onClick={() => scrollTo(link.href)}
-                    className="text-white cursor-pointer text-lg whitespace-nowrap"
-                  >
+                    className="text-white cursor-pointer text-lg whitespace-nowrap">
                     {link.label}
                   </li>
                 ))}
@@ -105,8 +112,7 @@ const HeaderMobile = () => {
                     <button
                       type="button"
                       onClick={() => signOut()}
-                      className="flex gap-2 items-center justify-center text-white text-lg"
-                    >
+                      className="flex gap-2 items-center justify-center text-white text-lg">
                       <LogOut className="h-6 w-6" />
                       Sair
                     </button>
@@ -114,8 +120,7 @@ const HeaderMobile = () => {
                     <button
                       type="button"
                       onClick={handleDashboardStudentBtn}
-                      className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer"
-                    >
+                      className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer">
                       <Image
                         src="/assets/icons/user-green.svg"
                         alt="Usuário"
@@ -131,17 +136,15 @@ const HeaderMobile = () => {
                     <button
                       type="button"
                       onClick={() => signOut()}
-                      className="flex gap-2 items-center justify-center text-white text-lg"
-                    >
+                      className="flex gap-2 items-center justify-center text-white text-lg">
                       <LogOut className="h-6 w-6" />
                       Sair
                     </button>
 
-                    <button // signOut é temporário
+                    <button
                       type="button"
-                      onClick={() => signOut()}
-                      className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer"
-                    >
+                      onClick={handleDashboardProfessorBtn}
+                      className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer">
                       <Image
                         src="/assets/icons/user-green.svg"
                         alt="Usuário"

@@ -5,9 +5,10 @@ import TableRow, { TableRowProps } from "@/components/dashboard/history/TableRow
 
 interface ResponsiveTableProps {
   data: TableRowProps[];
+  type: string;
 }
 
-const ResponsiveTable: React.FC<ResponsiveTableProps> = ({ data }) => {
+const ResponsiveTable: React.FC<ResponsiveTableProps> = ({ data, type }) => {
   return (
     <div className="relative pb-12 pt-12">
       <div className="sticky top-0 left-0 w-6 bg-gradient-to-r from-white to-transparent" />
@@ -16,7 +17,8 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({ data }) => {
           <thead>
             <tr>
               <th className="w-40 min-w-[300px] p-3 text-base font-medium tracking-wide text-left text-[#879298] whitespace-nowrap">
-                Professor
+                {type === "Professor" ? "Aluno" : null}
+                {type === "Student" ? "Professor" : null}
               </th>
 
               <th className="w-24 p-3 text-base font-medium tracking-wide text-left text-[#879298] whitespace-nowrap">
