@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 import { prisma } from "@/libs/prismadb";
 
-export async function PATCH(req: Request) {
+export async function PATCH(req: NextRequest) {
   try {
     const s3 = new S3({
       region: "sa-east-1",
