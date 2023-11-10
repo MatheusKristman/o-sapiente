@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,6 +13,8 @@ import { studentLoginType } from "@/constants/schemas/studentLoginSchema";
 import axios from "axios";
 
 const StudentLoginForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const {
     setToNotLogin,
     setToRegister,
@@ -66,10 +69,13 @@ const StudentLoginForm = () => {
           handleClose();
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => console.error(error))
+      .finally(() => setIsSubmitting(false));
   }
 
   async function onSubmit(data: studentLoginType) {
+    setIsSubmitting(true);
+
     if (theme && message) {
       await axios
         .post("/api/login/student/has-theme-and-message", {
@@ -114,7 +120,8 @@ const StudentLoginForm = () => {
               name="email"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.email && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -134,7 +141,8 @@ const StudentLoginForm = () => {
               name="password"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.password && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -153,7 +161,8 @@ const StudentLoginForm = () => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter]"
+          disabled={isSubmitting}
+          className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter] disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75"
         >
           {studentLoginInfo.loginButton}
         </motion.button>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { BsXLg } from "react-icons/bs";
 import { signIn } from "next-auth/react";
@@ -18,6 +19,8 @@ import { professorLoginInfo } from "@/constants/register/professor-register-br";
 import professorLoginSchema, { professorLoginType } from "@/constants/schemas/professorLoginSchema";
 
 const ProfessorLoginForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const { isModalOpen, closeModal } = useProfessorModalStore();
 
   const router = useRouter();
@@ -39,6 +42,8 @@ const ProfessorLoginForm = () => {
   }
 
   function handleSignin(email: string, password: string) {
+    setIsSubmitting(true);
+
     signIn("credentials", {
       email,
       password,
@@ -54,7 +59,8 @@ const ProfessorLoginForm = () => {
           router.replace("/");
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => console.error(error))
+      .finally(() => setIsSubmitting(false));
   }
 
   async function onSubmit(data: professorLoginType) {
@@ -117,7 +123,8 @@ const ProfessorLoginForm = () => {
                           name="email"
                           autoComplete="off"
                           autoCorrect="off"
-                          className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+                          disabled={isSubmitting}
+                          className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                             errors.email && "border-[#FF7373] border-2 border-solid"
                           }`}
                         />
@@ -137,7 +144,8 @@ const ProfessorLoginForm = () => {
                           name="password"
                           autoComplete="off"
                           autoCorrect="off"
-                          className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+                          disabled={isSubmitting}
+                          className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                             errors.password && "border-[#FF7373] border-2 border-solid"
                           }`}
                         />
@@ -156,7 +164,8 @@ const ProfessorLoginForm = () => {
                       initial="initial"
                       animate="animate"
                       exit="exit"
-                      className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter]"
+                      disabled={isSubmitting}
+                      className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter] disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75"
                     >
                       {professorLoginInfo.loginButton}
                     </motion.button>

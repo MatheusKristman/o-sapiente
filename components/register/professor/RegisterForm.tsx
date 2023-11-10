@@ -17,7 +17,7 @@ import { professorRegisterFormInfo } from "@/constants/register/professor-regist
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
 
 const RegisterForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const { openModal } = useProfessorModalStore();
 
@@ -41,7 +41,7 @@ const RegisterForm = () => {
   });
 
   const inputStyle =
-    "w-full h-11 bg-[#EBEFF1] rounded-md px-4 text-base text-gray-primary placeholder:font-medium border-2 border-[#EBEFF1] focus:border-[#9DA5AA] outline-none transition-[border]";
+    "w-full h-11 bg-[#EBEFF1] rounded-md px-4 text-base text-gray-primary placeholder:font-medium border-2 border-[#EBEFF1] focus:border-[#9DA5AA] outline-none transition-[border] disabled:brightness-75 disabled:hover:brightness-75";
   const inputErrorStyle = "border-[#FF7373] border-2 border-solid focus:border-[#FF7373]";
 
   function handleTelFormat(event: React.ChangeEvent<HTMLInputElement>) {
@@ -100,8 +100,7 @@ const RegisterForm = () => {
 
           <form
             onSubmit={handleSubmit(onSubmit, (error) => console.log(error))} // TODO temporário, remover depois de configurado
-            className="w-full flex flex-col gap-6 mb-6"
-          >
+            className="w-full flex flex-col gap-6 mb-6">
             <div className="w-full flex flex-col gap-4">
               <input
                 {...register("firstName")}
@@ -191,8 +190,7 @@ const RegisterForm = () => {
             <button
               type="submit"
               className="w-full h-11 bg-green-primary rounded-md flex items-center justify-center text-white text-base font-semibold transition disabled:brightness-75 disabled:hover:brightness-75 lg:hover:brightness-90"
-              disabled={isSubmitting}
-            >
+              disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   {professorRegisterFormInfo.registerBtn}{" "}
@@ -209,8 +207,7 @@ const RegisterForm = () => {
               <button
                 type="button"
                 onClick={handleOpenLoginModal}
-                className="text-green-primary cursor-pointer lg:hover:underline"
-              >
+                className="text-green-primary cursor-pointer lg:hover:underline">
                 {professorRegisterFormInfo.alreadyHasAccount.link}
               </button>
             </span>
@@ -219,8 +216,7 @@ const RegisterForm = () => {
               {professorRegisterFormInfo.privacy.text + " "}
               <Link
                 className="underline text-gray-primary/80"
-                href={professorRegisterFormInfo.privacy.link.href}
-              >
+                href={professorRegisterFormInfo.privacy.link.href}>
                 {professorRegisterFormInfo.privacy.link.text}
               </Link>
             </span>

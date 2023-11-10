@@ -15,7 +15,7 @@ import { studentRegisterSchemaType } from "@/constants/schemas/studentRegisterSc
 import React from "react";
 
 const StudentRegisterForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const {
     setToLogin,
@@ -64,11 +64,13 @@ const StudentRegisterForm = () => {
   }
 
   function handleLoginLink() {
-    setToNotRegister();
+    if (!isSubmitting) {
+      setToNotRegister();
 
-    setTimeout(() => {
-      setToLogin();
-    }, 350);
+      setTimeout(() => {
+        setToLogin();
+      }, 350);
+    }
   }
 
   function handleClose() {
@@ -134,7 +136,8 @@ const StudentRegisterForm = () => {
               name="firstName"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.firstName && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -154,7 +157,8 @@ const StudentRegisterForm = () => {
               name="lastName"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.lastName && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -174,7 +178,8 @@ const StudentRegisterForm = () => {
               name="email"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.email && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -196,7 +201,8 @@ const StudentRegisterForm = () => {
               autoComplete="off"
               autoCorrect="off"
               maxLength={15}
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.tel && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -216,7 +222,8 @@ const StudentRegisterForm = () => {
               name="password"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.password && "border-[#FF7373] border-2 border-solid"
               }`}
             />
@@ -236,7 +243,8 @@ const StudentRegisterForm = () => {
               name="passwordConfirm"
               autoComplete="off"
               autoCorrect="off"
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
                 errors.passwordConfirm && "border-[#FF7373] border-2 border-solid"
               }`}
             />

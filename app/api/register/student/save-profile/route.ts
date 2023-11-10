@@ -5,6 +5,13 @@ import { prisma } from "@/libs/prismadb";
 
 export async function PATCH(req: Request) {
   try {
+    const s3 = new S3({
+      region: "sa-east-1",
+      accessKeyId: process.env.NEXT_S3_PUBLIC_ACCESS_KEY,
+      secretAccessKey: process.env.NEXT_S3_PUBLIC_SECRET_KEY,
+      signatureVersion: "v4",
+    });
+
     const data = await req.formData();
     const file: File | null = data.get("profilePhoto") as unknown as File;
     const id: string = data.get("id") as string;
@@ -32,13 +39,6 @@ export async function PATCH(req: Request) {
         type: "student",
       });
     }
-
-    const s3 = new S3({
-      region: "sa-east-1",
-      accessKeyId: process.env.NEXT_S3_PUBLIC_ACCESS_KEY,
-      secretAccessKey: process.env.NEXT_S3_PUBLIC_SECRET_KEY,
-      signatureVersion: "v4",
-    });
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
@@ -77,6 +77,7 @@ export async function PATCH(req: Request) {
         errorOnS3 = false;
       })
       .catch((error) => {
+        console.log(error);
         if (error) {
           errorOnS3 = true;
         }
