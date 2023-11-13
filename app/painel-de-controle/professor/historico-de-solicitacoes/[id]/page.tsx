@@ -69,7 +69,7 @@ const HistoryPage = () => {
     <div className="w-full px-6 pt-12 mx-auto md:px-16 lg:container lg:pt-24 lg:pb-12">
       <TopStats stats={stats} />
 
-      <FilterWrapper isProfessor={true} />
+      <FilterWrapper isTeacher={true} />
 
       <ResponsiveTable data={tableData} type="Professor" />
     </div>

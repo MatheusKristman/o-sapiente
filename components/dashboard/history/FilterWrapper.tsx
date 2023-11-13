@@ -3,14 +3,14 @@ import { Search, ChevronDown } from "lucide-react";
 import Button from "@/components/Button";
 
 interface FilterWrapperProps {
-  isProfessor: boolean;
+  isTeacher: boolean;
 }
 
-const FilterWrapper: React.FC<FilterWrapperProps> = ({ isProfessor }) => {
+const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
   return (
     <div
       className={
-        isProfessor
+        isTeacher
           ? "flex flex-col pt-9 md:flex-row lg:justify-between"
           : "flex flex-col pt-9 lg:flex-row lg:justify-between"
       }
@@ -33,14 +33,14 @@ const FilterWrapper: React.FC<FilterWrapperProps> = ({ isProfessor }) => {
 
       <div
         className={
-          isProfessor
+          isTeacher
             ? "flex flex-col md:flex-row w-full md:justify-end mt-6 gap-6 lg:w-fit md:mt-0"
             : "flex flex-col md:flex-row w-full mt-6 gap-6 lg:w-fit lg:mt-0"
         }
       >
         <div
           className={
-            isProfessor
+            isTeacher
               ? "hidden"
               : "flex w-full md:w-6/12 md:whitespace-nowrap lg:w-fit"
           }
@@ -55,7 +55,7 @@ const FilterWrapper: React.FC<FilterWrapperProps> = ({ isProfessor }) => {
 
         <div
           className={
-            isProfessor
+            isTeacher
               ? "relative w-full md:w-4/12 lg:w-40"
               : "relative w-full md:w-3/12 lg:w-40"
           }
