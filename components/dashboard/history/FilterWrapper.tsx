@@ -2,9 +2,19 @@ import { Search, ChevronDown } from "lucide-react";
 
 import Button from "@/components/Button";
 
-const FilterWrapper = () => {
+interface FilterWrapperProps {
+  isTeacher: boolean;
+}
+
+const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
   return (
-    <div className="flex flex-col pt-9 lg:flex-row lg:justify-between">
+    <div
+      className={
+        isTeacher
+          ? "flex flex-col pt-9 md:flex-row lg:justify-between"
+          : "flex flex-col pt-9 lg:flex-row lg:justify-between"
+      }
+    >
       <div className="w-full flex items-center justify-between h-[46px] bg-[#C8D6DF] rounded-lg px-5 peer md:w-7/12 lg:w-96">
         <input
           type="text"
@@ -21,12 +31,35 @@ const FilterWrapper = () => {
         />
       </div>
 
-      <div className="flex flex-col md:flex-row w-full mt-6 gap-6 lg:w-fit lg:mt-0">
-        <div className="flex w-full md:w-5/12 md:whitespace-nowrap lg:w-fit">
-          <Button onClick={() => {}} label="Consultar Certificado" fullWidth primary />
+      <div
+        className={
+          isTeacher
+            ? "flex flex-col md:flex-row w-full md:justify-end mt-6 gap-6 lg:w-fit md:mt-0"
+            : "flex flex-col md:flex-row w-full mt-6 gap-6 lg:w-fit lg:mt-0"
+        }
+      >
+        <div
+          className={
+            isTeacher
+              ? "hidden"
+              : "flex w-full md:w-6/12 md:whitespace-nowrap lg:w-fit"
+          }
+        >
+          <Button
+            onClick={() => {}}
+            label="Consultar Certificado"
+            fullWidth
+            primary
+          />
         </div>
 
-        <div className="relative w-full md:w-3/12 lg:w-40">
+        <div
+          className={
+            isTeacher
+              ? "relative w-full md:w-4/12 lg:w-40"
+              : "relative w-full md:w-3/12 lg:w-40"
+          }
+        >
           <select
             id="periodo"
             className="bg-[#2C383F] border border-[#2C383F] text-white text-lg rounded-lg w-full pl-5 h-[46px] appearance-none text-center md:text-start outline-green-primary lg:cursor-pointer"

@@ -15,8 +15,12 @@ export type StatsType = {
   total: number;
 };
 
-const DashboardPage = () => {
-  const [stats, setStats] = useState<StatsType>({ finished: 10, current: 10, total: 10 });
+const HistoryPage = () => {
+  const [stats, setStats] = useState<StatsType>({
+    finished: 10,
+    current: 10,
+    total: 10,
+  });
 
   const tableData = [
     {
@@ -65,11 +69,11 @@ const DashboardPage = () => {
     <div className="w-full px-6 pt-12 mx-auto md:px-16 lg:container lg:pt-24 lg:pb-12">
       <TopStats stats={stats} />
 
-      <FilterWrapper />
+      <FilterWrapper isTeacher={false} />
 
-      <ResponsiveTable data={tableData} />
+      <ResponsiveTable data={tableData} type="Professor" />
     </div>
   );
 };
 
-export default DashboardPage;
+export default HistoryPage;
