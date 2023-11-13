@@ -1,3 +1,11 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+
 import Banner from "@/components/home/Banner";
 import StudentModal from "@/components/home/StudentModal";
 import Hero from "../components/home/Hero";
@@ -5,10 +13,62 @@ import Steps from "@/components/home/Steps";
 import Benefits from "@/components/home/Benefits";
 import RecentsRequests from "@/components/home/RecentsRequests";
 import Contact from "@/components/home/Contact";
+import ProfessorLoginForm from "@/components/home/components/professor-login/ProfessorLoginForm";
+import useProfessorModalStore from "@/stores/useProfessorModalStore";
+import useStudentModalStore from "@/stores/useStudentModalStore";
 
 export default function Home() {
+  const [successMessage, setSuccessMessage] = useState<string>("");
+
+  const { openModal: openStudentModal, setToLogin } = useStudentModalStore();
+  const { openModal: openProfessorModal } = useProfessorModalStore();
+
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const confirmed = searchParams.get("confirmed");
+  const type = searchParams.get("type");
+  let redirected = searchParams.get("redirected");
+
+  const router = useRouter();
+
+  if (id && confirmed && type) {
+    axios
+      .post("/api/register/confirm-account", { id, confirmed, type })
+      .then((res) => {
+        setSuccessMessage(res.data.message);
+      })
+      .catch((error) => {
+        console.error(error);
+
+        toast.error(error.response.data);
+      })
+      .finally(() => {
+        router.replace(`/?type=${type}&redirected=true`);
+      });
+  }
+
+  useEffect(() => {
+    if (redirected) {
+      if (type === "professor") {
+        toast.dismiss();
+        toast.success(successMessage);
+        openProfessorModal();
+      }
+
+      if (type === "student") {
+        toast.dismiss();
+        toast.success(successMessage);
+        openStudentModal();
+        setToLogin();
+      }
+
+      redirected = "";
+    }
+  }, [redirected]);
+
   return (
     <>
+      <ProfessorLoginForm />
       <StudentModal />
       <Hero />
       <Banner />

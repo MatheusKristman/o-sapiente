@@ -10,55 +10,67 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Lang {
+  br
+}
+
 model Student {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String
-  lastName String
-  email String @unique 
-  tel String?
-  birth String?
-  cep String?
-  city String?
-  state String?
-  address String?
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  firstName     String
+  lastName      String
+  email         String    @unique
+  tel           String?
+  birth         String?
+  cep           String?
+  city          String?
+  state         String?
+  address       String?
   addressNumber String?
-  district String?
-  complement String?
-  password String
-  profilePhoto String?
-  accountType String @default("Student")
-  requests Request[]
+  district      String?
+  complement    String?
+  password      String
+  profilePhoto  String?
+  accountType   String    @default("Student")
+  isConfirmed   Boolean   @default(false)
+  requests      Request[]
 }
 
 model Professor {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String
-  lastName String
-  email String @unique
-  ddd String
-  tel String?
-  birth String?
-  cep String?
-  city String?
-  state String?
-  address String?
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  firstName     String
+  lastName      String
+  email         String   @unique
+  tel           String?
+  birth         String?
+  cep           String?
+  city          String?
+  state         String?
+  address       String?
   addressNumber String?
-  district String?
-  complement String?
-  password String
-  themes String[]
-  resume String
-  accountType String @default("Professor")
-  profilePhoto String?
+  district      String?
+  complement    String?
+  password      String
+  themes        String[]
+  resume        String?
+  accountType   String   @default("Professor")
+  isCompleted   Boolean  @default(false)
+  isConfirmed   Boolean  @default(false)
+  profilePhoto  String?
 }
 
 model Request {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  theme String
-  message String
-  createdAt DateTime @default(now()) 
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  theme     String
+  message   String
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  studentId String @db.ObjectId
-  student Student @relation(fields: [studentId], references: [id])
+  studentId String   @db.ObjectId
+  student   Student  @relation(fields: [studentId], references: [id])
 }
 
+model Subject {
+  id   String   @id @default(auto()) @map("_id") @db.ObjectId
+  main String
+  lang Lang
+  subs String[]
+}

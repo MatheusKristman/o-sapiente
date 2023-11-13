@@ -6,6 +6,7 @@ export const profilePhotoStepsInfo = {
   inputPlaceholder: "Clique aqui para carregar uma imagem",
   inputButton: "Carregar imagem",
   nextButton: "Próximo",
+  backButton: "Voltar",
   skipButton: "Pular",
   removeImageButton: "Remover imagem",
 };
