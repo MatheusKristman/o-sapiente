@@ -5,3 +5,5 @@ export type StepType = number;
 export interface IUser extends DefaultUser {
   accountType: string;
 }
+
+// somente teste
