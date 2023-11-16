@@ -11,6 +11,8 @@ import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto
 import ResumeCurrentLessonBox from "@/components/dashboard/resume/ResumeCurrentLessonBox";
 import useNewRequestStore from "@/stores/useNewRequestStore";
 
+// criar funções no modal
+
 const DashboardPage = () => {
   const [profilePhoto, setProfilePhoto] = useState<string>("");
   const [name, setName] = useState<string>("");
