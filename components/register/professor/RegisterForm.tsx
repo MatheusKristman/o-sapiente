@@ -9,7 +9,7 @@ import axios from "axios";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
-import { cn } from "@/libs/utils";
+import { cn } from "@/lib/utils";
 import professorRegisterSchema, {
   professorRegisterSchemaType,
 } from "@/constants/schemas/professorRegisterSchema";

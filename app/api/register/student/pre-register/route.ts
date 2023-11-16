@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 import { prisma } from "@/libs/prismadb";
 

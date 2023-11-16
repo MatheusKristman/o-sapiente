@@ -26,8 +26,6 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log(session);
-
   useEffect(() => {
     if (session) {
       axios
@@ -35,7 +33,6 @@ const Header = () => {
         .then((res) => {
           setAccountType(res.data.type);
           setUserId(res.data.id);
-          console.log(res);
         })
         .catch((error) => console.error(error));
     }
@@ -94,7 +91,8 @@ const Header = () => {
         onClick={openMobileMenu}
         className={`flex lg:hidden ${
           isMobileMenuOpen && "opacity-0 pointer-events-none"
-        } items-center justify-center cursor-pointer`}>
+        } items-center justify-center cursor-pointer`}
+      >
         <IoIosMenu size={35} className="text-green-primary" />
       </button>
 
@@ -103,7 +101,8 @@ const Header = () => {
           <li
             key={link.href}
             onClick={() => scrollTo(link.href)}
-            className="text-gray-primary cursor-pointer text-base xl:text-lg hover:opacity-70 transition duration-200 whitespace-nowrap">
+            className="text-gray-primary cursor-pointer text-base xl:text-lg hover:opacity-70 transition duration-200 whitespace-nowrap"
+          >
             {link.label}
           </li>
         ))}
@@ -116,7 +115,8 @@ const Header = () => {
               <button
                 type="button"
                 onClick={() => signOut()}
-                className="flex gap-2 items-center justify-center text-green-primary text-lg">
+                className="flex gap-2 items-center justify-center text-green-primary text-lg"
+              >
                 <LogOut className="h-6 w-6" />
                 Sair
               </button>
@@ -124,7 +124,8 @@ const Header = () => {
               <button
                 type="button"
                 onClick={handleDashboardStudentBtn}
-                className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90">
+                className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
+              >
                 <Image
                   src="/assets/icons/user.svg"
                   alt="Usuário"
@@ -140,7 +141,8 @@ const Header = () => {
               <button
                 type="button"
                 onClick={() => signOut()}
-                className="flex gap-2 items-center justify-center text-green-primary text-lg">
+                className="flex gap-2 items-center justify-center text-green-primary text-lg"
+              >
                 <LogOut className="h-6 w-6" />
                 Sair
               </button>
@@ -148,7 +150,8 @@ const Header = () => {
               <button
                 type="button"
                 onClick={handleDashboardProfessorBtn}
-                className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90">
+                className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
+              >
                 <Image
                   src="/assets/icons/user.svg"
                   alt="Usuário"

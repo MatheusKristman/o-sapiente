@@ -1,4 +1,4 @@
-import { cn } from "@/libs/utils";
+import { cn } from "@/lib/utils";
 import Button from "@/components/Button";
 import { MyAccountInfo } from "@/constants/dashboard/my-account-br";
 

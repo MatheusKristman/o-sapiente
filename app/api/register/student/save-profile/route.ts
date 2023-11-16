@@ -1,5 +1,5 @@
 import S3 from "aws-sdk/clients/s3";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import axios from "axios";
 import { prisma } from "@/libs/prismadb";
 
