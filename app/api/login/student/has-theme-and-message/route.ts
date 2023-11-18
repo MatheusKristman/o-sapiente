@@ -1,17 +1,18 @@
 import bcrypt from "bcrypt";
 
 import { prisma } from "@/libs/prismadb";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Response) {
   try {
     const body = await req.json();
     const { theme, message, email, password } = body;
 
     if (!email || !password || !theme || !message) {
-      return new NextResponse("Credenciais inválidas! Verifique e tente novamente", {
-        status: 404,
-      });
+      return new NextResponse(
+        "Credenciais inválidas! Verifique e tente novamente",
+        { status: 404 },
+      );
     }
 
     const user = await prisma.student.findUnique({
@@ -21,17 +22,19 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return new NextResponse("Credenciais inválidas! Verifique e tente novamente", {
-        status: 404,
-      });
+      return new NextResponse(
+        "Credenciais inválidas! Verifique e tente novamente",
+        { status: 404 },
+      );
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
-      return new NextResponse("Credenciais inválidas! Verifique e tente novamente", {
-        status: 406,
-      });
+      return new NextResponse(
+        "Credenciais inválidas! Verifique e tente novamente",
+        { status: 406 },
+      );
     }
 
     await prisma.request.create({
@@ -54,6 +57,9 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.log(error, "HAS-THEME-AND-MESSAGE-ERROR");
 
-    return new NextResponse("Ocorreu um erro durante o login, tente novamente", { status: 400 });
+    return new NextResponse(
+      "Ocorreu um erro durante o login, tente novamente",
+      { status: 400 },
+    );
   }
 }

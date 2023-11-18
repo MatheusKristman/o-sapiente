@@ -10,7 +10,7 @@ import {
 import Image from "next/image";
 
 import Button from "@/components/Button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/libs/utils";
 import { useEffect, useState } from "react";
 
 interface MessagesChatBoxProps {
@@ -18,7 +18,10 @@ interface MessagesChatBoxProps {
   handleBackBtn: () => void;
 }
 
-const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps) => {
+const MessagesChatBox = ({
+  isMessageOpen,
+  handleBackBtn,
+}: MessagesChatBoxProps) => {
   const [isModalNavOpen, setIsModalNavOpen] = useState(false);
   const [isModalFooterOpen, setIsModalFooterOpen] = useState(false);
 
@@ -48,11 +51,15 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
       className={cn(
         "flex-1 flex flex-col lg:w-full lg:h-full lg:flex ",
         isMessageOpen ? "flex" : "hidden lg:flex",
-      )}>
+      )}
+    >
       <div className=" w-full bg-[#2C383F] h-fit px-6 py-4 sm:px-16">
         <div className="w-full flex items-center justify-between">
           <div className="flex items-center gap-x-4">
-            <button onClick={handleBackBtn} className="text-green-primary block lg:hidden">
+            <button
+              onClick={handleBackBtn}
+              className="text-green-primary block lg:hidden"
+            >
               <ChevronLeft size={35} />
             </button>
 
@@ -74,16 +81,30 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
           <div className="flex items-center">
             <button
               onClick={toggleModalNav}
-              className="text-green-primary flex items-center ml-auto md:hidden">
+              className="text-green-primary flex items-center ml-auto md:hidden"
+            >
               {isModalNavOpen ? (
-                <XCircleIcon onClick={toggleModalNav} size={35} strokeWidth={2.7} />
+                <XCircleIcon
+                  onClick={toggleModalNav}
+                  size={35}
+                  strokeWidth={2.7}
+                />
               ) : (
-                <MoreHorizontal onClick={toggleModalNav} size={35} strokeWidth={2.7} />
+                <MoreHorizontal
+                  onClick={toggleModalNav}
+                  size={35}
+                  strokeWidth={2.7}
+                />
               )}
             </button>
 
             <div className="hidden md:flex justify-end ml-auto">
-              <Button onClick={() => {}} label="Confirmar Finalização" fullWidth primary />
+              <Button
+                onClick={() => {}}
+                label="Confirmar Finalização"
+                fullWidth
+                primary
+              />
             </div>
           </div>
         </div>
@@ -94,7 +115,11 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
           <div className="flex w-full justify-end  mt-1">
             <div className="flex w-full justify-end ">
               <div className="flex justify-center items-center w-72 h-24 bg-white rounded-l-lg rounded-br-lg">
-                <Button onClick={() => {}} label="Confirmar Finalização" primary />
+                <Button
+                  onClick={() => {}}
+                  label="Confirmar Finalização"
+                  primary
+                />
               </div>
             </div>
           </div>
@@ -106,13 +131,15 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
           <div className="flex flex-col gap-4 items-center h-fit bg-white rounded-r-lg rounded-tl-lg p-6">
             <button
               onClick={() => {}}
-              className=" rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center">
+              className=" rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center"
+            >
               <ImageIcon />
               Enviar Imagem
             </button>
             <button
               onClick={() => {}}
-              className="rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center">
+              className="rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center"
+            >
               <Video />
               Enviar Video
             </button>
@@ -125,18 +152,21 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
           <div className="flex flex-row items-center justify-start gap-3.5">
             <button
               onClick={toggleModalFooter}
-              className="flex rounded-xl w-12 h-12 bg-green-primary text-white md:hidden justify-center items-center">
+              className="flex rounded-xl w-12 h-12 bg-green-primary text-white md:hidden justify-center items-center"
+            >
               {isModalFooterOpen ? <XCircleIcon /> : <Plus />}
             </button>
             <button
               onClick={() => {}}
-              className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">
+              className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center"
+            >
               <ImageIcon />
             </button>
 
             <button
               onClick={() => {}}
-              className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">
+              className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center"
+            >
               <Video />
             </button>
           </div>

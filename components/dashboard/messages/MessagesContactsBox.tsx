@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn } from "@/libs/utils";
 
 import Button from "@/components/Button";
 
@@ -15,7 +15,8 @@ const MessagesContactsBox = ({ handleNavigation, isMessageOpen }: MessagesContac
       className={cn(
         "flex-1 w-full flex flex-col bg-white lg:max-w-md lg:min-w-[448px] pt-9",
         isMessageOpen ? "hidden lg:flex" : "flex",
-      )}>
+      )}
+    >
       <div className="px-9 w-full">
         <div className="w-full flex items-center justify-between h-[46px] bg-[#EBEFF1] rounded-lg px-5 peer">
           <input
@@ -37,7 +38,8 @@ const MessagesContactsBox = ({ handleNavigation, isMessageOpen }: MessagesContac
       <div className="w-full h-56 scrollbar scrollbar-thumb-slate-100 mt-9">
         <div
           className="w-full bg-white hover:bg-green-primary transition ease-in-out delay-150 group px-9 py-6 lg:cursor-pointer"
-          onClick={handleNavigation}>
+          onClick={handleNavigation}
+        >
           <div className="flex flex-row justify-between items-center w-full">
             <div className="flex gap-5 items-center">
               <div className="relative flex justify-center items-center w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-full overflow-hidden">

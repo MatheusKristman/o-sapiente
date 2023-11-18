@@ -9,7 +9,7 @@ import axios from "axios";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/libs/utils";
 import professorRegisterSchema, {
   professorRegisterSchemaType,
 } from "@/constants/schemas/professorRegisterSchema";
@@ -100,7 +100,8 @@ const RegisterForm = () => {
 
           <form
             onSubmit={handleSubmit(onSubmit, (error) => console.log(error))} // TODO temporário, remover depois de configurado
-            className="w-full flex flex-col gap-6 mb-6">
+            className="w-full flex flex-col gap-6 mb-6"
+          >
             <div className="w-full flex flex-col gap-4">
               <input
                 {...register("firstName")}
@@ -190,7 +191,8 @@ const RegisterForm = () => {
             <button
               type="submit"
               className="w-full h-11 bg-green-primary rounded-md flex items-center justify-center text-white text-base font-semibold transition disabled:brightness-75 disabled:hover:brightness-75 lg:hover:brightness-90"
-              disabled={isSubmitting}>
+              disabled={isSubmitting}
+            >
               {isSubmitting ? (
                 <>
                   {professorRegisterFormInfo.registerBtn}{" "}
@@ -207,7 +209,8 @@ const RegisterForm = () => {
               <button
                 type="button"
                 onClick={handleOpenLoginModal}
-                className="text-green-primary cursor-pointer lg:hover:underline">
+                className="text-green-primary cursor-pointer lg:hover:underline"
+              >
                 {professorRegisterFormInfo.alreadyHasAccount.link}
               </button>
             </span>
@@ -216,7 +219,8 @@ const RegisterForm = () => {
               {professorRegisterFormInfo.privacy.text + " "}
               <Link
                 className="underline text-gray-primary/80"
-                href={professorRegisterFormInfo.privacy.link.href}>
+                href={professorRegisterFormInfo.privacy.link.href}
+              >
                 {professorRegisterFormInfo.privacy.link.text}
               </Link>
             </span>

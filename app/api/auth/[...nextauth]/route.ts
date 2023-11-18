@@ -24,7 +24,9 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Credenciais inválidas! Verifique e tente novamente!");
+          throw new Error(
+            "Credenciais inválidas! Verifique e tente novamente!",
+          );
         }
 
         let user;
@@ -47,13 +49,20 @@ const handler = NextAuth({
 
         if (!user || !user?.password) {
           console.log("erro no usuário não encontrado");
-          throw new Error("Credenciais inválidas! Verifique e tente novamente!");
+          throw new Error(
+            "Credenciais inválidas! Verifique e tente novamente!",
+          );
         }
 
-        const isCorrectPassword = await bcrypt.compare(credentials.password, user.password);
+        const isCorrectPassword = await bcrypt.compare(
+          credentials.password,
+          user.password,
+        );
 
         if (!isCorrectPassword) {
-          throw new Error("Credenciais inválidas! Verifique e tente novamente!");
+          throw new Error(
+            "Credenciais inválidas! Verifique e tente novamente!",
+          );
         }
 
         return user;

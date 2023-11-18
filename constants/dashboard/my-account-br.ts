@@ -6,8 +6,6 @@ export const MyAccountInfo = {
   personalDataPlaceholders: {
     firstName: "Nome",
     lastName: "Sobrenome",
-    email: "E-mail",
-    tel: "Telefone",
     birthDate: "Data de nascimento",
     cep: "CEP",
     city: "Cidade",

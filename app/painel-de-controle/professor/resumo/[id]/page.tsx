@@ -2,6 +2,7 @@
 
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
 import ResumeRequestBox from "@/components/dashboard/resume/ResumeRequestBox";
+import Button from "@/components/Button";
 import ResumeCurrentLessonBox from "@/components/dashboard/resume/ResumeCurrentLessonBox";
 import BalanceBox from "@/components/dashboard/resume/BalanceBox";
 
