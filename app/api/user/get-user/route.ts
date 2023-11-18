@@ -24,9 +24,6 @@ export async function GET() {
       });
 
       if (student) {
-<<<<<<< Updated upstream
-        return NextResponse.json({ id: student.id, type: student.accountType });
-=======
         return NextResponse.json({
           id: student.id,
           type: student.accountType,
@@ -44,7 +41,6 @@ export async function GET() {
           district: student.district,
           complement: student.complement,
         });
->>>>>>> Stashed changes
       }
 
       if (professor) {
@@ -57,9 +53,8 @@ export async function GET() {
   } catch (error: any) {
     console.log(error, "GET-USER-ERROR");
 
-    return new NextResponse(
-      "Ocorreu um erro durante a requisição, tente novamente",
-      { status: 400 },
-    );
+    return new NextResponse("Ocorreu um erro durante a requisição, tente novamente", {
+      status: 400,
+    });
   }
 }

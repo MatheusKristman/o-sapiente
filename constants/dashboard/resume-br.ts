@@ -5,8 +5,6 @@ export const professorResumeInfos = {
   redeemBtn: "RESGATAR",
   requestBoxTitle: "Ultimas Solicitações",
 };
-<<<<<<< Updated upstream
-=======
 
 export const studentResumeInfos = {
   newRequestBtn: "NOVA SOLICITAÇÃO",
@@ -27,4 +25,3 @@ export const studentNewRequestInfo = {
   successMessage: "Solicitação enviada com sucesso!",
   closeBtn: "FECHAR",
 };
->>>>>>> Stashed changes
