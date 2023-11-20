@@ -2,6 +2,10 @@ export const MyAccountInfo = {
   changePhotoBtn: "MUDAR FOTO",
   changePasswordTitle: "Senha",
   changePasswordBtn: "MUDAR",
+  cancelPasswordBtn: "CANCELAR",
+  sendPasswordBtn: "ENVIAR",
+  newPasswordPlaceholder: "Nova senha",
+  newPasswordConfirmPlaceholder: "Confirmar nova senha",
   personalDataTitle: "Meus Dados",
   personalDataPlaceholders: {
     firstName: "Nome",
