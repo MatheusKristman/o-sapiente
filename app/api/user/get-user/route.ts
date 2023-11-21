@@ -23,6 +23,7 @@ export async function GET() {
         },
       });
 
+
       if (student) {
         return NextResponse.json({
           id: student.id,
@@ -47,6 +48,9 @@ export async function GET() {
         return NextResponse.json({
           id: professor.id,
           type: professor.accountType,
+          firstName: professor.firstName,
+          lastName: professor.lastName,
+          themes: professor.themes,
         });
       }
     }
