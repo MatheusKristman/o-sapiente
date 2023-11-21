@@ -1,5 +1,7 @@
 import { DefaultUser } from "next-auth";
 
+// test
+
 export type StepType = number;
 
 export interface IUser extends DefaultUser {
