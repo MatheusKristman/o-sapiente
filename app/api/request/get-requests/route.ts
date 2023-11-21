@@ -20,21 +20,24 @@ export async function POST(req: NextRequest) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
     }
 
-    await prisma.request.create({
-      data: {
-        theme: subject,
-        message: message,
-        student: {
-          connect: {
-            id: user.id,
-          },
-        },
-      },
-    });
-
-    return NextResponse.json({ sended: true });
-  } catch (error) {
-    console.log("[ERROR_POST_REQUEST]", error);
+    // if(user){
+    //   const requestData = await prisma.student.findUnique({
+    //     where: {
+    //       email: user.email,
+    //     },
+    //   });
+      
+    //   if (requestData) {
+    //     return NextResponse.json({
+    //       requests: requestData.requests,
+    //     });
+    //   }
+    // }
+      
+      return NextResponse.json({ sended: true });
+    } catch (error) {
+      console.log("[ERROR_POST_REQUEST]", error);
     return new NextResponse("Ocorreu um erro na solicitação do pedido", { status: 400 });
   }
 }
+
