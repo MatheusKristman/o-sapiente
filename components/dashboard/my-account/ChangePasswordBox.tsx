@@ -69,8 +69,7 @@ const ChangePasswordBox = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-green-primary w-full p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)] flex flex-col"
-    >
+      className="bg-green-primary w-full p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)] flex flex-col">
       <h2 className="text-2xl text-white font-semibold mb-4">
         {MyAccountInfo.changePasswordTitle}
       </h2>
@@ -78,9 +77,8 @@ const ChangePasswordBox = () => {
       <div
         className={cn(
           "w-full flex flex-col transition-[max-height]",
-          isInputsActive ? "max-h-44 mb-4" : "max-h-0 overflow-hidden",
-        )}
-      >
+          isInputsActive ? "max-h-52 mb-4" : "max-h-0 overflow-hidden",
+        )}>
         <input
           {...register("newPassword")}
           type="password"
