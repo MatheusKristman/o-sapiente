@@ -1,14 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import OfferBox from "./OfferBox";
-import { professorResumeInfos, studentResumeInfos } from "@/constants/dashboard/resume-br";
+import {
+  professorResumeInfos,
+  studentResumeInfos,
+} from "@/constants/dashboard/resume-br";
+import { request } from "http";
 
 interface ResumeRequestBoxProps {
   type: string;
+  request?: string[];
 }
 
-const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
-  const [offers, setOffers] = useState([]);
+const ResumeRequestBox = ({ type, request }: ResumeRequestBoxProps) => {
+  const [offers, setOffers] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (request) {
+      setOffers(request);
+    }
+  }, [request]);
 
   return (
     <div className="w-full rounded-lg bg-green-primary p-9 mb-5 shadow-md shadow-[rgba(0,0,0,0.25)]">
@@ -22,8 +33,8 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
           <>
             <div className="sticky top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-            <OfferBox />
-            <OfferBox last />
+            <OfferBox teste={request} />
+            <OfferBox last teste={request} />
 
             <div className="sticky bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
           </>
