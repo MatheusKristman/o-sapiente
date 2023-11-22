@@ -11,11 +11,23 @@ import BalanceBox from "@/components/dashboard/resume/BalanceBox";
 
 import { useSession } from "next-auth/react";
 
+interface RequestData {
+  id: string;
+  theme: string;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+  studentId: string;
+  firstName: string;
+  lastName: string;
+  profilePhoto: string;
+}
+
 const ResumePage = () => {
   const [profilePhoto, setProfilePhoto] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [themes, setThemes] = useState<string[]>([]);
-  const [request, setRequest] = useState<string[]>([]);
+  const [request, setRequest] = useState<RequestData[]>([]);
 
   const session = useSession();
 
