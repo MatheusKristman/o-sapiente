@@ -5,23 +5,32 @@ import Button from "@/components/Button";
 import { cn } from "@/libs/utils";
 import { studentResumeInfos } from "@/constants/dashboard/resume-br";
 
-interface OfferBoxProps {
-  last?: boolean;
-  teste?: string[];
+interface RequestData {
+  id: string;
+  theme: string;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+  studentId: string;
+  firstName: string;
+  lastName: string;
+  profilePhoto: string;
 }
 
-const OfferBox = ({ last, teste }: OfferBoxProps) => {
-  console.log("TESTE: ", teste);
+interface OfferBoxProps {
+  last?: boolean;
+  request?: RequestData;
+}
 
-  const themes = teste || [];
+const OfferBox = ({ last, request }: OfferBoxProps) => {
+  console.log("TESTE: ", request);
 
-  console.log("THEMES: ", themes[0].theme);
   return (
     <div className={cn("w-full rounded-lg bg-white p-5 mb-4", last && "mb-0")}>
       <div className="flex flex-col lg:flex-row lg:gap-6 xl:w-full">
         <div className="flex justify-center xl:w-1/12">
           <Image
-            src="/assets/images/profile-test.png"
+            src={request ? request.profilePhoto : "N/A"}
             alt="Perfil"
             width={50}
             height={40}
@@ -30,7 +39,9 @@ const OfferBox = ({ last, teste }: OfferBoxProps) => {
         </div>
 
         <div className="flex flex-col items-center justify-center p-2.5 text-green-primary text-lg font-semibold lg:p-1 lg:flex-row xl:w-6/12 xl:justify-start">
-          <span className="-mb-3 lg:mb-0">CU Doe</span>
+          <span className="-mb-3 lg:mb-0">
+            {request ? request.firstName + " " + request.lastName : "N/A"}
+          </span>
 
           <Dot
             style={{
@@ -40,7 +51,7 @@ const OfferBox = ({ last, teste }: OfferBoxProps) => {
           />
 
           <span className="text-base -mt-3 lg:mt-0">
-            {themes ? themes[0]?.theme : "N/A"}
+            {request ? request.theme : "N/A"}
           </span>
         </div>
 

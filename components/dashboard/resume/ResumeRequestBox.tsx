@@ -6,14 +6,24 @@ import {
   studentResumeInfos,
 } from "@/constants/dashboard/resume-br";
 import { request } from "http";
-
+interface RequestData {
+  id: string;
+  theme: string;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+  studentId: string;
+  firstName: string;
+  lastName: string;
+  profilePhoto: string;
+}
 interface ResumeRequestBoxProps {
   type: string;
-  request?: string[];
+  request?: RequestData[];
 }
 
 const ResumeRequestBox = ({ type, request }: ResumeRequestBoxProps) => {
-  const [offers, setOffers] = useState<string[]>([]);
+  const [offers, setOffers] = useState<RequestData[]>([]);
 
   useEffect(() => {
     if (request) {
@@ -33,8 +43,10 @@ const ResumeRequestBox = ({ type, request }: ResumeRequestBoxProps) => {
           <>
             <div className="sticky top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-            <OfferBox teste={request} />
-            <OfferBox last teste={request} />
+            {request &&
+              request.map((request, index) => (
+                <OfferBox key={request.id} request={request} />
+              ))}
 
             <div className="sticky bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
           </>
