@@ -18,7 +18,6 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    console.log(teacherUser)
 
     if (!teacherUser) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
@@ -32,13 +31,42 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    console.log("Request Data: ", requestData)
+
 
     if (requestData) {
-      return NextResponse.json(requestData);
+      
+      const requestDataWithStudentInfo: {
+        id: string;
+        theme: string;
+        message: string;
+        createdAt: Date;
+        updatedAt: Date;
+        studentId: string;
+        firstName?: string;
+        lastName?: string;
+        profilePhoto?: string;
+      }[] = [];
+      
+      if (requestData && requestData.length > 0) {
+        for (const request of requestData) {
+          const studentInfo = await prisma.student.findUnique({
+            where: {
+              id: request.studentId,
+            },
+          });
+          requestDataWithStudentInfo.push({
+            ...request,
+            firstName: studentInfo?.firstName,
+            lastName: studentInfo?.lastName,
+            profilePhoto: studentInfo?.profilePhoto ?? undefined,
+          });
+        }
+      
+        return NextResponse.json(requestDataWithStudentInfo);
+      }
     }
 
-    console.log("PASSEI AQUI")
+
     const studentUser = await prisma.student.findUnique({
       where: {
         email,
