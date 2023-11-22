@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, newPassword, newPasswordConfirm } = await body;
+    const { email, newPassword, newPasswordConfirm, profileType } = await body;
 
     if (!email) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
@@ -17,14 +17,27 @@ export async function PATCH(req: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
 
-    await prisma.student.update({
-      where: {
-        email,
-      },
-      data: {
-        password: hashedPassword,
-      },
-    });
+    if (profileType === "Student") {
+      await prisma.student.update({
+        where: {
+          email,
+        },
+        data: {
+          password: hashedPassword,
+        },
+      });
+    }
+
+    if (profileType === "Professor") {
+      await prisma.professor.update({
+        where: {
+          email,
+        },
+        data: {
+          password: hashedPassword,
+        },
+      });
+    }
 
     return NextResponse.json({ passwordUpdated: true });
   } catch (error) {

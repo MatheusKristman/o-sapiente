@@ -51,6 +51,17 @@ export async function GET() {
           lastName: professor.lastName,
           themes: professor.themes,
           profilePhoto: professor.profilePhoto,
+          email: professor.email,
+          tel: professor.tel,
+          birth: professor.birth,
+          cep: professor.cep,
+          city: professor.city,
+          address: professor.address,
+          addressNumber: professor.addressNumber,
+          state: professor.state,
+          district: professor.district,
+          complement: professor.complement,
+          resume: professor.resume,
         });
       }
     }

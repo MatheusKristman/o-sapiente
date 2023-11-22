@@ -22,10 +22,11 @@ export const MyAccountInfo = {
     complement: "Complemento",
   },
   themeTitle: "Matérias e Temas",
-  themePlaceholder: "Pesquise a matéria ou o tema aqui...",
+  inputPlaceholder: "Pesquise aqui por temas ou matérias",
   themeSelectedTitle: "Selecionados",
   themesAvailableTitle: "Temas",
   aboutTitle: "Sobre você",
   aboutPlaceholder: "Mínimo de 40 palavras",
+  themeErrorMessage: "É necessario ter pelo menos 1 tema selecionado",
   submitButton: "SALVAR DADOS",
 };

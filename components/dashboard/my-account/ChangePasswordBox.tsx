@@ -13,7 +13,11 @@ import {
 } from "@/constants/schemas/studentChangePasswordSchema";
 import { useSession } from "next-auth/react";
 
-const ChangePasswordBox = () => {
+interface ChangePasswordBoxProps {
+  profileType: "Professor" | "Student";
+}
+
+const ChangePasswordBox = ({ profileType }: ChangePasswordBoxProps) => {
   const [isInputsActive, setIsInputsActive] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -47,7 +51,11 @@ const ChangePasswordBox = () => {
       setIsSubmitting(true);
 
       axios
-        .patch("/api/user/change-password/student", { ...data, email: session.data?.user?.email })
+        .patch("/api/user/change-password", {
+          ...data,
+          email: session.data?.user?.email,
+          profileType,
+        })
         .then((res) => {
           if (res.data.passwordUpdated) {
             toast.success("Senha atualizado com sucesso");
@@ -69,7 +77,8 @@ const ChangePasswordBox = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-green-primary w-full p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)] flex flex-col">
+      className="bg-green-primary w-full p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)] flex flex-col"
+    >
       <h2 className="text-2xl text-white font-semibold mb-4">
         {MyAccountInfo.changePasswordTitle}
       </h2>
@@ -78,7 +87,8 @@ const ChangePasswordBox = () => {
         className={cn(
           "w-full flex flex-col transition-[max-height]",
           isInputsActive ? "max-h-52 mb-4" : "max-h-0 overflow-hidden",
-        )}>
+        )}
+      >
         <input
           {...register("newPassword")}
           type="password"
