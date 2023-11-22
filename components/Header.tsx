@@ -78,7 +78,6 @@ const Header = () => {
 
   function handleLogOut() {
     signOut();
-    router.push("/");
   }
 
   return (

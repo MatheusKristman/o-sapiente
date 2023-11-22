@@ -11,9 +11,15 @@ interface ProfilePhotoBoxProps {
   profilePhotoUrl: string;
   setProfilePhotoUrl: Dispatch<SetStateAction<string>>;
   email: string | null | undefined;
+  profileType: "Professor" | "Student";
 }
 
-const ProfilePhotoBox = ({ profilePhotoUrl, setProfilePhotoUrl, email }: ProfilePhotoBoxProps) => {
+const ProfilePhotoBox = ({
+  profilePhotoUrl,
+  setProfilePhotoUrl,
+  email,
+  profileType,
+}: ProfilePhotoBoxProps) => {
   const [isSendingImage, setSendingImage] = useState<boolean>(false);
 
   function handleImage(event: React.ChangeEvent<HTMLInputElement>) {
@@ -34,6 +40,7 @@ const ProfilePhotoBox = ({ profilePhotoUrl, setProfilePhotoUrl, email }: Profile
 
       formData.append("profilePhoto", file);
       formData.append("email", email!);
+      formData.append("profileType", profileType);
 
       axios
         .patch("/api/user/update-photo", formData)

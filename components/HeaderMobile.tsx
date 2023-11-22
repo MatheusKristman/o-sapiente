@@ -80,7 +80,6 @@ const HeaderMobile = () => {
 
   function handleLogOut() {
     signOut();
-    router.push("/");
   }
 
   return (
