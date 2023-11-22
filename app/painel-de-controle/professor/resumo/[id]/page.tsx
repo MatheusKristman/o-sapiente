@@ -9,26 +9,38 @@ import Button from "@/components/Button";
 import ResumeCurrentLessonBox from "@/components/dashboard/resume/ResumeCurrentLessonBox";
 import BalanceBox from "@/components/dashboard/resume/BalanceBox";
 
+import { useSession } from "next-auth/react";
+
 const ResumePage = () => {
   const [profilePhoto, setProfilePhoto] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [themes, setThemes] = useState<string[]>([]);
+  const [request, setRequest] = useState<string[]>([]);
+
+  const session = useSession();
 
   useEffect(() => {
-    axios
-      .get("/api/user/get-user")
-      .then((res) => {
-        if (res.data.profilePhoto) {
-          setProfilePhoto(res.data.profilePhoto);
+    const fetchData = async () => {
+      try {
+        const userResponse = await axios.get("/api/user/get-user");
+        if (userResponse.data.profilePhoto) {
+          setProfilePhoto(userResponse.data.profilePhoto);
         }
+        setName(`${userResponse.data.firstName} ${userResponse.data.lastName}`);
+        setThemes(userResponse.data.themes);
 
-        setName(`${res.data.firstName} ${res.data.lastName}`);
-        setThemes(res.data.themes);
-      })
-      .catch((error) => {
+        const requestResponse = await axios.post("/api/request/get-requests", {
+          email: session?.data?.user?.email,
+        });
+        setRequest(requestResponse.data);
+      } catch (error) {
         console.error(error);
-      });
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [session?.data?.user?.email]);
+
   return (
     <div className="flex-1 w-full px-6 pt-9 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:mb-12">
       <div className="w-full flex flex-col-reverse gap-9 md:flex-col lg:w-4/12 xl:w-6/12">
@@ -43,7 +55,7 @@ const ResumePage = () => {
       </div>
 
       <div className="w-full flex flex-col gap-8">
-        <ResumeRequestBox type="Professor" />
+        <ResumeRequestBox type="Professor" request={request} />
 
         <ResumeCurrentLessonBox />
       </div>
