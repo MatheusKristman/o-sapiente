@@ -78,6 +78,11 @@ const HeaderMobile = () => {
     }, 500);
   }
 
+  function handleLogOut() {
+    signOut();
+    router.push("/");
+  }
+
   return (
     <>
       <AnimatePresence>
@@ -87,7 +92,8 @@ const HeaderMobile = () => {
             initial="offscreen"
             animate="onscreen"
             exit="exit"
-            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex lg:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999]">
+            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex lg:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999]"
+          >
             <button type="button" onClick={closeMobileMenu} className="text-white cursor-pointer">
               <BsXLg size={26} />
             </button>
@@ -98,7 +104,8 @@ const HeaderMobile = () => {
                   <li
                     key={link.href}
                     onClick={() => scrollTo(link.href)}
-                    className="text-white cursor-pointer text-lg whitespace-nowrap">
+                    className="text-white cursor-pointer text-lg whitespace-nowrap"
+                  >
                     {link.label}
                   </li>
                 ))}
@@ -111,8 +118,9 @@ const HeaderMobile = () => {
                   <>
                     <button
                       type="button"
-                      onClick={() => signOut()}
-                      className="flex gap-2 items-center justify-center text-white text-lg">
+                      onClick={handleLogOut}
+                      className="flex gap-2 items-center justify-center text-white text-lg"
+                    >
                       <LogOut className="h-6 w-6" />
                       Sair
                     </button>
@@ -120,7 +128,8 @@ const HeaderMobile = () => {
                     <button
                       type="button"
                       onClick={handleDashboardStudentBtn}
-                      className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer">
+                      className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer"
+                    >
                       <Image
                         src="/assets/icons/user-green.svg"
                         alt="Usuário"
@@ -135,8 +144,9 @@ const HeaderMobile = () => {
                   <>
                     <button
                       type="button"
-                      onClick={() => signOut()}
-                      className="flex gap-2 items-center justify-center text-white text-lg">
+                      onClick={handleLogOut}
+                      className="flex gap-2 items-center justify-center text-white text-lg"
+                    >
                       <LogOut className="h-6 w-6" />
                       Sair
                     </button>
@@ -144,7 +154,8 @@ const HeaderMobile = () => {
                     <button
                       type="button"
                       onClick={handleDashboardProfessorBtn}
-                      className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer">
+                      className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer"
+                    >
                       <Image
                         src="/assets/icons/user-green.svg"
                         alt="Usuário"
