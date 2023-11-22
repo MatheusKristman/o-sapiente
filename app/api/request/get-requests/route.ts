@@ -4,40 +4,64 @@ import { prisma } from "@/libs/prismadb";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { subject, message, email } = await body;
+    const { email } = await body;
 
-    if (!subject || !message || !email) {
-      return new NextResponse("Dados invalidos, verifique e tente novamente", { status: 401 });
+    if (!email) {
+      return new NextResponse("Dados invalidos, verifique e tente novamente", {
+        status: 401,
+      });
     }
 
-    const user = await prisma.student.findFirst({
+    const teacherUser = await prisma.professor.findFirst({
       where: {
         email,
       },
     });
 
-    if (!user) {
+    console.log(teacherUser)
+
+    if (!teacherUser) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
     }
 
-    // if(user){
-    //   const requestData = await prisma.student.findUnique({
-    //     where: {
-    //       email: user.email,
-    //     },
-    //   });
-      
-    //   if (requestData) {
-    //     return NextResponse.json({
-    //       requests: requestData.requests,
-    //     });
-    //   }
-    // }
-      
-      return NextResponse.json({ sended: true });
-    } catch (error) {
-      console.log("[ERROR_POST_REQUEST]", error);
-    return new NextResponse("Ocorreu um erro na solicitação do pedido", { status: 400 });
+    const requestData = await prisma.request.findMany({
+      where: {
+        theme: {
+          in: teacherUser.themes,
+        },
+      },
+    });
+
+    console.log("Request Data: ", requestData)
+
+    if (requestData) {
+      return NextResponse.json(requestData);
+    }
+
+    console.log("PASSEI AQUI")
+    const studentUser = await prisma.student.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!studentUser) {
+      return new NextResponse("Usuário não encontrado", { status: 404 });
+    }
+
+    const userRequests = await prisma.request.findMany({
+      where: {
+        studentId: studentUser.id,
+      },
+    });
+
+    if(userRequests) {
+      return NextResponse.json(userRequests);
+    }
+  } catch (error) {
+    console.log("[ERROR_GET_REQUEST]", error);
+    return new NextResponse("Ocorreu um erro na solicitação do pedido", {
+      status: 400,
+    });
   }
 }
-
