@@ -3,6 +3,7 @@ export const professorResumeInfos = {
   buyPlanBtn: "ADQUIRIR",
   availableBalanceInfo: "Valor Disponível:",
   redeemBtn: "RESGATAR",
+  seeOfferBtn: "VER PROPOSTA",
   requestBoxTitle: "Ultimas Solicitações",
 };
 
