@@ -30,9 +30,10 @@ const DashboardPage = () => {
             profilePhotoUrl={profilePhotoUrl}
             setProfilePhotoUrl={setProfilePhotoUrl}
             email={session.data?.user?.email}
+            profileType="Student"
           />
 
-          <ChangePasswordBox />
+          <ChangePasswordBox profileType="Student" />
         </div>
 
         <StudentFormBox />

@@ -15,6 +15,7 @@ export async function PATCH(req: NextRequest) {
     const data = await req.formData();
     const file: File | null = data.get("profilePhoto") as unknown as File;
     const email: string = data.get("email") as string;
+    const profileType: string = data.get("profileType") as string;
 
     if (!file) {
       return new NextResponse("Foto não encontrada, verifique e tente novamente", { status: 404 });
@@ -54,14 +55,29 @@ export async function PATCH(req: NextRequest) {
       return new NextResponse("Ocorreu um erro durante o envio, tente novamente!", { status: 424 });
     }
 
-    const user = await prisma.student.update({
-      where: {
-        email,
-      },
-      data: {
-        profilePhoto: `${process.env.NEXT_S3_PUBLIC_URL}/profile/${file.name}`,
-      },
-    });
+    let user;
+
+    if (profileType === "Professor") {
+      user = await prisma.professor.update({
+        where: {
+          email,
+        },
+        data: {
+          profilePhoto: `${process.env.NEXT_S3_PUBLIC_URL}/profile/${file.name}`,
+        },
+      });
+    }
+
+    if (profileType === "Student") {
+      user = await prisma.student.update({
+        where: {
+          email,
+        },
+        data: {
+          profilePhoto: `${process.env.NEXT_S3_PUBLIC_URL}/profile/${file.name}`,
+        },
+      });
+    }
 
     if (!user) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
