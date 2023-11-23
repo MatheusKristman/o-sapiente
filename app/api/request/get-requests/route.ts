@@ -103,6 +103,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    //Teste
     if (!studentUser && !teacherUser) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
     }
