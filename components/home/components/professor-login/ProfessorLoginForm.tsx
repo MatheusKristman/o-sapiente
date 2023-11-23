@@ -130,7 +130,7 @@ const ProfessorLoginForm = () => {
                         />
 
                         {errors.email && (
-                          <small className="text-sm text-[#FF7373] font-medium text-left">
+                          <small className="text-sm text-[#ff7373] font-medium text-left">
                             {errors.email?.message}
                           </small>
                         )}

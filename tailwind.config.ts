@@ -50,6 +50,7 @@ const config: Config = {
         uploadIcon: "url('/assets/icons/upload.svg')",
         highlight: "url('/assets/icons/highlight.svg')",
         registerStepShadow: "url('/assets/icons/register-about-shadow-step.svg')",
+        lightGrayArrowDown: "url('/assets/icons/light-gray-arrow-down.svg')",
       },
       transitionProperty: {
         "max-height": "max-height",

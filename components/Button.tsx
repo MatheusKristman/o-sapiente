@@ -8,9 +8,10 @@ interface ButtonProps {
   secondaryMobile?: boolean;
   fullWidth?: boolean;
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   icon?: ReactNode;
+  type?: "button" | "submit" | undefined;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,9 +24,11 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   disabled,
   icon,
+  type,
 }) => {
   return (
     <button
+      type={type ? type : "button"}
       disabled={disabled}
       className={cn(
         "py-1.5 px-8 flex items-center justify-center gap-2 text-base rounded-lg border-2 font-medium disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75",
