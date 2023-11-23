@@ -45,7 +45,7 @@ const ResumeRequestBox = ({ type, request }: ResumeRequestBoxProps) => {
 
             {request &&
               request.map((request, index) => (
-                <OfferBox key={request.id} request={request} />
+                <OfferBox type={type} key={request.id} request={request} />
               ))}
 
             <div className="sticky bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
