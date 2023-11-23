@@ -3,7 +3,10 @@ import { Dot } from "lucide-react";
 
 import Button from "@/components/Button";
 import { cn } from "@/libs/utils";
-import { studentResumeInfos } from "@/constants/dashboard/resume-br";
+import {
+  studentResumeInfos,
+  professorResumeInfos,
+} from "@/constants/dashboard/resume-br";
 
 interface RequestData {
   id: string;
@@ -18,13 +21,12 @@ interface RequestData {
 }
 
 interface OfferBoxProps {
+  type: string;
   last?: boolean;
   request?: RequestData;
 }
 
-const OfferBox = ({ last, request }: OfferBoxProps) => {
-  console.log("TESTE: ", request);
-
+const OfferBox = ({ last, request, type }: OfferBoxProps) => {
   return (
     <div className={cn("w-full rounded-lg bg-white p-5 mb-4", last && "mb-0")}>
       <div className="flex flex-col lg:flex-row lg:gap-6 xl:w-full">
@@ -60,7 +62,13 @@ const OfferBox = ({ last, request }: OfferBoxProps) => {
             <Button
               primary
               fullWidth
-              label={studentResumeInfos.seeOfferBtn}
+              label={
+                type === "Professor"
+                  ? professorResumeInfos.seeOfferBtn
+                  : type === "Student"
+                  ? studentResumeInfos.seeMessageBtn
+                  : ""
+              }
               onClick={() => {}}
             />
           </div>
