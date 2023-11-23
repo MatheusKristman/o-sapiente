@@ -18,54 +18,48 @@ export async function POST(req: NextRequest) {
       },
     });
 
-
-    if (!teacherUser) {
-      return new NextResponse("Usuário não encontrado", { status: 404 });
-    }
-
-    const requestData = await prisma.request.findMany({
-      where: {
-        theme: {
-          in: teacherUser.themes,
+    if (teacherUser) {
+      const requestData = await prisma.request.findMany({
+        where: {
+          theme: {
+            in: teacherUser.themes,
+          },
         },
-      },
-    });
-
-
-
-    if (requestData) {
-      
-      const requestDataWithStudentInfo: {
-        id: string;
-        theme: string;
-        message: string;
-        createdAt: Date;
-        updatedAt: Date;
-        studentId: string;
-        firstName?: string;
-        lastName?: string;
-        profilePhoto?: string;
-      }[] = [];
-      
-      if (requestData && requestData.length > 0) {
-        for (const request of requestData) {
-          const studentInfo = await prisma.student.findUnique({
-            where: {
-              id: request.studentId,
-            },
-          });
-          requestDataWithStudentInfo.push({
-            ...request,
-            firstName: studentInfo?.firstName,
-            lastName: studentInfo?.lastName,
-            profilePhoto: studentInfo?.profilePhoto ?? undefined,
-          });
+      });
+  
+      if (requestData) {
+        
+        const requestDataWithStudentInfo: {
+          id: string;
+          theme: string;
+          message: string;
+          createdAt: Date;
+          updatedAt: Date;
+          studentId: string;
+          firstName?: string;
+          lastName?: string;
+          profilePhoto?: string;
+        }[] = [];
+        
+        if (requestData && requestData.length > 0) {
+          for (const request of requestData) {
+            const studentInfo = await prisma.student.findUnique({
+              where: {
+                id: request.studentId,
+              },
+            });
+            requestDataWithStudentInfo.push({
+              ...request,
+              firstName: studentInfo?.firstName,
+              lastName: studentInfo?.lastName,
+              profilePhoto: studentInfo?.profilePhoto ?? undefined,
+            });
+          }
+        
+          return NextResponse.json(requestDataWithStudentInfo);
         }
-      
-        return NextResponse.json(requestDataWithStudentInfo);
       }
     }
-
 
     const studentUser = await prisma.student.findUnique({
       where: {
@@ -73,19 +67,47 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (!studentUser) {
+    if(studentUser){
+      const userRequests = await prisma.request.findMany({
+        where: {
+          studentId: studentUser.id,
+        },
+      });
+  
+      if(userRequests) {
+
+        const requestDataWithStudentInfo: {
+          id: string;
+          theme: string;
+          message: string;
+          createdAt: Date;
+          updatedAt: Date;
+          studentId: string;
+          firstName?: string;
+          lastName?: string;
+          profilePhoto?: string;
+        }[] = [];
+        
+        if (userRequests && userRequests.length > 0) {
+          for (const request of userRequests) {
+            requestDataWithStudentInfo.push({
+              ...request,
+              firstName: studentUser?.firstName,
+              lastName: studentUser?.lastName,
+              profilePhoto: studentUser?.profilePhoto ?? undefined,
+            });
+          }
+        
+          return NextResponse.json(requestDataWithStudentInfo);
+        }
+      }
+    }
+
+    if (!studentUser && !teacherUser) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
     }
 
-    const userRequests = await prisma.request.findMany({
-      where: {
-        studentId: studentUser.id,
-      },
-    });
-
-    if(userRequests) {
-      return NextResponse.json(userRequests);
-    }
+    
   } catch (error) {
     console.log("[ERROR_GET_REQUEST]", error);
     return new NextResponse("Ocorreu um erro na solicitação do pedido", {
