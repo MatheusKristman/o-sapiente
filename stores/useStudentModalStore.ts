@@ -13,10 +13,10 @@ interface useStudentModalInter {
   isLogin: boolean;
   setToLogin: () => void;
   setToNotLogin: () => void;
-  theme: string;
-  setTheme: (value: string) => void;
-  message: string;
-  setMessage: (value: string) => void;
+  subject: string;
+  setSubject: (value: string) => void;
+  description: string;
+  setDescription: (value: string) => void;
   isBackBtnActive: boolean;
   activateBackBtn: () => void;
   deactivateBackBtn: () => void;
@@ -35,10 +35,10 @@ const useStudentModalStore = create<useStudentModalInter>((set) => ({
   isLogin: false,
   setToLogin: () => set(() => ({ isLogin: true })),
   setToNotLogin: () => set(() => ({ isLogin: false })),
-  theme: "",
-  setTheme: (value) => set(() => ({ theme: value })),
-  message: "",
-  setMessage: (value) => set(() => ({ message: value })),
+  subject: "",
+  setSubject: (value) => set(() => ({ subject: value })),
+  description: "",
+  setDescription: (value) => set(() => ({ description: value })),
   isBackBtnActive: false,
   activateBackBtn: () => set(() => ({ isBackBtnActive: true })),
   deactivateBackBtn: () => set(() => ({ isBackBtnActive: false })),

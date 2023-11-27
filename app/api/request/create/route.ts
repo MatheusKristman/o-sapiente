@@ -1,33 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/libs/prismadb";
+import { AccountRole } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { subject, message, email } = await body;
+    const { subject, description, email } = await body;
 
-    if (!subject || !message || !email) {
+    if (!subject || !description || !email) {
       return new NextResponse("Dados invalidos, verifique e tente novamente", { status: 401 });
     }
 
-    const user = await prisma.student.findFirst({
+    const student = await prisma.user.findFirst({
       where: {
         email,
+        accountType: AccountRole.STUDENT,
       },
     });
 
-    if (!user) {
+    if (!student) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
     }
 
-    await prisma.request.create({
+    const newRequest = await prisma.request.create({
       data: {
-        theme: subject,
-        message: message,
-        student: {
-          connect: {
-            id: user.id,
-          },
+        subject,
+        description,
+        userIds: [student.id],
+      },
+    });
+
+    await prisma.user.update({
+      where: {
+        email,
+        accountType: AccountRole.STUDENT,
+      },
+      data: {
+        requestIds: {
+          push: newRequest.id,
         },
       },
     });

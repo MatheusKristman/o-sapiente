@@ -43,7 +43,7 @@ export async function PATCH(req: NextRequest) {
 
       const url = await s3.getSignedUrlPromise("putObject", fileParams);
 
-      updatedProfessor = await prisma.professor.update({
+      updatedProfessor = await prisma.user.update({
         where: {
           id,
         },
@@ -75,7 +75,7 @@ export async function PATCH(req: NextRequest) {
         });
 
       if (errorOnS3) {
-        await prisma.student.update({
+        await prisma.user.update({
           where: {
             id,
           },
@@ -89,7 +89,7 @@ export async function PATCH(req: NextRequest) {
         });
       }
     } else {
-      updatedProfessor = await prisma.professor.update({
+      updatedProfessor = await prisma.user.update({
         where: {
           id,
         },
@@ -456,7 +456,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       lastName: updatedProfessor.lastName,
       profilePhoto: updatedProfessor.profilePhoto,
       themes: updatedProfessor.themes,
-      type: "professor",
+      type: "Professor",
     });
   } catch (error) {
     console.log("[ERROR_ON_SAVE_PROFESSOR_PROFILE]", error);

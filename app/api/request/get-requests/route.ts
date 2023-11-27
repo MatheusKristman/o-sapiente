@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/libs/prismadb";
+import { AccountRole } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,40 +13,41 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const teacherUser = await prisma.professor.findFirst({
+    const teacherUser = await prisma.user.findFirst({
       where: {
         email,
+        accountType: AccountRole.PROFESSOR,
       },
     });
 
     if (teacherUser) {
       const requestData = await prisma.request.findMany({
         where: {
-          theme: {
+          subject: {
             in: teacherUser.themes,
           },
         },
       });
-  
+
       if (requestData) {
-        
         const requestDataWithStudentInfo: {
           id: string;
-          theme: string;
-          message: string;
+          subject: string;
+          description: string;
           createdAt: Date;
           updatedAt: Date;
-          studentId: string;
+          userIds: string[];
           firstName?: string;
           lastName?: string;
           profilePhoto?: string;
         }[] = [];
-        
+
         if (requestData && requestData.length > 0) {
           for (const request of requestData) {
-            const studentInfo = await prisma.student.findUnique({
+            const studentInfo = await prisma.user.findUnique({
               where: {
-                id: request.studentId,
+                id: request.userIds[0],
+                accountType: AccountRole.STUDENT,
               },
             });
             requestDataWithStudentInfo.push({
@@ -55,39 +57,41 @@ export async function POST(req: NextRequest) {
               profilePhoto: studentInfo?.profilePhoto ?? undefined,
             });
           }
-        
+
           return NextResponse.json(requestDataWithStudentInfo);
         }
       }
     }
 
-    const studentUser = await prisma.student.findUnique({
+    const studentUser = await prisma.user.findUnique({
       where: {
         email,
+        accountType: AccountRole.STUDENT,
       },
     });
 
-    if(studentUser){
+    if (studentUser) {
       const userRequests = await prisma.request.findMany({
         where: {
-          studentId: studentUser.id,
+          userIds: {
+            has: studentUser.id,
+          },
         },
       });
-  
-      if(userRequests) {
 
+      if (userRequests) {
         const requestDataWithStudentInfo: {
           id: string;
-          theme: string;
-          message: string;
+          subject: string;
+          description: string;
           createdAt: Date;
           updatedAt: Date;
-          studentId: string;
+          userIds: string[];
           firstName?: string;
           lastName?: string;
           profilePhoto?: string;
         }[] = [];
-        
+
         if (userRequests && userRequests.length > 0) {
           for (const request of userRequests) {
             requestDataWithStudentInfo.push({
@@ -97,7 +101,7 @@ export async function POST(req: NextRequest) {
               profilePhoto: studentUser?.profilePhoto ?? undefined,
             });
           }
-        
+
           return NextResponse.json(requestDataWithStudentInfo);
         }
       }
@@ -107,8 +111,6 @@ export async function POST(req: NextRequest) {
     if (!studentUser && !teacherUser) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
     }
-
-    
   } catch (error) {
     console.log("[ERROR_GET_REQUEST]", error);
     return new NextResponse("Ocorreu um erro na solicitação do pedido", {

@@ -11,59 +11,35 @@ export async function GET() {
     }
 
     if (session.user && session.user.email) {
-      const student = await prisma.student.findUnique({
+      const user = await prisma.user.findUnique({
         where: {
           email: session.user.email,
         },
       });
 
-      const professor = await prisma.professor.findUnique({
-        where: {
-          email: session.user.email,
-        },
+      if (!user) {
+        return new NextResponse("Usuário não encontrado", { status: 404 });
+      }
+
+      return NextResponse.json({
+        id: user.id,
+        type: user.accountType,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        themes: user.themes,
+        profilePhoto: user.profilePhoto,
+        email: user.email,
+        tel: user.tel,
+        birth: user.birth,
+        cep: user.cep,
+        city: user.city,
+        address: user.address,
+        addressNumber: user.addressNumber,
+        state: user.state,
+        district: user.district,
+        complement: user.complement,
+        resume: user.resume,
       });
-
-      if (student) {
-        return NextResponse.json({
-          id: student.id,
-          type: student.accountType,
-          firstName: student.firstName,
-          lastName: student.lastName,
-          profilePhoto: student.profilePhoto,
-          email: student.email,
-          tel: student.tel,
-          birth: student.birth,
-          cep: student.cep,
-          city: student.city,
-          address: student.address,
-          addressNumber: student.addressNumber,
-          state: student.state,
-          district: student.district,
-          complement: student.complement,
-        });
-      }
-
-      if (professor) {
-        return NextResponse.json({
-          id: professor.id,
-          type: professor.accountType,
-          firstName: professor.firstName,
-          lastName: professor.lastName,
-          themes: professor.themes,
-          profilePhoto: professor.profilePhoto,
-          email: professor.email,
-          tel: professor.tel,
-          birth: professor.birth,
-          cep: professor.cep,
-          city: professor.city,
-          address: professor.address,
-          addressNumber: professor.addressNumber,
-          state: professor.state,
-          district: professor.district,
-          complement: professor.complement,
-          resume: professor.resume,
-        });
-      }
     }
   } catch (error: any) {
     console.log(error, "GET-USER-ERROR");

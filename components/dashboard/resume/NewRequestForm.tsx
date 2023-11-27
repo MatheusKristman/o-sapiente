@@ -28,7 +28,7 @@ const NewRequestForm = () => {
   } = useForm({
     defaultValues: {
       subject: studentNewRequestInfo.themePlaceholder,
-      message: "",
+      description: "",
     },
     resolver: yupResolver(newRequestSchema),
   });
@@ -36,6 +36,7 @@ const NewRequestForm = () => {
 
   useEffect(() => {
     setIsLoading(true);
+
     axios
       .get("/api/subject?lang=br")
       .then((res) => {
@@ -59,7 +60,7 @@ const NewRequestForm = () => {
       .post("/api/request/create", {
         email: session?.data?.user?.email,
         subject: data.subject,
-        message: data.message,
+        description: data.description,
       })
       .then((res) => {
         if (res.data.sended) {
@@ -122,7 +123,7 @@ const NewRequestForm = () => {
         )}
 
         <motion.textarea
-          {...register("message")}
+          {...register("description")}
           variants={newRequestFormAnimation}
           initial="initial"
           animate="animate"
@@ -131,12 +132,12 @@ const NewRequestForm = () => {
           placeholder={studentNewRequestInfo.descPlaceholder}
           className={cn(
             "w-full h-40 mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
-            errors.message && "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
+            errors.description && "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
           )}
         />
-        {errors.message && (
+        {errors.description && (
           <span className="text-sm text-[#FF7373] font-medium text-left mb-6">
-            {errors.message?.message}
+            {errors.description?.message}
           </span>
         )}
 

@@ -70,7 +70,7 @@ const RegisterForm = () => {
     console.log(data);
 
     axios
-      .post("/api/register/professor/pre-register", data)
+      .post("/api/user/pre-register", { ...data, accountType: "Professor" })
       .then((res) => router.replace(`/cadastro/professor/finalizacao/${res.data.id}`))
       .catch((error) => {
         console.error(error.response);

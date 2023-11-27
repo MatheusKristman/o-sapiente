@@ -2,6 +2,7 @@ import S3 from "aws-sdk/clients/s3";
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { prisma } from "@/libs/prismadb";
+import { AccountRole } from "@prisma/client";
 
 export async function PATCH(req: Request) {
   try {
@@ -19,8 +20,7 @@ export async function PATCH(req: Request) {
     console.log(file);
 
     if (!file) {
-      console.log("sem foto");
-      const student = await prisma.student.findFirst({
+      const student = await prisma.user.findFirst({
         where: {
           id,
         },
@@ -36,7 +36,7 @@ export async function PATCH(req: Request) {
         firstName: student.firstName,
         lastName: student.lastName,
         profilePhoto: student.profilePhoto,
-        type: "student",
+        type: "Student",
       });
     }
 
@@ -54,7 +54,7 @@ export async function PATCH(req: Request) {
 
     const url = await s3.getSignedUrlPromise("putObject", fileParams);
 
-    const student = await prisma.student.update({
+    const student = await prisma.user.update({
       where: {
         id,
       },
@@ -85,7 +85,7 @@ export async function PATCH(req: Request) {
 
     if (errorOnS3) {
       console.log("erro no s3");
-      await prisma.student.update({
+      await prisma.user.update({
         where: {
           id,
         },
@@ -101,7 +101,7 @@ export async function PATCH(req: Request) {
       firstName: student.firstName,
       lastName: student.lastName,
       profilePhoto: student.profilePhoto,
-      type: "student",
+      type: "Student",
     });
   } catch (error: any) {
     console.log(error, "PROFILE_PHOTO");

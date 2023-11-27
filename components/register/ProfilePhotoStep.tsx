@@ -96,7 +96,7 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
       data.set("id", id);
 
       axios
-        .patch(`/api/register/${type}/save-profile`, data)
+        .patch(`/api/user/save-profile/${type}`, data)
         .then((res) => {
           console.log(res.data);
 
@@ -116,7 +116,7 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
       data.set("id", id);
 
       axios
-        .patch(`/api/register/${type}/save-profile`, data)
+        .patch(`/api/user/save-profile/${type}`, data)
         .then((res) => {
           console.log(res.data);
 
@@ -145,7 +145,7 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
       data.set("id", id);
 
       axios
-        .patch(`/api/register/${type}/save-profile`, data)
+        .patch(`/api/user/save-profile/${type}`, data)
         .then((res) => {
           console.log(res.data);
 
@@ -166,7 +166,7 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
       data.set("id", id);
 
       axios
-        .patch(`/api/register/${type}/save-profile`, data)
+        .patch(`/api/user/save-profile/${type}`, data)
         .then((res) => {
           console.log(res.data);
 
@@ -198,7 +198,8 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
           <div className="w-full flex flex-col items-center justify-center gap-6 mb-8 md:mb-24 relative">
             <label
               htmlFor="profilePhoto"
-              className="w-[200px] h-[200px] rounded-lg bg-[#C8D6DF] block cursor-pointer relative overflow-hidden shadow-md shadow-[rgba(0,0,0,0.25)]">
+              className="w-[200px] h-[200px] rounded-lg bg-[#C8D6DF] block cursor-pointer relative overflow-hidden shadow-md shadow-[rgba(0,0,0,0.25)]"
+            >
               {profilePhotoUrl ? (
                 <Image
                   src={profilePhotoUrl}
@@ -236,7 +237,8 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
               <button
                 type="button"
                 onClick={handleDeleteButton}
-                className="bg-green-primary border-green-primary text-white hover:brightness-90 transition py-1.5 px-8 text-base rounded-lg border-2 font-medium flex items-center justify-center gap-2 disabled:brightness-75 disabled:hover:brightness-75">
+                className="bg-green-primary border-green-primary text-white hover:brightness-90 transition py-1.5 px-8 text-base rounded-lg border-2 font-medium flex items-center justify-center gap-2 disabled:brightness-75 disabled:hover:brightness-75"
+              >
                 {profilePhotoStepsInfo.removeImageButton} <Trash2 size={20} />
               </button>
             )}

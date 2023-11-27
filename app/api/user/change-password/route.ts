@@ -17,27 +17,14 @@ export async function PATCH(req: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
 
-    if (profileType === "Student") {
-      await prisma.student.update({
-        where: {
-          email,
-        },
-        data: {
-          password: hashedPassword,
-        },
-      });
-    }
-
-    if (profileType === "Professor") {
-      await prisma.professor.update({
-        where: {
-          email,
-        },
-        data: {
-          password: hashedPassword,
-        },
-      });
-    }
+    await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
 
     return NextResponse.json({ passwordUpdated: true });
   } catch (error) {

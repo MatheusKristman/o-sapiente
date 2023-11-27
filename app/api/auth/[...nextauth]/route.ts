@@ -24,45 +24,26 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error(
-            "Credenciais inválidas! Verifique e tente novamente!",
-          );
+          throw new Error("Credenciais inválidas! Verifique e tente novamente!");
         }
 
         let user;
 
-        if (credentials.type === "student") {
-          user = await prisma.student.findUnique({
-            where: {
-              email: credentials.email,
-            },
-          });
-        }
-
-        if (credentials.type === "professor") {
-          user = await prisma.professor.findUnique({
-            where: {
-              email: credentials.email,
-            },
-          });
-        }
+        user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email,
+          },
+        });
 
         if (!user || !user?.password) {
           console.log("erro no usuário não encontrado");
-          throw new Error(
-            "Credenciais inválidas! Verifique e tente novamente!",
-          );
+          throw new Error("Credenciais inválidas! Verifique e tente novamente!");
         }
 
-        const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
-          user.password,
-        );
+        const isCorrectPassword = await bcrypt.compare(credentials.password, user.password);
 
         if (!isCorrectPassword) {
-          throw new Error(
-            "Credenciais inválidas! Verifique e tente novamente!",
-          );
+          throw new Error("Credenciais inválidas! Verifique e tente novamente!");
         }
 
         return user;

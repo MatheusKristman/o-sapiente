@@ -19,10 +19,10 @@ const StudentLoginForm = () => {
     setToNotLogin,
     setToRegister,
     closeModal,
-    theme,
-    setTheme,
-    message,
-    setMessage,
+    subject,
+    setSubject,
+    description,
+    setDescription,
     deactivateBackBtn,
   } = useStudentModalStore();
 
@@ -49,8 +49,8 @@ const StudentLoginForm = () => {
   function handleClose() {
     closeModal();
     setToNotLogin();
-    setTheme("");
-    setMessage("");
+    setSubject("");
+    setDescription("");
     deactivateBackBtn();
   }
 
@@ -76,13 +76,13 @@ const StudentLoginForm = () => {
   async function onSubmit(data: studentLoginType) {
     setIsSubmitting(true);
 
-    if (theme && message) {
+    if (subject && description) {
       await axios
-        .post("/api/login/student/has-theme-and-message", {
+        .post("/api/user/has-subject-and-description-login", {
           email: data.email,
           password: data.password,
-          theme,
-          message,
+          subject,
+          description,
         })
         .then((res) => {
           toast.success(res.data.message);
@@ -101,10 +101,7 @@ const StudentLoginForm = () => {
 
   return (
     <div className="w-full flex flex-col gap-9">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full overflow-x-hidden"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full overflow-x-hidden">
         <motion.div
           variants={studentFormAnimation}
           initial="initial"
@@ -173,10 +170,7 @@ const StudentLoginForm = () => {
       <div className="w-full flex flex-col items-center justify-center gap-4">
         <p className="text-base font-semibold text-[#2C383F]">
           {studentLoginInfo.noAccountText}{" "}
-          <span
-            onClick={handleRegisterLink}
-            className="text-green-primary cursor-pointer"
-          >
+          <span onClick={handleRegisterLink} className="text-green-primary cursor-pointer">
             {studentLoginInfo.noAccountLink}
           </span>
         </p>

@@ -1,70 +1,94 @@
 import bcrypt from "bcrypt";
-import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 import { prisma } from "@/libs/prismadb";
+import { AccountRole } from "@prisma/client";
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
-    const { firstName, lastName, email, password } = body;
+    const body = await req.json();
+    const { firstName, lastName, email, tel, password, passwordConfirm, accountType } = body;
 
-    if (!firstName || !lastName || !email || !password) {
-      return new NextResponse("Informação incompleta, verifique e tente novamente", {
-        status: 406,
-      });
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !tel ||
+      !password ||
+      !passwordConfirm ||
+      !accountType
+    ) {
+      return new NextResponse("Dados inválidos, verifique e tente novamente", { status: 401 });
     }
 
-    const userExists = await prisma.student.findFirst({
+    const userExists = await prisma.user.findFirst({
       where: {
         email,
       },
     });
 
     if (userExists) {
-      return new NextResponse("Usuário já cadastrado!", { status: 405 });
+      return new NextResponse("Usuário já está cadastrado", { status: 405 });
+    }
+
+    if (password !== passwordConfirm) {
+      return new NextResponse("Senhas não coincidem, verifique e tente novamente", { status: 401 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
+    let user;
 
-    const user = await prisma.student.create({
-      data: {
-        firstName,
-        lastName,
-        email,
-        tel: body.tel,
-        password: hashedPassword,
-      },
-    });
-
-    if (body.theme && body.message) {
-      await prisma.request.create({
+    if (accountType === "Professor") {
+      user = await prisma.user.create({
         data: {
-          theme: body.theme,
-          message: body.message,
-          student: {
-            connect: {
-              id: user.id,
-            },
-          },
+          firstName,
+          lastName,
+          email,
+          tel,
+          password: hashedPassword,
+          accountType: AccountRole.PROFESSOR,
         },
       });
     }
 
-    const transport = nodemailer.createTransport({
-      host: "sandbox.smtp.mailtrap.io",
-      port: 2525,
-      auth: {
-        user: process.env.MAILTRAP_USER,
-        pass: process.env.MAILTRAP_PASS,
-      },
-    });
+    if (accountType === "Student") {
+      user = await prisma.user.create({
+        data: {
+          firstName,
+          lastName,
+          email,
+          tel,
+          password: hashedPassword,
+          accountType: AccountRole.STUDENT,
+          isCompleted: true,
+        },
+      });
 
-    const mailData = {
-      from: "atendimento@osapiente.com.br",
-      to: email,
-      subject: "Confirme sua conta - O Sapiente",
-      html: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+      if (body.subject && body.description) {
+        await prisma.request.create({
+          data: {
+            subject: body.subject,
+            description: body.description,
+            userIds: [user.id],
+          },
+        });
+      }
+
+      const transport = nodemailer.createTransport({
+        host: "sandbox.smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+          user: process.env.MAILTRAP_USER,
+          pass: process.env.MAILTRAP_PASS,
+        },
+      });
+
+      const mailData = {
+        from: "atendimento@osapiente.com.br",
+        to: email,
+        subject: "Confirme sua conta - O Sapiente",
+        html: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
 <!--[if gte mso 9]>
@@ -377,35 +401,44 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
 </html>
 `,
-      attachments: [
-        {
-          filename: "image-1.png",
-          path: "public/assets/images/image-1.png",
-          cid: "image-1",
-        },
-        {
-          filename: "image-2.png",
-          path: "public/assets/images/image-2.png",
-          cid: "image-2",
-        },
-      ],
-    };
+        attachments: [
+          {
+            filename: "image-1.png",
+            path: "public/assets/images/image-1.png",
+            cid: "image-1",
+          },
+          {
+            filename: "image-2.png",
+            path: "public/assets/images/image-2.png",
+            cid: "image-2",
+          },
+        ],
+      };
 
-    transport.sendMail(mailData, (error) => {
-      if (error) {
-        console.log("[ERROR_ON_CONFIRMATION_EMAIL]", error);
+      transport.sendMail(mailData, (error) => {
+        if (error) {
+          console.log("[ERROR_ON_CONFIRMATION_EMAIL]", error);
 
-        return new NextResponse("Ocorreu um erro no envio do e-mail de confirmação da sua conta", {
-          status: 400,
-        });
-      }
-    });
+          return new NextResponse(
+            "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
+            {
+              status: 400,
+            },
+          );
+        }
+      });
+    }
+
+    if (!user) {
+      return new NextResponse("Ocorreu um erro durante a criação da conta, tente novamente", {
+        status: 400,
+      });
+    }
 
     return NextResponse.json({ id: user.id });
   } catch (error: any) {
-    console.log("[STUDENT_PRE_REGISTER_ERROR]", error);
-
-    return new NextResponse("Ocorreu um erro, tente novamente!", {
+    console.log("[ERROR_PROFESSOR_PRE_REGISTER]", error);
+    return new NextResponse("Ocorreu um erro durante o cadastro, tente novamente!", {
       status: 400,
     });
   }

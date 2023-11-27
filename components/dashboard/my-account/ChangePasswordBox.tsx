@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
@@ -13,11 +13,7 @@ import {
 } from "@/constants/schemas/studentChangePasswordSchema";
 import { useSession } from "next-auth/react";
 
-interface ChangePasswordBoxProps {
-  profileType: "Professor" | "Student";
-}
-
-const ChangePasswordBox = ({ profileType }: ChangePasswordBoxProps) => {
+const ChangePasswordBox = () => {
   const [isInputsActive, setIsInputsActive] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -54,7 +50,6 @@ const ChangePasswordBox = ({ profileType }: ChangePasswordBoxProps) => {
         .patch("/api/user/change-password", {
           ...data,
           email: session.data?.user?.email,
-          profileType,
         })
         .then((res) => {
           if (res.data.passwordUpdated) {

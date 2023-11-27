@@ -31,9 +31,9 @@ export default function Home() {
 
   const router = useRouter();
 
-  if (id && confirmed && type) {
+  if (id && confirmed) {
     axios
-      .post("/api/register/confirm-account", { id, confirmed, type })
+      .post("/api/user/confirm-account", { id, confirmed })
       .then((res) => {
         setSuccessMessage(res.data.message);
       })

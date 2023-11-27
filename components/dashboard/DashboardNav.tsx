@@ -18,7 +18,7 @@ const DashboardNav = () => {
   console.log(pathname);
 
   function handleNavigation(type: string, index: number) {
-    if (type === "Student") {
+    if (type === "STUDENT") {
       const href = menuItems[index].studentHref;
 
       if (href !== "") {
@@ -26,7 +26,7 @@ const DashboardNav = () => {
       }
     }
 
-    if (type === "Professor") {
+    if (type === "PROFESSOR") {
       const href = menuItems[index].professorHref;
 
       if (href !== "") {

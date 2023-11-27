@@ -44,7 +44,7 @@ const ConfirmAccountStep = ({ profileData }: ConfirmAccountStepProps) => {
               <span className="text-xl font-semibold text-gray-primary">{`${
                 profileData!.firstName
               } ${profileData!.lastName}`}</span>
-              {profileData!.type === "professor" && (
+              {profileData!.type === "Professor" && (
                 <span className="text-base text-gray-primary font-medium">
                   {profileData!.themes.join(", ")}
                 </span>

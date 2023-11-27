@@ -39,3 +39,15 @@ export type cityOptionsType = {
     };
   };
 };
+
+export interface RequestData {
+  id: string;
+  subject: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  userIds: string[];
+  firstName: string;
+  lastName: string;
+  profilePhoto: string;
+}

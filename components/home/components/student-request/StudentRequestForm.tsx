@@ -11,20 +11,20 @@ const StudentRequestForm = () => {
   const {
     setToNotRequest,
     setToRegister,
-    theme,
-    setTheme,
-    message,
-    setMessage,
+    subject,
+    setSubject,
+    description,
+    setDescription,
     activateBackBtn,
   } = useStudentModalStore();
 
   useEffect(() => {
-    if (theme !== "" && message.length > 100) {
+    if (subject !== "" && description.length > 100) {
       setIsNextEnabled(false);
     } else {
       setIsNextEnabled(true);
     }
-  }, [theme, message, setIsNextEnabled]);
+  }, [subject, description, setIsNextEnabled]);
 
   function handleNextButton() {
     setToNotRequest();
@@ -43,11 +43,11 @@ const StudentRequestForm = () => {
         animate="animate"
         exit="exit"
         placeholder={studentRequestInfo.themePlaceholder}
-        name="topic"
+        name="subject"
         autoComplete="off"
         autoCorrect="off"
-        value={theme}
-        onChange={(e) => setTheme(e.target.value)}
+        value={subject}
+        onChange={(e) => setSubject(e.target.value)}
         className="w-full h-11 rounded-lg px-4 py-2 bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors mb-4"
       />
 
@@ -57,11 +57,11 @@ const StudentRequestForm = () => {
         animate="animate"
         exit="exit"
         placeholder={studentRequestInfo.messagePlaceholder}
-        name="message"
+        name="description"
         autoComplete="off"
         autoCorrect="off"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
         className="w-full h-24 rounded-lg px-4 py-2 bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors resize-none mb-6 sm:h-40"
       />
 

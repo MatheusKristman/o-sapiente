@@ -29,13 +29,13 @@ const Header = () => {
   console.log(session);
 
   useEffect(() => {
-    if (session) {
+    if (session.data) {
       axios
         .get("/api/user/get-user")
         .then((res) => {
           setAccountType(res.data.type);
           setUserId(res.data.id);
-          console.log(res);
+          console.log(res.data);
         })
         .catch((error) => console.error(error));
     }
@@ -117,7 +117,7 @@ const Header = () => {
 
       <div className="hidden lg:flex items-center justify-center gap-x-6">
         {session.status === "authenticated" ? (
-          accountType === "Student" ? (
+          accountType === "STUDENT" ? (
             <>
               <button
                 type="button"
@@ -143,7 +143,7 @@ const Header = () => {
                 Área do Aluno
               </button>
             </>
-          ) : accountType === "Professor" ? (
+          ) : accountType === "PROFESSOR" ? (
             <>
               <button
                 type="button"

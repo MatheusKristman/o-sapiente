@@ -1,4 +1,5 @@
 import { prisma } from "@/libs/prismadb";
+import { AccountRole } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(req: NextRequest) {
@@ -29,16 +30,17 @@ export async function PATCH(req: NextRequest) {
       return new NextResponse("É necessario ter pelo menos 1 tema selecionado", { status: 401 });
     }
 
-    const professor = await prisma.professor.update({
+    const professor = await prisma.user.update({
       where: {
         email,
+        accountType: AccountRole.PROFESSOR,
       },
       data: {
         firstName,
         lastName,
         birth,
-        city,
-        state,
+        city: city === "Cidade" ? "" : city,
+        state: state === "Estado" ? "" : state,
         address,
         addressNumber,
         tel: `(${ddd}) ${cel}`,

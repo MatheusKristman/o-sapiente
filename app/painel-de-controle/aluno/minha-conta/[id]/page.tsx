@@ -33,7 +33,7 @@ const DashboardPage = () => {
             profileType="Student"
           />
 
-          <ChangePasswordBox profileType="Student" />
+          <ChangePasswordBox />
         </div>
 
         <StudentFormBox />

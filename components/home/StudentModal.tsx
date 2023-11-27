@@ -24,8 +24,8 @@ const StudentModal = () => {
     setToNotLogin,
     setToNotRequest,
     setToNotRegister,
-    setTheme,
-    setMessage,
+    setSubject,
+    setDescription,
     isBackBtnActive,
     deactivateBackBtn,
     setToRequest,
@@ -36,8 +36,8 @@ const StudentModal = () => {
     setToNotLogin();
     setToNotRequest();
     setToNotRegister();
-    setTheme("");
-    setMessage("");
+    setSubject("");
+    setDescription("");
     deactivateBackBtn();
   }
 
@@ -81,26 +81,14 @@ const StudentModal = () => {
               variants={studentModalAnimation}
               className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle"
             >
-              <div
-                className={`flex ${
-                  isBackBtnActive ? "justify-between" : "justify-end"
-                } mb-6`}
-              >
+              <div className={`flex ${isBackBtnActive ? "justify-between" : "justify-end"} mb-6`}>
                 {isBackBtnActive && (
-                  <button
-                    type="button"
-                    className="text-green-primary"
-                    onClick={handleBackButton}
-                  >
+                  <button type="button" className="text-green-primary" onClick={handleBackButton}>
                     <HiChevronLeft size={34} />
                   </button>
                 )}
 
-                <button
-                  type="button"
-                  className="text-green-primary"
-                  onClick={handleCloseButton}
-                >
+                <button type="button" className="text-green-primary" onClick={handleCloseButton}>
                   <BsXLg size={26} />
                 </button>
               </div>

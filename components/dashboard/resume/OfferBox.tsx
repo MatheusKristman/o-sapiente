@@ -3,22 +3,8 @@ import { Dot } from "lucide-react";
 
 import Button from "@/components/Button";
 import { cn } from "@/libs/utils";
-import {
-  studentResumeInfos,
-  professorResumeInfos,
-} from "@/constants/dashboard/resume-br";
-
-interface RequestData {
-  id: string;
-  theme: string;
-  message: string;
-  createdAt: string;
-  updatedAt: string;
-  studentId: string;
-  firstName: string;
-  lastName: string;
-  profilePhoto: string;
-}
+import { studentResumeInfos, professorResumeInfos } from "@/constants/dashboard/resume-br";
+import { RequestData } from "@/types";
 
 interface OfferBoxProps {
   type: string;
@@ -52,9 +38,7 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
             }}
           />
 
-          <span className="text-base -mt-3 lg:mt-0">
-            {request ? request.theme : "N/A"}
-          </span>
+          <span className="text-base -mt-3 lg:mt-0">{request ? request.subject : "N/A"}</span>
         </div>
 
         <div className="xl:flex xl:justify-end xl:w-5/12">
@@ -66,8 +50,8 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
                 type === "Professor"
                   ? professorResumeInfos.seeOfferBtn
                   : type === "Student"
-                  ? studentResumeInfos.seeMessageBtn
-                  : ""
+                    ? studentResumeInfos.seeMessageBtn
+                    : ""
               }
               onClick={() => {}}
             />

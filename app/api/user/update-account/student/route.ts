@@ -1,4 +1,5 @@
 import { prisma } from "@/libs/prismadb";
+import { AccountRole } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(req: NextRequest) {
@@ -23,16 +24,17 @@ export async function PATCH(req: NextRequest) {
       return new NextResponse("Usuário não localizado", { status: 404 });
     }
 
-    const student = await prisma.student.update({
+    const student = await prisma.user.update({
       where: {
         email,
+        accountType: AccountRole.STUDENT,
       },
       data: {
         firstName,
         lastName,
         birth,
-        city,
-        state,
+        city: city === "Cidade" ? "" : city,
+        state: state === "Estado" ? "" : state,
         address,
         addressNumber,
         tel: `(${ddd}) ${cel}`,
