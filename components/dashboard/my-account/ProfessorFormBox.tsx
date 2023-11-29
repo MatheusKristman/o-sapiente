@@ -76,7 +76,7 @@ const ProfessorFormBox = () => {
           setValue("cel", res.data.tel.substring(5));
           setValue("district", res.data.district);
           setValue("complement", res.data.complement);
-          setValue("aboutMe", res.data.resume);
+          setValue("aboutMe", res.data.aboutMe);
           setThemes(res.data.themes);
 
           setSelectedCity(res.data.city);
@@ -127,7 +127,7 @@ const ProfessorFormBox = () => {
       setValue("city", selectedCity);
       setSelectedCity("");
     }
-  }, [cityOptions, selectedCity]);
+  }, [cityOptions, selectedCity, setValue]);
 
   useEffect(() => {
     function getAllSubjectsOptions() {
@@ -291,7 +291,7 @@ const ProfessorFormBox = () => {
         setValue("cel", res.data.tel.substring(5));
         setValue("district", res.data.district);
         setValue("complement", res.data.complement);
-        setValue("aboutMe", res.data.resume);
+        setValue("aboutMe", res.data.aboutMe);
         setThemes(res.data.themes);
       })
       .catch((error) => {
@@ -306,8 +306,7 @@ const ProfessorFormBox = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]"
-    >
+      className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]">
       <h2 className="text-2xl text-gray-primary font-semibold mb-6">
         {MyAccountInfo.personalDataTitle}
       </h2>
@@ -375,16 +374,14 @@ const ProfessorFormBox = () => {
             <div
               className={cn(
                 "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
-              )}
-            >
+              )}>
               <select
                 {...register("state")}
                 disabled={isSubmitting || isLoading}
                 defaultValue={MyAccountInfo.personalDataPlaceholders.state}
                 className={cn(
                   "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
-                )}
-              >
+                )}>
                 <option value={MyAccountInfo.personalDataPlaceholders.state} disabled hidden>
                   {MyAccountInfo.personalDataPlaceholders.state}
                 </option>
@@ -401,16 +398,14 @@ const ProfessorFormBox = () => {
             <div
               className={cn(
                 "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
-              )}
-            >
+              )}>
               <select
                 {...register("city")}
                 disabled={isSubmitting || isLoading}
                 defaultValue={MyAccountInfo.personalDataPlaceholders.city}
                 className={cn(
                   "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
-                )}
-              >
+                )}>
                 <option value={MyAccountInfo.personalDataPlaceholders.city} disabled hidden>
                   {MyAccountInfo.personalDataPlaceholders.city}
                 </option>
@@ -561,8 +556,7 @@ const ProfessorFormBox = () => {
             <li
               key={`${option}-${index}`}
               onClick={() => handleOptionSelect(option)}
-              className="w-full h-12 px-4 py-3 rounded-lg bg-green-primary text-base font-medium text-white flex items-center justify-between group lg:cursor-pointer"
-            >
+              className="w-full h-12 px-4 py-3 rounded-lg bg-green-primary text-base font-medium text-white flex items-center justify-between group lg:cursor-pointer">
               {option}
               <X className="h-7 w-7 block lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
             </li>
@@ -586,8 +580,7 @@ const ProfessorFormBox = () => {
                 <li
                   key={`${option}-${index}`}
                   onClick={() => handleOptionSelect(option)}
-                  className="w-full h-12 px-4 py-3 rounded-lg bg-[#EBEFF1] text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer"
-                >
+                  className="w-full h-12 px-4 py-3 rounded-lg bg-[#EBEFF1] text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer">
                   {option}
                   <Plus className="h-7 w-7 block text-green-primary lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
                 </li>
@@ -605,8 +598,7 @@ const ProfessorFormBox = () => {
                   <li
                     key={`${option}-${index}`}
                     onClick={() => handleOptionSelect(option)}
-                    className="w-full h-12 px-4 py-3 rounded-lg bg-[#EBEFF1] text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer"
-                  >
+                    className="w-full h-12 px-4 py-3 rounded-lg bg-[#EBEFF1] text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer">
                     {option}
                     <Plus className="h-7 w-7 block text-green-primary lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
                   </li>

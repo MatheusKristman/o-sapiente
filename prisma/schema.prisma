@@ -14,32 +14,16 @@ enum Lang {
   br
 }
 
-model Student {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName     String
-  lastName      String
-  email         String    @unique
-  tel           String?
-  birth         String?
-  cep           String?
-  city          String?
-  state         String?
-  address       String?
-  addressNumber String?
-  district      String?
-  complement    String?
-  password      String
-  profilePhoto  String?
-  accountType   String    @default("Student")
-  isConfirmed   Boolean   @default(false)
-  requests      Request[]
+enum AccountRole {
+  PROFESSOR
+  STUDENT
 }
 
-model Professor {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+model User {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
   firstName     String
   lastName      String
-  email         String   @unique
+  email         String      @unique
   tel           String?
   birth         String?
   cep           String?
@@ -51,21 +35,37 @@ model Professor {
   complement    String?
   password      String
   themes        String[]
-  resume        String?
-  accountType   String   @default("Professor")
-  isCompleted   Boolean  @default(false)
-  isConfirmed   Boolean  @default(false)
+  aboutMe       String?
+  accountType   AccountRole
+  isCompleted   Boolean     @default(false)
+  isConfirmed   Boolean     @default(false)
   profilePhoto  String?
+
+  subjectIds String[]  @db.ObjectId
+  subjects   Subject[] @relation(fields: [subjectIds], references: [id])
+
+  requestIds String[]  @db.ObjectId
+  requests   Request[] @relation(fields: [requestIds], references: [id])
+
+  seenMessageIds String[]  @db.ObjectId
+  seenMessages   Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
+
+  messages Message[]
 }
 
 model Request {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  theme     String
-  message   String
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  subject     String
+  description String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  studentId String   @db.ObjectId
-  student   Student  @relation(fields: [studentId], references: [id])
+
+  messagesIds String[]  @db.ObjectId
+  messages    Message[]
+
+  userIds String[] @db.ObjectId
+  users   User[]   @relation(fields: [userIds], references: [id])
 }
 
 model Subject {
@@ -73,4 +73,24 @@ model Subject {
   main String
   lang Lang
   subs String[]
+
+  userIds String[] @db.ObjectId
+  users   User[]   @relation(fields: [userIds], references: [id])
+}
+
+model Message {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  content String?
+  fileUrl String?
+
+  createdAt DateTime @default(now())
+
+  seenIds String[] @db.ObjectId
+  seen    User[]   @relation("Seen", fields: [seenIds], references: [id])
+
+  requestId String  @db.ObjectId
+  request   Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  senderId String @db.ObjectId
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }

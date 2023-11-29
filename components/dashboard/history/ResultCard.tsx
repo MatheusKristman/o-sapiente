@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { TableRowProps } from "../table/ResponsiveTable";
+import { TableRowProps } from "./TableRow";
 import { Dot } from "lucide-react";
 
 const ResultCard = ({ imageSrc, name, startDate, endDate, status, value }: TableRowProps) => {

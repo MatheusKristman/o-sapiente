@@ -27,6 +27,6 @@ export const MyAccountInfo = {
   themesAvailableTitle: "Temas",
   aboutTitle: "Sobre você",
   aboutPlaceholder: "Mínimo de 40 palavras",
-  themeErrorMessage: "É necessario ter pelo menos 1 tema selecionado",
+  themeErrorMessage: "É necessário ter pelo menos 1 tema selecionado",
   submitButton: "SALVAR DADOS",
 };

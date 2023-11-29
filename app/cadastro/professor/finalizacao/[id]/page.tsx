@@ -8,6 +8,7 @@ import ThemeStep from "@/components/register/professor/components/complete-regis
 import AboutStep from "@/components/register/professor/components/complete-register/AboutStep";
 import ProfilePhotoStep from "@/components/register/ProfilePhotoStep";
 import ConfirmAccountStep from "@/components/register/ConfirmAccountStep";
+import { AccountRole } from "@prisma/client";
 
 interface CompleteRegisterPageProps {
   params: {
@@ -20,7 +21,7 @@ export interface IProfileData {
   lastName: string;
   profilePhoto: string;
   themes: string[];
-  type: string;
+  accountType: AccountRole;
 }
 
 const CompleteRegisterPage = ({ params }: CompleteRegisterPageProps) => {

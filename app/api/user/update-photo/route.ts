@@ -57,27 +57,14 @@ export async function PATCH(req: NextRequest) {
 
     let user;
 
-    if (profileType === "Professor") {
-      user = await prisma.professor.update({
-        where: {
-          email,
-        },
-        data: {
-          profilePhoto: `${process.env.NEXT_S3_PUBLIC_URL}/profile/${file.name}`,
-        },
-      });
-    }
-
-    if (profileType === "Student") {
-      user = await prisma.student.update({
-        where: {
-          email,
-        },
-        data: {
-          profilePhoto: `${process.env.NEXT_S3_PUBLIC_URL}/profile/${file.name}`,
-        },
-      });
-    }
+    user = await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        profilePhoto: `${process.env.NEXT_S3_PUBLIC_URL}/profile/${file.name}`,
+      },
+    });
 
     if (!user) {
       return new NextResponse("Usuário não encontrado", { status: 404 });

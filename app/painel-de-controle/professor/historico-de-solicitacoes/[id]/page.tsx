@@ -1,9 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Dot, Search, ChevronDown } from "lucide-react";
-
-import Button from "@/components/Button";
 
 import TopStats from "@/components/dashboard/history/TopStats";
 import ResponsiveTable from "@/components/dashboard/history/ResponsiveTable";

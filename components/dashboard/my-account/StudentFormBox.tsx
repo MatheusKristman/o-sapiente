@@ -117,7 +117,7 @@ const StudentFormBox = () => {
       setValue("city", selectedCity);
       setSelectedCity("");
     }
-  }, [cityOptions, selectedCity]);
+  }, [cityOptions, selectedCity, setValue]);
 
   function handleBirth(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 8);
@@ -178,8 +178,7 @@ const StudentFormBox = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]"
-    >
+      className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]">
       <h2 className="text-2xl text-gray-primary font-semibold mb-6">
         {MyAccountInfo.personalDataTitle}
       </h2>
@@ -247,21 +246,18 @@ const StudentFormBox = () => {
             <div
               className={cn(
                 "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
-              )}
-            >
+              )}>
               <select
                 {...register("state")}
                 disabled={isSubmitting || isLoading}
                 className={cn(
                   "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
-                )}
-              >
+                )}>
                 <option
                   value={MyAccountInfo.personalDataPlaceholders.state}
                   selected
                   disabled
-                  hidden
-                >
+                  hidden>
                   {MyAccountInfo.personalDataPlaceholders.state}
                 </option>
                 {stateOptions.map((state) => (
@@ -277,21 +273,18 @@ const StudentFormBox = () => {
             <div
               className={cn(
                 "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
-              )}
-            >
+              )}>
               <select
                 {...register("city")}
                 disabled={isSubmitting || isLoading}
                 className={cn(
                   "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
-                )}
-              >
+                )}>
                 <option
                   value={MyAccountInfo.personalDataPlaceholders.state}
                   selected
                   disabled
-                  hidden
-                >
+                  hidden>
                   {MyAccountInfo.personalDataPlaceholders.city}
                 </option>
                 {cityOptions.map((city) => (
