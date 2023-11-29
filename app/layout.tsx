@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import HeaderMobile from "@/components/HeaderMobile";
 import Footer from "@/components/Footer";
 import AuthContext from "@/context/AuthContext";
+import { SocketProvider } from "@/components/providers/SocketProvider";
 
 export const metadata: Metadata = {
   title: "O Sapiente",
@@ -18,11 +19,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR">
       <body>
         <AuthContext>
-          <Header />
-          <HeaderMobile />
-          <Toaster position="top-center" reverseOrder containerStyle={{ zIndex: "99999" }} />
-          {children}
-          <Footer />
+          <SocketProvider>
+            <Header />
+            <HeaderMobile />
+            <Toaster position="top-center" reverseOrder containerStyle={{ zIndex: "99999" }} />
+            {children}
+            <Footer />
+          </SocketProvider>
         </AuthContext>
       </body>
     </html>
