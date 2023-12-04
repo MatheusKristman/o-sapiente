@@ -24,10 +24,10 @@ export default function Home() {
     const { openModal: openProfessorModal } = useProfessorModalStore();
 
     const searchParams = useSearchParams();
-    const id = searchParams.get("id");
-    const confirmed = searchParams.get("confirmed");
-    const type = searchParams.get("type");
-    let redirected = searchParams.get("redirected");
+    const id = searchParams?.get("id");
+    const confirmed = searchParams?.get("confirmed");
+    const type = searchParams?.get("type");
+    let redirected = searchParams?.get("redirected");
 
     const router = useRouter();
 
