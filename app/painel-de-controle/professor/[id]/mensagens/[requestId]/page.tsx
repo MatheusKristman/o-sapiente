@@ -11,7 +11,7 @@ import MessagesContactsBox from "@/components/dashboard/messages/MessagesContact
 
 const MessagesPage = () => {
     const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
-    const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(true);
+    const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
     const [isVideoModalOpen, setIsVideoModalOpen] = useState<boolean>(false);
     const params = useParams();
     const router = useRouter();

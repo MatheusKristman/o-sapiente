@@ -31,7 +31,7 @@ const MessagesPage = () => {
                 isMessageOpen={isMessageOpen}
             />
 
-            <MessagesChatBox isMessageOpen={isMessageOpen} handleBackBtn={handleBackBtn} />
+            {/* <MessagesChatBox isMessageOpen={isMessageOpen} handleBackBtn={handleBackBtn} /> */}
         </div>
     );
 };
