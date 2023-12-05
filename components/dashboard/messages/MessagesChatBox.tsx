@@ -124,7 +124,7 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
 
                         <div className="hidden md:flex justify-end ml-auto">
                             <Button
-                                onClick={() => {}}
+                                onClick={() => { }}
                                 label="Confirmar Finalização"
                                 fullWidth
                                 primary
@@ -139,7 +139,7 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
                     <div className="flex w-full justify-end  mt-1">
                         <div className="flex w-full justify-end ">
                             <div className="flex justify-center items-center w-72 h-24 bg-white rounded-l-lg rounded-br-lg">
-                                <Button onClick={() => {}} label="Confirmar Finalização" primary />
+                                <Button onClick={() => { }} label="Confirmar Finalização" primary />
                             </div>
                         </div>
                     </div>
@@ -150,14 +150,14 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
                 <div className="flex flex-col-reverse justify-start w-[233px] h-full">
                     <div className="flex flex-col gap-4 items-center h-fit bg-white rounded-r-lg rounded-tl-lg p-6">
                         <button
-                            onClick={() => {}}
+                            onClick={() => { }}
                             className=" rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center"
                         >
                             <ImageIcon />
                             Enviar Imagem
                         </button>
                         <button
-                            onClick={() => {}}
+                            onClick={() => { }}
                             className="rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center"
                         >
                             <Video />
@@ -177,17 +177,17 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
                             {isModalFooterOpen ? <XCircleIcon /> : <Plus />}
                         </button>
                         <button
-                            onClick={() => {}}
+                            onClick={() => { }}
                             className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center"
                         >
-                            <ImageIcon />
+                            <div className="bg-galleryIcon bg-no-repeat bg-contain w-7 h-7" />
                         </button>
 
                         <button
-                            onClick={() => {}}
+                            onClick={() => { }}
                             className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center"
                         >
-                            <Video />
+                            <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />
                         </button>
                     </div>
 
@@ -203,13 +203,23 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
                     </div>
 
                     <div className="flex flex-row items-center justify-start">
-                        <button
-                            onClick={handleSubmitTest}
-                            className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold"
-                        >
-                            <Mic />
-                            <span className="hidden md:block">Gravar</span>
-                        </button>
+                        {content.length > 0 ? (
+                            <button
+                                onClick={handleSubmitTest}
+                                className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold"
+                            >
+                                <div className="bg-sendIcon w-7 h-7 text-white bg-no-repeat bg-contain" />
+                                <span className="hidden md:block">Enviar</span>
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleSubmitTest}
+                                className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-medium"
+                            >
+                                <div className="bg-micOnIcon w-7 h-7 text-white bg-no-repeat bg-contain" />
+                                <span className="hidden md:block">Gravar</span>
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

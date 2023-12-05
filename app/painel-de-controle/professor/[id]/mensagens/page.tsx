@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 import MessagesChatBox from "@/components/dashboard/messages/MessagesChatBox";
 import MessagesContactsBox from "@/components/dashboard/messages/MessagesContactsBox";
@@ -10,6 +10,9 @@ import MessagesContactsBox from "@/components/dashboard/messages/MessagesContact
 
 const MessagesPage = () => {
     const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
+    const params = useParams();
+
+    console.log(params);
 
     const router = useRouter();
 
