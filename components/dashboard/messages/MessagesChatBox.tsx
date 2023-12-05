@@ -5,7 +5,7 @@ import {
     XCircleIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { ChangeEvent, ChangeEventHandler, useEffect, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 import Button from "@/components/Button";
@@ -17,9 +17,10 @@ interface MessagesChatBoxProps {
     isMessageOpen: boolean;
     handleBackBtn: () => void;
     requestId?: string;
+    setIsImageModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId }: MessagesChatBoxProps) => {
+const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId, setIsImageModalOpen }: MessagesChatBoxProps) => {
     const [content, setContent] = useState("");
     const [isModalNavOpen, setIsModalNavOpen] = useState(false);
     const [isModalFooterOpen, setIsModalFooterOpen] = useState(false);
@@ -37,6 +38,11 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId }: MessagesCh
     const handleContent = (event: ChangeEvent<HTMLInputElement>) => {
         setContent(event.target.value);
     };
+
+    const handleImageModalOpen = () => {
+        setIsModalFooterOpen(false);
+        setIsImageModalOpen(true);
+    }
 
     useEffect(() => {
         function handleResize() {
@@ -148,7 +154,7 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId }: MessagesCh
                 <div className="flex flex-col-reverse justify-start w-[233px] h-full">
                     <div className="flex flex-col gap-4 items-center h-fit bg-white rounded-r-lg rounded-tl-lg p-6">
                         <button
-                            onClick={() => { }}
+                            onClick={handleImageModalOpen}
                             className=" rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center"
                         >
                             <div className="bg-galleryIcon bg-no-repeat bg-contain w-7 h-7" />
@@ -175,7 +181,7 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId }: MessagesCh
                             {isModalFooterOpen ? <XCircleIcon /> : <Plus />}
                         </button>
                         <button
-                            onClick={() => { }}
+                            onClick={handleImageModalOpen}
                             className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center"
                         >
                             <div className="bg-galleryIcon bg-no-repeat bg-contain w-7 h-7" />

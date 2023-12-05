@@ -4,14 +4,16 @@ import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 
 import MessagesChatBox from "@/components/dashboard/messages/MessagesChatBox";
+import MessagesImageModal from "@/components/dashboard/messages/MessagesImageModal";
 import MessagesContactsBox from "@/components/dashboard/messages/MessagesContactsBox";
 
 // para componentes das mensagens que são apresentadas na tela, usar o capitulo Chat Messages component do video fullstack discord clone do code with antonio, é uma boa referencia
 
 const MessagesPage = () => {
     const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
+    const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(true);
+    const [isVideoModalOpen, setIsVideoModalOpen] = useState<boolean>(false);
     const params = useParams();
-
     const router = useRouter();
 
     function handleNavigation() {
@@ -29,7 +31,8 @@ const MessagesPage = () => {
                 isMessageOpen={isMessageOpen}
             />
 
-            <MessagesChatBox isMessageOpen={isMessageOpen} handleBackBtn={handleBackBtn} requestId={params?.requestId as string} />
+            <MessagesChatBox isMessageOpen={isMessageOpen} handleBackBtn={handleBackBtn} requestId={params?.requestId as string} setIsImageModalOpen={setIsImageModalOpen} />
+            <MessagesImageModal isImageModalOpen={isImageModalOpen} setIsImageModalOpen={setIsImageModalOpen} />
         </div>
     );
 };
