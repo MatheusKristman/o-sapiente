@@ -2,9 +2,6 @@ import {
     ChevronLeft,
     MoreHorizontal,
     Plus,
-    ImageIcon,
-    Video,
-    Mic,
     XCircleIcon,
 } from "lucide-react";
 import Image from "next/image";
@@ -19,9 +16,10 @@ import axios from "axios";
 interface MessagesChatBoxProps {
     isMessageOpen: boolean;
     handleBackBtn: () => void;
+    requestId?: string;
 }
 
-const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps) => {
+const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId }: MessagesChatBoxProps) => {
     const [content, setContent] = useState("");
     const [isModalNavOpen, setIsModalNavOpen] = useState(false);
     const [isModalFooterOpen, setIsModalFooterOpen] = useState(false);
@@ -59,9 +57,9 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
     }, [content, session]);
 
     const handleSubmitTest = () => {
-        if (content.length > 3) {
+        if (content.length > 0) {
             axios
-                .post("/api/socket/messages?requestId=656e2030bb73a681424b52e1", {
+                .post(`/api/socket/messages?requestId=${requestId}`, {
                     content,
                     email: session.data?.user?.email,
                 })
@@ -75,7 +73,7 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
     return (
         <div
             className={cn(
-                "flex-1 flex flex-col lg:w-full lg:h-full lg:flex ",
+                "flex-1 flex flex-col lg:w-full lg:h-full lg:flex",
                 isMessageOpen ? "flex" : "hidden lg:flex",
             )}
         >
@@ -153,14 +151,14 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn }: MessagesChatBoxProps)
                             onClick={() => { }}
                             className=" rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center"
                         >
-                            <ImageIcon />
+                            <div className="bg-galleryIcon bg-no-repeat bg-contain w-7 h-7" />
                             Enviar Imagem
                         </button>
                         <button
                             onClick={() => { }}
                             className="rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center"
                         >
-                            <Video />
+                            <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />
                             Enviar Video
                         </button>
                     </div>

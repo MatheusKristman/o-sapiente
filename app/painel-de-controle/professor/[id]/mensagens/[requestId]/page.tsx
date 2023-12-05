@@ -12,8 +12,6 @@ const MessagesPage = () => {
     const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
     const params = useParams();
 
-    console.log(params);
-
     const router = useRouter();
 
     function handleNavigation() {
@@ -31,7 +29,7 @@ const MessagesPage = () => {
                 isMessageOpen={isMessageOpen}
             />
 
-            <MessagesChatBox isMessageOpen={isMessageOpen} handleBackBtn={handleBackBtn} />
+            <MessagesChatBox isMessageOpen={isMessageOpen} handleBackBtn={handleBackBtn} requestId={params?.requestId as string} />
         </div>
     );
 };
