@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
+import toast from "react-hot-toast";
 import { Trash2 } from "lucide-react";
 import { BsXLg } from "react-icons/bs";
-import { Dispatch, SetStateAction } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 
 import { imageModalInfo } from "@/constants/dashboard/message-br";
 import Button from "@/components/Button";
@@ -15,8 +17,48 @@ interface MessagesImageModalProps {
 }
 
 const MessagesImageModal = ({ isImageModalOpen, setIsImageModalOpen }: MessagesImageModalProps) => {
+    const [image, setImage] = useState<File | null>(null);
+    const [imageUrl, setImageUrl] = useState<string>("");
+    const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
+
+    const fileInput = useRef<HTMLInputElement | null>(null);
+
     function handleCloseButton() {
         setIsImageModalOpen(false);
+    }
+
+    function handleImage(event: React.ChangeEvent<HTMLInputElement>) {
+        setIsImageLoading(true);
+
+        if (!event.target.files) {
+            return;
+        }
+
+        const file = event.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        if (file && file.type.startsWith("image/")) {
+            setImageUrl(URL.createObjectURL(file));
+            setImage(file);
+            setIsImageLoading(false);
+            return;
+        }
+
+        toast.error("Formato da imagem é inválido");
+
+        setIsImageLoading(false);
+    }
+
+    function handleDeleteButton() {
+        if (fileInput.current) {
+            fileInput.current.value = "";
+        }
+
+        setImage(null);
+        setImageUrl("");
     }
 
     return (
@@ -37,32 +79,48 @@ const MessagesImageModal = ({ isImageModalOpen, setIsImageModalOpen }: MessagesI
                             animate="animate"
                             exit="exit"
                             variants={messageImageModalAnimation}
-                            className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle">
+                            className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle"
+                        >
                             <div className="w-full flex items-center justify-end mb-4">
                                 <button type="button" className="text-green-primary" onClick={handleCloseButton}>
                                     <BsXLg size={26} />
                                 </button>
                             </div>
+
                             <div className="w-full flex flex-col items-start">
                                 <h4 className="text-2xl text-gray-primary font-semibold mb-6 lg:text-3xl">{imageModalInfo.title}</h4>
 
-                                <label htmlFor="messageImage" className="bg-[#C8D6DF] rounded-2xl w-full p-6 flex flex-col items-center justify-center gap-y-4 mb-4 lg:cursor-pointer">
-                                    <div className="bg-camera bg-no-repeat bg-contain w-10 h-10" />
-                                    <span className="text-base text-gray-primary font-medium max-w-[250px]">{imageModalInfo.inputPlaceholder}</span>
-                                </label>
+                                {imageUrl && image ? (
+                                    <div className="w-full h-[250px] max-w-[250px] rounded-lg relative overflow-hidden shadow-md shadow-[rgba(0,0,0,0.25)] mx-auto mb-4">
+                                        <Image
+                                            src={imageUrl}
+                                            alt="Imagem"
+                                            fill
+                                            className="object-cover object-center"
+                                        />
+                                    </div>
+                                ) : (
+                                    <label htmlFor="messageImage" className="bg-[#C8D6DF] rounded-2xl border-2 border-gray-primary/10 w-full p-6 flex flex-col items-center justify-center gap-y-4 mb-4 lg:cursor-pointer">
+                                        <div className="bg-camera bg-no-repeat bg-contain w-10 h-10 opacity-60" />
+                                        <span className="text-base text-gray-primary font-medium max-w-[250px] opacity-60">{imageModalInfo.inputPlaceholder}</span>
+                                    </label>
+                                )}
 
                                 <input
+                                    ref={fileInput}
                                     type="file"
                                     id="messageImage"
                                     name="messageImage"
                                     className="hidden"
-                                // disabled={isSendingImage}
-                                // onChange={(event) => handleImage(event)}
+                                    disabled={isImageLoading}
+                                    onChange={(event) => handleImage(event)}
                                 />
 
-                                <div className="w-full flex items-center justify-center mb-6">
-                                    <Button label={imageModalInfo.removeBtn} icon={<Trash2 size={20} />} primary />
-                                </div>
+                                {imageUrl && image && (
+                                    <div className="w-full flex items-center justify-center mb-6">
+                                        <Button onClick={handleDeleteButton} label={imageModalInfo.removeBtn} icon={<Trash2 size={20} />} primary />
+                                    </div>
+                                )}
 
                                 <Button label={imageModalInfo.sendBtn} fullWidth primary />
                             </div>

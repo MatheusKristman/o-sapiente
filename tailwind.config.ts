@@ -33,7 +33,8 @@ const config: Config = {
                 benefitsStudentsDesktop: "url('/assets/images/benefits-line-students-desktop.svg')",
                 benefitsStudentsTablet: "url('/assets/images/benefits-line-students-tablet.svg')",
                 benefitsStudentsMobile: "url('/assets/images/benefits-line-students-mobile.svg')",
-                benefitsProfessorDesktop: "url('/assets/images/benefits-line-professor-desktop.svg')",
+                benefitsProfessorDesktop:
+                    "url('/assets/images/benefits-line-professor-desktop.svg')",
                 benefitsProfessorTablet: "url('/assets/images/benefits-line-professor-tablet.svg')",
                 benefitsProfessorMobile: "url('/assets/images/benefits-line-professor-mobile.svg')",
                 paperAirplane: "url('/assets/images/paper-airplane.svg')",
@@ -56,6 +57,7 @@ const config: Config = {
                 micOffIcon: "url('/assets/icons/mic-off.svg')",
                 videoIcon: "url('/assets/icons/video.svg')",
                 galleryIcon: "url('/assets/icons/gallery.svg')",
+                videoFile: "url('/assets/icons/video-file.svg')",
             },
             transitionProperty: {
                 "max-height": "max-height",

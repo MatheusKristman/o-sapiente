@@ -1,11 +1,13 @@
-import {
-    ChevronLeft,
-    MoreHorizontal,
-    Plus,
-    XCircleIcon,
-} from "lucide-react";
+import { ChevronLeft, MoreHorizontal, Plus, XCircleIcon } from "lucide-react";
 import Image from "next/image";
-import { ChangeEvent, ChangeEventHandler, Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+    ChangeEvent,
+    ChangeEventHandler,
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useState,
+} from "react";
 import { useSession } from "next-auth/react";
 
 import Button from "@/components/Button";
@@ -18,9 +20,16 @@ interface MessagesChatBoxProps {
     handleBackBtn: () => void;
     requestId?: string;
     setIsImageModalOpen: Dispatch<SetStateAction<boolean>>;
+    setIsVideoModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId, setIsImageModalOpen }: MessagesChatBoxProps) => {
+const MessagesChatBox = ({
+    isMessageOpen,
+    handleBackBtn,
+    requestId,
+    setIsImageModalOpen,
+    setIsVideoModalOpen,
+}: MessagesChatBoxProps) => {
     const [content, setContent] = useState("");
     const [isModalNavOpen, setIsModalNavOpen] = useState(false);
     const [isModalFooterOpen, setIsModalFooterOpen] = useState(false);
@@ -42,7 +51,12 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId, setIsImageMo
     const handleImageModalOpen = () => {
         setIsModalFooterOpen(false);
         setIsImageModalOpen(true);
-    }
+    };
+
+    const handleVideoModalOpen = () => {
+        setIsModalFooterOpen(false);
+        setIsVideoModalOpen(true);
+    };
 
     useEffect(() => {
         function handleResize() {
@@ -128,7 +142,7 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId, setIsImageMo
 
                         <div className="hidden md:flex justify-end ml-auto">
                             <Button
-                                onClick={() => { }}
+                                onClick={() => {}}
                                 label="Confirmar Finalização"
                                 fullWidth
                                 primary
@@ -143,7 +157,7 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId, setIsImageMo
                     <div className="flex w-full justify-end  mt-1">
                         <div className="flex w-full justify-end ">
                             <div className="flex justify-center items-center w-72 h-24 bg-white rounded-l-lg rounded-br-lg">
-                                <Button onClick={() => { }} label="Confirmar Finalização" primary />
+                                <Button onClick={() => {}} label="Confirmar Finalização" primary />
                             </div>
                         </div>
                     </div>
@@ -155,14 +169,14 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId, setIsImageMo
                     <div className="flex flex-col gap-4 items-center h-fit bg-white rounded-r-lg rounded-tl-lg p-6">
                         <button
                             onClick={handleImageModalOpen}
-                            className=" rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center"
+                            className=" rounded-xl gap-2.5 p-2.5 w-full h-12 bg-green-primary text-white flex justify-start items-center"
                         >
                             <div className="bg-galleryIcon bg-no-repeat bg-contain w-7 h-7" />
                             Enviar Imagem
                         </button>
                         <button
-                            onClick={() => { }}
-                            className="rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center"
+                            onClick={handleVideoModalOpen}
+                            className="rounded-xl gap-2.5 p-2.5 w-full h-12 bg-green-primary text-white flex justify-start items-center"
                         >
                             <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />
                             Enviar Video
@@ -171,7 +185,7 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId, setIsImageMo
                 </div>
             )}
 
-            <div className="w-full flex bg-[#2C383F] h-[112px]  mt-auto">
+            <div className="w-full flex bg-[#2C383F] mt-auto">
                 <div className="w-full flex flex-row px-6 py-4 gap-8 sm:px-16">
                     <div className="flex flex-row items-center justify-start gap-3.5">
                         <button
@@ -188,7 +202,7 @@ const MessagesChatBox = ({ isMessageOpen, handleBackBtn, requestId, setIsImageMo
                         </button>
 
                         <button
-                            onClick={() => { }}
+                            onClick={handleVideoModalOpen}
                             className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center"
                         >
                             <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />

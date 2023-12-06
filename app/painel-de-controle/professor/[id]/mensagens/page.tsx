@@ -25,7 +25,7 @@ const MessagesPage = () => {
     }
 
     return (
-        <div className="w-full h-[calc(100vh-131px)] mx-auto flex flex-col lg:h-[calc(100vh-147px)] lg:flex-row ">
+        <div className="w-full h-[calc(100vh-131px)] min-h-[500px] mx-auto flex flex-col lg:h-[calc(100vh-147px)] lg:flex-row ">
             <MessagesContactsBox
                 handleNavigation={handleNavigation}
                 isMessageOpen={isMessageOpen}
