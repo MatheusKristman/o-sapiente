@@ -3,11 +3,15 @@ export const imageModalInfo = {
     inputPlaceholder: "Clique aqui para carregar uma imagem",
     removeBtn: "Remover Imagem",
     sendBtn: "Enviar",
-}
+};
 
 export const videoModalInfo = {
     title: "Envie seu video",
     inputPlaceholder: "Clique aqui para carregar um video",
     removeBtn: "Remover video",
     sendBtn: "Enviar",
-}
+};
+
+export const noConversationInfo = {
+    desc: "Clique na conversa ao lado para abrir",
+};

@@ -58,6 +58,7 @@ const config: Config = {
                 videoIcon: "url('/assets/icons/video.svg')",
                 galleryIcon: "url('/assets/icons/gallery.svg')",
                 videoFile: "url('/assets/icons/video-file.svg')",
+                logoIcon: "url('/assets/icons/logo-icon.svg')",
             },
             transitionProperty: {
                 "max-height": "max-height",

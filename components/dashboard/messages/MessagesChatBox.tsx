@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronLeft, MoreHorizontal, Plus, XCircleIcon } from "lucide-react";
 import Image from "next/image";
 import {
@@ -9,6 +11,7 @@ import {
     useState,
 } from "react";
 import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 
 import Button from "@/components/Button";
 import { cn } from "@/libs/utils";
@@ -16,7 +19,6 @@ import { useSocket } from "@/components/providers/SocketProvider";
 import axios from "axios";
 
 interface MessagesChatBoxProps {
-    isMessageOpen: boolean;
     handleBackBtn: () => void;
     requestId?: string;
     setIsImageModalOpen: Dispatch<SetStateAction<boolean>>;
@@ -24,17 +26,28 @@ interface MessagesChatBoxProps {
 }
 
 const MessagesChatBox = ({
-    isMessageOpen,
     handleBackBtn,
     requestId,
     setIsImageModalOpen,
     setIsVideoModalOpen,
 }: MessagesChatBoxProps) => {
-    const [content, setContent] = useState("");
-    const [isModalNavOpen, setIsModalNavOpen] = useState(false);
-    const [isModalFooterOpen, setIsModalFooterOpen] = useState(false);
+    const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
+    const [content, setContent] = useState<string>("");
+    const [isModalNavOpen, setIsModalNavOpen] = useState<boolean>(false);
+    const [isModalFooterOpen, setIsModalFooterOpen] = useState<boolean>(false);
     const { isConnected } = useSocket();
     const session = useSession();
+    const params = useParams();
+
+    useEffect(() => {
+        if (params?.requestId) {
+            setIsMessageOpen(true);
+        }
+
+        return () => {
+            setIsMessageOpen(false);
+        };
+    }, [params?.requestId]);
 
     const toggleModalNav = () => {
         setIsModalNavOpen(!isModalNavOpen);
