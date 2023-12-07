@@ -9,6 +9,7 @@ import {
     SetStateAction,
     useEffect,
     useState,
+    useRef,
 } from "react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
@@ -38,6 +39,7 @@ const MessagesChatBox = ({
     const { isConnected } = useSocket();
     const session = useSession();
     const params = useParams();
+    const messageInputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
         if (params?.requestId) {
@@ -99,6 +101,8 @@ const MessagesChatBox = ({
                 .then((res) => console.log(res.data))
                 .catch((error) => console.error(error));
         } else {
+            messageInputRef.current?.focus();
+
             return;
         }
     };
@@ -224,6 +228,7 @@ const MessagesChatBox = ({
 
                     <div className="w-full flex items-center">
                         <input
+                            ref={messageInputRef}
                             type="text"
                             name="message"
                             placeholder="Digite a sua mensagem"
@@ -233,24 +238,34 @@ const MessagesChatBox = ({
                         />
                     </div>
 
+                    {/* <div className="flex flex-row items-center justify-start"> */}
+                    {/*     {content.length > 0 ? ( */}
+                    {/*         <button */}
+                    {/*             onClick={handleSubmitTest} */}
+                    {/*             className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold" */}
+                    {/*         > */}
+                    {/*             <div className="bg-sendIcon w-7 h-7 text-white bg-no-repeat bg-contain" /> */}
+                    {/*             <span className="hidden md:block">Enviar</span> */}
+                    {/*         </button> */}
+                    {/*     ) : ( */}
+                    {/*         <button */}
+                    {/*             onClick={handleSubmitTest} */}
+                    {/*             className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-medium" */}
+                    {/*         > */}
+                    {/*             <div className="bg-micOnIcon w-7 h-7 text-white bg-no-repeat bg-contain" /> */}
+                    {/*             <span className="hidden md:block">Gravar</span> */}
+                    {/*         </button> */}
+                    {/*     )} */}
+                    {/* </div> */}
+
                     <div className="flex flex-row items-center justify-start">
-                        {content.length > 0 ? (
-                            <button
-                                onClick={handleSubmitTest}
-                                className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold"
-                            >
-                                <div className="bg-sendIcon w-7 h-7 text-white bg-no-repeat bg-contain" />
-                                <span className="hidden md:block">Enviar</span>
-                            </button>
-                        ) : (
-                            <button
-                                onClick={handleSubmitTest}
-                                className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-medium"
-                            >
-                                <div className="bg-micOnIcon w-7 h-7 text-white bg-no-repeat bg-contain" />
-                                <span className="hidden md:block">Gravar</span>
-                            </button>
-                        )}
+                        <button
+                            onClick={handleSubmitTest}
+                            className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold"
+                        >
+                            <div className="bg-sendIcon w-7 h-7 text-white bg-no-repeat bg-contain" />
+                            <span className="hidden md:block">Enviar</span>
+                        </button>
                     </div>
                 </div>
             </div>
