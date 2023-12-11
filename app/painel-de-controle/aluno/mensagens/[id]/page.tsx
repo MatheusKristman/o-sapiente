@@ -21,9 +21,15 @@ const DashboardPage = () => {
 
   return (
     <div className="w-full h-[calc(100vh-131px)] mx-auto flex flex-col lg:h-[calc(100vh-147px)] lg:flex-row ">
-      <MessagesContactsBox handleNavigation={handleNavigation} isMessageOpen={isMessageOpen} />
+      <MessagesContactsBox
+        handleNavigation={handleNavigation}
+        isMessageOpen={isMessageOpen}
+      />
 
-      <MessagesChatBox isMessageOpen={isMessageOpen} handleBackBtn={handleBackBtn} />
+      <MessagesChatBox
+        isMessageOpen={isMessageOpen}
+        handleBackBtn={handleBackBtn}
+      />
     </div>
   );
 };
