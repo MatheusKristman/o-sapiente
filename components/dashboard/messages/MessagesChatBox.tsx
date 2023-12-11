@@ -18,6 +18,7 @@ import Button from "@/components/Button";
 import { cn } from "@/libs/utils";
 import { useSocket } from "@/components/providers/SocketProvider";
 import axios from "axios";
+import Body from "./Body";
 
 interface MessagesChatBoxProps {
     handleBackBtn: () => void;
@@ -181,6 +182,8 @@ const MessagesChatBox = ({
                 </div>
             )}
 
+            <Body initialMessages="teste" />
+
             {isModalFooterOpen && (
                 <div className="flex flex-col-reverse justify-start w-[233px] h-full">
                     <div className="flex flex-col gap-4 items-center h-fit bg-white rounded-r-lg rounded-tl-lg p-6">
@@ -211,6 +214,7 @@ const MessagesChatBox = ({
                         >
                             {isModalFooterOpen ? <XCircleIcon /> : <Plus />}
                         </button>
+
                         <button
                             onClick={handleImageModalOpen}
                             className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center"
