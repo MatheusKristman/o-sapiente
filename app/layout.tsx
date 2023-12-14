@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import HeaderMobile from "@/components/HeaderMobile";
 import Footer from "@/components/Footer";
 import AuthContext from "@/context/AuthContext";
+import ActiveStatus from "@/components/ActiveStatus";
 
 export const metadata: Metadata = {
   title: "O Sapiente",
@@ -24,6 +25,7 @@ export default function RootLayout({
         <AuthContext>
           <Header />
           <HeaderMobile />
+          <ActiveStatus />
           <Toaster
             position="top-center"
             reverseOrder
