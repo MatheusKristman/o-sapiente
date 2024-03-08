@@ -42,7 +42,8 @@ const RegisterForm = () => {
 
   const inputStyle =
     "w-full h-11 bg-[#EBEFF1] rounded-md px-4 text-base text-gray-primary placeholder:font-medium border-2 border-[#EBEFF1] focus:border-[#9DA5AA] outline-none transition-[border] disabled:brightness-75 disabled:hover:brightness-75";
-  const inputErrorStyle = "border-[#FF7373] border-2 border-solid focus:border-[#FF7373]";
+  const inputErrorStyle =
+    "border-[#FF7373] border-2 border-solid focus:border-[#FF7373]";
 
   function handleTelFormat(event: React.ChangeEvent<HTMLInputElement>) {
     let tel = event.target.value.replace(/\D/g, "");
@@ -67,11 +68,11 @@ const RegisterForm = () => {
   function onSubmit(data: professorRegisterSchemaType) {
     setIsSubmitting(true);
 
-    console.log(data);
-
     axios
       .post("/api/user/pre-register", { ...data, accountType: "Professor" })
-      .then((res) => router.replace(`/cadastro/professor/finalizacao/${res.data.id}`))
+      .then((res) =>
+        router.replace(`/cadastro/professor/finalizacao/${res.data.id}`),
+      )
       .catch((error) => {
         console.error(error.response);
 
@@ -99,8 +100,9 @@ const RegisterForm = () => {
           </h3>
 
           <form
-            onSubmit={handleSubmit(onSubmit, (error) => console.log(error))} // TODO temporário, remover depois de configurado
-            className="w-full flex flex-col gap-6 mb-6">
+            onSubmit={handleSubmit(onSubmit, (error) => console.error(error))} // TODO temporário, remover depois de configurado
+            className="w-full flex flex-col gap-6 mb-6"
+          >
             <div className="w-full flex flex-col gap-4">
               <input
                 {...register("firstName")}
@@ -174,7 +176,10 @@ const RegisterForm = () => {
               <input
                 {...register("passwordConfirm")}
                 type="password"
-                className={cn(inputStyle, errors.passwordConfirm && inputErrorStyle)}
+                className={cn(
+                  inputStyle,
+                  errors.passwordConfirm && inputErrorStyle,
+                )}
                 placeholder={professorRegisterFormInfo.confirmPassword}
                 disabled={isSubmitting}
                 autoComplete="off"
@@ -190,7 +195,8 @@ const RegisterForm = () => {
             <button
               type="submit"
               className="w-full h-11 bg-green-primary rounded-md flex items-center justify-center text-white text-base font-semibold transition disabled:brightness-75 disabled:hover:brightness-75 lg:hover:brightness-90"
-              disabled={isSubmitting}>
+              disabled={isSubmitting}
+            >
               {isSubmitting ? (
                 <>
                   {professorRegisterFormInfo.registerBtn}{" "}
@@ -207,7 +213,8 @@ const RegisterForm = () => {
               <button
                 type="button"
                 onClick={handleOpenLoginModal}
-                className="text-green-primary cursor-pointer lg:hover:underline">
+                className="text-green-primary cursor-pointer lg:hover:underline"
+              >
                 {professorRegisterFormInfo.alreadyHasAccount.link}
               </button>
             </span>
@@ -216,7 +223,8 @@ const RegisterForm = () => {
               {professorRegisterFormInfo.privacy.text + " "}
               <Link
                 className="underline text-gray-primary/80"
-                href={professorRegisterFormInfo.privacy.link.href}>
+                href={professorRegisterFormInfo.privacy.link.href}
+              >
                 {professorRegisterFormInfo.privacy.link.text}
               </Link>
             </span>

@@ -17,10 +17,7 @@ export async function PATCH(req: Request) {
     const file: File | null = data.get("profilePhoto") as unknown as File;
     const id: string = data.get("id") as string;
 
-    console.log(file);
-
     if (!file) {
-      console.log("sem foto");
       const student = await prisma.user.findFirst({
         where: {
           id,
@@ -29,9 +26,12 @@ export async function PATCH(req: Request) {
       });
 
       if (!student) {
-        return new NextResponse("Aluno não encontrado, verifique e tente novamente", {
-          status: 404,
-        });
+        return new NextResponse(
+          "Aluno não encontrado, verifique e tente novamente",
+          {
+            status: 404,
+          },
+        );
       }
 
       return NextResponse.json({
@@ -98,7 +98,10 @@ export async function PATCH(req: Request) {
         },
       });
 
-      return new NextResponse("Ocorreu um erro durante o envio, tente novamente!", { status: 424 });
+      return new NextResponse(
+        "Ocorreu um erro durante o envio, tente novamente!",
+        { status: 424 },
+      );
     }
 
     return NextResponse.json({

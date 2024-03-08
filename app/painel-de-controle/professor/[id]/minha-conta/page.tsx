@@ -9,38 +9,37 @@ import ChangePasswordBox from "@/components/dashboard/my-account/ChangePasswordB
 import ProfessorFormBox from "@/components/dashboard/my-account/ProfessorFormBox";
 
 const DashboardPage = () => {
-    const [profilePhotoUrl, setProfilePhotoUrl] = useState<string>("");
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState<string>("");
 
-    const session = useSession();
+  const session = useSession();
 
-    useEffect(() => {
-        axios
-            .get("/api/user/get-user")
-            .then((res) => {
-                setProfilePhotoUrl(res.data.profilePhoto);
-                console.log(res.data);
-            })
-            .catch((error) => console.error(error));
-    }, []);
+  useEffect(() => {
+    axios
+      .get("/api/user/get-user")
+      .then((res) => {
+        setProfilePhotoUrl(res.data.profilePhoto);
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
-    return (
-        <div className="flex-1 w-full px-6 py-12 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:pb-24">
-            <div className="w-full flex flex-col items-center gap-9 lg:flex-row lg:items-start lg:justify-center">
-                <div className="w-full sm:max-w-sm flex flex-col items-center gap-y-9">
-                    <ProfilePhotoBox
-                        profilePhotoUrl={profilePhotoUrl}
-                        setProfilePhotoUrl={setProfilePhotoUrl}
-                        email={session.data?.user?.email}
-                        profileType="Professor"
-                    />
+  return (
+    <div className="flex-1 w-full px-6 py-12 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:pb-24">
+      <div className="w-full flex flex-col items-center gap-9 lg:flex-row lg:items-start lg:justify-center">
+        <div className="w-full sm:max-w-sm flex flex-col items-center gap-y-9">
+          <ProfilePhotoBox
+            profilePhotoUrl={profilePhotoUrl}
+            setProfilePhotoUrl={setProfilePhotoUrl}
+            email={session.data?.user?.email}
+            profileType="Professor"
+          />
 
-                    <ChangePasswordBox />
-                </div>
-
-                <ProfessorFormBox />
-            </div>
+          <ChangePasswordBox />
         </div>
-    );
+
+        <ProfessorFormBox />
+      </div>
+    </div>
+  );
 };
 
 export default DashboardPage;

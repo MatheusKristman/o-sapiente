@@ -69,7 +69,10 @@ const ProfessorFormBox = () => {
           setValue("firstName", res.data.firstName);
           setValue("lastName", res.data.lastName);
           setValue("birth", res.data.birth);
-          setValue("state", res.data.state ?? MyAccountInfo.personalDataPlaceholders.state);
+          setValue(
+            "state",
+            res.data.state ?? MyAccountInfo.personalDataPlaceholders.state,
+          );
           setValue("address", res.data.address);
           setValue("addressNumber", res.data.addressNumber);
           setValue("ddd", res.data.tel.substring(1, 3));
@@ -103,8 +106,6 @@ const ProfessorFormBox = () => {
   useEffect(() => {
     if (stateOptions.length > 0) {
       setIsLoading(true);
-
-      console.log(state);
 
       const ufSelected = stateOptions.filter((option) => option.nome === state);
 
@@ -145,7 +146,6 @@ const ProfessorFormBox = () => {
 
           setAvailableThemes(allThemes);
           setAvailableSubjects(data);
-          console.log(res.data);
         })
         .catch((error) => {
           console.error(error.response);
@@ -189,7 +189,9 @@ const ProfessorFormBox = () => {
       );
 
       if (filteredSubjects.length > 0) {
-        const filteredOpt = filteredSubjects[0].subs.filter((sub) => !themes.includes(sub));
+        const filteredOpt = filteredSubjects[0].subs.filter(
+          (sub) => !themes.includes(sub),
+        );
 
         setFilteredOptions(filteredOpt);
 
@@ -220,11 +222,12 @@ const ProfessorFormBox = () => {
     const formattedDate = value.replace(/(\d{2})(\d{2})(\d{4})/, "$1/$2/$3");
 
     setValue("birth", formattedDate);
-    console.log(formattedDate);
   }
 
   function handleDDD(event: ChangeEvent<HTMLInputElement>) {
-    const DDDFormatted = event.target.value.replace(/[^0-9]/g, "").substring(0, 2);
+    const DDDFormatted = event.target.value
+      .replace(/[^0-9]/g, "")
+      .substring(0, 2);
 
     setValue("ddd", DDDFormatted);
   }
@@ -283,8 +286,14 @@ const ProfessorFormBox = () => {
         setValue("firstName", res.data.firstName);
         setValue("lastName", res.data.lastName);
         setValue("birth", res.data.birth);
-        setValue("city", res.data.city ?? MyAccountInfo.personalDataPlaceholders.city);
-        setValue("state", res.data.state ?? MyAccountInfo.personalDataPlaceholders.state);
+        setValue(
+          "city",
+          res.data.city ?? MyAccountInfo.personalDataPlaceholders.city,
+        );
+        setValue(
+          "state",
+          res.data.state ?? MyAccountInfo.personalDataPlaceholders.state,
+        );
         setValue("address", res.data.address);
         setValue("addressNumber", res.data.addressNumber);
         setValue("ddd", res.data.tel.substring(1, 3));
@@ -306,7 +315,8 @@ const ProfessorFormBox = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]">
+      className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]"
+    >
       <h2 className="text-2xl text-gray-primary font-semibold mb-6">
         {MyAccountInfo.personalDataTitle}
       </h2>
@@ -319,7 +329,8 @@ const ProfessorFormBox = () => {
             disabled={isSubmitting || isLoading}
             className={cn(
               inputStyle,
-              errors.firstName && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+              errors.firstName &&
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.firstName}
           />
@@ -337,7 +348,8 @@ const ProfessorFormBox = () => {
             disabled={isSubmitting || isLoading}
             className={cn(
               inputStyle,
-              errors.lastName && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+              errors.lastName &&
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.lastName}
           />
@@ -354,7 +366,8 @@ const ProfessorFormBox = () => {
             type="text"
             className={cn(
               inputStyle,
-              errors.birth && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+              errors.birth &&
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
             )}
             disabled={isSubmitting || isLoading}
             autoComplete="off"
@@ -370,19 +383,30 @@ const ProfessorFormBox = () => {
         </div>
 
         <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
-          <div className={cn("flex flex-col gap-y-1 w-1/2", "sm:grow lg:grow-0 xl:grow")}>
+          <div
+            className={cn(
+              "flex flex-col gap-y-1 w-1/2",
+              "sm:grow lg:grow-0 xl:grow",
+            )}
+          >
             <div
               className={cn(
                 "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
-              )}>
+              )}
+            >
               <select
                 {...register("state")}
                 disabled={isSubmitting || isLoading}
                 defaultValue={MyAccountInfo.personalDataPlaceholders.state}
                 className={cn(
                   "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
-                )}>
-                <option value={MyAccountInfo.personalDataPlaceholders.state} disabled hidden>
+                )}
+              >
+                <option
+                  value={MyAccountInfo.personalDataPlaceholders.state}
+                  disabled
+                  hidden
+                >
                   {MyAccountInfo.personalDataPlaceholders.state}
                 </option>
                 {stateOptions.map((state) => (
@@ -394,19 +418,30 @@ const ProfessorFormBox = () => {
             </div>
           </div>
 
-          <div className={cn("flex flex-col gap-y-1 w-1/2", "sm:grow lg:grow-0 xl:grow")}>
+          <div
+            className={cn(
+              "flex flex-col gap-y-1 w-1/2",
+              "sm:grow lg:grow-0 xl:grow",
+            )}
+          >
             <div
               className={cn(
                 "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
-              )}>
+              )}
+            >
               <select
                 {...register("city")}
                 disabled={isSubmitting || isLoading}
                 defaultValue={MyAccountInfo.personalDataPlaceholders.city}
                 className={cn(
                   "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
-                )}>
-                <option value={MyAccountInfo.personalDataPlaceholders.city} disabled hidden>
+                )}
+              >
+                <option
+                  value={MyAccountInfo.personalDataPlaceholders.city}
+                  disabled
+                  hidden
+                >
                   {MyAccountInfo.personalDataPlaceholders.city}
                 </option>
                 {cityOptions.map((city) => (
@@ -420,14 +455,17 @@ const ProfessorFormBox = () => {
         </div>
 
         <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
-          <div className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}>
+          <div
+            className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}
+          >
             <input
               {...register("address")}
               type="text"
               disabled={isSubmitting || isLoading}
               className={cn(
                 inputStyle,
-                errors.address && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                errors.address &&
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.address}
             />
@@ -438,7 +476,12 @@ const ProfessorFormBox = () => {
             )}
           </div>
 
-          <div className={cn("flex flex-col gap-y-1", "sm:w-2/5 lg:w-full xl:w-2/5")}>
+          <div
+            className={cn(
+              "flex flex-col gap-y-1",
+              "sm:w-2/5 lg:w-full xl:w-2/5",
+            )}
+          >
             <input
               {...register("addressNumber")}
               type="text"
@@ -459,7 +502,12 @@ const ProfessorFormBox = () => {
         </div>
 
         <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
-          <div className={cn("flex flex-col gap-y-1", "sm:w-2/5 lg:w-full xl:w-2/5")}>
+          <div
+            className={cn(
+              "flex flex-col gap-y-1",
+              "sm:w-2/5 lg:w-full xl:w-2/5",
+            )}
+          >
             <input
               {...register("ddd")}
               type="text"
@@ -467,7 +515,8 @@ const ProfessorFormBox = () => {
               onChange={handleDDD}
               className={cn(
                 inputStyle,
-                errors.ddd && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                errors.ddd &&
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.ddd}
             />
@@ -478,7 +527,9 @@ const ProfessorFormBox = () => {
             )}
           </div>
 
-          <div className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}>
+          <div
+            className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}
+          >
             <input
               {...register("cel")}
               type="text"
@@ -486,7 +537,8 @@ const ProfessorFormBox = () => {
               onChange={handleCel}
               className={cn(
                 inputStyle,
-                errors.cel && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                errors.cel &&
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.cel}
             />
@@ -505,7 +557,8 @@ const ProfessorFormBox = () => {
             disabled={isSubmitting || isLoading}
             className={cn(
               inputStyle,
-              errors.district && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+              errors.district &&
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.district}
           />
@@ -523,7 +576,8 @@ const ProfessorFormBox = () => {
             disabled={isSubmitting || isLoading}
             className={cn(
               inputStyle,
-              errors.complement && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+              errors.complement &&
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.complement}
           />
@@ -535,7 +589,9 @@ const ProfessorFormBox = () => {
         </div>
       </div>
 
-      <h2 className="text-2xl text-gray-primary font-semibold mb-6">{MyAccountInfo.themeTitle}</h2>
+      <h2 className="text-2xl text-gray-primary font-semibold mb-6">
+        {MyAccountInfo.themeTitle}
+      </h2>
 
       <input
         type="text"
@@ -556,7 +612,8 @@ const ProfessorFormBox = () => {
             <li
               key={`${option}-${index}`}
               onClick={() => handleOptionSelect(option)}
-              className="w-full h-12 px-4 py-3 rounded-lg bg-green-primary text-base font-medium text-white flex items-center justify-between group lg:cursor-pointer">
+              className="w-full h-12 px-4 py-3 rounded-lg bg-green-primary text-base font-medium text-white flex items-center justify-between group lg:cursor-pointer"
+            >
               {option}
               <X className="h-7 w-7 block lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
             </li>
@@ -580,7 +637,8 @@ const ProfessorFormBox = () => {
                 <li
                   key={`${option}-${index}`}
                   onClick={() => handleOptionSelect(option)}
-                  className="w-full h-12 px-4 py-3 rounded-lg bg-[#EBEFF1] text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer">
+                  className="w-full h-12 px-4 py-3 rounded-lg bg-[#EBEFF1] text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer"
+                >
                   {option}
                   <Plus className="h-7 w-7 block text-green-primary lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
                 </li>
@@ -598,7 +656,8 @@ const ProfessorFormBox = () => {
                   <li
                     key={`${option}-${index}`}
                     onClick={() => handleOptionSelect(option)}
-                    className="w-full h-12 px-4 py-3 rounded-lg bg-[#EBEFF1] text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer">
+                    className="w-full h-12 px-4 py-3 rounded-lg bg-[#EBEFF1] text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer"
+                  >
                     {option}
                     <Plus className="h-7 w-7 block text-green-primary lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
                   </li>
@@ -608,14 +667,17 @@ const ProfessorFormBox = () => {
         )}
       </div>
 
-      <h2 className="text-2xl text-gray-primary font-semibold mb-6">{MyAccountInfo.aboutTitle}</h2>
+      <h2 className="text-2xl text-gray-primary font-semibold mb-6">
+        {MyAccountInfo.aboutTitle}
+      </h2>
 
       <textarea
         {...register("aboutMe")}
         disabled={isSubmitting || isLoading}
         className={cn(
           "w-full h-64 bg-[#EBEFF1] px-4 py-2 rounded-lg resize-none text-base text-gray-primary focus:outline-[#9DA5AA] mb-9",
-          errors.aboutMe && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373] mb-0",
+          errors.aboutMe &&
+            "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373] mb-0",
         )}
         placeholder={MyAccountInfo.aboutPlaceholder}
       />

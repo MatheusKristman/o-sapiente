@@ -3,24 +3,16 @@ import { Dot } from "lucide-react";
 
 import Button from "@/components/Button";
 import { cn } from "@/libs/utils";
-import { studentResumeInfos, professorResumeInfos } from "@/constants/dashboard/resume-br";
-
-interface RequestData {
-  id: string;
-  theme: string;
-  message: string;
-  createdAt: string;
-  updatedAt: string;
-  studentId: string;
-  firstName: string;
-  lastName: string;
-  profilePhoto: string;
-}
+import {
+  studentResumeInfos,
+  professorResumeInfos,
+} from "@/constants/dashboard/resume-br";
+import { RequestWithUsers } from "@/types";
 
 interface OfferBoxProps {
   type: string;
   last?: boolean;
-  request?: RequestData;
+  request: RequestWithUsers;
 }
 
 const OfferBox = ({ last, request, type }: OfferBoxProps) => {
@@ -29,7 +21,11 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
       <div className="flex flex-col lg:flex-row lg:gap-6 xl:w-full">
         <div className="flex justify-center xl:w-1/12">
           <Image
-            src={request ? request.profilePhoto : "N/A"}
+            src={
+              request.users[0].profilePhoto
+                ? request.users[0].profilePhoto
+                : "N/A"
+            }
             alt="Perfil"
             width={50}
             height={40}
@@ -39,7 +35,7 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
 
         <div className="flex flex-col items-center justify-center p-2.5 text-green-primary text-lg font-semibold lg:p-1 lg:flex-row xl:w-6/12 xl:justify-start">
           <span className="-mb-3 lg:mb-0">
-            {request ? request.firstName + " " + request.lastName : "N/A"}
+            {request.users[0].firstName + " " + request.users[0].lastName}
           </span>
 
           <Dot
@@ -49,7 +45,7 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
             }}
           />
 
-          <span className="text-base -mt-3 lg:mt-0">{request ? request.theme : "N/A"}</span>
+          <span className="text-base -mt-3 lg:mt-0">{request.subject}</span>
         </div>
 
         <div className="xl:flex xl:justify-end xl:w-5/12">
@@ -61,8 +57,8 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
                 type === "Professor"
                   ? professorResumeInfos.seeOfferBtn
                   : type === "Student"
-                  ? studentResumeInfos.seeMessageBtn
-                  : ""
+                    ? studentResumeInfos.seeOfferBtn
+                    : ""
               }
               onClick={() => {}}
             />

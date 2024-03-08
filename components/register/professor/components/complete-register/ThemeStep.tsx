@@ -16,7 +16,11 @@ interface ThemeStepProps {
   setSteps: Dispatch<SetStateAction<number>>;
 }
 
-const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepProps) => {
+const ThemeStep = ({
+  selectedOptions,
+  setSelectedOptions,
+  setSteps,
+}: ThemeStepProps) => {
   const [themes, setThemes] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
@@ -42,7 +46,6 @@ const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepP
 
           setThemes(allThemes);
           setSubjects(data);
-          console.log(res.data);
         })
         .catch((error) => {
           console.error(error.response);
@@ -157,14 +160,20 @@ const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepP
     <div className="w-full h-full py-12 lg:py-24">
       <div className="w-full mx-auto px-6 flex flex-col justify-center items-center gap-9 md:px-16 lg:flex-row lg:justify-between lg:items-start lg:gap-24 lg:container">
         <div className="w-full px-6 py-9 rounded-2xl bg-green-primary h-fit lg:w-2/5">
-          <p className="w-full text-white text-lg">{ThemeStepInfos.boxMessage}</p>
+          <p className="w-full text-white text-lg">
+            {ThemeStepInfos.boxMessage}
+          </p>
         </div>
 
         <div className="w-full md:max-w-[550px] lg:w-3/5">
           <h2 className="text-2xl text-gray-primary font-semibold mb-6 md:text-3xl text-center">
-            <span className="text-green-primary">{ThemeStepInfos.firstTitleColored}</span>{" "}
+            <span className="text-green-primary">
+              {ThemeStepInfos.firstTitleColored}
+            </span>{" "}
             {ThemeStepInfos.title}{" "}
-            <span className="text-green-primary">{ThemeStepInfos.secondTitleColored}</span>
+            <span className="text-green-primary">
+              {ThemeStepInfos.secondTitleColored}
+            </span>
           </h2>
 
           <input
@@ -177,14 +186,17 @@ const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepP
           />
 
           <div className="w-full flex flex-col gap-y-1 mb-9">
-            <h3 className="text-lg font-medium text-gray-primary">{ThemeStepInfos.selectedText}</h3>
+            <h3 className="text-lg font-medium text-gray-primary">
+              {ThemeStepInfos.selectedText}
+            </h3>
 
             <ul className="w-full flex flex-col gap-y-4">
               {selectedOptions.map((option, index) => (
                 <li
                   key={`${option}-${index}`}
                   onClick={() => handleOptionSelect(option)}
-                  className="w-full h-12 px-4 py-3 rounded-lg bg-green-primary text-base font-medium text-white flex items-center justify-between group lg:cursor-pointer">
+                  className="w-full h-12 px-4 py-3 rounded-lg bg-green-primary text-base font-medium text-white flex items-center justify-between group lg:cursor-pointer"
+                >
                   {option}
                   <X className="h-7 w-7 block lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
                 </li>
@@ -193,7 +205,9 @@ const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepP
           </div>
 
           <div className="w-full flex flex-col gap-y-1 mb-9">
-            <h3 className="text-lg font-medium text-gray-primary">{ThemeStepInfos.themesText}</h3>
+            <h3 className="text-lg font-medium text-gray-primary">
+              {ThemeStepInfos.themesText}
+            </h3>
 
             {isLoading ? (
               <div className="w-full flex items-center justify-center">
@@ -206,7 +220,8 @@ const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepP
                     <li
                       key={`${option}-${index}`}
                       onClick={() => handleOptionSelect(option)}
-                      className="w-full h-12 px-4 py-3 rounded-lg bg-white text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer">
+                      className="w-full h-12 px-4 py-3 rounded-lg bg-white text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer"
+                    >
                       {option}
                       <Plus className="h-7 w-7 block text-green-primary lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
                     </li>
@@ -224,7 +239,8 @@ const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepP
                       <li
                         key={`${option}-${index}`}
                         onClick={() => handleOptionSelect(option)}
-                        className="w-full h-12 px-4 py-3 rounded-lg bg-white text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer">
+                        className="w-full h-12 px-4 py-3 rounded-lg bg-white text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer"
+                      >
                         {option}
                         <Plus className="h-7 w-7 block text-green-primary lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
                       </li>

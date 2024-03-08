@@ -62,7 +62,6 @@ const StudentLoginForm = () => {
       redirect: false,
     })
       .then((res) => {
-        console.log(res);
         if (res && res.error) {
           toast.error(res.error);
         } else {
@@ -90,7 +89,7 @@ const StudentLoginForm = () => {
           handleSignin(res.data.email, res.data.password);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
 
           toast.error(error.response.data);
         });
@@ -101,13 +100,17 @@ const StudentLoginForm = () => {
 
   return (
     <div className="w-full flex flex-col gap-9">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full overflow-x-hidden">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full overflow-x-hidden"
+      >
         <motion.div
           variants={studentFormAnimation}
           initial="initial"
           animate="animate"
           exit="exit"
-          className="grid grid-cols-1 grid-rows-2 gap-4 mb-6">
+          className="grid grid-cols-1 grid-rows-2 gap-4 mb-6"
+        >
           <div className="flex flex-col gap-1">
             <input
               {...register("email")}
@@ -158,7 +161,8 @@ const StudentLoginForm = () => {
           animate="animate"
           exit="exit"
           disabled={isSubmitting}
-          className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter] disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75">
+          className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter] disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75"
+        >
           {studentLoginInfo.loginButton}
         </motion.button>
       </form>
@@ -168,7 +172,10 @@ const StudentLoginForm = () => {
       <div className="w-full flex flex-col items-center justify-center gap-4">
         <p className="text-base font-semibold text-[#2C383F]">
           {studentLoginInfo.noAccountText}{" "}
-          <span onClick={handleRegisterLink} className="text-green-primary cursor-pointer">
+          <span
+            onClick={handleRegisterLink}
+            className="text-green-primary cursor-pointer"
+          >
             {studentLoginInfo.noAccountLink}
           </span>
         </p>

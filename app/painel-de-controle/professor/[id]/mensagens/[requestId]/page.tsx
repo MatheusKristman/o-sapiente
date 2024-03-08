@@ -26,7 +26,6 @@ const MessagesPage = () => {
         .get(`/api/request/get-requests/${params?.requestId}`)
         .then((res) => {
           setRequest(res.data);
-          console.log("request", res.data);
         })
         .catch((error) => {
           console.error(error);

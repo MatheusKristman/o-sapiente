@@ -1,26 +1,20 @@
 import { useEffect, useState } from "react";
 
 import OfferBox from "./OfferBox";
-import { professorResumeInfos, studentResumeInfos } from "@/constants/dashboard/resume-br";
+import {
+  professorResumeInfos,
+  studentResumeInfos,
+} from "@/constants/dashboard/resume-br";
 import { request } from "http";
-interface RequestData {
-  id: string;
-  theme: string;
-  message: string;
-  createdAt: string;
-  updatedAt: string;
-  studentId: string;
-  firstName: string;
-  lastName: string;
-  profilePhoto: string;
-}
+import { RequestWithUsers } from "@/types";
+
 interface ResumeRequestBoxProps {
   type: string;
-  request?: RequestData[];
+  request?: RequestWithUsers[];
 }
 
 const ResumeRequestBox = ({ type, request }: ResumeRequestBoxProps) => {
-  const [offers, setOffers] = useState<RequestData[]>([]);
+  const [offers, setOffers] = useState<RequestWithUsers[]>([]);
 
   useEffect(() => {
     if (request) {

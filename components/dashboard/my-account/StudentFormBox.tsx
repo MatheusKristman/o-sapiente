@@ -94,8 +94,6 @@ const StudentFormBox = () => {
     if (stateOptions.length > 0) {
       setIsLoading(true);
 
-      console.log(state);
-
       const ufSelected = stateOptions.filter((option) => option.nome === state);
 
       if (ufSelected.length > 0) {
@@ -124,11 +122,12 @@ const StudentFormBox = () => {
     const formattedDate = value.replace(/(\d{2})(\d{2})(\d{4})/, "$1/$2/$3");
 
     setValue("birth", formattedDate);
-    console.log(formattedDate);
   }
 
   function handleDDD(event: ChangeEvent<HTMLInputElement>) {
-    const DDDFormatted = event.target.value.replace(/[^0-9]/g, "").substring(0, 2);
+    const DDDFormatted = event.target.value
+      .replace(/[^0-9]/g, "")
+      .substring(0, 2);
 
     setValue("ddd", DDDFormatted);
   }
@@ -178,7 +177,8 @@ const StudentFormBox = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]">
+      className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]"
+    >
       <h2 className="text-2xl text-gray-primary font-semibold mb-6">
         {MyAccountInfo.personalDataTitle}
       </h2>
@@ -191,7 +191,8 @@ const StudentFormBox = () => {
             disabled={isSubmitting || isLoading}
             className={cn(
               inputStyle,
-              errors.firstName && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+              errors.firstName &&
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.firstName}
           />
@@ -209,7 +210,8 @@ const StudentFormBox = () => {
             disabled={isSubmitting || isLoading}
             className={cn(
               inputStyle,
-              errors.lastName && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+              errors.lastName &&
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.lastName}
           />
@@ -226,7 +228,8 @@ const StudentFormBox = () => {
             type="text"
             className={cn(
               inputStyle,
-              errors.birth && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+              errors.birth &&
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
             )}
             disabled={isSubmitting || isLoading}
             autoComplete="off"
@@ -242,22 +245,30 @@ const StudentFormBox = () => {
         </div>
 
         <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
-          <div className={cn("flex flex-col gap-y-1 w-1/2", "sm:grow lg:grow-0 xl:grow")}>
+          <div
+            className={cn(
+              "flex flex-col gap-y-1 w-1/2",
+              "sm:grow lg:grow-0 xl:grow",
+            )}
+          >
             <div
               className={cn(
                 "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
-              )}>
+              )}
+            >
               <select
                 {...register("state")}
                 disabled={isSubmitting || isLoading}
                 className={cn(
                   "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
-                )}>
+                )}
+              >
                 <option
                   value={MyAccountInfo.personalDataPlaceholders.state}
                   selected
                   disabled
-                  hidden>
+                  hidden
+                >
                   {MyAccountInfo.personalDataPlaceholders.state}
                 </option>
                 {stateOptions.map((state) => (
@@ -269,22 +280,30 @@ const StudentFormBox = () => {
             </div>
           </div>
 
-          <div className={cn("flex flex-col gap-y-1 w-1/2", "sm:grow lg:grow-0 xl:grow")}>
+          <div
+            className={cn(
+              "flex flex-col gap-y-1 w-1/2",
+              "sm:grow lg:grow-0 xl:grow",
+            )}
+          >
             <div
               className={cn(
                 "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
-              )}>
+              )}
+            >
               <select
                 {...register("city")}
                 disabled={isSubmitting || isLoading}
                 className={cn(
                   "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
-                )}>
+                )}
+              >
                 <option
                   value={MyAccountInfo.personalDataPlaceholders.state}
                   selected
                   disabled
-                  hidden>
+                  hidden
+                >
                   {MyAccountInfo.personalDataPlaceholders.city}
                 </option>
                 {cityOptions.map((city) => (
@@ -298,14 +317,17 @@ const StudentFormBox = () => {
         </div>
 
         <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
-          <div className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}>
+          <div
+            className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}
+          >
             <input
               {...register("address")}
               type="text"
               disabled={isSubmitting || isLoading}
               className={cn(
                 inputStyle,
-                errors.address && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                errors.address &&
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.address}
             />
@@ -316,7 +338,12 @@ const StudentFormBox = () => {
             )}
           </div>
 
-          <div className={cn("flex flex-col gap-y-1", "sm:w-2/5 lg:w-full xl:w-2/5")}>
+          <div
+            className={cn(
+              "flex flex-col gap-y-1",
+              "sm:w-2/5 lg:w-full xl:w-2/5",
+            )}
+          >
             <input
               {...register("addressNumber")}
               type="text"
@@ -337,7 +364,12 @@ const StudentFormBox = () => {
         </div>
 
         <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
-          <div className={cn("flex flex-col gap-y-1", "sm:w-2/5 lg:w-full xl:w-2/5")}>
+          <div
+            className={cn(
+              "flex flex-col gap-y-1",
+              "sm:w-2/5 lg:w-full xl:w-2/5",
+            )}
+          >
             <input
               {...register("ddd")}
               type="text"
@@ -345,7 +377,8 @@ const StudentFormBox = () => {
               onChange={handleDDD}
               className={cn(
                 inputStyle,
-                errors.ddd && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                errors.ddd &&
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.ddd}
             />
@@ -356,7 +389,9 @@ const StudentFormBox = () => {
             )}
           </div>
 
-          <div className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}>
+          <div
+            className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}
+          >
             <input
               {...register("cel")}
               type="text"
@@ -364,7 +399,8 @@ const StudentFormBox = () => {
               onChange={handleCel}
               className={cn(
                 inputStyle,
-                errors.cel && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                errors.cel &&
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.cel}
             />
@@ -383,7 +419,8 @@ const StudentFormBox = () => {
             disabled={isSubmitting || isLoading}
             className={cn(
               inputStyle,
-              errors.district && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+              errors.district &&
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.district}
           />
@@ -401,7 +438,8 @@ const StudentFormBox = () => {
             disabled={isSubmitting || isLoading}
             className={cn(
               inputStyle,
-              errors.complement && "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+              errors.complement &&
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.complement}
           />

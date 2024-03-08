@@ -30,10 +30,6 @@ const CompleteRegisterPage = ({ params }: CompleteRegisterPageProps) => {
   const [aboutMeValue, setAboutMeValue] = useState<string>("");
   const [profileData, setProfileData] = useState<IProfileData | null>(null);
 
-  useEffect(() => {
-    console.log(selectedOptions);
-  }, [selectedOptions]);
-
   const { id } = params;
 
   return (

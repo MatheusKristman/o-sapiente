@@ -11,23 +11,12 @@ import useNewRequestStore from "@/stores/useNewRequestStore";
 import { studentResumeInfos } from "@/constants/dashboard/resume-br";
 import NewRequestModal from "@/components/dashboard/resume/NewRequestModal";
 import { useSession } from "next-auth/react";
-
-interface RequestData {
-  id: string;
-  theme: string;
-  message: string;
-  createdAt: string;
-  updatedAt: string;
-  studentId: string;
-  firstName: string;
-  lastName: string;
-  profilePhoto: string;
-}
+import { RequestWithUsers } from "@/types";
 
 const DashboardPage = () => {
   const [profilePhoto, setProfilePhoto] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [request, setRequest] = useState<RequestData[]>([]);
+  const [request, setRequest] = useState<RequestWithUsers[]>([]);
 
   const session = useSession();
 
@@ -50,16 +39,26 @@ const DashboardPage = () => {
         console.error(error);
       }
     };
+
     fetchData();
   }, [session?.data?.user?.email]);
 
   return (
     <div className="flex-1 w-full px-6 pt-9 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:mb-12">
       <div className="w-full flex flex-col-reverse gap-9 md:flex-col lg:w-4/12 xl:w-6/12">
-        <ResumeProfilePhoto type="Student" profilePhoto={profilePhoto} name={name} />
+        <ResumeProfilePhoto
+          type="Student"
+          profilePhoto={profilePhoto}
+          name={name}
+        />
 
         <div className="shadow-md shadow-[rgba(0,0,0,0.25)] rounded-lg">
-          <Button label={studentResumeInfos.newRequestBtn} primary fullWidth onClick={openModal} />
+          <Button
+            label={studentResumeInfos.newRequestBtn}
+            primary
+            fullWidth
+            onClick={openModal}
+          />
         </div>
       </div>
 

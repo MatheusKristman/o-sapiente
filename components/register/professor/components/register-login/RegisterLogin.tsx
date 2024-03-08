@@ -15,7 +15,9 @@ import {
 } from "@/constants/framer-animations/professor-modal";
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
 import { professorLoginInfo } from "@/constants/register/professor-register-br";
-import professorLoginSchema, { professorLoginType } from "@/constants/schemas/professorLoginSchema";
+import professorLoginSchema, {
+  professorLoginType,
+} from "@/constants/schemas/professorLoginSchema";
 
 const RegisterLogin = () => {
   const { isModalOpen, closeModal } = useProfessorModalStore();
@@ -46,7 +48,6 @@ const RegisterLogin = () => {
       redirect: false,
     })
       .then((res) => {
-        console.log(res);
         if (res && res.error) {
           toast.error(res.error);
         } else {
@@ -82,7 +83,11 @@ const RegisterLogin = () => {
               className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle"
             >
               <div className="flex justify-end mb-6">
-                <button type="button" className="text-green-primary" onClick={handleCloseButton}>
+                <button
+                  type="button"
+                  className="text-green-primary"
+                  onClick={handleCloseButton}
+                >
                   <BsXLg size={26} />
                 </button>
               </div>
@@ -93,7 +98,10 @@ const RegisterLogin = () => {
 
               <AnimatePresence>
                 <div className="w-full flex flex-col gap-9">
-                  <form onSubmit={handleSubmit(onSubmit)} className="w-full overflow-x-hidden">
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="w-full overflow-x-hidden"
+                  >
                     <motion.div
                       variants={professorFormAnimation}
                       initial="initial"
@@ -110,7 +118,8 @@ const RegisterLogin = () => {
                           autoComplete="off"
                           autoCorrect="off"
                           className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
-                            errors.email && "border-[#FF7373] border-2 border-solid"
+                            errors.email &&
+                            "border-[#FF7373] border-2 border-solid"
                           }`}
                         />
 
@@ -130,7 +139,8 @@ const RegisterLogin = () => {
                           autoComplete="off"
                           autoCorrect="off"
                           className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors ${
-                            errors.password && "border-[#FF7373] border-2 border-solid"
+                            errors.password &&
+                            "border-[#FF7373] border-2 border-solid"
                           }`}
                         />
 
