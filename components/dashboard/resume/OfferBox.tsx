@@ -9,6 +9,7 @@ import {
 } from "@/constants/dashboard/resume-br";
 import { RequestWithUsers } from "@/types";
 import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
+import useOffersModalStore from "@/stores/useOffersModalStore";
 
 interface OfferBoxProps {
   type: string;
@@ -26,6 +27,8 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
     setMessage,
   } = useRequestDetailsModalStore();
 
+  const { openModal: openOfferModal } = useOffersModalStore();
+
   function handleBtn() {
     if (type === "Professor") {
       openModal();
@@ -36,6 +39,10 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
       );
       setSubject(request.subject);
       setMessage(request.description);
+    }
+
+    if (type === "Student") {
+      openOfferModal();
     }
   }
 

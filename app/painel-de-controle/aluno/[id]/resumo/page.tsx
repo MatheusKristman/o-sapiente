@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 import Button from "@/components/Button";
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
@@ -10,7 +11,7 @@ import ResumeCurrentLessonBox from "@/components/dashboard/resume/ResumeCurrentL
 import useNewRequestStore from "@/stores/useNewRequestStore";
 import { studentResumeInfos } from "@/constants/dashboard/resume-br";
 import NewRequestModal from "@/components/dashboard/resume/NewRequestModal";
-import { useSession } from "next-auth/react";
+import OffersModal from "@/components/dashboard/resume/OffersModal";
 import { RequestWithUsers } from "@/types";
 
 const DashboardPage = () => {
@@ -69,6 +70,7 @@ const DashboardPage = () => {
       </div>
 
       <NewRequestModal />
+      <OffersModal />
     </div>
   );
 };

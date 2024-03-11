@@ -76,7 +76,7 @@ const Header = () => {
   function handleDashboardStudentBtn() {
     if (session.status === "authenticated" && userId) {
       router.push(
-        `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`,
+        `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`
       );
     }
   }
@@ -84,13 +84,15 @@ const Header = () => {
   function handleDashboardProfessorBtn() {
     if (session.status === "authenticated" && userId) {
       router.push(
-        `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`,
+        `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`
       );
     }
   }
 
-  function handleLogOut() {
-    signOut();
+  async function handleLogOut() {
+    const data = await signOut({ redirect: false, callbackUrl: "/" });
+
+    router.replace(data.url);
   }
 
   return (
