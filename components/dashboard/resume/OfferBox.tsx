@@ -8,6 +8,7 @@ import {
   professorResumeInfos,
 } from "@/constants/dashboard/resume-br";
 import { RequestWithUsers } from "@/types";
+import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
 
 interface OfferBoxProps {
   type: string;
@@ -16,6 +17,28 @@ interface OfferBoxProps {
 }
 
 const OfferBox = ({ last, request, type }: OfferBoxProps) => {
+  const {
+    openModal,
+    setRequestId,
+    setStudentImage,
+    setStudentName,
+    setSubject,
+    setMessage,
+  } = useRequestDetailsModalStore();
+
+  function handleBtn() {
+    if (type === "Professor") {
+      openModal();
+      setRequestId(request.id);
+      setStudentImage(request.users[0].profilePhoto);
+      setStudentName(
+        `${request.users[0].firstName} ${request.users[0].lastName}`
+      );
+      setSubject(request.subject);
+      setMessage(request.description);
+    }
+  }
+
   return (
     <div className={cn("w-full rounded-lg bg-white p-5 mb-4", last && "mb-0")}>
       <div className="flex flex-col lg:flex-row lg:gap-6 xl:w-full">
@@ -57,10 +80,10 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
                 type === "Professor"
                   ? professorResumeInfos.seeOfferBtn
                   : type === "Student"
-                    ? studentResumeInfos.seeOfferBtn
-                    : ""
+                  ? studentResumeInfos.seeOfferBtn
+                  : ""
               }
-              onClick={() => {}}
+              onClick={handleBtn}
             />
           </div>
         </div>

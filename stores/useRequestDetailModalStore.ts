@@ -4,13 +4,17 @@ interface useRequestDetailsModalStoreProps {
   isModalOpen: boolean;
   openModal: () => void;
   closeModal: () => void;
-  isMessage: boolean;
-  activateMessage: () => void;
-  deactivateMessage: () => void;
-  isForm: boolean;
-  activateForm: () => void;
-  deactivateForm: () => void;
-  resetModalContent: () => void;
+  requestId: string;
+  setRequestId: (id: string) => void;
+  studentImage: string | null;
+  setStudentImage: (url: string | null) => void;
+  studentName: string;
+  setStudentName: (name: string) => void;
+  subject: string;
+  setSubject: (sub: string) => void;
+  message: string;
+  setMessage: (msg: string) => void;
+  reset: () => void;
 }
 
 const useRequestDetailsModalStore = create<useRequestDetailsModalStoreProps>(
@@ -18,14 +22,26 @@ const useRequestDetailsModalStore = create<useRequestDetailsModalStoreProps>(
     isModalOpen: false,
     openModal: () => set(() => ({ isModalOpen: true })),
     closeModal: () => set(() => ({ isModalOpen: false })),
-    isMessage: false,
-    activateMessage: () => set(() => ({ isMessage: true })),
-    deactivateMessage: () => set(() => ({ isMessage: false })),
-    isForm: true,
-    activateForm: () => set(() => ({ isForm: true })),
-    deactivateForm: () => set(() => ({ isForm: false })),
-    resetModalContent: () => set(() => ({ isForm: true, isMessage: false })),
-  }),
+    requestId: "",
+    setRequestId: (id) => set({ requestId: id }),
+    studentImage: null,
+    setStudentImage: (url) => set({ studentImage: url }),
+    studentName: "",
+    setStudentName: (name) => set({ studentName: name }),
+    subject: "",
+    setSubject: (sub) => set({ subject: sub }),
+    message: "",
+    setMessage: (msg) => set({ message: msg }),
+    reset: () =>
+      set((state) => ({
+        ...state,
+        requestId: "",
+        studentImage: null,
+        studentName: "",
+        subject: "",
+        message: "",
+      })),
+  })
 );
 
 export default useRequestDetailsModalStore;
