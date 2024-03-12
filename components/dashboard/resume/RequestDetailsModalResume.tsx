@@ -1,15 +1,31 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 import { requestDetailsInfo } from "@/constants/requestDetails-br";
 import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
 import Button from "@/components/Button";
+import { requestDetailsFormAnimation } from "@/constants/framer-animations/request-details-modal";
 
-const RequestDetailsModalResume = () => {
+interface RequestDetailsModalResumeProps {
+  AcceptRequest: () => void;
+}
+
+const RequestDetailsModalResume = ({
+  AcceptRequest,
+}: RequestDetailsModalResumeProps) => {
   const { studentImage, studentName, subject, message } =
     useRequestDetailsModalStore();
 
   return (
-    <div className="w-full flex flex-col">
+    <motion.div
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={requestDetailsFormAnimation}
+      className="w-full flex flex-col"
+    >
       <h3 className="text-3xl font-semibold text-gray-primary text-left mb-6">
         {requestDetailsInfo.title}
       </h3>
@@ -51,8 +67,14 @@ const RequestDetailsModalResume = () => {
         </span>
       </div>
 
-      <Button label={requestDetailsInfo.btn} fullWidth primary type="button" />
-    </div>
+      <Button
+        label={requestDetailsInfo.btn}
+        fullWidth
+        primary
+        type="button"
+        onClick={AcceptRequest}
+      />
+    </motion.div>
   );
 };
 

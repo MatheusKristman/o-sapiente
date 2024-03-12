@@ -1,5 +1,8 @@
+"use client";
+
 import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 
 import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
 import {
@@ -10,22 +13,26 @@ import RequestDetailsModalResume from "./RequestDetailsModalResume";
 import RequestDetailsModalOfferForm from "./RequestDetailsModalOfferForm";
 
 const RequestDetailModal = () => {
-  const {
-    isModalOpen,
-    closeModal,
-    requestId,
-    studentImage,
-    studentName,
-    subject,
-    message,
-    reset,
-  } = useRequestDetailsModalStore();
+  const [isResume, setIsResume] = useState(true);
+  const [isOfferForm, setIsOfferForm] = useState(false);
+
+  const { isModalOpen, closeModal, reset } = useRequestDetailsModalStore();
 
   function handleCloseButton() {
     closeModal();
 
     setTimeout(() => {
       reset();
+      setIsResume(true);
+      setIsOfferForm(false);
+    }, 350);
+  }
+
+  function AcceptRequest() {
+    setIsResume(false);
+
+    setTimeout(() => {
+      setIsOfferForm(true);
     }, 350);
   }
 
@@ -46,7 +53,7 @@ const RequestDetailModal = () => {
               animate="animate"
               exit="exit"
               variants={requestDetailsModalAnimation}
-              className="w-full max-w-[650px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
+              className="w-full max-w-[650px] min-h-[542.5px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
             >
               <div className="w-full flex justify-end items-center">
                 <button
@@ -58,8 +65,17 @@ const RequestDetailModal = () => {
                 </button>
               </div>
 
-              {false && <RequestDetailsModalResume />}
-              {true && <RequestDetailsModalOfferForm />}
+              <AnimatePresence>
+                {isResume && (
+                  <RequestDetailsModalResume
+                    key="request-details-resume"
+                    AcceptRequest={AcceptRequest}
+                  />
+                )}
+                {isOfferForm && (
+                  <RequestDetailsModalOfferForm key="request-details-offer-form" />
+                )}
+              </AnimatePresence>
             </motion.div>
           </motion.div>
         )}
