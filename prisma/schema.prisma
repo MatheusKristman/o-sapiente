@@ -54,6 +54,7 @@ model User {
   seenMessages   Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
 
   messages Message[]
+  offers   Offer[]
 }
 
 model Request {
@@ -68,6 +69,21 @@ model Request {
   userIds      String[]       @db.ObjectId
   users        User[]         @relation(fields: [userIds], references: [id])
   Conversation Conversation[]
+  offers       Offer[]
+}
+
+model Offer {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  message    String
+  isAccepted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String  @db.ObjectId
+  user      User    @relation(fields: [userId], references: [id])
+  requestId String  @db.ObjectId
+  request   Request @relation(fields: [requestId], references: [id])
 }
 
 model Conversation {
