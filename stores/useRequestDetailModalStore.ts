@@ -41,7 +41,7 @@ const useRequestDetailsModalStore = create<useRequestDetailsModalStoreProps>(
         subject: "",
         message: "",
       })),
-  })
+  }),
 );
 
 export default useRequestDetailsModalStore;
