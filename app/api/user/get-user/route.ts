@@ -15,6 +15,9 @@ export async function GET() {
         where: {
           email: session.user.email,
         },
+        include: {
+          plan: true,
+        },
       });
 
       if (!user) {
@@ -44,8 +47,11 @@ export async function GET() {
   } catch (error: any) {
     console.log(error, "GET-USER-ERROR");
 
-    return new NextResponse("Ocorreu um erro durante a requisição, tente novamente", {
-      status: 400,
-    });
+    return new NextResponse(
+      "Ocorreu um erro durante a requisição, tente novamente",
+      {
+        status: 400,
+      },
+    );
   }
 }

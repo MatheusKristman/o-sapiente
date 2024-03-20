@@ -18,6 +18,7 @@ const ResumePage = () => {
   const [name, setName] = useState<string>("");
   const [themes, setThemes] = useState<string[]>([]);
   const [request, setRequest] = useState<RequestWithUsers[]>([]);
+  const [plan, setPlan] = useState<string>("");
 
   const session = useSession();
 
@@ -25,9 +26,15 @@ const ResumePage = () => {
     const fetchData = async () => {
       try {
         const userResponse = await axios.get("/api/user/get-user");
+
         if (userResponse.data.profilePhoto) {
           setProfilePhoto(userResponse.data.profilePhoto);
         }
+
+        if (userResponse.data.plan) {
+          setPlan(userResponse.data.plan.planName);
+        }
+
         setName(`${userResponse.data.firstName} ${userResponse.data.lastName}`);
         setThemes(userResponse.data.themes);
 
@@ -52,6 +59,7 @@ const ResumePage = () => {
             profilePhoto={profilePhoto}
             name={name}
             themes={themes}
+            plan={plan}
           />
 
           <BalanceBox />

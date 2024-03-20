@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import Button from "@/components/Button";
 import { professorResumeInfos } from "@/constants/dashboard/resume-br";
@@ -8,6 +9,7 @@ interface ResumeProfilePhotoProps {
   profilePhoto: string;
   name: string;
   themes?: string[];
+  plan: string;
 }
 
 const ResumeProfilePhoto = ({
@@ -15,8 +17,14 @@ const ResumeProfilePhoto = ({
   profilePhoto,
   name,
   themes,
+  plan,
 }: ResumeProfilePhotoProps) => {
   const formattedThemes = themes ? themes.join(" | ") : "";
+  const router = useRouter();
+
+  function handleBuy() {
+    router.push("/pagamento-do-plano");
+  }
 
   return (
     <div className="w-full flex flex-col gap-5 bg-white rounded-2xl p-9 shadow-md shadow-[rgba(0,0,0,0.25)]">
@@ -54,13 +62,17 @@ const ResumeProfilePhoto = ({
           <div className="w-full flex flex-col items-center gap-y-6">
             {/* caso de não ter plano */}
             <span className="text-xl text-gray-primary text-center font-semibold">
-              {professorResumeInfos.noPlanText}
+              {plan ? (
+                <>{professorResumeInfos.planText + plan}</>
+              ) : (
+                <>{professorResumeInfos.noPlanText}</>
+              )}
             </span>
 
             <Button
               primary
               fullWidth
-              onClick={() => {}}
+              onClick={handleBuy}
               label={professorResumeInfos.buyPlanBtn}
             />
           </div>

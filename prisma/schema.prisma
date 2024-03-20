@@ -53,6 +53,9 @@ model User {
   seenMessageIds String[]  @db.ObjectId
   seenMessages   Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
 
+  planId String? @db.ObjectId
+  plan   Plan?   @relation(fields: [planId], references: [id])
+
   messages Message[]
   offers   Offer[]
 }
@@ -99,6 +102,15 @@ model Conversation {
 
   requestId String  @db.ObjectId
   request   Request @relation(fields: [requestId], references: [id])
+}
+
+model Plan {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  planName     String
+  cost         String
+  stripePlanId String
+
+  users User[] 
 }
 
 model Subject {

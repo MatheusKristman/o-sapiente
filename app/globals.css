@@ -29,6 +29,14 @@
   @apply relative;
 }
 
+.input {
+  @apply w-full h-12 px-4 py-3 bg-[#EBEFF1] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
+}
+
+.input-error {
+  @apply border-2 border-[#FF7373] focus-visible:ring-[#FF7373];
+}
+
 body {
   background-color: #f0f5f8;
 

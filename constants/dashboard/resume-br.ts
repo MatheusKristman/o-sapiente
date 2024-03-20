@@ -1,5 +1,6 @@
 export const professorResumeInfos = {
   noPlanText: "Plano não ativo",
+  planText: "Plano ",
   buyPlanBtn: "ADQUIRIR",
   availableBalanceInfo: "Valor Disponível:",
   redeemBtn: "RESGATAR",
