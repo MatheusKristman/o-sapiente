@@ -4,15 +4,18 @@ import { prisma } from "@/libs/prismadb";
 import { NextResponse } from "next/server";
 import { AccountRole } from "@prisma/client";
 
-export async function POST(req: Response) {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { subject, description, email, password } = body;
 
     if (!email || !password || !subject || !description) {
-      return new NextResponse("Credenciais inválidas! Verifique e tente novamente", {
-        status: 404,
-      });
+      return new NextResponse(
+        "Credenciais inválidas! Verifique e tente novamente",
+        {
+          status: 404,
+        }
+      );
     }
 
     const user = await prisma.user.findUnique({
@@ -23,17 +26,23 @@ export async function POST(req: Response) {
     });
 
     if (!user) {
-      return new NextResponse("Credenciais inválidas! Verifique e tente novamente", {
-        status: 404,
-      });
+      return new NextResponse(
+        "Credenciais inválidas! Verifique e tente novamente",
+        {
+          status: 404,
+        }
+      );
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
-      return new NextResponse("Credenciais inválidas! Verifique e tente novamente", {
-        status: 406,
-      });
+      return new NextResponse(
+        "Credenciais inválidas! Verifique e tente novamente",
+        {
+          status: 406,
+        }
+      );
     }
 
     await prisma.request.create({
@@ -52,6 +61,9 @@ export async function POST(req: Response) {
   } catch (error: any) {
     console.log(error, "HAS-THEME-AND-MESSAGE-ERROR");
 
-    return new NextResponse("Ocorreu um erro durante o login, tente novamente", { status: 400 });
+    return new NextResponse(
+      "Ocorreu um erro durante o login, tente novamente",
+      { status: 400 }
+    );
   }
 }
