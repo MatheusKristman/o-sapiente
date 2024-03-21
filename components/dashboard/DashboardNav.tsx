@@ -47,10 +47,10 @@ const DashboardNav = () => {
                   className={cn(
                     "p-4 flex items-center gap-2 cursor-pointer transition-colors hover:bg-white hover:text-green-primary",
                     pathname.includes(item.professorHref) &&
-                      pathname.includes(item.pageHref) &&
+                      pathname.includes(item.pageHref!) &&
                       item.professorHref !== ""
                       ? linkActiveClass
-                      : linkInactiveClass,
+                      : linkInactiveClass
                   )}
                 >
                   <item.icon className="h-fit w-fit" />
@@ -58,10 +58,10 @@ const DashboardNav = () => {
                     className={cn(
                       "hidden md:block",
                       pathname.includes(item.professorHref) &&
-                        pathname.includes(item.pageHref) &&
+                        pathname.includes(item.pageHref!) &&
                         item.professorHref !== ""
                         ? "md:block lg:block"
-                        : "md:hidden lg:block",
+                        : "md:hidden lg:block"
                     )}
                   >
                     {item.label}
@@ -77,10 +77,10 @@ const DashboardNav = () => {
                   className={cn(
                     "p-4 flex items-center gap-2 cursor-pointer transition-colors hover:bg-white hover:text-green-primary",
                     pathname.includes(item.studentHref) &&
-                      pathname.includes(item.pageHref) &&
+                      pathname.includes(item.pageHref!) &&
                       item.studentHref !== ""
                       ? linkActiveClass
-                      : linkInactiveClass,
+                      : linkInactiveClass
                   )}
                 >
                   <item.icon className="h-fit w-fit" />
@@ -88,10 +88,10 @@ const DashboardNav = () => {
                     className={cn(
                       "hidden md:block",
                       pathname.includes(item.studentHref) &&
-                        pathname.includes(item.pageHref) &&
+                        pathname.includes(item.pageHref!) &&
                         item.studentHref !== ""
                         ? "md:block lg:block"
-                        : "md:hidden lg:block",
+                        : "md:hidden lg:block"
                     )}
                   >
                     {item.label}
