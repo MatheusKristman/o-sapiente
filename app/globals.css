@@ -37,6 +37,19 @@
   @apply border-2 border-[#FF7373] focus-visible:ring-[#FF7373];
 }
 
+.gray-button {
+  @apply bg-[#C8D6DF] border-[#C8D6DF] py-1.5 px-8 flex items-center justify-center gap-2 text-base text-gray-primary rounded-lg border-2 font-medium disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 hover:brightness-90 transition;
+}
+
+.green-button {
+  @apply bg-green-primary border-green-primary py-1.5 px-8 flex items-center justify-center gap-2 text-base text-white rounded-lg border-2 font-medium disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 hover:brightness-90 transition;
+}
+
+.rccs,
+.rccs__card {
+  @apply !w-full !max-w-[290px] lg:!max-w-[435px] lg:!h-[274.309496784px];
+}
+
 body {
   background-color: #f0f5f8;
 

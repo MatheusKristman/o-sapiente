@@ -8,6 +8,8 @@ import Footer from "@/components/Footer";
 import AuthContext from "@/context/AuthContext";
 import ActiveStatus from "@/components/ActiveStatus";
 
+import "react-credit-cards-2/dist/es/styles-compiled.css";
+
 export const metadata: Metadata = {
   title: "O Sapiente",
   description:
