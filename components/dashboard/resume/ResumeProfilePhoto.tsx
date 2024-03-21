@@ -9,7 +9,7 @@ interface ResumeProfilePhotoProps {
   profilePhoto: string;
   name: string;
   themes?: string[];
-  plan: string;
+  plan?: string;
 }
 
 const ResumeProfilePhoto = ({
