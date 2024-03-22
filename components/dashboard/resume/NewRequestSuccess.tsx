@@ -14,7 +14,7 @@ const NewRequestSuccess = ({ handleCloseButton }: NewRequestSuccessProps) => {
     <div className="w-full flex flex-col items-center">
       <div className="relative w-36 h-36 mb-9">
         <Image
-          src="/assets/images/confirm-animation.gif"
+          src="/assets/icons/confirm.gif"
           alt="Confirmado"
           fill
           className="object-cover"

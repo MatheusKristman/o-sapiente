@@ -17,11 +17,13 @@ const ConfirmAccountStep = ({ profileData }: ConfirmAccountStepProps) => {
   }
 
   return (
-    <section className="w-full h-full pb-12 flex  flex-col justify-center">
+    <section className="w-full h-full pb-12 flex flex-col justify-center">
       <div className="w-full mx-auto px-6 pt-24 flex flex-col items-center justify-center md:px-16 lg:container">
         <h2 className="w-full text-2xl text-gray-primary font-semibold text-center mb-9 max-w-md md:text-3xl md:max-w-xl">
           {confirmAccountStepInfo.title[0] + " "}
-          <span className="text-green-primary">{confirmAccountStepInfo.titleColored[0] + " "}</span>
+          <span className="text-green-primary">
+            {confirmAccountStepInfo.titleColored[0] + " "}
+          </span>
           {confirmAccountStepInfo.title[1] + " "}
           <span className="text-green-primary relative after:content-[''] after:w-4 after:h-4 after:block after:bg-highlight after:bg-contain after:bg-no-repeat after:absolute after:top-1 after:-right-3">
             {confirmAccountStepInfo.titleColored[1]}
@@ -33,7 +35,10 @@ const ConfirmAccountStep = ({ profileData }: ConfirmAccountStepProps) => {
             <div className="relative w-14 h-14 min-w-[56px] min-h-[56px] rounded-full overflow-hidden">
               {/* TODO depois adicionar foto padrão caso o perfil não possua foto */}
               <Image
-                src={profileData?.profilePhoto || "/assets/images/avatar-example.png"}
+                src={
+                  profileData?.profilePhoto ||
+                  "/assets/images/avatar-example.png"
+                }
                 alt="Perfil"
                 fill
                 className="object-cover w-full h-full"
@@ -67,7 +72,11 @@ const ConfirmAccountStep = ({ profileData }: ConfirmAccountStepProps) => {
           {confirmAccountStepInfo.description}
         </p>
 
-        <Button label={confirmAccountStepInfo.backBtn} onClick={handleBackBtn} primary />
+        <Button
+          label={confirmAccountStepInfo.backBtn}
+          onClick={handleBackBtn}
+          primary
+        />
       </div>
     </section>
   );

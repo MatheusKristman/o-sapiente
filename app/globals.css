@@ -45,6 +45,10 @@
   @apply bg-green-primary border-green-primary py-1.5 px-8 flex items-center justify-center gap-2 text-base text-white rounded-lg border-2 font-medium disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 hover:brightness-90 transition;
 }
 
+.outline-green-button {
+  @apply bg-green-primary/10 border-green-primary py-1.5 px-8 flex items-center justify-center gap-2 text-base text-green-primary rounded-lg border-2 font-medium disabled:bg-green-primary/25 disabled:cursor-not-allowed disabled:hover:bg-green-primary/25 hover:bg-green-primary/25 transition;
+}
+
 .rccs,
 .rccs__card {
   @apply !w-full !max-w-[290px] lg:!max-w-[435px] lg:!h-[274.309496784px];
