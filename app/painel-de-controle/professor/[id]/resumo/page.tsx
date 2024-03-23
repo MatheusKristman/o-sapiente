@@ -12,6 +12,7 @@ import BalanceBox from "@/components/dashboard/resume/BalanceBox";
 import RequestDetailModal from "@/components/dashboard/resume/RequestDetailModal";
 
 import { RequestWithUsers } from "@/types";
+import { Offer } from "@prisma/client";
 
 const ResumePage = () => {
   const [profilePhoto, setProfilePhoto] = useState<string>("");
@@ -19,6 +20,7 @@ const ResumePage = () => {
   const [themes, setThemes] = useState<string[]>([]);
   const [request, setRequest] = useState<RequestWithUsers[]>([]);
   const [plan, setPlan] = useState<string>("");
+  const [offers, setOffers] = useState<Offer[]>([]);
 
   const session = useSession();
 
@@ -35,6 +37,7 @@ const ResumePage = () => {
           setPlan(userResponse.data.plan.planName);
         }
 
+        setOffers(userResponse.data.offers);
         setName(`${userResponse.data.firstName} ${userResponse.data.lastName}`);
         setThemes(userResponse.data.themes);
 
@@ -49,6 +52,10 @@ const ResumePage = () => {
 
     fetchData();
   }, [session?.data?.user?.email]);
+
+  useEffect(() => {
+    console.log("offers: ", offers);
+  }, [offers]);
 
   return (
     <>
@@ -66,13 +73,17 @@ const ResumePage = () => {
         </div>
 
         <div className="w-full flex flex-col gap-8">
-          <ResumeRequestBox type="Professor" request={request} />
+          <ResumeRequestBox
+            offers={offers}
+            type="Professor"
+            request={request}
+          />
 
           <ResumeCurrentLessonBox />
         </div>
       </div>
 
-      <RequestDetailModal />
+      <RequestDetailModal setOffers={setOffers} type="Professor" plan={plan} />
     </>
   );
 };

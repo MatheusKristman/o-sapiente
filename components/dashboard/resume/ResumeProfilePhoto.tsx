@@ -69,12 +69,14 @@ const ResumeProfilePhoto = ({
               )}
             </span>
 
-            <Button
-              primary
-              fullWidth
-              onClick={handleBuy}
-              label={professorResumeInfos.buyPlanBtn}
-            />
+            {!plan && (
+              <Button
+                primary
+                fullWidth
+                onClick={handleBuy}
+                label={professorResumeInfos.buyPlanBtn}
+              />
+            )}
           </div>
         </div>
       )}

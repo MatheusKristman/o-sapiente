@@ -1,9 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { Offer } from "@prisma/client";
+import { toast } from "react-hot-toast";
 
 import Button from "@/components/Button";
 import { requestDetailsOfferFormInfo } from "@/constants/requestDetails-br";
@@ -13,8 +16,21 @@ import {
   requestDetailsOfferFormSchema,
 } from "@/constants/schemas/requestDetailsOfferFormSchema";
 import { cn } from "@/libs/utils";
+import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
 
-const RequestDetailsModalOfferForm = () => {
+interface RequestDetailsModalOfferFormProps {
+  setOffers?: Dispatch<SetStateAction<Offer[]>>;
+  handleCloseButton: () => void;
+}
+
+const RequestDetailsModalOfferForm = ({
+  setOffers,
+  handleCloseButton,
+}: RequestDetailsModalOfferFormProps) => {
+  const { requestId } = useRequestDetailsModalStore();
+
+  const [isSending, setIsSending] = useState<boolean>(false);
+
   const {
     handleSubmit,
     register,
@@ -27,7 +43,23 @@ const RequestDetailsModalOfferForm = () => {
   });
 
   function onSubmit(values: IRequestDetailsOfferForm) {
-    console.log(values);
+    if (setOffers) {
+      setIsSending(true);
+
+      axios
+        .post("/api/offer/create", { message: values.message, requestId })
+        .then((res) => {
+          setOffers((prev: Offer[]) => [...prev, res.data]);
+
+          handleCloseButton();
+        })
+        .catch((error) => {
+          console.log(error);
+
+          toast.error(error.response.data);
+        })
+        .finally(() => setIsSending(false));
+    }
   }
 
   return (
@@ -45,6 +77,7 @@ const RequestDetailsModalOfferForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col">
         <textarea
           {...register("message")}
+          disabled={isSending}
           placeholder={requestDetailsOfferFormInfo.placeholder}
           className={cn(
             "w-full h-64 px-4 py-2 mb-9 rounded-lg bg-[#EBEFF1] text-base text-gray-primary resize-none placeholder:text-[#96A3AB] placeholder:font-medium focus:border-2 focus:border-[#96A3AB] outline-none transition-[border]",
@@ -61,6 +94,7 @@ const RequestDetailsModalOfferForm = () => {
         )}
 
         <Button
+          disabled={isSending}
           label={requestDetailsOfferFormInfo.btn}
           fullWidth
           type="submit"

@@ -7,13 +7,20 @@ import { requestDetailsInfo } from "@/constants/requestDetails-br";
 import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
 import Button from "@/components/Button";
 import { requestDetailsFormAnimation } from "@/constants/framer-animations/request-details-modal";
+import Link from "next/link";
 
 interface RequestDetailsModalResumeProps {
   AcceptRequest: () => void;
+  type?: string;
+  plan?: string;
+  handleCloseButton: () => void;
 }
 
 const RequestDetailsModalResume = ({
   AcceptRequest,
+  type,
+  plan,
+  handleCloseButton,
 }: RequestDetailsModalResumeProps) => {
   const { studentImage, studentName, subject, message } =
     useRequestDetailsModalStore();
@@ -68,12 +75,28 @@ const RequestDetailsModalResume = ({
       </div>
 
       <Button
+        disabled={type === "Professor" && !plan}
         label={requestDetailsInfo.btn}
         fullWidth
         primary
         type="button"
         onClick={AcceptRequest}
       />
+
+      {type === "Professor" && !plan && (
+        <span className="mt-4 text-base text-gray-primary text-center max-w-md mx-auto">
+          Para acessar todas as funcionalidades, por favor, atualize para o
+          plano de{" "}
+          <Link
+            onClick={handleCloseButton}
+            href="/pagamento-do-plano"
+            className="font-semibold text-green-primary"
+          >
+            30 dias
+          </Link>
+          .
+        </span>
+      )}
     </motion.div>
   );
 };

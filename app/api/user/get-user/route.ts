@@ -24,6 +24,12 @@ export async function GET() {
         return new NextResponse("Usuário não encontrado", { status: 404 });
       }
 
+      const offers = await prisma.offer.findMany({
+        where: {
+          userId: user.id,
+        },
+      });
+
       return NextResponse.json({
         id: user.id,
         type: user.accountType,
@@ -42,6 +48,8 @@ export async function GET() {
         complement: user.complement,
         themes: user.themes,
         aboutMe: user.aboutMe,
+        plan: user.plan,
+        offers,
       });
     }
   } catch (error: any) {

@@ -10,14 +10,16 @@ import {
 import { RequestWithUsers } from "@/types";
 import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
 import useOffersModalStore from "@/stores/useOffersModalStore";
+import { Offer } from "@prisma/client";
 
 interface OfferBoxProps {
   type: string;
   last?: boolean;
   request: RequestWithUsers;
+  offer?: Offer | null;
 }
 
-const OfferBox = ({ last, request, type }: OfferBoxProps) => {
+const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
   const {
     openModal,
     setRequestId,
@@ -29,13 +31,15 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
 
   const { openModal: openOfferModal } = useOffersModalStore();
 
+  console.log(offer);
+
   function handleBtn() {
     if (type === "Professor") {
       openModal();
       setRequestId(request.id);
       setStudentImage(request.users[0].profilePhoto);
       setStudentName(
-        `${request.users[0].firstName} ${request.users[0].lastName}`
+        `${request.users[0].firstName} ${request.users[0].lastName}`,
       );
       setSubject(request.subject);
       setMessage(request.description);
@@ -83,12 +87,15 @@ const OfferBox = ({ last, request, type }: OfferBoxProps) => {
             <Button
               primary
               fullWidth
+              disabled={type === "Professor" && !!offer}
               label={
                 type === "Professor"
-                  ? professorResumeInfos.seeOfferBtn
+                  ? !!offer
+                    ? professorResumeInfos.offerSended
+                    : professorResumeInfos.seeOfferBtn
                   : type === "Student"
-                  ? studentResumeInfos.seeOfferBtn
-                  : ""
+                    ? studentResumeInfos.seeOfferBtn
+                    : ""
               }
               onClick={handleBtn}
             />

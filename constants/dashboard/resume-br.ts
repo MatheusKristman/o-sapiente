@@ -5,6 +5,7 @@ export const professorResumeInfos = {
   availableBalanceInfo: "Valor Disponível:",
   redeemBtn: "RESGATAR",
   seeOfferBtn: "VER SOLICITAÇÃO",
+  offerSended: "PROPOSTA ENVIADA",
   requestBoxTitle: "Ultimas Solicitações",
 };
 

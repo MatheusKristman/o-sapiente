@@ -2,7 +2,8 @@
 
 import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Offer } from "@prisma/client";
 
 import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
 import {
@@ -12,7 +13,17 @@ import {
 import RequestDetailsModalResume from "./RequestDetailsModalResume";
 import RequestDetailsModalOfferForm from "./RequestDetailsModalOfferForm";
 
-const RequestDetailModal = () => {
+interface RequestDetailModalProps {
+  type?: string;
+  plan?: string;
+  setOffers?: Dispatch<SetStateAction<Offer[]>>;
+}
+
+const RequestDetailModal = ({
+  type,
+  plan,
+  setOffers,
+}: RequestDetailModalProps) => {
   const [isResume, setIsResume] = useState(true);
   const [isOfferForm, setIsOfferForm] = useState(false);
 
@@ -70,10 +81,17 @@ const RequestDetailModal = () => {
                   <RequestDetailsModalResume
                     key="request-details-resume"
                     AcceptRequest={AcceptRequest}
+                    type={type}
+                    plan={plan}
+                    handleCloseButton={handleCloseButton}
                   />
                 )}
                 {isOfferForm && (
-                  <RequestDetailsModalOfferForm key="request-details-offer-form" />
+                  <RequestDetailsModalOfferForm
+                    handleCloseButton={handleCloseButton}
+                    setOffers={setOffers}
+                    key="request-details-offer-form"
+                  />
                 )}
               </AnimatePresence>
             </motion.div>

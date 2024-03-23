@@ -7,20 +7,34 @@ import {
 } from "@/constants/dashboard/resume-br";
 import { request } from "http";
 import { RequestWithUsers } from "@/types";
+import { Offer } from "@prisma/client";
 
 interface ResumeRequestBoxProps {
   type: string;
   request?: RequestWithUsers[];
+  offers?: Offer[];
 }
 
-const ResumeRequestBox = ({ type, request }: ResumeRequestBoxProps) => {
-  const [offers, setOffers] = useState<RequestWithUsers[]>([]);
+const ResumeRequestBox = ({
+  type,
+  request,
+  offers: professorOffers,
+}: ResumeRequestBoxProps) => {
+  const [offersToStudent, setOffersToStudent] = useState<RequestWithUsers[]>(
+    [],
+  );
 
   useEffect(() => {
     if (request) {
-      setOffers(request);
+      setOffersToStudent(request);
     }
   }, [request]);
+
+  function offerFiltered(requestId: string) {
+    if (professorOffers) {
+      return professorOffers.find((offer) => offer.requestId === requestId);
+    }
+  }
 
   return (
     <div className="w-full rounded-lg bg-green-primary p-9 mb-5 shadow-md shadow-[rgba(0,0,0,0.25)]">
@@ -30,24 +44,48 @@ const ResumeRequestBox = ({ type, request }: ResumeRequestBoxProps) => {
       </h2>
 
       <div className="relative w-full max-h-[300px] overflow-auto scrollbar scrollbar-thumb-slate-100">
-        {offers.length > 0 ? (
-          <>
-            <div className="sticky top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
+        {type === "Professor" &&
+          (request && request.length > 0 ? (
+            <>
+              <div className="sticky top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-            {request &&
-              request.map((request, index) => (
+              {request.map((request, index) => (
+                <OfferBox
+                  offer={professorOffers ? offerFiltered(request.id) : null}
+                  type={type}
+                  key={request.id}
+                  request={request}
+                />
+              ))}
+
+              <div className="sticky bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
+            </>
+          ) : (
+            <div className="w-full flex items-center justify-center">
+              <span className="text-gray-primary/50 text-lg font-medium">
+                {studentResumeInfos.noOfferMessage}
+              </span>
+            </div>
+          ))}
+
+        {type === "Student" &&
+          (request && request.length > 0 ? (
+            <>
+              <div className="sticky top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
+
+              {request.map((request, index) => (
                 <OfferBox type={type} key={request.id} request={request} />
               ))}
 
-            <div className="sticky bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
-          </>
-        ) : (
-          <div className="w-full flex items-center justify-center">
-            <span className="text-gray-primary/50 text-lg font-medium">
-              {studentResumeInfos.noOfferMessage}
-            </span>
-          </div>
-        )}
+              <div className="sticky bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
+            </>
+          ) : (
+            <div className="w-full flex items-center justify-center">
+              <span className="text-gray-primary/50 text-lg font-medium">
+                {studentResumeInfos.noOfferMessage}
+              </span>
+            </div>
+          ))}
       </div>
     </div>
   );
