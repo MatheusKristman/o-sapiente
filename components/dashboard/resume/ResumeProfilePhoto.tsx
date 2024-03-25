@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { professorResumeInfos } from "@/constants/dashboard/resume-br";
 
 interface ResumeProfilePhotoProps {
@@ -70,12 +70,9 @@ const ResumeProfilePhoto = ({
             </span>
 
             {!plan && (
-              <Button
-                primary
-                fullWidth
-                onClick={handleBuy}
-                label={professorResumeInfos.buyPlanBtn}
-              />
+              <Button className="w-full" onClick={handleBuy}>
+                {professorResumeInfos.buyPlanBtn}
+              </Button>
             )}
           </div>
         </div>

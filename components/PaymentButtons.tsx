@@ -3,6 +3,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { info } from "@/constants/paymentButtons-br";
 import useHeaderStore from "@/stores/useHeaderStore";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
+import { Button } from "@/components/ui/button";
 
 export function PaymentButtons() {
   const pathname = usePathname();
@@ -24,17 +25,19 @@ export function PaymentButtons() {
   return (
     <div className="w-full flex flex-col gap-4 mb-12">
       {pathname !== "/pagamento-do-plano" && (
-        <button className="w-full gray-button">{info.skipButton}</button>
+        <Button variant="gray" className="w-full">
+          {info.skipButton}
+        </Button>
       )}
 
       <div className="w-full flex items-center justify-between gap-4">
-        <button onClick={handleBack} className="w-1/2 gray-button">
+        <Button variant="gray" onClick={handleBack} className="w-1/2">
           {info.backButton}
-        </button>
+        </Button>
 
-        <button onClick={handleNext} className="green-button w-1/2">
+        <Button onClick={handleNext} className="w-1/2">
           {info.nextButton}
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { confirmAccountStepInfo } from "@/constants/confirmAccountStep-br";
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { IProfileData } from "@/app/cadastro/professor/finalizacao/[id]/page";
 
 interface ConfirmAccountStepProps {
@@ -72,11 +72,9 @@ const ConfirmAccountStep = ({ profileData }: ConfirmAccountStepProps) => {
           {confirmAccountStepInfo.description}
         </p>
 
-        <Button
-          label={confirmAccountStepInfo.backBtn}
-          onClick={handleBackBtn}
-          primary
-        />
+        <Button onClick={handleBackBtn}>
+          {confirmAccountStepInfo.backBtn}
+        </Button>
       </div>
     </section>
   );

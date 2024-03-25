@@ -5,7 +5,7 @@ import MoonLoader from "react-spinners/MoonLoader";
 import { Trash2 } from "lucide-react";
 import axios from "axios";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { profilePhotoStepsInfo } from "@/constants/profilePhotoSteps-br";
 import { IProfileData } from "@/app/cadastro/professor/finalizacao/[id]/page";
 
@@ -224,13 +224,13 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
             />
 
             {profilePhotoUrl && profilePhoto && (
-              <button
+              <Button
                 type="button"
                 onClick={handleDeleteButton}
-                className="bg-green-primary border-green-primary text-white hover:brightness-90 transition py-1.5 px-8 text-base rounded-lg border-2 font-medium flex items-center justify-center gap-2 disabled:brightness-75 disabled:hover:brightness-75"
+                className="flex items-center justify-center gap-2"
               >
                 {profilePhotoStepsInfo.removeImageButton} <Trash2 size={20} />
-              </button>
+              </Button>
             )}
           </div>
 
@@ -238,47 +238,50 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
             <div className="flex flex-col gap-4">
               <div className="flex gap-x-4">
                 <Button
-                  label={profilePhotoStepsInfo.backButton}
+                  variant="outline"
+                  className="w-full"
                   onClick={handleBackButton}
-                  fullWidth
-                  secondary
                   disabled={isSubmitting}
-                />
+                >
+                  {profilePhotoStepsInfo.backButton}
+                </Button>
 
                 <Button
-                  label={profilePhotoStepsInfo.nextButton}
                   onClick={handleNextButton}
-                  fullWidth
-                  primary
                   disabled={isSkipAvailable || isSubmitting}
-                />
+                  className="w-full"
+                >
+                  {profilePhotoStepsInfo.nextButton}
+                </Button>
               </div>
 
               <Button
-                label={profilePhotoStepsInfo.skipButton}
+                variant="outline"
+                className="w-full"
                 onClick={handleSkipButton}
-                fullWidth
-                secondary
                 disabled={!isSkipAvailable || isSubmitting}
-              />
+              >
+                {profilePhotoStepsInfo.skipButton}
+              </Button>
             </div>
           ) : (
             <div className="w-full flex gap-6">
               <Button
-                label={profilePhotoStepsInfo.skipButton}
+                variant="outline"
+                className="w-full"
                 onClick={handleSkipButton}
-                fullWidth
-                secondary
                 disabled={!isSkipAvailable || isSubmitting}
-              />
+              >
+                {profilePhotoStepsInfo.skipButton}
+              </Button>
 
               <Button
-                label={profilePhotoStepsInfo.nextButton}
+                className="w-full"
                 onClick={handleNextButton}
-                fullWidth
-                primary
                 disabled={isSkipAvailable || isSubmitting}
-              />
+              >
+                {profilePhotoStepsInfo.nextButton}
+              </Button>
             </div>
           )}
         </div>

@@ -11,7 +11,7 @@ import {
   XCircleIcon,
 } from "lucide-react";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -51,12 +51,14 @@ const DashboardPage = () => {
       <div className="flex flex-col w-full">
         <div className="w-full bg-[#2C383F] h-fit px-2 lg:px-6 py-2">
           <div className="flex flex-row w-full">
-            <button
+            <Button
+              variant="link"
+              size="icon"
               className="text-green-primary px-3 block md:hidden"
               onClick={handleNavigation}
             >
               <ChevronLeft size={35} />
-            </button>
+            </Button>
             <div className="flex justify-start  md:px-6 py-2">
               <Image
                 src="/assets/images/profile-test.png"
@@ -71,16 +73,20 @@ const DashboardPage = () => {
               <span className="text-xs">Online</span>
             </div>
 
-            <button className="text-green-primary px-4 flex items-center ml-auto md:hidden">
+            <Button
+              variant="link"
+              size="icon"
+              className="text-green-primary px-4 flex items-center ml-auto md:hidden"
+            >
               {isModalOpen ? (
                 <XCircleIcon onClick={toggleModalNav} size={35} />
               ) : (
                 <MoreHorizontal onClick={toggleModalNav} size={35} />
               )}
-            </button>
+            </Button>
 
             <div className="hidden md:flex justify-end ml-auto px-4 py-2">
-              <Button label="Confirmar Finalização" fullWidth primary />
+              <Button className="w-full">Confirmar Finalização</Button>
             </div>
           </div>
         </div>
@@ -89,7 +95,7 @@ const DashboardPage = () => {
           <div className="flex w-full">
             <div className="flex w-full justify-end ">
               <div className="flex justify-center items-center w-72 h-24 bg-white rounded-l-lg rounded-br-lg">
-                <Button label="Confirmar Finalização" primary />
+                <Button className="w-full">Confirmar Finalização</Button>
               </div>
             </div>
           </div>
@@ -99,14 +105,15 @@ const DashboardPage = () => {
           <div className="flex flex-col justify-end h-screen">
             <div className="flex justify-start w-full">
               <div className="flex flex-col gap-4 items-start  h-fit bg-white rounded-r-lg rounded-tl-lg p-6">
-                <button className=" rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center">
+                <Button className="rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center">
                   <ImageIcon />
                   Enviar Imagem
-                </button>
-                <button className="rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center">
+                </Button>
+
+                <Button className="rounded-xl gap-2.5 p-2.5 w-44 h-12 bg-green-primary text-white flex justify-start items-center">
                   <Video />
                   Enviar Video
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -115,19 +122,20 @@ const DashboardPage = () => {
         <div className="w-full flex bg-[#2C383F] h-28 mt-auto">
           <div className="w-full flex flex-row px-4 py-4 gap-8">
             <div className="flex flex-row items-center justify-start gap-3.5 md:pl-11">
-              <button
+              <Button
                 onClick={toggleModalFooter}
                 className="flex rounded-xl w-12 h-12 bg-green-primary text-white md:hidden justify-center items-center"
               >
                 {isModalFooterOpen ? <XCircleIcon /> : <Plus />}
-              </button>
-              <button className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">
-                <ImageIcon />
-              </button>
+              </Button>
 
-              <button className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">
+              <Button className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">
+                <ImageIcon />
+              </Button>
+
+              <Button className="hidden rounded-xl w-12 h-12 bg-green-primary text-white md:flex justify-center items-center">
                 <Video />
-              </button>
+              </Button>
             </div>
 
             <div className="w-full flex items-center">
@@ -140,10 +148,10 @@ const DashboardPage = () => {
             </div>
 
             <div className="flex flex-row items-center justify-start md:pr-11">
-              <button className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold">
+              <Button className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold">
                 <Mic />
                 <span className="hidden md:block">Gravar</span>
-              </button>
+              </Button>
             </div>
           </div>
         </div>

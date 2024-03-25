@@ -1,6 +1,6 @@
 import { Search, ChevronDown } from "lucide-react";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 
 interface FilterWrapperProps {
   isTeacher: boolean;
@@ -45,12 +45,9 @@ const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
               : "flex w-full md:w-6/12 md:whitespace-nowrap lg:w-fit"
           }
         >
-          <Button
-            onClick={() => {}}
-            label="Consultar Certificado"
-            fullWidth
-            primary
-          />
+          <Button onClick={() => {}} className="w-full">
+            Consultar Certificado
+          </Button>
         </div>
 
         <div

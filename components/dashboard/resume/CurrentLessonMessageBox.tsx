@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Dot } from "lucide-react";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { studentResumeInfos } from "@/constants/dashboard/resume-br";
 import { cn } from "@/libs/utils";
 
@@ -11,7 +11,12 @@ interface CurrentLessonMessageBoxProps {
 
 const CurrentLessonMessageBox = ({ last }: CurrentLessonMessageBoxProps) => {
   return (
-    <div className={cn("w-full rounded-lg bg-green-primary p-5 mb-4", last && "mb-0")}>
+    <div
+      className={cn(
+        "w-full rounded-lg bg-green-primary p-5 mb-4",
+        last && "mb-0"
+      )}
+    >
       <div className="flex flex-col lg:flex-row lg:gap-6 xl:w-full">
         <div className="flex justify-center xl:w-1/12">
           <Image
@@ -33,12 +38,9 @@ const CurrentLessonMessageBox = ({ last }: CurrentLessonMessageBoxProps) => {
 
         <div className="xl:flex xl:justify-end xl:w-5/12">
           <div className="flex items-center justify-center">
-            <Button
-              primaryMobile
-              fullWidth
-              label={studentResumeInfos.seeMessageBtn}
-              onClick={() => {}}
-            />
+            <Button variant="secondary" className="w-full">
+              {studentResumeInfos.seeMessageBtn}
+            </Button>
           </div>
         </div>
       </div>

@@ -15,6 +15,7 @@ import professorRegisterSchema, {
 } from "@/constants/schemas/professorRegisterSchema";
 import { professorRegisterFormInfo } from "@/constants/register/professor-register-br";
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
+import { Button } from "@/components/ui/button";
 
 const RegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -71,7 +72,7 @@ const RegisterForm = () => {
     axios
       .post("/api/user/pre-register", { ...data, accountType: "Professor" })
       .then((res) =>
-        router.replace(`/cadastro/professor/finalizacao/${res.data.id}`),
+        router.replace(`/cadastro/professor/finalizacao/${res.data.id}`)
       )
       .catch((error) => {
         console.error(error.response);
@@ -178,7 +179,7 @@ const RegisterForm = () => {
                 type="password"
                 className={cn(
                   inputStyle,
-                  errors.passwordConfirm && inputErrorStyle,
+                  errors.passwordConfirm && inputErrorStyle
                 )}
                 placeholder={professorRegisterFormInfo.confirmPassword}
                 disabled={isSubmitting}
@@ -192,9 +193,9 @@ const RegisterForm = () => {
               )}
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="w-full h-11 bg-green-primary rounded-md flex items-center justify-center text-white text-base font-semibold transition disabled:brightness-75 disabled:hover:brightness-75 lg:hover:brightness-90"
+              className="w-full flex items-center justify-center"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -205,18 +206,19 @@ const RegisterForm = () => {
               ) : (
                 professorRegisterFormInfo.registerBtn
               )}
-            </button>
+            </Button>
           </form>
           <div className="w-full border-t border-[#EBEFF1] pt-6 flex flex-col gap-4">
             <span className="w-full text-base text-gray-primary font-semibold text-center">
               {professorRegisterFormInfo.alreadyHasAccount.desc + " "}
-              <button
+              <Button
+                variant="link"
                 type="button"
                 onClick={handleOpenLoginModal}
                 className="text-green-primary cursor-pointer lg:hover:underline"
               >
                 {professorRegisterFormInfo.alreadyHasAccount.link}
-              </button>
+              </Button>
             </span>
 
             <span className="text-sm text-gray-primary/60 font-medium text-center">

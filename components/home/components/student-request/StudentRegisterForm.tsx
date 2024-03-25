@@ -6,13 +6,14 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 import { studentRegisterInfo } from "@/constants/studentModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 import studentRegisterSchema from "@/constants/schemas/studentRegisterSchema";
 import { studentRegisterSchemaType } from "@/constants/schemas/studentRegisterSchema";
-import React from "react";
+import { Button } from "@/components/ui/button";
 
 const StudentRegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -85,7 +86,12 @@ const StudentRegisterForm = () => {
     setIsSubmitting(true);
 
     if (subject && description) {
-      const formData = { ...data, subject, description, accountType: "Student" };
+      const formData = {
+        ...data,
+        subject,
+        description,
+        accountType: "Student",
+      };
 
       axios
         .post("/api/user/pre-register", formData)
@@ -121,13 +127,17 @@ const StudentRegisterForm = () => {
 
   return (
     <div className="w-full flex flex-col gap-9">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full overflow-x-hidden">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full overflow-x-hidden"
+      >
         <motion.div
           variants={studentFormAnimation}
           initial="initial"
           animate="animate"
           exit="exit"
-          className="grid grid-cols-2 grid-rows-4 gap-4 mb-6">
+          className="grid grid-cols-2 grid-rows-4 gap-4 mb-6"
+        >
           <div className="w-full col-start-1 col-end-2 flex flex-col gap-1">
             <input
               {...register("firstName")}
@@ -245,7 +255,8 @@ const StudentRegisterForm = () => {
               autoCorrect="off"
               disabled={isSubmitting}
               className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
-                errors.passwordConfirm && "border-[#FF7373] border-2 border-solid"
+                errors.passwordConfirm &&
+                "border-[#FF7373] border-2 border-solid"
               }`}
             />
 
@@ -257,16 +268,16 @@ const StudentRegisterForm = () => {
           </div>
         </motion.div>
 
-        <motion.button
-          type="submit"
+        <motion.div
           variants={studentFormAnimation}
           initial="initial"
           animate="animate"
           exit="exit"
-          disabled={isSubmitting}
-          className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter] disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75">
-          {studentRegisterInfo.nextButton}
-        </motion.button>
+        >
+          <Button type="submit" disabled={isSubmitting} className="w-full">
+            {studentRegisterInfo.nextButton}
+          </Button>
+        </motion.div>
       </form>
 
       <div className="w-full h-[1px] bg-[#EBEFF1]" />
@@ -274,7 +285,10 @@ const StudentRegisterForm = () => {
       <div className="w-full flex flex-col items-center justify-center gap-4">
         <p className="text-base font-semibold text-[#2C383F]">
           {studentRegisterInfo.hasAccountText}{" "}
-          <span onClick={handleLoginLink} className="text-green-primary cursor-pointer">
+          <span
+            onClick={handleLoginLink}
+            className="text-green-primary cursor-pointer"
+          >
             {studentRegisterInfo.hasAccountLink}
           </span>
         </p>

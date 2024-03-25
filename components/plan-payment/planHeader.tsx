@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 import { info } from "@/constants/plan-payment/plan-header-br";
 import { PlanOption } from "./planOption";
 import { cn } from "@/libs/utils";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export function PlanHeader() {
   // TODO: para teste, depois aplicar logica do gateway de pagamento
@@ -46,27 +48,23 @@ export function PlanHeader() {
         </div>
 
         <div className="w-full flex flex-col gap-4 sm:flex-row">
-          <button
+          <Button
+            variant={paymentType === "pix" ? "default" : "outline"}
             type="button"
             onClick={handlePixSelect}
-            className={cn("w-full sm:w-[230.41px]", {
-              "green-button": paymentType === "pix",
-              "outline-green-button": paymentType === "credit",
-            })}
+            className="w-full sm:w-[230.41px]"
           >
             {info.pixBtn}
-          </button>
+          </Button>
 
-          <button
+          <Button
+            variant={paymentType === "credit" ? "default" : "outline"}
             type="button"
             onClick={handleCreditSelect}
-            className={cn("w-full sm:w-fit", {
-              "green-button": paymentType === "credit",
-              "outline-green-button": paymentType === "pix",
-            })}
+            className="w-full sm:w-fit"
           >
             {info.cardBtn}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

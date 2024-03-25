@@ -8,6 +8,7 @@ import {
   offersModalAnimation,
   offersOverlayAnimation,
 } from "@/constants/framer-animations/offers-modal";
+import { Button } from "@/components/ui/button";
 
 const OffersModal = () => {
   const { isModalOpen, closeModal, requestSelectedOffers } =
@@ -41,13 +42,15 @@ const OffersModal = () => {
               className="w-full max-w-[650px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
             >
               <div className="w-full flex justify-end items-center">
-                <button
+                <Button
+                  variant="link"
+                  size="icon"
                   type="button"
                   onClick={handleCloseButton}
                   className="mb-6"
                 >
                   <BsXLg size={26} className="text-green-primary" />
-                </button>
+                </Button>
               </div>
 
               <div className="w-full flex flex-col">

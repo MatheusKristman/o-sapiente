@@ -6,19 +6,18 @@ import { useSession } from "next-auth/react";
 
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
 import ResumeRequestBox from "@/components/dashboard/resume/ResumeRequestBox";
-import Button from "@/components/Button";
 import ResumeCurrentLessonBox from "@/components/dashboard/resume/ResumeCurrentLessonBox";
 import BalanceBox from "@/components/dashboard/resume/BalanceBox";
 import RequestDetailModal from "@/components/dashboard/resume/RequestDetailModal";
 
-import { RequestWithUsers } from "@/types";
+import { RequestWithUsersAndOffers } from "@/types";
 import { Offer } from "@prisma/client";
 
 const ResumePage = () => {
   const [profilePhoto, setProfilePhoto] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [themes, setThemes] = useState<string[]>([]);
-  const [request, setRequest] = useState<RequestWithUsers[]>([]);
+  const [request, setRequest] = useState<RequestWithUsersAndOffers[]>([]);
   const [plan, setPlan] = useState<string>("");
   const [offers, setOffers] = useState<Offer[]>([]);
 

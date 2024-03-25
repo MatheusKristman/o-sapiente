@@ -1,4 +1,4 @@
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { professorResumeInfos } from "@/constants/dashboard/resume-br";
 
 const BalanceBox = () => {
@@ -13,7 +13,9 @@ const BalanceBox = () => {
           <span className="text-2xl text-white font-semibold">R$ 0,00</span>
         </div>
 
-        <Button primaryMobile fullWidth onClick={() => {}} label={professorResumeInfos.redeemBtn} />
+        <Button variant="secondary" className="w-full">
+          {professorResumeInfos.redeemBtn}
+        </Button>
       </div>
     </div>
   );

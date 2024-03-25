@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { studentNewRequestInfo } from "@/constants/dashboard/resume-br";
 import { newRequestMessageAnimation } from "@/constants/framer-animations/new-request-modal";
 
@@ -38,12 +38,9 @@ const NewRequestSuccess = ({ handleCloseButton }: NewRequestSuccessProps) => {
         variants={newRequestMessageAnimation}
         className="w-full"
       >
-        <Button
-          primary
-          fullWidth
-          label={studentNewRequestInfo.closeBtn}
-          onClick={handleCloseButton}
-        />
+        <Button className="w-full" onClick={handleCloseButton}>
+          {studentNewRequestInfo.closeBtn}
+        </Button>
       </motion.div>
     </div>
   );

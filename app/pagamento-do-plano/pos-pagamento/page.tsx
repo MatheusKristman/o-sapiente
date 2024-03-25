@@ -5,9 +5,9 @@ import { PaymentDenied } from "@/components/after-payment/paymentDenied";
 function AfterPaymentPage() {
   return (
     <div className="w-full flex items-center justify-center sm:min-h-[700px]">
-      <ProcessingPayment />
+      {/* <ProcessingPayment /> */}
       {/* <PaymentConfirmed /> */}
-      {/* <PaymentDenied /> */}
+      <PaymentDenied />
     </div>
   );
 }

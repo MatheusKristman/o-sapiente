@@ -6,6 +6,7 @@ import Link from "next/link";
 import useHeaderStore from "@/stores/useHeaderStore";
 import { info } from "@/constants/after-payment/paymentDenied-br";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
+import { Button } from "@/components/ui/button";
 
 export function PaymentDenied() {
   const { userId } = useHeaderStore();
@@ -35,19 +36,23 @@ export function PaymentDenied() {
         </div>
 
         <div className="w-full flex flex-col gap-4 sm:flex-row max-w-xl">
-          <Link
-            href="/pagamento-do-plano"
-            className="green-button text-center w-full sm:w-1/2"
-          >
-            {info.againBtn}
-          </Link>
+          <Button asChild>
+            <Link
+              href="/pagamento-do-plano"
+              className="text-center w-full sm:w-1/2"
+            >
+              {info.againBtn}
+            </Link>
+          </Button>
 
-          <Link
-            href={`${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`}
-            className="outline-green-button text-center w-full sm:w-1/2"
-          >
-            {info.backBtn}
-          </Link>
+          <Button variant="outline" asChild>
+            <Link
+              href={`${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`}
+              className="text-center w-full sm:w-1/2"
+            >
+              {info.backBtn}
+            </Link>
+          </Button>
         </div>
       </div>
     </div>

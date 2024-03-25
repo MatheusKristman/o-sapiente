@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Dot } from "lucide-react";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/libs/utils";
 import {
   studentResumeInfos,
@@ -91,21 +91,20 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
                 {request.offers.length}
               </span>
             ) : null}
+
             <Button
-              primary
-              fullWidth
+              className="w-full"
               disabled={type === "Professor" && !!offer}
-              label={
-                type === "Professor"
-                  ? !!offer
-                    ? professorResumeInfos.offerSended
-                    : professorResumeInfos.seeOfferBtn
-                  : type === "Student"
-                  ? studentResumeInfos.seeOfferBtn
-                  : ""
-              }
               onClick={handleBtn}
-            />
+            >
+              {type === "Professor"
+                ? !!offer
+                  ? professorResumeInfos.offerSended
+                  : professorResumeInfos.seeOfferBtn
+                : type === "Student"
+                ? studentResumeInfos.seeOfferBtn
+                : ""}
+            </Button>
           </div>
         </div>
       </div>

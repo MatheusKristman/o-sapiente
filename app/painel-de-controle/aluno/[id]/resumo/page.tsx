@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
 import ResumeRequestBox from "@/components/dashboard/resume/ResumeRequestBox";
 import ResumeCurrentLessonBox from "@/components/dashboard/resume/ResumeCurrentLessonBox";
@@ -59,12 +59,9 @@ const DashboardPage = () => {
         />
 
         <div className="shadow-md shadow-[rgba(0,0,0,0.25)] rounded-lg">
-          <Button
-            label={studentResumeInfos.newRequestBtn}
-            primary
-            fullWidth
-            onClick={openModal}
-          />
+          <Button className="w-full" onClick={openModal}>
+            {studentResumeInfos.newRequestBtn}
+          </Button>
         </div>
       </div>
 

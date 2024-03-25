@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 import { requestDetailsInfo } from "@/constants/requestDetails-br";
 import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { requestDetailsFormAnimation } from "@/constants/framer-animations/request-details-modal";
 import Link from "next/link";
 
@@ -75,13 +75,12 @@ const RequestDetailsModalResume = ({
       </div>
 
       <Button
+        className="w-full"
         disabled={type === "Professor" && !plan}
-        label={requestDetailsInfo.btn}
-        fullWidth
-        primary
-        type="button"
         onClick={AcceptRequest}
-      />
+      >
+        {requestDetailsInfo.btn}
+      </Button>
 
       {type === "Professor" && !plan && (
         <span className="mt-4 text-base text-gray-primary text-center max-w-md mx-auto">

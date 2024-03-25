@@ -14,11 +14,12 @@ import {
   professorHeaderButton,
   studentHeaderButton,
 } from "@/constants/header-br";
-import Button from "./Button";
+import { Button } from "@/components/ui/button";
 import useHeaderStore from "@/stores/useHeaderStore";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
+import { cn } from "@/libs/utils";
 
 // TODO ao deslogar enviar para a home
 
@@ -108,15 +109,18 @@ const Header = () => {
         />
       </Link>
 
-      <button
+      <Button
         type="button"
         onClick={openMobileMenu}
-        className={`flex lg:hidden ${
-          isMobileMenuOpen && "opacity-0 pointer-events-none"
-        } items-center justify-center cursor-pointer`}
+        className={cn(
+          "flex lg:hidden items-center justify-center cursor-pointer",
+          {
+            "opacity-0 pointer-events-none": isMobileMenuOpen,
+          }
+        )}
       >
         <IoIosMenu size={35} className="text-green-primary" />
-      </button>
+      </Button>
 
       <ul className="hidden lg:flex items-center justify-between gap-x-12">
         {navLinks.map((link) => (
@@ -134,16 +138,18 @@ const Header = () => {
         {session.status === "authenticated" ? (
           accountType === "STUDENT" ? (
             <>
-              <button
+              <Button
+                variant="link"
+                size="sm"
                 type="button"
                 onClick={handleLogOut}
                 className="flex gap-2 items-center justify-center text-green-primary text-lg"
               >
                 <LogOut className="h-6 w-6" />
                 Sair
-              </button>
+              </Button>
 
-              <button
+              <Button
                 type="button"
                 onClick={handleDashboardStudentBtn}
                 className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
@@ -156,20 +162,22 @@ const Header = () => {
                   className="object-contain"
                 />
                 Área do Aluno
-              </button>
+              </Button>
             </>
           ) : accountType === "PROFESSOR" ? (
             <>
-              <button
+              <Button
+                variant="link"
+                size="sm"
                 type="button"
                 onClick={handleLogOut}
                 className="flex gap-2 items-center justify-center text-green-primary text-lg"
               >
                 <LogOut className="h-6 w-6" />
                 Sair
-              </button>
+              </Button>
 
-              <button
+              <Button
                 type="button"
                 onClick={handleDashboardProfessorBtn}
                 className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
@@ -182,22 +190,18 @@ const Header = () => {
                   className="object-contain"
                 />
                 Área do Professor
-              </button>
+              </Button>
             </>
           ) : null
         ) : (
           <>
-            <Button
-              secondary
-              label={professorHeaderButton.label}
-              onClick={openProfessorLoginModal}
-            />
+            <Button variant="outline" onClick={openProfessorLoginModal}>
+              {professorHeaderButton.label}
+            </Button>
 
-            <Button
-              primary
-              label={studentHeaderButton.label}
-              onClick={openStudentRegisterModal}
-            />
+            <Button onClick={openStudentRegisterModal}>
+              {studentHeaderButton.label}
+            </Button>
           </>
         )}
       </div>

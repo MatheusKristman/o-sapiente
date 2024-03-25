@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 
 import { cn } from "@/libs/utils";
 import { ChangeEvent } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { cityOptionsType, stateOptionsType } from "@/types";
 import studentUpdateFormSchema, {
   studentUpdateFormSchemaType,
@@ -99,7 +99,7 @@ const StudentFormBox = () => {
       if (ufSelected.length > 0) {
         axios
           .get(
-            `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufSelected[0].id}/municipios`,
+            `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufSelected[0].id}/municipios`
           )
           .then((res) => setCityOptions(res.data))
           .catch((error) => console.error(error))
@@ -192,7 +192,7 @@ const StudentFormBox = () => {
             className={cn(
               inputStyle,
               errors.firstName &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.firstName}
           />
@@ -211,7 +211,7 @@ const StudentFormBox = () => {
             className={cn(
               inputStyle,
               errors.lastName &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.lastName}
           />
@@ -229,7 +229,7 @@ const StudentFormBox = () => {
             className={cn(
               inputStyle,
               errors.birth &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
             )}
             disabled={isSubmitting || isLoading}
             autoComplete="off"
@@ -248,19 +248,19 @@ const StudentFormBox = () => {
           <div
             className={cn(
               "flex flex-col gap-y-1 w-1/2",
-              "sm:grow lg:grow-0 xl:grow",
+              "sm:grow lg:grow-0 xl:grow"
             )}
           >
             <div
               className={cn(
-                "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
+                "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu"
               )}
             >
               <select
                 {...register("state")}
                 disabled={isSubmitting || isLoading}
                 className={cn(
-                  "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
+                  "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed"
                 )}
               >
                 <option
@@ -283,19 +283,19 @@ const StudentFormBox = () => {
           <div
             className={cn(
               "flex flex-col gap-y-1 w-1/2",
-              "sm:grow lg:grow-0 xl:grow",
+              "sm:grow lg:grow-0 xl:grow"
             )}
           >
             <div
               className={cn(
-                "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
+                "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu"
               )}
             >
               <select
                 {...register("city")}
                 disabled={isSubmitting || isLoading}
                 className={cn(
-                  "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
+                  "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed"
                 )}
               >
                 <option
@@ -327,7 +327,7 @@ const StudentFormBox = () => {
               className={cn(
                 inputStyle,
                 errors.address &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.address}
             />
@@ -341,7 +341,7 @@ const StudentFormBox = () => {
           <div
             className={cn(
               "flex flex-col gap-y-1",
-              "sm:w-2/5 lg:w-full xl:w-2/5",
+              "sm:w-2/5 lg:w-full xl:w-2/5"
             )}
           >
             <input
@@ -351,7 +351,7 @@ const StudentFormBox = () => {
               className={cn(
                 inputStyle,
                 errors.addressNumber &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.addressNumber}
             />
@@ -367,7 +367,7 @@ const StudentFormBox = () => {
           <div
             className={cn(
               "flex flex-col gap-y-1",
-              "sm:w-2/5 lg:w-full xl:w-2/5",
+              "sm:w-2/5 lg:w-full xl:w-2/5"
             )}
           >
             <input
@@ -378,7 +378,7 @@ const StudentFormBox = () => {
               className={cn(
                 inputStyle,
                 errors.ddd &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.ddd}
             />
@@ -400,7 +400,7 @@ const StudentFormBox = () => {
               className={cn(
                 inputStyle,
                 errors.cel &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.cel}
             />
@@ -420,7 +420,7 @@ const StudentFormBox = () => {
             className={cn(
               inputStyle,
               errors.district &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.district}
           />
@@ -439,7 +439,7 @@ const StudentFormBox = () => {
             className={cn(
               inputStyle,
               errors.complement &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.complement}
           />
@@ -452,12 +452,12 @@ const StudentFormBox = () => {
       </div>
 
       <Button
-        primary
-        fullWidth
+        className="w-full"
         type="submit"
         disabled={isSubmitting || isLoading}
-        label={MyAccountInfo.submitButton}
-      />
+      >
+        {MyAccountInfo.submitButton}
+      </Button>
     </form>
   );
 };

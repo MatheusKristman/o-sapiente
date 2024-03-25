@@ -6,6 +6,7 @@ import Link from "next/link";
 import { info } from "@/constants/after-payment/processingPayment-br";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import useHeaderStore from "@/stores/useHeaderStore";
+import { Button } from "@/components/ui/button";
 
 export function ProcessingPayment() {
   const { userId } = useHeaderStore();
@@ -36,12 +37,14 @@ export function ProcessingPayment() {
           </p>
         </div>
 
-        <Link
-          href={`${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`}
-          className="green-button text-center w-full sm:w-fit"
-        >
-          {info.backBtn}
-        </Link>
+        <Button asChild>
+          <Link
+            href={`${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`}
+            className="text-center w-full sm:w-fit"
+          >
+            {info.backBtn}
+          </Link>
+        </Button>
       </div>
     </div>
   );

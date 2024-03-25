@@ -8,7 +8,7 @@ import axios from "axios";
 import { Offer } from "@prisma/client";
 import { toast } from "react-hot-toast";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { requestDetailsOfferFormInfo } from "@/constants/requestDetails-br";
 import { requestDetailsFormAnimation } from "@/constants/framer-animations/request-details-modal";
 import {
@@ -83,7 +83,7 @@ const RequestDetailsModalOfferForm = ({
             "w-full h-64 px-4 py-2 mb-9 rounded-lg bg-[#EBEFF1] text-base text-gray-primary resize-none placeholder:text-[#96A3AB] placeholder:font-medium focus:border-2 focus:border-[#96A3AB] outline-none transition-[border]",
             {
               "mb-2": errors?.message,
-            },
+            }
           )}
         />
 
@@ -94,13 +94,13 @@ const RequestDetailsModalOfferForm = ({
         )}
 
         <Button
+          className="w-full"
           disabled={isSending}
-          label={requestDetailsOfferFormInfo.btn}
-          fullWidth
           type="submit"
-          primary
           onClick={() => {}}
-        />
+        >
+          {requestDetailsOfferFormInfo.btn}
+        </Button>
       </form>
     </motion.div>
   );

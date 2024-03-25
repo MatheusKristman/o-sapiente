@@ -4,13 +4,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 import { studentLoginInfo } from "@/constants/studentModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 import studentLoginSchema from "@/constants/schemas/studentLoginSchema";
 import { studentLoginType } from "@/constants/schemas/studentLoginSchema";
-import axios from "axios";
+import { Button } from "@/components/ui/button";
 
 const StudentLoginForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -154,17 +155,16 @@ const StudentLoginForm = () => {
           </div>
         </motion.div>
 
-        <motion.button
-          type="submit"
+        <motion.div
           variants={studentFormAnimation}
           initial="initial"
           animate="animate"
           exit="exit"
-          disabled={isSubmitting}
-          className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter] disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75"
         >
-          {studentLoginInfo.loginButton}
-        </motion.button>
+          <Button type="submit" disabled={isSubmitting} className="w-full">
+            {studentLoginInfo.loginButton}
+          </Button>
+        </motion.div>
       </form>
 
       <div className="w-full h-[1px] bg-[#EBEFF1]" />

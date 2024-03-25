@@ -158,7 +158,7 @@ const Contact = () => {
                     : contactLeftSideAnimation
                 }
                 type="submit"
-                className="mt-9 bg-green-primary w-full h-11 rounded-lg flex items-center justify-center text-lg text-[#24493D] font-semibold lg:hover:brightness-90 transition-[filter]"
+                className="mt-9 green-button w-full h-11 flex items-center justify-center text-lg text-[#24493D] font-semibold lg:hover:brightness-90 transition-[filter]"
               >
                 {contactFormInfo.submitBtn}
               </motion.button>

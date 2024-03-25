@@ -6,7 +6,7 @@ import { Loader2, Plus, X } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { ThemeStepInfos } from "@/constants/register/theme-step-br";
 import { Subject } from "@prisma/client";
 
@@ -75,8 +75,8 @@ const ThemeStep = ({
                 searchValue
                   .toLowerCase()
                   .normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, ""),
-              ),
+                  .replace(/[\u0300-\u036f]/g, "")
+              )
           ) &&
           option.main
             .toLowerCase()
@@ -86,13 +86,13 @@ const ThemeStep = ({
               searchValue
                 .toLowerCase()
                 .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, ""),
-            ),
+                .replace(/[\u0300-\u036f]/g, "")
+            )
       );
 
       if (filteredSubjects.length > 0) {
         const filteredOpt = filteredSubjects[0].subs.filter(
-          (sub) => !selectedOptions.includes(sub),
+          (sub) => !selectedOptions.includes(sub)
         );
 
         setFilteredOptions(filteredOpt);
@@ -111,8 +111,8 @@ const ThemeStep = ({
               searchValue
                 .toLowerCase()
                 .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, ""),
-            ),
+                .replace(/[\u0300-\u036f]/g, "")
+            )
       );
 
       setFilteredOptions(filteredOpt);
@@ -252,20 +252,21 @@ const ThemeStep = ({
 
           <div className="w-full flex flex-col gap-6 md:flex-row">
             <Button
-              label={ThemeStepInfos.backButton}
+              variant="outline"
+              className="w-full"
               onClick={() => {}}
-              fullWidth
-              secondary
               disabled={true}
-            />
+            >
+              {ThemeStepInfos.backButton}
+            </Button>
 
             <Button
-              label={ThemeStepInfos.nextButton}
+              className="w-full"
               onClick={handleNextBtn}
-              fullWidth
-              primary
               disabled={!isNextAvailable || isLoading}
-            />
+            >
+              {ThemeStepInfos.nextButton}
+            </Button>
           </div>
         </div>
       </div>

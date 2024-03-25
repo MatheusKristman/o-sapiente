@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import Button from "./Button";
+import { Button } from "@/components/ui/button";
 import {
   navLinks,
   professorHeaderButton,
@@ -104,13 +104,15 @@ const HeaderMobile = () => {
             exit="exit"
             className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex lg:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999]"
           >
-            <button
+            <Button
+              variant="link"
+              size="icon"
               type="button"
               onClick={closeMobileMenu}
               className="text-white cursor-pointer"
             >
               <BsXLg size={26} />
-            </button>
+            </Button>
 
             <nav>
               <ul className="lg:hidden flex flex-col items-end justify-between gap-y-6">
@@ -130,19 +132,21 @@ const HeaderMobile = () => {
               {session.status === "authenticated" ? (
                 accountType === "Student" ? (
                   <>
-                    <button
+                    <Button
+                      variant="link"
                       type="button"
                       onClick={handleLogOut}
                       className="flex gap-2 items-center justify-center text-white text-lg"
                     >
                       <LogOut className="h-6 w-6" />
                       Sair
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
+                      variant="secondary"
                       type="button"
                       onClick={handleDashboardStudentBtn}
-                      className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer"
+                      className="flex gap-2 items-center justify-center"
                     >
                       <Image
                         src="/assets/icons/user-green.svg"
@@ -152,23 +156,26 @@ const HeaderMobile = () => {
                         className="object-contain"
                       />
                       Área do Aluno
-                    </button>
+                    </Button>
                   </>
                 ) : accountType === "Professor" ? (
                   <>
-                    <button
+                    <Button
+                      variant="link"
+                      size="icon"
                       type="button"
                       onClick={handleLogOut}
                       className="flex gap-2 items-center justify-center text-white text-lg"
                     >
                       <LogOut className="h-6 w-6" />
                       Sair
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
+                      variant="secondary"
                       type="button"
                       onClick={handleDashboardProfessorBtn}
-                      className="bg-white flex gap-2 items-center justify-center text-green-primary text-lg px-7 py-2 rounded-lg cursor-pointer"
+                      className="flex gap-2 items-center justify-center"
                     >
                       <Image
                         src="/assets/icons/user-green.svg"
@@ -178,24 +185,26 @@ const HeaderMobile = () => {
                         className="object-contain"
                       />
                       Área do Professor
-                    </button>
+                    </Button>
                   </>
                 ) : null
               ) : (
                 <>
                   <Button
-                    secondaryMobile
-                    fullWidth
-                    label={professorHeaderButton.label}
+                    variant="outline"
+                    className="w-full"
                     onClick={openProfessorLoginModal}
-                  />
+                  >
+                    {professorHeaderButton.label}
+                  </Button>
 
                   <Button
-                    primaryMobile
-                    fullWidth
-                    label={studentHeaderButton.label}
+                    variant="secondary"
+                    className="w-full"
                     onClick={openStudentRegisterModal}
-                  />
+                  >
+                    {studentHeaderButton.label}
+                  </Button>
                 </>
               )}
             </div>

@@ -12,7 +12,7 @@ import {
   messageVideoModalAnimation,
   messageVideoOverlayAnimation,
 } from "@/constants/framer-animations/message-video-modal";
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 
 interface MessagesVideoModalProps {
   isVideoModalOpen: boolean;
@@ -98,13 +98,15 @@ const MessagesVideoModal = ({
               className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle"
             >
               <div className="w-full flex items-center justify-end mb-4">
-                <button
+                <Button
+                  variant="link"
+                  size="icon"
                   type="button"
                   className="text-green-primary"
                   onClick={handleCloseButton}
                 >
                   <BsXLg size={26} />
-                </button>
+                </Button>
               </div>
 
               <div className="w-full flex flex-col items-start">
@@ -142,14 +144,15 @@ const MessagesVideoModal = ({
                   <div className="w-full flex items-center justify-center mb-6">
                     <Button
                       onClick={handleDeleteButton}
-                      label={videoModalInfo.removeBtn}
-                      icon={<Trash2 size={20} />}
-                      primary
-                    />
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <Trash2 size={20} />
+                      {videoModalInfo.removeBtn}
+                    </Button>
                   </div>
                 )}
 
-                <Button label={videoModalInfo.sendBtn} fullWidth primary />
+                <Button className="w-full">{videoModalInfo.sendBtn}</Button>
               </div>
             </motion.div>
           </motion.div>

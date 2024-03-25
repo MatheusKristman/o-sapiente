@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 
 import { cn } from "@/libs/utils";
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { MyAccountInfo } from "@/constants/dashboard/my-account-br";
 import {
   professorUpdateFormSchema,
@@ -71,7 +71,7 @@ const ProfessorFormBox = () => {
           setValue("birth", res.data.birth);
           setValue(
             "state",
-            res.data.state ?? MyAccountInfo.personalDataPlaceholders.state,
+            res.data.state ?? MyAccountInfo.personalDataPlaceholders.state
           );
           setValue("address", res.data.address);
           setValue("addressNumber", res.data.addressNumber);
@@ -112,7 +112,7 @@ const ProfessorFormBox = () => {
       if (ufSelected.length > 0) {
         axios
           .get(
-            `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufSelected[0].id}/municipios`,
+            `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufSelected[0].id}/municipios`
           )
           .then((res) => setCityOptions(res.data))
           .catch((error) => console.error(error))
@@ -173,8 +173,8 @@ const ProfessorFormBox = () => {
                 searchValue
                   .toLowerCase()
                   .normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, ""),
-              ),
+                  .replace(/[\u0300-\u036f]/g, "")
+              )
           ) &&
           option.main
             .toLowerCase()
@@ -184,13 +184,13 @@ const ProfessorFormBox = () => {
               searchValue
                 .toLowerCase()
                 .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, ""),
-            ),
+                .replace(/[\u0300-\u036f]/g, "")
+            )
       );
 
       if (filteredSubjects.length > 0) {
         const filteredOpt = filteredSubjects[0].subs.filter(
-          (sub) => !themes.includes(sub),
+          (sub) => !themes.includes(sub)
         );
 
         setFilteredOptions(filteredOpt);
@@ -209,8 +209,8 @@ const ProfessorFormBox = () => {
               searchValue
                 .toLowerCase()
                 .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, ""),
-            ),
+                .replace(/[\u0300-\u036f]/g, "")
+            )
       );
 
       setFilteredOptions(filteredOpt);
@@ -288,11 +288,11 @@ const ProfessorFormBox = () => {
         setValue("birth", res.data.birth);
         setValue(
           "city",
-          res.data.city ?? MyAccountInfo.personalDataPlaceholders.city,
+          res.data.city ?? MyAccountInfo.personalDataPlaceholders.city
         );
         setValue(
           "state",
-          res.data.state ?? MyAccountInfo.personalDataPlaceholders.state,
+          res.data.state ?? MyAccountInfo.personalDataPlaceholders.state
         );
         setValue("address", res.data.address);
         setValue("addressNumber", res.data.addressNumber);
@@ -330,7 +330,7 @@ const ProfessorFormBox = () => {
             className={cn(
               inputStyle,
               errors.firstName &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.firstName}
           />
@@ -349,7 +349,7 @@ const ProfessorFormBox = () => {
             className={cn(
               inputStyle,
               errors.lastName &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.lastName}
           />
@@ -367,7 +367,7 @@ const ProfessorFormBox = () => {
             className={cn(
               inputStyle,
               errors.birth &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
             )}
             disabled={isSubmitting || isLoading}
             autoComplete="off"
@@ -386,12 +386,12 @@ const ProfessorFormBox = () => {
           <div
             className={cn(
               "flex flex-col gap-y-1 w-1/2",
-              "sm:grow lg:grow-0 xl:grow",
+              "sm:grow lg:grow-0 xl:grow"
             )}
           >
             <div
               className={cn(
-                "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
+                "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu"
               )}
             >
               <select
@@ -399,7 +399,7 @@ const ProfessorFormBox = () => {
                 disabled={isSubmitting || isLoading}
                 defaultValue={MyAccountInfo.personalDataPlaceholders.state}
                 className={cn(
-                  "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
+                  "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed"
                 )}
               >
                 <option
@@ -421,12 +421,12 @@ const ProfessorFormBox = () => {
           <div
             className={cn(
               "flex flex-col gap-y-1 w-1/2",
-              "sm:grow lg:grow-0 xl:grow",
+              "sm:grow lg:grow-0 xl:grow"
             )}
           >
             <div
               className={cn(
-                "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
+                "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu"
               )}
             >
               <select
@@ -434,7 +434,7 @@ const ProfessorFormBox = () => {
                 disabled={isSubmitting || isLoading}
                 defaultValue={MyAccountInfo.personalDataPlaceholders.city}
                 className={cn(
-                  "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed",
+                  "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed"
                 )}
               >
                 <option
@@ -465,7 +465,7 @@ const ProfessorFormBox = () => {
               className={cn(
                 inputStyle,
                 errors.address &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.address}
             />
@@ -479,7 +479,7 @@ const ProfessorFormBox = () => {
           <div
             className={cn(
               "flex flex-col gap-y-1",
-              "sm:w-2/5 lg:w-full xl:w-2/5",
+              "sm:w-2/5 lg:w-full xl:w-2/5"
             )}
           >
             <input
@@ -489,7 +489,7 @@ const ProfessorFormBox = () => {
               className={cn(
                 inputStyle,
                 errors.addressNumber &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.addressNumber}
             />
@@ -505,7 +505,7 @@ const ProfessorFormBox = () => {
           <div
             className={cn(
               "flex flex-col gap-y-1",
-              "sm:w-2/5 lg:w-full xl:w-2/5",
+              "sm:w-2/5 lg:w-full xl:w-2/5"
             )}
           >
             <input
@@ -516,7 +516,7 @@ const ProfessorFormBox = () => {
               className={cn(
                 inputStyle,
                 errors.ddd &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.ddd}
             />
@@ -538,7 +538,7 @@ const ProfessorFormBox = () => {
               className={cn(
                 inputStyle,
                 errors.cel &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
               )}
               placeholder={MyAccountInfo.personalDataPlaceholders.cel}
             />
@@ -558,7 +558,7 @@ const ProfessorFormBox = () => {
             className={cn(
               inputStyle,
               errors.district &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.district}
           />
@@ -577,7 +577,7 @@ const ProfessorFormBox = () => {
             className={cn(
               inputStyle,
               errors.complement &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]",
+                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
             )}
             placeholder={MyAccountInfo.personalDataPlaceholders.complement}
           />
@@ -677,7 +677,7 @@ const ProfessorFormBox = () => {
         className={cn(
           "w-full h-64 bg-[#EBEFF1] px-4 py-2 rounded-lg resize-none text-base text-gray-primary focus:outline-[#9DA5AA] mb-9",
           errors.aboutMe &&
-            "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373] mb-0",
+            "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373] mb-0"
         )}
         placeholder={MyAccountInfo.aboutPlaceholder}
       />
@@ -688,12 +688,12 @@ const ProfessorFormBox = () => {
       )}
 
       <Button
-        primary
-        fullWidth
+        className="w-full"
         type="submit"
         disabled={isSubmitting || isLoading}
-        label={MyAccountInfo.submitButton}
-      />
+      >
+        {MyAccountInfo.submitButton}
+      </Button>
     </form>
   );
 };

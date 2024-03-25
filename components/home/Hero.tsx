@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
-import Button from "../Button";
+import { Button } from "@/components/ui/button";
 import { heroInfos } from "@/constants/hero-br";
 import {
   heroInfoAnimation,
@@ -51,11 +51,7 @@ const Hero = () => {
             </motion.p>
 
             <motion.div variants={heroInfoAnimation}>
-              <Button
-                primary
-                label={heroInfos.btn}
-                onClick={openRequestModal}
-              />
+              <Button onClick={openRequestModal}>{heroInfos.btn}</Button>
             </motion.div>
           </motion.div>
 

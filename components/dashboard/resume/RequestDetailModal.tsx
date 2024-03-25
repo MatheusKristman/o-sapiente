@@ -12,6 +12,7 @@ import {
 } from "@/constants/framer-animations/request-details-modal";
 import RequestDetailsModalResume from "./RequestDetailsModalResume";
 import RequestDetailsModalOfferForm from "./RequestDetailsModalOfferForm";
+import { Button } from "@/components/ui/button";
 
 interface RequestDetailModalProps {
   type?: string;
@@ -67,13 +68,15 @@ const RequestDetailModal = ({
               className="w-full max-w-[650px] min-h-[542.5px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
             >
               <div className="w-full flex justify-end items-center">
-                <button
+                <Button
+                  variant="link"
+                  size="icon"
                   type="button"
                   onClick={handleCloseButton}
                   className="mb-6"
                 >
                   <BsXLg size={26} className="text-green-primary" />
-                </button>
+                </Button>
               </div>
 
               <AnimatePresence>

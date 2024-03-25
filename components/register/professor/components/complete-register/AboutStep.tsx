@@ -8,7 +8,7 @@ import {
   useEffect,
 } from "react";
 
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { AboutStepInfos } from "@/constants/register/about-step-br";
 
 interface AboutStepsProps {
@@ -76,20 +76,21 @@ const AboutStep = ({
 
           <div className="w-full flex flex-col gap-6 md:flex-row">
             <Button
-              label={AboutStepInfos.backButton}
+              variant="outline"
+              className="w-full"
               onClick={handleBackBtn}
-              fullWidth
-              secondary
               disabled={isLoading}
-            />
+            >
+              {AboutStepInfos.backButton}
+            </Button>
 
             <Button
-              label={AboutStepInfos.nextButton}
+              className="w-full"
               onClick={handleNextBtn}
-              fullWidth
-              primary
               disabled={!isNextAvailable || isLoading}
-            />
+            >
+              {AboutStepInfos.nextButton}
+            </Button>
           </div>
         </div>
       </div>

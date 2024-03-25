@@ -18,6 +18,7 @@ import { professorLoginInfo } from "@/constants/register/professor-register-br";
 import professorLoginSchema, {
   professorLoginType,
 } from "@/constants/schemas/professorLoginSchema";
+import { Button } from "@/components/ui/button";
 
 const RegisterLogin = () => {
   const { isModalOpen, closeModal } = useProfessorModalStore();
@@ -83,13 +84,15 @@ const RegisterLogin = () => {
               className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle"
             >
               <div className="flex justify-end mb-6">
-                <button
+                <Button
+                  variant="link"
+                  size="icon"
                   type="button"
                   className="text-green-primary"
                   onClick={handleCloseButton}
                 >
                   <BsXLg size={26} />
-                </button>
+                </Button>
               </div>
 
               <h4 className="text-2xl text-[#2C383F] font-semibold mb-9 sm:text-3xl text-left">
@@ -152,16 +155,16 @@ const RegisterLogin = () => {
                       </div>
                     </motion.div>
 
-                    <motion.button
-                      type="submit"
+                    <motion.div
                       variants={professorFormAnimation}
                       initial="initial"
                       animate="animate"
                       exit="exit"
-                      className="w-full h-11 rounded-lg flex items-center justify-center bg-green-primary text-white text-base font-semibold cursor-pointer lg:hover:brightness-90 transition-[filter]"
                     >
-                      {professorLoginInfo.loginButton}
-                    </motion.button>
+                      <Button type="submit" className="w-full">
+                        {professorLoginInfo.loginButton}
+                      </Button>
+                    </motion.div>
                   </form>
                 </div>
               </AnimatePresence>
