@@ -23,10 +23,7 @@ const DashboardPage = async () => {
       <MessagesContactsBox />
 
       {/* <MessagesChatBox isMessageOpen={isMessageOpen} handleBackBtn={handleBackBtn} /> */}
-      <MessagesChatBox
-        // requestId={params?.requestId as string}
-        requestId=""
-      />
+      <MessagesChatBox />
       <MessagesImageModal />
       <MessagesVideoModal />
     </div>
