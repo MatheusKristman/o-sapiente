@@ -13,7 +13,7 @@ export const studentResumeInfos = {
   newRequestBtn: "NOVA SOLICITAÇÃO",
   newOffersTitle: "Solicitações Pendentes",
   noOfferMessage: "Nenhuma proposta no momento",
-  seeOfferBtn: "VER PROPOSTA",
+  seeOfferBtn: "VER PROPOSTAS",
   currentLessonTitle: "Aulas em Andamento",
   seeMessageBtn: "VER MENSAGENS",
   noCurrentLessonMessage: "Nenhuma aula em andamento",

@@ -12,12 +12,12 @@ import useNewRequestStore from "@/stores/useNewRequestStore";
 import { studentResumeInfos } from "@/constants/dashboard/resume-br";
 import NewRequestModal from "@/components/dashboard/resume/NewRequestModal";
 import OffersModal from "@/components/dashboard/resume/OffersModal";
-import { RequestWithUsers } from "@/types";
+import { RequestWithUsersAndOffers } from "@/types";
 
 const DashboardPage = () => {
   const [profilePhoto, setProfilePhoto] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [request, setRequest] = useState<RequestWithUsers[]>([]);
+  const [request, setRequest] = useState<RequestWithUsersAndOffers[]>([]);
 
   const session = useSession();
 
@@ -35,6 +35,7 @@ const DashboardPage = () => {
         const requestResponse = await axios.post("/api/request/get-requests", {
           email: userResponse.data.email,
         });
+
         setRequest(requestResponse.data);
       } catch (error) {
         console.error(error);
@@ -43,6 +44,10 @@ const DashboardPage = () => {
 
     fetchData();
   }, [session?.data?.user?.email]);
+
+  useEffect(() => {
+    console.log(request);
+  }, [request]);
 
   return (
     <div className="flex-1 w-full px-6 pt-9 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:mb-12">

@@ -10,7 +10,8 @@ import {
 } from "@/constants/framer-animations/offers-modal";
 
 const OffersModal = () => {
-  const { isModalOpen, closeModal } = useOffersModalStore();
+  const { isModalOpen, closeModal, requestSelectedOffers } =
+    useOffersModalStore();
 
   function handleCloseButton() {
     closeModal();
@@ -55,10 +56,15 @@ const OffersModal = () => {
                 </h3>
 
                 <div className="w-full h-[400px] overflow-auto flex flex-col gap-y-6">
-                  <OfferItem />
-                  <OfferItem />
-                  <OfferItem />
-                  <OfferItem />
+                  {requestSelectedOffers.length > 0 ? (
+                    requestSelectedOffers.map((offer) => (
+                      <OfferItem offer={offer} key={offer.id} />
+                    ))
+                  ) : (
+                    <span className="text-lg text-center text-gray-primary/40">
+                      Nenhuma proposta no momento
+                    </span>
+                  )}
                 </div>
               </div>
             </motion.div>

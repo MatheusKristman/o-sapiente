@@ -7,7 +7,7 @@ import {
   studentResumeInfos,
   professorResumeInfos,
 } from "@/constants/dashboard/resume-br";
-import { RequestWithUsers } from "@/types";
+import { RequestWithUsersAndOffers } from "@/types";
 import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
 import useOffersModalStore from "@/stores/useOffersModalStore";
 import { Offer } from "@prisma/client";
@@ -15,7 +15,7 @@ import { Offer } from "@prisma/client";
 interface OfferBoxProps {
   type: string;
   last?: boolean;
-  request: RequestWithUsers;
+  request: RequestWithUsersAndOffers;
   offer?: Offer | null;
 }
 
@@ -29,9 +29,10 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
     setMessage,
   } = useRequestDetailsModalStore();
 
-  const { openModal: openOfferModal } = useOffersModalStore();
-
-  console.log(offer);
+  const {
+    openModal: openOfferModal,
+    setRequestSelectedOffers: setRequestSelected,
+  } = useOffersModalStore();
 
   function handleBtn() {
     if (type === "Professor") {
@@ -39,7 +40,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
       setRequestId(request.id);
       setStudentImage(request.users[0].profilePhoto);
       setStudentName(
-        `${request.users[0].firstName} ${request.users[0].lastName}`,
+        `${request.users[0].firstName} ${request.users[0].lastName}`
       );
       setSubject(request.subject);
       setMessage(request.description);
@@ -47,6 +48,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
 
     if (type === "Student") {
       openOfferModal();
+      setRequestSelected(request.offers);
     }
   }
 
@@ -83,7 +85,12 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
         </div>
 
         <div className="xl:flex xl:justify-end xl:w-5/12">
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center relative">
+            {type === "Student" && request.offers.length > 0 ? (
+              <span className="absolute -top-1 -right-1 z-10 rounded-full bg-gray-primary text-sm text-white font-semibold text-center h-6 w-6 flex items-center justify-center">
+                {request.offers.length}
+              </span>
+            ) : null}
             <Button
               primary
               fullWidth
@@ -94,8 +101,8 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
                     ? professorResumeInfos.offerSended
                     : professorResumeInfos.seeOfferBtn
                   : type === "Student"
-                    ? studentResumeInfos.seeOfferBtn
-                    : ""
+                  ? studentResumeInfos.seeOfferBtn
+                  : ""
               }
               onClick={handleBtn}
             />

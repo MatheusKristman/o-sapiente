@@ -6,12 +6,12 @@ import {
   studentResumeInfos,
 } from "@/constants/dashboard/resume-br";
 import { request } from "http";
-import { RequestWithUsers } from "@/types";
+import { RequestWithUsersAndOffers } from "@/types";
 import { Offer } from "@prisma/client";
 
 interface ResumeRequestBoxProps {
   type: string;
-  request?: RequestWithUsers[];
+  request?: RequestWithUsersAndOffers[];
   offers?: Offer[];
 }
 
@@ -20,9 +20,9 @@ const ResumeRequestBox = ({
   request,
   offers: professorOffers,
 }: ResumeRequestBoxProps) => {
-  const [offersToStudent, setOffersToStudent] = useState<RequestWithUsers[]>(
-    [],
-  );
+  const [offersToStudent, setOffersToStudent] = useState<
+    RequestWithUsersAndOffers[]
+  >([]);
 
   useEffect(() => {
     if (request) {
