@@ -1,10 +1,10 @@
-import { Check, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { Offer } from "@prisma/client";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 import { OfferWithUser } from "@/types";
-import { cn } from "@/libs/utils";
 import { offersModalInfo } from "@/constants/offersModal-br";
 import {
   Accordion,
@@ -13,19 +13,36 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import useHeaderStore from "@/stores/useHeaderStore";
 
 interface OfferItemProps {
   offer: OfferWithUser;
+  handleCloseButton: () => void;
 }
 
-const OfferItem = ({ offer }: OfferItemProps) => {
-  const [moreDetails, setMoreDetails] = useState(false);
+const OfferItem = ({ offer, handleCloseButton }: OfferItemProps) => {
+  const router = useRouter();
+  const { userId } = useHeaderStore();
 
-  function handleMoreDetails() {
-    setMoreDetails((prev: boolean) => !prev);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
+  function AcceptOffer() {
+    setSubmitting(true);
+
+    axios
+      .post("/api/conversations", {
+        otherUserId: offer.userId,
+        requestId: offer.requestId,
+      })
+      .then((res) => {
+        handleCloseButton();
+        router.push(
+          `/painel-de-controle/aluno/${userId}/mensagens/${res.data.id}`
+        );
+      })
+      .catch((error) => toast.error(error))
+      .finally(() => setSubmitting(false));
   }
-
-  console.log("offer: ", offer);
 
   return (
     <Accordion type="single" collapsible>
@@ -67,7 +84,9 @@ const OfferItem = ({ offer }: OfferItemProps) => {
               </span>
             </div>
 
-            <Button>{offersModalInfo.btn}</Button>
+            <Button onClick={AcceptOffer} disabled={submitting}>
+              {offersModalInfo.btn}
+            </Button>
           </div>
         </AccordionContent>
       </AccordionItem>

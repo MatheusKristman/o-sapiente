@@ -7,38 +7,14 @@ export async function POST(request: Request) {
   try {
     const currentUser = await getCurrentUser();
     const body = await request.json();
-    const { userId, requestId, members } = body;
+    const { otherUserId, requestId } = body;
 
     if (!currentUser?.id || !currentUser?.email) {
       return new Response("Não autorizado", { status: 400 });
     }
 
-    if (!members || members.length < 2) {
-      return new Response("Dados inválidos", { status: 400 });
-    }
-
-    const existingConversations = await prisma.conversation.findMany({
-      where: {
-        requestId,
-        OR: [
-          {
-            userIds: {
-              equals: [currentUser.id, userId],
-            },
-          },
-          {
-            userIds: {
-              equals: [userId, currentUser.id],
-            },
-          },
-        ],
-      },
-    });
-
-    const singleConversation = existingConversations[0];
-
-    if (singleConversation) {
-      return Response.json(singleConversation);
+    if (!otherUserId || !requestId) {
+      return new Response("Dados inválidos", { status: 404 });
     }
 
     const newConversation = await prisma.conversation.create({
@@ -50,7 +26,7 @@ export async function POST(request: Request) {
               id: currentUser.id,
             },
             {
-              id: userId,
+              id: otherUserId,
             },
           ],
         },
@@ -60,13 +36,28 @@ export async function POST(request: Request) {
       },
     });
 
+    if (!newConversation) {
+      return new Response("Ocorreu um erro na criação da conversa", {
+        status: 401,
+      });
+    }
+
+    await prisma.request.update({
+      where: {
+        id: requestId,
+      },
+      data: {
+        isOfferAccepted: true,
+      },
+    });
+
     newConversation.users.map((user) => {
       if (user.email) {
         pusherServer.trigger(user.email, "conversation:new", newConversation);
       }
     });
 
-    return Response.json(newConversation);
+    return Response.json({ id: newConversation.id });
   } catch (error) {
     console.log("[ERROR_CONVERSATION]", error);
 

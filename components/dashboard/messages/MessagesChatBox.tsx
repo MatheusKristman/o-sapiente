@@ -2,46 +2,28 @@
 
 import { ChevronLeft, MoreHorizontal, Plus, XCircleIcon } from "lucide-react";
 import Image from "next/image";
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-  useRef,
-} from "react";
+import { ChangeEvent, useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/libs/utils";
 import Body from "./Body";
-// TODO: verificar tipagem quando realizar a logica daqui
-import { RequestWithUsersAndOffers } from "@/types";
 
-interface MessagesChatBoxProps {
-  handleBackBtn: () => void;
-  requestId: string;
-  request: RequestWithUsersAndOffers;
-  setIsImageModalOpen: Dispatch<SetStateAction<boolean>>;
-  setIsVideoModalOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-const MessagesChatBox = ({
-  handleBackBtn,
-  requestId,
-  request,
-  setIsImageModalOpen,
-  setIsVideoModalOpen,
-}: MessagesChatBoxProps) => {
+const MessagesChatBox = () => {
   const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
   const [content, setContent] = useState<string>("");
   const [isModalNavOpen, setIsModalNavOpen] = useState<boolean>(false);
   const [isModalFooterOpen, setIsModalFooterOpen] = useState<boolean>(false);
   const session = useSession();
   const params = useParams();
+  const router = useRouter();
   const messageInputRef = useRef<HTMLInputElement | null>(null);
+
+  function handleBackBtn() {
+    router.push(`/painel-de-controle/aluno/${params?.id}/mensagens`);
+  }
 
   useEffect(() => {
     if (params?.requestId) {
@@ -65,15 +47,15 @@ const MessagesChatBox = ({
     setContent(event.target.value);
   };
 
-  const handleImageModalOpen = () => {
-    setIsModalFooterOpen(false);
-    setIsImageModalOpen(true);
-  };
-
-  const handleVideoModalOpen = () => {
-    setIsModalFooterOpen(false);
-    setIsVideoModalOpen(true);
-  };
+  // const handleImageModalOpen = () => {
+  //   setIsModalFooterOpen(false);
+  //   setIsImageModalOpen(true);
+  // };
+  //
+  // const handleVideoModalOpen = () => {
+  //   setIsModalFooterOpen(false);
+  //   setIsVideoModalOpen(true);
+  // };
 
   useEffect(() => {
     function handleResize() {
@@ -89,26 +71,26 @@ const MessagesChatBox = ({
   }, []);
 
   const handleSubmitTest = () => {
-    if (content.length > 0) {
-      axios
-        .post(`/api/socket/messages?requestId=${requestId}`, {
-          content,
-          email: session.data?.user?.email,
-        })
-        .then((res) => console.log(res.data))
-        .catch((error) => console.error(error));
-    } else {
-      messageInputRef.current?.focus();
-
-      return;
-    }
+    // if (content.length > 0) {
+    //   axios
+    //     .post(`/api/socket/messages?requestId=${requestId}`, {
+    //       content,
+    //       email: session.data?.user?.email,
+    //     })
+    //     .then((res) => console.log(res.data))
+    //     .catch((error) => console.error(error));
+    // } else {
+    //   messageInputRef.current?.focus();
+    //
+    //   return;
+    // }
   };
 
   return (
     <div
       className={cn(
         "flex-1 flex flex-col lg:w-full lg:h-full lg:flex",
-        isMessageOpen ? "flex" : "hidden lg:flex"
+        isMessageOpen ? "flex" : "hidden lg:flex",
       )}
     >
       <div className=" w-full bg-[#2C383F] h-fit px-6 py-4 sm:px-16">
@@ -185,7 +167,7 @@ const MessagesChatBox = ({
         <div className="flex flex-col-reverse justify-start w-[233px] h-full">
           <div className="flex flex-col gap-4 items-center h-fit bg-white rounded-r-lg rounded-tl-lg p-6">
             <Button
-              onClick={handleImageModalOpen}
+              onClick={() => {}}
               className="gap-2.5 w-full flex justify-start items-center"
             >
               <div className="bg-galleryIcon bg-no-repeat bg-contain w-7 h-7" />
@@ -193,7 +175,7 @@ const MessagesChatBox = ({
             </Button>
 
             <Button
-              onClick={handleVideoModalOpen}
+              onClick={() => {}}
               className="gap-2.5 w-full flex justify-start items-center"
             >
               <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />
@@ -214,14 +196,14 @@ const MessagesChatBox = ({
             </Button>
 
             <Button
-              onClick={handleImageModalOpen}
+              onClick={() => {}}
               className="hidden w-12 md:flex justify-center items-center"
             >
               <div className="bg-galleryIcon bg-no-repeat bg-contain w-7 h-7" />
             </Button>
 
             <Button
-              onClick={handleVideoModalOpen}
+              onClick={() => {}}
               className="hidden w-12 md:flex justify-center items-center"
             >
               <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />

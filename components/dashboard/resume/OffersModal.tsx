@@ -61,7 +61,11 @@ const OffersModal = () => {
                 <div className="w-full h-[400px] overflow-auto flex flex-col gap-y-6 overflow-x-hidden">
                   {requestSelectedOffers.length > 0 ? (
                     requestSelectedOffers.map((offer) => (
-                      <OfferItem offer={offer} key={offer.id} />
+                      <OfferItem
+                        offer={offer}
+                        key={offer.id}
+                        handleCloseButton={handleCloseButton}
+                      />
                     ))
                   ) : (
                     <span className="text-lg text-center text-gray-primary/40">

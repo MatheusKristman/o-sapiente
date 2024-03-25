@@ -1,3 +1,5 @@
+"use client";
+
 import { Search } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/libs/utils";
@@ -24,9 +26,7 @@ const MessagesContactsBox = () => {
 
   function handleNavigation() {
     router.push(
-      `/painel-de-controle/professor/${
-        params?.id
-      }/mensagens/${"656e2030bb73a681424b52e1"}`
+      `/painel-de-controle/professor/${params?.id}/mensagens/${"656e2030bb73a681424b52e1"}`,
     );
   }
 
@@ -34,7 +34,7 @@ const MessagesContactsBox = () => {
     <div
       className={cn(
         "flex-1 w-full flex flex-col bg-white lg:max-w-md lg:min-w-[448px] pt-9",
-        isMessageOpen ? "hidden lg:flex" : "flex"
+        isMessageOpen ? "hidden lg:flex" : "flex",
       )}
     >
       <div className="px-9 w-full">

@@ -14,15 +14,7 @@ import {
   messageImageOverlayAnimation,
 } from "@/constants/framer-animations/message-image-modal";
 
-interface MessagesImageModalProps {
-  isImageModalOpen: boolean;
-  setIsImageModalOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-const MessagesImageModal = ({
-  isImageModalOpen,
-  setIsImageModalOpen,
-}: MessagesImageModalProps) => {
+const MessagesImageModal = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
   const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
@@ -30,7 +22,7 @@ const MessagesImageModal = ({
   const fileInput = useRef<HTMLInputElement | null>(null);
 
   function handleCloseButton() {
-    setIsImageModalOpen(false);
+    // setIsImageModalOpen(false);
   }
 
   function handleImage(event: React.ChangeEvent<HTMLInputElement>) {
@@ -72,7 +64,8 @@ const MessagesImageModal = ({
   return (
     <>
       <AnimatePresence>
-        {isImageModalOpen && (
+        {/* TODO: adicionar estado para lidar com modal */}
+        {false && (
           <motion.div
             key="modal"
             initial="initial"

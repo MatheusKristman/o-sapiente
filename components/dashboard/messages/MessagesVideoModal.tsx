@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { Trash2 } from "lucide-react";
 import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
-import { Dispatch, SetStateAction, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import Video from "next-video";
 
 import { videoModalInfo } from "@/constants/dashboard/message-br";
@@ -14,15 +14,7 @@ import {
 } from "@/constants/framer-animations/message-video-modal";
 import { Button } from "@/components/ui/button";
 
-interface MessagesVideoModalProps {
-  isVideoModalOpen: boolean;
-  setIsVideoModalOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-const MessagesVideoModal = ({
-  isVideoModalOpen,
-  setIsVideoModalOpen,
-}: MessagesVideoModalProps) => {
+const MessagesVideoModal = () => {
   const [video, setVideo] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [isVideoLoading, setIsVideoLoading] = useState<boolean>(false);
@@ -30,7 +22,7 @@ const MessagesVideoModal = ({
   const fileInput = useRef<HTMLInputElement | null>(null);
 
   function handleCloseButton() {
-    setIsVideoModalOpen(false);
+    // setIsVideoModalOpen(false);
   }
 
   function handleVideo(event: React.ChangeEvent<HTMLInputElement>) {
@@ -80,7 +72,8 @@ const MessagesVideoModal = ({
   return (
     <>
       <AnimatePresence>
-        {isVideoModalOpen && (
+        {/* TODO: adicionar estado para lidar com o modal */}
+        {false && (
           <motion.div
             key="modal"
             initial="initial"

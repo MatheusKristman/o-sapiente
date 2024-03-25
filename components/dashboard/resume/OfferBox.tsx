@@ -86,7 +86,9 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
 
         <div className="xl:flex xl:justify-end xl:w-5/12">
           <div className="flex items-center justify-center relative">
-            {type === "Student" && request.offers.length > 0 ? (
+            {type === "Student" &&
+            request.offers.length > 0 &&
+            !request.isOfferAccepted ? (
               <span className="absolute -top-1 -right-1 z-10 rounded-full bg-gray-primary text-sm text-white font-semibold text-center h-6 w-6 flex items-center justify-center">
                 {request.offers.length}
               </span>
@@ -94,7 +96,9 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
 
             <Button
               className="w-full"
-              disabled={type === "Professor" && !!offer}
+              disabled={
+                (type === "Professor" && !!offer) || request.isOfferAccepted
+              }
               onClick={handleBtn}
             >
               {type === "Professor"
@@ -102,7 +106,9 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
                   ? professorResumeInfos.offerSended
                   : professorResumeInfos.seeOfferBtn
                 : type === "Student"
-                ? studentResumeInfos.seeOfferBtn
+                ? request.isOfferAccepted
+                  ? studentResumeInfos.offerAccepted
+                  : studentResumeInfos.seeOfferBtn
                 : ""}
             </Button>
           </div>

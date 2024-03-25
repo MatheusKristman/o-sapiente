@@ -52,10 +52,6 @@ const ResumePage = () => {
     fetchData();
   }, [session?.data?.user?.email]);
 
-  useEffect(() => {
-    console.log("offers: ", offers);
-  }, [offers]);
-
   return (
     <>
       <div className="flex-1 w-full px-6 pt-9 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:mb-12">

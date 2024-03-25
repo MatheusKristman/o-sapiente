@@ -61,10 +61,12 @@ model User {
 }
 
 model Request {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  subject     String
-  description String
-  isConcluded Boolean @default(false)
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  subject           String
+  description       String
+  isConcluded       Boolean @default(false)
+  isOfferAccepted   Boolean @default(false)
+  isRequestAccepted Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -76,9 +78,8 @@ model Request {
 }
 
 model Offer {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  message    String
-  isAccepted Boolean @default(false)
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  message String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -110,7 +111,7 @@ model Plan {
   cost         String
   stripePlanId String
 
-  users User[] 
+  users User[]
 }
 
 model Subject {

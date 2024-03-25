@@ -45,10 +45,6 @@ const DashboardPage = () => {
     fetchData();
   }, [session?.data?.user?.email]);
 
-  useEffect(() => {
-    console.log(request);
-  }, [request]);
-
   return (
     <div className="flex-1 w-full px-6 pt-9 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:mb-12">
       <div className="w-full flex flex-col-reverse gap-9 md:flex-col lg:w-4/12 xl:w-6/12">
