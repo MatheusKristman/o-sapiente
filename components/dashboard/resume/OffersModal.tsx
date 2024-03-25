@@ -55,7 +55,7 @@ const OffersModal = () => {
                   {offersModalInfo.title}
                 </h3>
 
-                <div className="w-full h-[400px] overflow-auto flex flex-col gap-y-6">
+                <div className="w-full h-[400px] overflow-auto flex flex-col gap-y-6 overflow-x-hidden">
                   {requestSelectedOffers.length > 0 ? (
                     requestSelectedOffers.map((offer) => (
                       <OfferItem offer={offer} key={offer.id} />
