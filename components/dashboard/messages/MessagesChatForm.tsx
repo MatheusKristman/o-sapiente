@@ -1,0 +1,151 @@
+import { Plus, XCircleIcon } from "lucide-react";
+import { ChangeEvent, useState } from "react";
+import axios from "axios";
+import { FieldValues, useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
+
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import useConversation from "@/hooks/useConversation";
+import useConversationStore from "@/stores/useConversationStore";
+
+interface Props {
+  conversationParams?: { conversationId: string };
+}
+
+const MessagesChatForm = ({ conversationParams }: Props) => {
+  const { conversationId } = useConversation(conversationParams);
+  const { status } = useSession();
+  const { openImageModal, openVideoModal } = useConversationStore();
+
+  const [isSending, setIsSending] = useState<boolean>(false);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    watch,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      message: "",
+    },
+  });
+
+  const message = watch("message");
+
+  function onSubmit(values: FieldValues) {
+    console.log(values);
+    // setIsSending(true);
+    setValue("message", "", { shouldValidate: true });
+
+    // TODO: criar rota para enviar mensagem
+    // axios
+    //   .post("/api/messages", {
+    //     ...data,
+    //     conversationId,
+    //   })
+    //   .finally(() => {
+    //     setIsSendingMessage(false);
+    //   });
+  }
+
+  if (status === "loading") {
+    return (
+      <div>
+        <div>Carregando...</div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {false && (
+        <div className="flex flex-col-reverse justify-start w-[233px] h-full">
+          <div className="flex flex-col gap-4 items-center h-fit bg-white rounded-r-lg rounded-tl-lg p-6">
+            <Button
+              onClick={openImageModal}
+              className="gap-2.5 w-full flex justify-start items-center"
+            >
+              <div className="bg-galleryIcon bg-no-repeat bg-contain w-7 h-7" />
+              Enviar Imagem
+            </Button>
+
+            <Button
+              onClick={openVideoModal}
+              className="gap-2.5 w-full flex justify-start items-center"
+            >
+              <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />
+              Enviar Video
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <div className="w-full flex bg-[#2C383F] mt-auto">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full flex flex-row px-6 py-4 gap-8 sm:px-16"
+        >
+          <div className="flex flex-row items-center justify-start gap-3.5">
+            <Button
+              type="button"
+              onClick={() => {}}
+              className="flex w-12 px-0 md:hidden justify-center items-center"
+            >
+              {false ? <XCircleIcon /> : <Plus />}
+            </Button>
+
+            <Button
+              type="button"
+              onClick={openImageModal}
+              className="hidden w-12 px-0 md:flex justify-center items-center"
+            >
+              <div className="bg-galleryIcon bg-no-repeat bg-contain w-7 h-7" />
+            </Button>
+
+            <Button
+              type="button"
+              onClick={openVideoModal}
+              className="hidden w-12 px-0 md:flex justify-center items-center"
+            >
+              <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />
+            </Button>
+          </div>
+
+          <div className="w-full flex items-center">
+            <Input
+              {...register("message")}
+              disabled={isSending}
+              // ref={messageInputRef}
+              type="text"
+              name="message"
+              placeholder="Digite a sua mensagem"
+              className="w-full input-message"
+            />
+          </div>
+
+          <div className="flex flex-row items-center justify-start">
+            {message.length > 0 ? (
+              <button
+                type="submit"
+                className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold"
+              >
+                <div className="bg-sendIcon w-7 h-7 text-white bg-no-repeat bg-contain" />
+                <span className="hidden md:block">Enviar</span>
+              </button>
+            ) : (
+              <button className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-medium">
+                <div className="bg-micOnIcon w-7 h-7 text-white bg-no-repeat bg-contain" />
+                <span className="hidden md:block">Gravar</span>
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+    </>
+  );
+};
+
+export default MessagesChatForm;

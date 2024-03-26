@@ -1,11 +1,12 @@
 "use client";
 
-import toast from "react-hot-toast";
-import { Trash2 } from "lucide-react";
 import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState, useRef } from "react";
-import Video from "next-video";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import ReactPlayer from "react-player/youtube";
 
 import { videoModalInfo } from "@/constants/dashboard/message-br";
 import {
@@ -13,67 +14,50 @@ import {
   messageVideoOverlayAnimation,
 } from "@/constants/framer-animations/message-video-modal";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import useConversationStore from "@/stores/useConversationStore";
+import { XCircle } from "lucide-react";
+import { cn } from "@/libs/utils";
+
+const formSchema = z.object({
+  videoUrl: z
+    .string()
+    .url({ message: "Link inválido, verifique e tente novamente" }),
+});
 
 const MessagesVideoModal = () => {
-  const [video, setVideo] = useState<File | null>(null);
-  const [videoUrl, setVideoUrl] = useState<string>("");
-  const [isVideoLoading, setIsVideoLoading] = useState<boolean>(false);
+  const { isVideoModalOpen, closeVideoModal } = useConversationStore();
+  const form = useForm<z.infer<typeof formSchema>>({
+    //@ts-ignore ocorrendo erro que não é pra acontecer
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      videoUrl: "",
+    },
+  });
+  const videoUrl = form.watch("videoUrl");
 
-  const fileInput = useRef<HTMLInputElement | null>(null);
+  const [validVideoUrl, setValidVideoUrl] = useState<string>("");
 
-  function handleCloseButton() {
-    // setIsVideoModalOpen(false);
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    setValidVideoUrl(values.videoUrl);
   }
 
-  function handleVideo(event: React.ChangeEvent<HTMLInputElement>) {
-    setIsVideoLoading(true);
-
-    if (!event.target.files) {
-      setIsVideoLoading(false);
-      return;
-    }
-
-    const file = event.target.files[0];
-
-    if (!file) {
-      setIsVideoLoading(false);
-      return;
-    }
-
-    const maxSizeInBytes = 10 * 1024 * 1024;
-
-    if (file.size > maxSizeInBytes) {
-      toast.error("Tamanho do arquivo excede o limite permitido (10MB )");
-      setIsVideoLoading(false);
-      return;
-    }
-
-    if (file && file.type.startsWith("video/")) {
-      setVideoUrl(URL.createObjectURL(file));
-      setVideo(file);
-      setIsVideoLoading(false);
-      return;
-    }
-
-    toast.error("Formado do video é inválido");
-
-    setIsVideoLoading(false);
-  }
-
-  function handleDeleteButton() {
-    if (fileInput.current) {
-      fileInput.current.value = "";
-    }
-
-    setVideo(null);
-    setVideoUrl("");
+  function clearUrl() {
+    setValidVideoUrl("");
+    form.reset();
   }
 
   return (
     <>
       <AnimatePresence>
-        {/* TODO: adicionar estado para lidar com o modal */}
-        {false && (
+        {isVideoModalOpen && (
           <motion.div
             key="modal"
             initial="initial"
@@ -96,7 +80,7 @@ const MessagesVideoModal = () => {
                   size="icon"
                   type="button"
                   className="text-green-primary"
-                  onClick={handleCloseButton}
+                  onClick={closeVideoModal}
                 >
                   <BsXLg size={26} />
                 </Button>
@@ -107,45 +91,67 @@ const MessagesVideoModal = () => {
                   {videoModalInfo.title}
                 </h4>
 
-                {videoUrl && video ? (
-                  <div className="w-full aspect-video rounded-lg relative overflow-hidden shadow-md shadow-[rgba(0,0,0,0.25)] mx-auto mb-4">
-                    <Video src={videoUrl} />
-                  </div>
-                ) : (
-                  <label
-                    htmlFor="messageVideo"
-                    className="bg-[#C8D6DF] rounded-2xl border-2 border-dashed border-gray-primary/50 w-full p-6 flex flex-col items-center justify-center gap-y-4 mb-4 lg:cursor-pointer"
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="w-full flex flex-col gap-4"
                   >
-                    <div className="bg-videoFile bg-no-repeat bg-contain w-10 h-10 opacity-60" />
-                    <span className="text-base text-gray-primary font-medium max-w-[240px] opacity-60">
-                      {videoModalInfo.inputPlaceholder}
-                    </span>
-                  </label>
-                )}
+                    <FormField
+                      control={form.control}
+                      name="videoUrl"
+                      render={({ field }) => (
+                        <FormItem className="relative">
+                          <FormControl>
+                            <Input
+                              {...field}
+                              className={cn("w-full input", {
+                                "!pr-10": !!validVideoUrl,
+                              })}
+                              placeholder="Insira o link do video"
+                            />
+                          </FormControl>
 
-                <input
-                  ref={fileInput}
-                  type="file"
-                  id="messageVideo"
-                  name="messageVideo"
-                  className="hidden"
-                  disabled={isVideoLoading}
-                  onChange={(event) => handleVideo(event)}
-                />
+                          {!!validVideoUrl ? (
+                            <Button
+                              variant="link"
+                              size="icon"
+                              onClick={clearUrl}
+                              className={cn(
+                                "!mt-0 absolute top-1/2 -translate-y-1/2 right-2 w-6 h-6 flex items-center justify-center",
+                              )}
+                            >
+                              <XCircle className="text-gray-primary" />
+                            </Button>
+                          ) : null}
 
-                {videoUrl && video && (
-                  <div className="w-full flex items-center justify-center mb-6">
+                          <FormMessage className="text-left" />
+                        </FormItem>
+                      )}
+                    />
+
+                    {!!validVideoUrl && (
+                      <div className="w-full aspect-video relative">
+                        <ReactPlayer
+                          url={validVideoUrl}
+                          width="100%"
+                          height="100%"
+                          volume={0.5}
+                          controls
+                        />
+                      </div>
+                    )}
+
                     <Button
-                      onClick={handleDeleteButton}
-                      className="flex items-center justify-center gap-2"
+                      type="submit"
+                      disabled={!videoUrl}
+                      className="w-full"
                     >
-                      <Trash2 size={20} />
-                      {videoModalInfo.removeBtn}
+                      {validVideoUrl
+                        ? videoModalInfo.sendBtn
+                        : videoModalInfo.uploadVideoBtn}
                     </Button>
-                  </div>
-                )}
-
-                <Button className="w-full">{videoModalInfo.sendBtn}</Button>
+                  </form>
+                </Form>
               </div>
             </motion.div>
           </motion.div>

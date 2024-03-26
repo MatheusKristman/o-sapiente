@@ -126,7 +126,7 @@ model Subject {
 
 model Message {
   id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  content String?
+  content String
   fileUrl String?
 
   createdAt DateTime @default(now())

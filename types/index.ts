@@ -2,8 +2,14 @@ import { DefaultUser } from "next-auth";
 import { Server as NetServer, Socket } from "net";
 import { NextApiResponse } from "next";
 import { Server as SocketIOServer } from "socket.io";
-import { AccountRole, Offer, Request, User } from "@prisma/client";
-import { Message } from "postcss";
+import {
+  AccountRole,
+  Conversation,
+  Offer,
+  Request,
+  User,
+  Message,
+} from "@prisma/client";
 
 export type StepType = number;
 
@@ -71,4 +77,15 @@ export type UserFromRequest = {
 
 export type OfferWithUser = Offer & {
   user: User;
+};
+
+export type FullMessageType = Message & {
+  sender: User;
+  seen: User[];
+};
+
+export type FullConversationType = Conversation & {
+  users: User[];
+  messages: FullMessageType[];
+  request: Request;
 };

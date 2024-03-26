@@ -13,17 +13,16 @@ import {
   messageImageModalAnimation,
   messageImageOverlayAnimation,
 } from "@/constants/framer-animations/message-image-modal";
+import useConversationStore from "@/stores/useConversationStore";
 
 const MessagesImageModal = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
   const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
 
-  const fileInput = useRef<HTMLInputElement | null>(null);
+  const { isImageModalOpen, closeImageModal } = useConversationStore();
 
-  function handleCloseButton() {
-    // setIsImageModalOpen(false);
-  }
+  const fileInput = useRef<HTMLInputElement | null>(null);
 
   function handleImage(event: React.ChangeEvent<HTMLInputElement>) {
     setIsImageLoading(true);
@@ -64,8 +63,7 @@ const MessagesImageModal = () => {
   return (
     <>
       <AnimatePresence>
-        {/* TODO: adicionar estado para lidar com modal */}
-        {false && (
+        {isImageModalOpen && (
           <motion.div
             key="modal"
             initial="initial"
@@ -88,7 +86,7 @@ const MessagesImageModal = () => {
                   size="icon"
                   type="button"
                   className="text-green-primary"
-                  onClick={handleCloseButton}
+                  onClick={closeImageModal}
                 >
                   <BsXLg size={26} />
                 </Button>
