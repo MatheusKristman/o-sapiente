@@ -1,17 +1,15 @@
 "use client";
 
-import { Plus, XCircleIcon } from "lucide-react";
-import { ChangeEvent, useEffect, useState, useRef } from "react";
-import { useSession } from "next-auth/react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/libs/utils";
 import MessagesChatBody from "./MessagesChatBody";
 import { Conversation as ConversationType, User } from "@prisma/client";
 import { FullMessageType } from "@/types";
 import MessagesChatHeader from "./MessagesChatHeader";
 import MessagesChatForm from "./MessagesChatForm";
+import useConversation from "@/hooks/useConversation";
+import useConversationStore from "@/stores/useConversationStore";
 
 interface Props {
   conversation: ConversationType & {
@@ -19,54 +17,38 @@ interface Props {
   };
   initialMessages: FullMessageType[];
   conversationParams?: { conversationId: string };
+  userType: "aluno" | "professor";
 }
 
 const MessagesChatBox = ({
   conversation,
   initialMessages,
   conversationParams,
+  userType,
 }: Props) => {
-  const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
+  const { isOpen } = useConversation(conversationParams);
+  const { openImageModal, openVideoModal } = useConversationStore();
 
-  const [isModalNavOpen, setIsModalNavOpen] = useState<boolean>(false);
   const [isModalFooterOpen, setIsModalFooterOpen] = useState<boolean>(false);
+  const [isModalNavOpen, setIsModalNavOpen] = useState<boolean>(false);
 
-  const session = useSession();
-  const params = useParams();
-  const router = useRouter();
-  const messageInputRef = useRef<HTMLInputElement | null>(null);
-
-  function handleBackBtn() {
-    router.push(`/painel-de-controle/aluno/${params?.id}/mensagens`);
+  function handleFooterModal() {
+    setIsModalFooterOpen((prev: boolean) => !prev);
   }
 
-  useEffect(() => {
-    if (params?.requestId) {
-      setIsMessageOpen(true);
-    }
+  function handleNavModal() {
+    setIsModalNavOpen((prev: boolean) => !prev);
+  }
 
-    return () => {
-      setIsMessageOpen(false);
-    };
-  }, [params?.requestId]);
+  function mobileOpenImageModal() {
+    setIsModalFooterOpen(false);
+    openImageModal();
+  }
 
-  const toggleModalNav = () => {
-    setIsModalNavOpen(!isModalNavOpen);
-  };
-
-  const toggleModalFooter = () => {
-    setIsModalFooterOpen(!isModalFooterOpen);
-  };
-
-  // const handleImageModalOpen = () => {
-  //   setIsModalFooterOpen(false);
-  //   setIsImageModalOpen(true);
-  // };
-  //
-  // const handleVideoModalOpen = () => {
-  //   setIsModalFooterOpen(false);
-  //   setIsVideoModalOpen(true);
-  // };
+  function mobileOpenVideoModal() {
+    setIsModalFooterOpen(false);
+    openVideoModal();
+  }
 
   useEffect(() => {
     function handleResize() {
@@ -75,6 +57,7 @@ const MessagesChatBox = ({
         setIsModalFooterOpen(false);
       }
     }
+
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -85,18 +68,29 @@ const MessagesChatBox = ({
     <>
       <div
         className={cn(
-          "flex-1 flex flex-col lg:w-full lg:h-full lg:flex",
-          isMessageOpen ? "flex" : "hidden lg:flex",
+          "relative flex-1 flex flex-col h-full lg:w-full lg:h-full lg:flex",
+          isOpen ? "flex" : "hidden lg:flex",
         )}
       >
-        <MessagesChatHeader conversation={conversation} />
+        <MessagesChatHeader
+          conversation={conversation}
+          handleNavModal={handleNavModal}
+          isModalNavOpen={isModalNavOpen}
+          userType={userType}
+        />
 
         <MessagesChatBody
           initialMessages={initialMessages}
           conversationParams={conversationParams}
         />
 
-        <MessagesChatForm conversationParams={conversationParams} />
+        <MessagesChatForm
+          conversationParams={conversationParams}
+          handleFooterModal={handleFooterModal}
+          mobileOpenImageModal={mobileOpenImageModal}
+          mobileOpenVideoModal={mobileOpenVideoModal}
+          isModalFooterOpen={isModalFooterOpen}
+        />
       </div>
     </>
   );

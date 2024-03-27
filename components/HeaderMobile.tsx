@@ -6,6 +6,7 @@ import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +17,6 @@ import {
 import { mobileMenuAnimation } from "@/constants/framer-animations/header";
 import useHeaderStore from "@/stores/useHeaderStore";
 import useStudentModalStore from "@/stores/useStudentModalStore";
-import { LogOut } from "lucide-react";
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 
@@ -64,7 +64,7 @@ const HeaderMobile = () => {
 
     setTimeout(() => {
       router.push(
-        `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`
+        `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`,
       );
     }, 500);
   }
@@ -82,7 +82,7 @@ const HeaderMobile = () => {
 
     setTimeout(() => {
       router.push(
-        `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`
+        `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`,
       );
     }, 500);
   }
@@ -130,13 +130,14 @@ const HeaderMobile = () => {
 
             <div className="lg:hidden flex flex-col items-end justify-center gap-y-4 w-full">
               {session.status === "authenticated" ? (
-                accountType === "Student" ? (
+                accountType === "STUDENT" ? (
                   <>
                     <Button
                       variant="link"
+                      size="sm"
                       type="button"
                       onClick={handleLogOut}
-                      className="flex gap-2 items-center justify-center text-white text-lg"
+                      className="px-0 flex gap-2 items-center justify-center text-white text-lg"
                     >
                       <LogOut className="h-6 w-6" />
                       Sair
@@ -158,14 +159,14 @@ const HeaderMobile = () => {
                       Área do Aluno
                     </Button>
                   </>
-                ) : accountType === "Professor" ? (
+                ) : accountType === "PROFESSOR" ? (
                   <>
                     <Button
                       variant="link"
-                      size="icon"
+                      size="sm"
                       type="button"
                       onClick={handleLogOut}
-                      className="flex gap-2 items-center justify-center text-white text-lg"
+                      className="px-0 flex gap-2 items-center justify-center text-white text-lg"
                     >
                       <LogOut className="h-6 w-6" />
                       Sair

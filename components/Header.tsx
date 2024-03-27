@@ -77,7 +77,7 @@ const Header = () => {
   function handleDashboardStudentBtn() {
     if (session.status === "authenticated" && userId) {
       router.push(
-        `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`
+        `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`,
       );
     }
   }
@@ -85,7 +85,7 @@ const Header = () => {
   function handleDashboardProfessorBtn() {
     if (session.status === "authenticated" && userId) {
       router.push(
-        `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`
+        `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`,
       );
     }
   }
@@ -110,13 +110,15 @@ const Header = () => {
       </Link>
 
       <Button
+        variant="link"
+        size="icon"
         type="button"
         onClick={openMobileMenu}
         className={cn(
           "flex lg:hidden items-center justify-center cursor-pointer",
           {
             "opacity-0 pointer-events-none": isMobileMenuOpen,
-          }
+          },
         )}
       >
         <IoIosMenu size={35} className="text-green-primary" />

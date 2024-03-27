@@ -63,7 +63,7 @@ const MessagesContacts = ({
           }
 
           return currentConversation;
-        })
+        }),
       );
     };
 
@@ -75,7 +75,7 @@ const MessagesContacts = ({
     <div
       className={cn(
         "flex-1 w-full flex flex-col bg-white lg:max-w-md lg:min-w-[448px] pt-9",
-        isOpen ? "hidden lg:flex" : "flex"
+        isOpen ? "hidden lg:flex" : "flex",
       )}
     >
       <div className="px-9 w-full">

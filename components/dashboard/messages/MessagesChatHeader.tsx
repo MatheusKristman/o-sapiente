@@ -1,21 +1,38 @@
 import { Button } from "@/components/ui/button";
 import useActiveStore from "@/hooks/useActiveStore";
 import useOtherUser from "@/hooks/useOtherUser";
+import useHeaderStore from "@/stores/useHeaderStore";
 import { Conversation, User } from "@prisma/client";
 import { ChevronLeft, MoreHorizontal, XCircleIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface Props {
   conversation: Conversation & {
     users: User[];
   };
+  handleNavModal: () => void;
+  isModalNavOpen: boolean;
+  userType: "aluno" | "professor";
 }
 
-const MessagesChatHeader = ({ conversation }: Props) => {
+const MessagesChatHeader = ({
+  conversation,
+  handleNavModal,
+  isModalNavOpen,
+  userType,
+}: Props) => {
   const otherUser = useOtherUser(conversation);
+  const { userId } = useHeaderStore();
+  const router = useRouter();
 
   const { members } = useActiveStore();
   const isActive = members.indexOf(otherUser?.email!) !== -1;
+
+  function handleBackButton() {
+    router.push(`/painel-de-controle/${userType}/${userId}/mensagens`);
+  }
 
   if (!otherUser) {
     return (
@@ -33,7 +50,7 @@ const MessagesChatHeader = ({ conversation }: Props) => {
             <Button
               variant="link"
               size="icon"
-              onClick={() => {}}
+              onClick={handleBackButton}
               className="text-green-primary block lg:hidden"
             >
               <ChevronLeft size={35} />
@@ -69,11 +86,11 @@ const MessagesChatHeader = ({ conversation }: Props) => {
             <Button
               variant="link"
               size="icon"
-              onClick={() => {}}
+              onClick={handleNavModal}
               className="text-green-primary flex items-center ml-auto md:hidden"
             >
-              {false ? (
-                <XCircleIcon onClick={() => {}} size={35} strokeWidth={2.7} />
+              {isModalNavOpen ? (
+                <XCircleIcon onClick={() => {}} size={35} strokeWidth={2} />
               ) : (
                 <MoreHorizontal
                   onClick={() => {}}
@@ -90,11 +107,11 @@ const MessagesChatHeader = ({ conversation }: Props) => {
         </div>
       </div>
 
-      {false && (
-        <div className="flex w-full">
-          <div className="flex w-full justify-end  mt-1">
-            <div className="flex w-full justify-end ">
-              <div className="flex justify-center items-center w-72 h-24 bg-white rounded-l-lg rounded-br-lg">
+      {isModalNavOpen && (
+        <div className="absolute top-[80px] right-0 z-10 flex w-full">
+          <div className="flex w-full justify-end">
+            <div className="flex w-full justify-end">
+              <div className="flex px-6 justify-center items-center w-72 h-24 bg-white rounded-l-lg rounded-br-lg shadow-lg">
                 <Button className="w-full">Confirmar Finalização</Button>
               </div>
             </div>

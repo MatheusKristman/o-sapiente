@@ -1,5 +1,5 @@
 import { Plus, XCircleIcon } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,27 +15,32 @@ import MessagesVideoModal from "./MessagesVideoModal";
 
 interface Props {
   conversationParams?: { conversationId: string };
+  handleFooterModal: () => void;
+  mobileOpenImageModal: () => void;
+  mobileOpenVideoModal: () => void;
+  isModalFooterOpen: boolean;
 }
 
 const formSchema = z.object({
   message: z.string().min(1),
 });
 
-const MessagesChatForm = ({ conversationParams }: Props) => {
+const MessagesChatForm = ({
+  conversationParams,
+  handleFooterModal,
+  mobileOpenImageModal,
+  mobileOpenVideoModal,
+  isModalFooterOpen,
+}: Props) => {
   const { conversationId } = useConversation(conversationParams);
   const { status } = useSession();
   const { openImageModal, openVideoModal } = useConversationStore();
 
   const [isSending, setIsSending] = useState<boolean>(false);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useForm<z.infer<typeof formSchema>>({
+  const { register, handleSubmit, setValue } = useForm<
+    z.infer<typeof formSchema>
+  >({
     // @ts-ignore
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,10 +48,7 @@ const MessagesChatForm = ({ conversationParams }: Props) => {
     },
   });
 
-  const message = watch("message");
-
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     setIsSending(true);
     setValue("message", "", { shouldValidate: true });
 
@@ -70,11 +72,11 @@ const MessagesChatForm = ({ conversationParams }: Props) => {
 
   return (
     <>
-      {false && (
-        <div className="flex flex-col-reverse justify-start w-[233px] h-full">
-          <div className="flex flex-col gap-4 items-center h-fit bg-white rounded-r-lg rounded-tl-lg p-6">
+      {isModalFooterOpen && (
+        <div className="absolute bottom-[calc(80px)] left-0 flex flex-col-reverse justify-start w-[233px]">
+          <div className="flex flex-col gap-4 items-center h-fit bg-white shadow-lg rounded-r-lg rounded-tl-lg p-6">
             <Button
-              onClick={openImageModal}
+              onClick={mobileOpenImageModal}
               className="gap-2.5 w-full flex justify-start items-center"
             >
               <div className="bg-galleryIcon bg-no-repeat bg-contain w-7 h-7" />
@@ -82,7 +84,7 @@ const MessagesChatForm = ({ conversationParams }: Props) => {
             </Button>
 
             <Button
-              onClick={openVideoModal}
+              onClick={mobileOpenVideoModal}
               className="gap-2.5 w-full flex justify-start items-center"
             >
               <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />
@@ -100,10 +102,10 @@ const MessagesChatForm = ({ conversationParams }: Props) => {
           <div className="flex flex-row items-center justify-start gap-3.5">
             <Button
               type="button"
-              onClick={() => {}}
+              onClick={handleFooterModal}
               className="flex w-12 px-0 md:hidden justify-center items-center"
             >
-              {false ? <XCircleIcon /> : <Plus />}
+              {isModalFooterOpen ? <XCircleIcon /> : <Plus />}
             </Button>
 
             <Button
