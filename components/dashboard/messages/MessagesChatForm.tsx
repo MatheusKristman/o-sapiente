@@ -2,16 +2,24 @@ import { Plus, XCircleIcon } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import axios from "axios";
 import { FieldValues, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
+import { z } from "zod";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useConversation from "@/hooks/useConversation";
 import useConversationStore from "@/stores/useConversationStore";
+import MessagesImageModal from "./MessagesImageModal";
+import MessagesVideoModal from "./MessagesVideoModal";
 
 interface Props {
   conversationParams?: { conversationId: string };
 }
+
+const formSchema = z.object({
+  message: z.string().min(1),
+});
 
 const MessagesChatForm = ({ conversationParams }: Props) => {
   const { conversationId } = useConversation(conversationParams);
@@ -27,7 +35,9 @@ const MessagesChatForm = ({ conversationParams }: Props) => {
     getValues,
     watch,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<z.infer<typeof formSchema>>({
+    // @ts-ignore
+    resolver: zodResolver(formSchema),
     defaultValues: {
       message: "",
     },
@@ -35,20 +45,19 @@ const MessagesChatForm = ({ conversationParams }: Props) => {
 
   const message = watch("message");
 
-  function onSubmit(values: FieldValues) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    // setIsSending(true);
+    setIsSending(true);
     setValue("message", "", { shouldValidate: true });
 
-    // TODO: criar rota para enviar mensagem
-    // axios
-    //   .post("/api/messages", {
-    //     ...data,
-    //     conversationId,
-    //   })
-    //   .finally(() => {
-    //     setIsSendingMessage(false);
-    //   });
+    axios
+      .post("/api/messages", {
+        ...values,
+        conversationId,
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   }
 
   if (status === "loading") {
@@ -126,24 +135,21 @@ const MessagesChatForm = ({ conversationParams }: Props) => {
             />
           </div>
 
-          <div className="flex flex-row items-center justify-start">
-            {message.length > 0 ? (
-              <button
-                type="submit"
-                className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-semibold"
-              >
-                <div className="bg-sendIcon w-7 h-7 text-white bg-no-repeat bg-contain" />
-                <span className="hidden md:block">Enviar</span>
-              </button>
-            ) : (
-              <button className="rounded-xl w-12 md:w-full h-12 px-2.5 gap-2.5  bg-green-primary text-white flex justify-center items-center font-medium">
-                <div className="bg-micOnIcon w-7 h-7 text-white bg-no-repeat bg-contain" />
-                <span className="hidden md:block">Gravar</span>
-              </button>
-            )}
-          </div>
+          <Button
+            disabled={isSending}
+            type="submit"
+            className="flex justify-center items-center gap-2.5 font-semibold"
+          >
+            <div className="bg-sendIcon w-7 h-7 text-white bg-no-repeat bg-contain" />
+            <span className="hidden md:block">
+              {isSending ? <>Enviando</> : <>Enviar</>}
+            </span>
+          </Button>
         </form>
       </div>
+
+      <MessagesImageModal conversationId={conversationId} />
+      <MessagesVideoModal />
     </>
   );
 };

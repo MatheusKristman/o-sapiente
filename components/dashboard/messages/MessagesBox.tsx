@@ -1,16 +1,18 @@
-import { cn } from "@/libs/utils";
-import { FullMessageType } from "@/types";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { format } from "date-fns";
+import { Check, MoreHorizontal, X } from "lucide-react";
+
+import { cn } from "@/libs/utils";
+import { FullMessageType } from "@/types";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Props {
@@ -23,7 +25,6 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
   const { data: session } = useSession();
 
   // TODO talvez entre
-  const [imageModalOpen, setImageModalOpen] = useState<boolean>(false);
   const [editedMessage, setEditedMessage] = useState<string>(message.content);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
@@ -48,14 +49,6 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
     setEditedMessage(e.target.value);
   }
 
-  function handleCloseImageModal() {
-    setImageModalOpen(false);
-  }
-
-  function handleOpenImageModal() {
-    setImageModalOpen(true);
-  }
-
   function submitEdit(message: FullMessageType) {
     if (editedMessage.length === 0) {
       toast.error("Mensagem não pode ser enviada vazia");
@@ -63,18 +56,18 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
     }
 
     // TODO: criar função de envio para edição
-    // axios
-    //   .put("/api/messages/edit", { message, editedMessage })
-    //   .then((res) => {
-    //     toast.success(res.data);
+    axios
+      .put("/api/messages/edit", { message, editedMessage })
+      .then((res) => {
+        toast.success(res.data);
 
-    //     setIsEditing(false);
-    //   })
-    //   .catch((error) => {
-    //     toast.error(error.response.data);
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        toast.error(error.response.data);
 
-    //     console.error(error);
-    //   });
+        console.error(error);
+      });
   }
 
   function handlePopover(open: boolean) {
@@ -85,17 +78,17 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
     <div
       className={cn(
         "w-full flex flex-row-reverse items-center justify-start group",
-        { "flex-row": otherMessage }
+        { "flex-row": otherMessage },
       )}
     >
       {message.fileUrl ? (
-        <div className="w-2/3 relative pb-2 xl:w-2/3 cursor-pointer">
+        <div className="w-2/3 relative pb-2 xl:w-2/5 cursor-pointer">
           <div
             className={cn(
               "relative w-full aspect-square rounded-tl-3xl rounded-br-3xl rounded-bl-3xl overflow-hidden",
               {
                 "rounded-tl-none rounded-tr-3xl": otherMessage,
-              }
+              },
             )}
           >
             <Image
@@ -114,14 +107,39 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
         <>
           <div
             className={cn(
-              "w-2/3 px-6 relative pt-6 pb-2 rounded-tl-3xl rounded-br-3xl rounded-bl-3xl bg-[#C8D6DF] xl:w-2/5",
+              "w-2/3 px-6 relative pt-6 pb-2 rounded-tl-lg rounded-br-lg rounded-bl-lg bg-green-primary xl:w-2/5",
               {
-                "bg-green-primary rounded-tl-none rounded-tr-3xl": otherMessage,
-              }
+                "bg-[#C8D6DF] rounded-tl-none rounded-tr-lg": otherMessage,
+              },
             )}
           >
             {isEditing ? (
-              <div></div>
+              <div className="w-full flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
+                <input
+                  type="text"
+                  value={editedMessage}
+                  onChange={handleMessageChange}
+                  className="w-full text-base text-white bg-transparent block outline-none lg:w-1/2"
+                />
+
+                <div className="flex items-center justify-end gap-2">
+                  <Button
+                    onClick={handleCancelEditing}
+                    variant="link"
+                    className="bg-white px-2 w-10 h-10 rounded-full flex items-center justify-center"
+                  >
+                    <X color="#03C988" size="20" />
+                  </Button>
+
+                  <Button
+                    onClick={() => submitEdit(message)}
+                    variant="link"
+                    className="bg-white px-2 w-10 h-10 rounded-full flex items-center justify-center"
+                  >
+                    <Check color="#03C988" size="20" />
+                  </Button>
+                </div>
+              </div>
             ) : (
               <p
                 className={cn("text-white text-base", {
@@ -132,27 +150,26 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
               </p>
             )}
 
-            <span className="text-white/50 text-[10px]">
+            <span className="text-white text-[10px]">
               {format(new Date(message.createdAt), "p")}
             </span>
           </div>
 
-          {/* TODO: verificar e personalizar */}
           {!otherMessage ? (
             <Popover open={isPopoverOpen} onOpenChange={handlePopover}>
               <PopoverTrigger className="mr-6 transition-opacity opacity-0 group-hover:opacity-100">
-                <MoreHorizontal color="#FFFFFF" />
+                <MoreHorizontal color="#03C988" />
               </PopoverTrigger>
 
               <PopoverContent
                 align="end"
-                className="bg-[#212A35] border-none rounded-xl rounded-tr-none space-y-6"
+                className="bg-white border-none rounded-xl rounded-tr-none space-y-6"
               >
                 {isEditing ? (
                   <Button
                     variant="destructive"
                     onClick={handleCancelEditing}
-                    className="w-full text-base font-semibold"
+                    className="w-full text-sm font-semibold"
                   >
                     Cancelar Edição de mensagem
                   </Button>

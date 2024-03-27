@@ -1,8 +1,10 @@
 export const imageModalInfo = {
   title: "Envie sua image",
   inputPlaceholder: "Clique aqui para carregar uma imagem",
+  inputAdviser: "Tamanho permitido: 2MB",
   removeBtn: "Remover Imagem",
   sendBtn: "Enviar",
+  sendingBtn: "Enviando",
 };
 
 export const videoModalInfo = {

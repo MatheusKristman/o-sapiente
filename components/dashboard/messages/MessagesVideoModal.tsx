@@ -29,7 +29,13 @@ import { cn } from "@/libs/utils";
 const formSchema = z.object({
   videoUrl: z
     .string()
-    .url({ message: "Link inválido, verifique e tente novamente" }),
+    .url({ message: "Link inválido, verifique e tente novamente" })
+    .refine((val) => val !== "https://www.youtube.com/", {
+      message: "Link inválido, é preciso ser um vídeo do YouTube",
+    })
+    .refine((val) => val.includes("youtube"), {
+      message: "O link do vídeo precisa ser do YouTube para poder ser enviado",
+    }),
 });
 
 const MessagesVideoModal = () => {
@@ -46,7 +52,9 @@ const MessagesVideoModal = () => {
   const [validVideoUrl, setValidVideoUrl] = useState<string>("");
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setValidVideoUrl(values.videoUrl);
+    if (values.videoUrl.includes("youtube")) {
+      setValidVideoUrl(values.videoUrl);
+    }
   }
 
   function clearUrl() {
@@ -104,6 +112,7 @@ const MessagesVideoModal = () => {
                           <FormControl>
                             <Input
                               {...field}
+                              disabled={!!validVideoUrl}
                               className={cn("w-full input", {
                                 "!pr-10": !!validVideoUrl,
                               })}

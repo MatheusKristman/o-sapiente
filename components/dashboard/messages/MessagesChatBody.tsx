@@ -88,6 +88,8 @@ const MessagesChatBody = ({ initialMessages, conversationParams }: Props) => {
           />
         ))}
       </div>
+
+      <div ref={bottomRef} />
     </ScrollArea>
   );
 };

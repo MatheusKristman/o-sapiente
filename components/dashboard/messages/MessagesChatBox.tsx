@@ -12,8 +12,6 @@ import { Conversation as ConversationType, User } from "@prisma/client";
 import { FullMessageType } from "@/types";
 import MessagesChatHeader from "./MessagesChatHeader";
 import MessagesChatForm from "./MessagesChatForm";
-import MessagesImageModal from "./MessagesImageModal";
-import MessagesVideoModal from "./MessagesVideoModal";
 
 interface Props {
   conversation: ConversationType & {
@@ -100,9 +98,6 @@ const MessagesChatBox = ({
 
         <MessagesChatForm conversationParams={conversationParams} />
       </div>
-
-      <MessagesImageModal />
-      <MessagesVideoModal />
     </>
   );
 };

@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
+import { useDropzone } from "@uploadthing/react";
+import { generateClientDropzoneAccept } from "uploadthing/client";
 
 import { imageModalInfo } from "@/constants/dashboard/message-br";
 import { Button } from "@/components/ui/button";
@@ -14,9 +16,15 @@ import {
   messageImageOverlayAnimation,
 } from "@/constants/framer-animations/message-image-modal";
 import useConversationStore from "@/stores/useConversationStore";
+import { useUploadThing } from "@/libs/uploadthing";
+import axios from "axios";
 
-const MessagesImageModal = () => {
-  const [image, setImage] = useState<File | null>(null);
+interface Props {
+  conversationId: string;
+}
+
+const MessagesImageModal = ({ conversationId }: Props) => {
+  const [image, setImage] = useState<File[] | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
   const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
 
@@ -24,32 +32,42 @@ const MessagesImageModal = () => {
 
   const fileInput = useRef<HTMLInputElement | null>(null);
 
-  function handleImage(event: React.ChangeEvent<HTMLInputElement>) {
-    setIsImageLoading(true);
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setImage(acceptedFiles);
+    setImageUrl(URL.createObjectURL(acceptedFiles[0]));
+  }, []);
 
-    if (!event.target.files) {
-      setIsImageLoading(false);
-      return;
-    }
+  const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
+    "imageMessage",
+    {
+      onClientUploadComplete: (res) => {
+        setIsImageLoading(true);
 
-    const file = event.target.files[0];
+        axios
+          .post("/api/messages", {
+            message: res[0].url,
+            image: res[0].url,
+            conversationId,
+          })
+          .then(() => {
+            closeImageModal();
+            setIsImageLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      },
+    },
+  );
 
-    if (!file) {
-      setIsImageLoading(false);
-      return;
-    }
+  const fileTypes = permittedFileInfo?.config
+    ? Object.keys(permittedFileInfo?.config)
+    : [];
 
-    if (file && file.type.startsWith("image/")) {
-      setImageUrl(URL.createObjectURL(file));
-      setImage(file);
-      setIsImageLoading(false);
-      return;
-    }
-
-    toast.error("Formato da imagem é inválido");
-
-    setIsImageLoading(false);
-  }
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
+  });
 
   function handleDeleteButton() {
     if (fileInput.current) {
@@ -107,30 +125,28 @@ const MessagesImageModal = () => {
                     />
                   </div>
                 ) : (
-                  <label
-                    htmlFor="messageImage"
-                    className="bg-[#C8D6DF] rounded-2xl border-2 border-gray-primary/10 w-full p-6 flex flex-col items-center justify-center gap-y-4 mb-4 lg:cursor-pointer"
+                  <div
+                    {...getRootProps()}
+                    className="bg-[#F0F5F8] rounded-2xl border-2 border-gray-primary/10 w-full p-6 flex flex-col items-center justify-center gap-y-4 mb-4 lg:cursor-pointer"
                   >
+                    <input {...getInputProps()} />
+
                     <div className="bg-camera bg-no-repeat bg-contain w-10 h-10 opacity-60" />
                     <span className="text-base text-gray-primary font-medium max-w-[250px] opacity-60">
                       {imageModalInfo.inputPlaceholder}
                     </span>
-                  </label>
+                    <span className="text-sm text-gray-primary/60 font-medium">
+                      {imageModalInfo.inputAdviser}
+                    </span>
+                  </div>
                 )}
-
-                <input
-                  ref={fileInput}
-                  type="file"
-                  id="messageImage"
-                  name="messageImage"
-                  className="hidden"
-                  disabled={isImageLoading}
-                  onChange={(event) => handleImage(event)}
-                />
 
                 {imageUrl && image && (
                   <div className="w-full flex items-center justify-center mb-6">
                     <Button
+                      disabled={
+                        !image || !imageUrl || isImageLoading || isUploading
+                      }
                       onClick={handleDeleteButton}
                       className="flex items-center justify-center gap-2"
                     >
@@ -140,7 +156,22 @@ const MessagesImageModal = () => {
                   </div>
                 )}
 
-                <Button className="w-full">{imageModalInfo.sendBtn}</Button>
+                <Button
+                  className="w-full flex items-center gap-2"
+                  disabled={
+                    !image || !imageUrl || isImageLoading || isUploading
+                  }
+                  onClick={() => startUpload(image!)}
+                >
+                  {isImageLoading || isUploading ? (
+                    <>
+                      {imageModalInfo.sendingBtn}
+                      <Loader2 color="#fff" className="w-6 h-6 animate-spin" />
+                    </>
+                  ) : (
+                    <>{imageModalInfo.sendBtn}</>
+                  )}
+                </Button>
               </div>
             </motion.div>
           </motion.div>
