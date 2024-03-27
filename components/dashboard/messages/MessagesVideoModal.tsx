@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import ReactPlayer from "react-player/youtube";
+import axios from "axios";
 
 import { videoModalInfo } from "@/constants/dashboard/message-br";
 import {
@@ -38,7 +39,11 @@ const formSchema = z.object({
     }),
 });
 
-const MessagesVideoModal = () => {
+interface Props {
+  conversationId: string;
+}
+
+const MessagesVideoModal = ({ conversationId }: Props) => {
   const { isVideoModalOpen, closeVideoModal } = useConversationStore();
   const form = useForm<z.infer<typeof formSchema>>({
     //@ts-ignore ocorrendo erro que não é pra acontecer
@@ -52,9 +57,26 @@ const MessagesVideoModal = () => {
   const [validVideoUrl, setValidVideoUrl] = useState<string>("");
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (values.videoUrl.includes("youtube")) {
-      setValidVideoUrl(values.videoUrl);
+    if (validVideoUrl) {
+      console.log("video pronto para upload");
+      axios
+        .post("/api/messages", {
+          message: validVideoUrl,
+          video: validVideoUrl,
+          conversationId,
+        })
+        .then(() => {
+          clearUrl();
+          closeVideoModal();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      return;
     }
+
+    setValidVideoUrl(values.videoUrl);
   }
 
   function clearUrl() {

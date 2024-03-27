@@ -125,9 +125,11 @@ model Subject {
 }
 
 model Message {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  content String
-  fileUrl String?
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  imageUrl  String?
+  videoUrl  String?
+  isDeleted Boolean @default(false)
 
   createdAt DateTime @default(now())
 

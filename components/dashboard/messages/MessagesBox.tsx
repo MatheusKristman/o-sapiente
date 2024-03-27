@@ -14,6 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import ReactPlayer from "react-player";
 
 interface Props {
   otherMessage?: boolean;
@@ -49,7 +50,22 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
     setEditedMessage(e.target.value);
   }
 
-  function submitEdit(message: FullMessageType) {
+  function handleDelete() {
+    axios
+      .put("/api/messages/delete", { messageId: message.id })
+      .then((res) => {
+        toast.success(res.data);
+
+        setIsPopoverOpen(false);
+      })
+      .catch((error) => {
+        toast.error(error.response.data);
+
+        console.error(error);
+      });
+  }
+
+  function submitEdit() {
     if (editedMessage.length === 0) {
       toast.error("Mensagem não pode ser enviada vazia");
       return;
@@ -81,25 +97,48 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
         { "flex-row": otherMessage },
       )}
     >
-      {message.fileUrl ? (
+      {message.videoUrl && !message.isDeleted ? (
         <div className="w-2/3 relative pb-2 xl:w-2/5 cursor-pointer">
           <div
             className={cn(
-              "relative w-full aspect-square rounded-tl-3xl rounded-br-3xl rounded-bl-3xl overflow-hidden",
+              "relative w-full aspect-video rounded-tl-lg rounded-br-lg rounded-bl-lg overflow-hidden",
               {
-                "rounded-tl-none rounded-tr-3xl": otherMessage,
+                "rounded-tl-none rounded-tr-lg": otherMessage,
+              },
+            )}
+          >
+            <ReactPlayer
+              url={message.videoUrl}
+              width="100%"
+              height="100%"
+              volume={0.5}
+              controls
+            />
+          </div>
+
+          <span className="text-gray-primary text-[10px]">
+            {format(new Date(message.createdAt), "p")}
+          </span>
+        </div>
+      ) : message.imageUrl && !message.isDeleted ? (
+        <div className="w-2/3 relative pb-2 xl:w-2/5 cursor-pointer">
+          <div
+            className={cn(
+              "relative w-full aspect-square rounded-tl-lg rounded-br-lg rounded-bl-lg overflow-hidden",
+              {
+                "rounded-tl-none rounded-tr-lg": otherMessage,
               },
             )}
           >
             <Image
-              src={message.fileUrl}
+              src={message.imageUrl}
               alt="Mensagem"
               fill
               className="object-cover object-center transition-all duration-500 hover:scale-125"
             />
           </div>
 
-          <span className="text-white/50 text-[10px]">
+          <span className="text-gray-primary text-[10px]">
             {format(new Date(message.createdAt), "p")}
           </span>
         </div>
@@ -110,6 +149,8 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
               "w-2/3 px-6 relative pt-6 pb-2 rounded-tl-lg rounded-br-lg rounded-bl-lg bg-green-primary xl:w-2/5",
               {
                 "bg-[#C8D6DF] rounded-tl-none rounded-tr-lg": otherMessage,
+                "pointer-events-none select-none":
+                  message.isDeleted,
               },
             )}
           >
@@ -132,7 +173,7 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
                   </Button>
 
                   <Button
-                    onClick={() => submitEdit(message)}
+                    onClick={submitEdit}
                     variant="link"
                     className="bg-white px-2 w-10 h-10 rounded-full flex items-center justify-center"
                   >
@@ -144,6 +185,7 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
               <p
                 className={cn("text-white text-base", {
                   "text-gray-primary": otherMessage,
+                  "text-opacity-80": message.isDeleted,
                 })}
               >
                 {message.content}
@@ -154,47 +196,48 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
               {format(new Date(message.createdAt), "p")}
             </span>
           </div>
-
-          {!otherMessage ? (
-            <Popover open={isPopoverOpen} onOpenChange={handlePopover}>
-              <PopoverTrigger className="mr-6 transition-opacity opacity-0 group-hover:opacity-100">
-                <MoreHorizontal color="#03C988" />
-              </PopoverTrigger>
-
-              <PopoverContent
-                align="end"
-                className="bg-white border-none rounded-xl rounded-tr-none space-y-6"
-              >
-                {isEditing ? (
-                  <Button
-                    variant="destructive"
-                    onClick={handleCancelEditing}
-                    className="w-full text-sm font-semibold"
-                  >
-                    Cancelar Edição de mensagem
-                  </Button>
-                ) : (
-                  <>
-                    <Button
-                      onClick={handleEditing}
-                      className="w-full text-base font-semibold"
-                    >
-                      Editar mensagem
-                    </Button>
-
-                    <Button
-                      variant="destructive"
-                      className="w-full text-base font-semibold"
-                    >
-                      Apagar mensagem
-                    </Button>
-                  </>
-                )}
-              </PopoverContent>
-            </Popover>
-          ) : null}
         </>
       )}
+
+      {!otherMessage && !message.isDeleted ? (
+        <Popover open={isPopoverOpen} onOpenChange={handlePopover}>
+          <PopoverTrigger className="mr-6 transition-opacity opacity-0 group-hover:opacity-100">
+            <MoreHorizontal color="#03C988" />
+          </PopoverTrigger>
+
+          <PopoverContent
+            align="end"
+            className="bg-white border-none rounded-xl rounded-tr-none space-y-6"
+          >
+            {isEditing ? (
+              <Button
+                variant="destructive"
+                onClick={handleCancelEditing}
+                className="w-full text-sm font-semibold"
+              >
+                Cancelar Edição de mensagem
+              </Button>
+            ) : (
+              <>
+                <Button
+                  onClick={handleEditing}
+                  className="w-full text-base font-semibold"
+                >
+                  Editar mensagem
+                </Button>
+
+                <Button
+                  onClick={handleDelete}
+                  variant="destructive"
+                  className="w-full text-base font-semibold"
+                >
+                  Apagar mensagem
+                </Button>
+              </>
+            )}
+          </PopoverContent>
+        </Popover>
+      ) : null}
     </div>
   );
 };

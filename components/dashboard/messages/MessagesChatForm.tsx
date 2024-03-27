@@ -149,7 +149,7 @@ const MessagesChatForm = ({ conversationParams }: Props) => {
       </div>
 
       <MessagesImageModal conversationId={conversationId} />
-      <MessagesVideoModal />
+      <MessagesVideoModal conversationId={conversationId} />
     </>
   );
 };

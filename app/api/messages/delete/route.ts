@@ -3,25 +3,28 @@ import { prisma } from "@/libs/prismadb";
 import { pusherServer } from "@/libs/pusher";
 
 export async function PUT(req: Request) {
+  console.log("execuranto api de delete");
+
   try {
     const currentUser = await getCurrentUser();
 
     if (!currentUser?.id || !currentUser?.email) {
-      return new Response("Usuário não encontrado", { status: 401 });
+      return new Response("Usuário não encontrado", { status: 404 });
     }
 
-    const { message, editedMessage } = await req.json();
+    const { messageId } = await req.json();
 
-    if (!editedMessage || !message?.id) {
-      return new Response("Dados inválidos", { status: 400 });
+    if (!messageId) {
+      return new Response("Dados inválidos", { status: 401 });
     }
 
     const updatedMessage = await prisma.message.update({
       where: {
-        id: message.id,
+        id: messageId,
       },
       data: {
-        content: editedMessage,
+        content: "[Mensagem excluída]",
+        isDeleted: true,
       },
       include: {
         conversation: true,
@@ -67,11 +70,11 @@ export async function PUT(req: Request) {
       updatedMessage,
     );
 
-    return new Response("Mensagem editada com sucesso", { status: 200 });
+    return new Response("Mensagem deletada com sucesso", { status: 200 });
   } catch (error) {
-    console.log("[ERROR_EDIT_MESSAGE]", error);
+    console.log("[ERROR_DELETE_MESSAGE]", error);
 
-    return new Response("Ocorreu um erro ao editar a mensagem", {
+    return new Response("Ocorreu um erro ao deletar a mensagem", {
       status: 500,
     });
   }

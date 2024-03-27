@@ -5,7 +5,7 @@ import { pusherServer } from "@/libs/pusher";
 export async function POST(req: Request) {
   try {
     const currentUser = await getCurrentUser();
-    const { message, image, conversationId } = await req.json();
+    const { message, image, video, conversationId } = await req.json();
 
     if (!currentUser?.id || !currentUser?.email) {
       return new Response("Usuário não encontrado", { status: 404 });
@@ -18,7 +18,8 @@ export async function POST(req: Request) {
     const newMessage = await prisma.message.create({
       data: {
         content: message,
-        fileUrl: image,
+        imageUrl: image,
+        videoUrl: video,
         conversation: {
           connect: {
             id: conversationId,
