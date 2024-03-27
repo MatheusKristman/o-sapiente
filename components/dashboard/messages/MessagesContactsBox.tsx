@@ -28,11 +28,19 @@ export function MessagesContactsBox({
     return messages[messages.length - 1];
   }, [conversation.messages]);
 
+  // TODO: ajustar carregamento das paginas, não esta sincronizado
   const unreadMessages = useMemo(() => {
     const messages = conversation.messages || [];
 
-    return messages.filter((message) => !message.seenIds.includes(userId))
-      .length;
+    console.log(
+      messages.filter(
+        (message) => !message.seenIds.includes(userId) && !message.isDeleted,
+      ),
+    );
+
+    return messages.filter(
+      (message) => !message.seenIds.includes(userId) && !message.isDeleted,
+    ).length;
   }, [conversation.messages, userId]);
 
   // TODO: adicionar skeleton enquanto não tem o otherUser
@@ -44,6 +52,7 @@ export function MessagesContactsBox({
     );
   }
 
+  // TODO: ajustar para quando é enviado um video ou imagem
   return (
     <Link
       href={`/painel-de-controle/${userType}/${userId}/mensagens/${conversation.id}`}
@@ -51,7 +60,7 @@ export function MessagesContactsBox({
         "w-full block bg-white hover:bg-green-primary transition ease-in-out delay-150 group px-9 py-6 lg:cursor-pointer",
         {
           "bg-green-primary": selected,
-        }
+        },
       )}
     >
       <div className="flex flex-row justify-between items-center w-full">
@@ -79,7 +88,7 @@ export function MessagesContactsBox({
               "flex flex-col gap-y-1 group-hover:text-white transition ease-in-out delay-150 max-w-[200px]",
               {
                 "text-white": selected,
-              }
+              },
             )}
           >
             <span className="font-semibold">{`${otherUser.firstName} ${otherUser.lastName}`}</span>
@@ -96,7 +105,7 @@ export function MessagesContactsBox({
               "rounded-3xl w-12 h-12 bg-green-primary text-white flex justify-center items-center font-semibold group-hover:text-green-primary group-hover:bg-white transition ease-in-out delay-150",
               {
                 "text-green-primary bg-white": selected,
-              }
+              },
             )}
           >
             {unreadMessages}

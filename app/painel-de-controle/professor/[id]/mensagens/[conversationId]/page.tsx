@@ -1,7 +1,8 @@
 import MessagesChatBox from "@/components/dashboard/messages/MessagesChatBox";
-import MessagesContacts from "@/components/dashboard/messages/MessagesContacts";
 import MessagesImageModal from "@/components/dashboard/messages/MessagesImageModal";
 import MessagesVideoModal from "@/components/dashboard/messages/MessagesVideoModal";
+import MessagesContacts from "@/components/dashboard/messages/MessagesContacts";
+import ActiveStatus from "@/components/ActiveStatus";
 import getConversations from "@/app/action/getConversations";
 import getConversationById from "@/app/action/getConversationById";
 import getMessages from "@/app/action/getMessages";
@@ -29,14 +30,14 @@ const ConversationMessagesPage = async ({ params }: Props) => {
       <MessagesContacts
         initialConversations={conversations}
         conversationParams={params}
-        userType="aluno"
+        userType="professor"
       />
 
       <MessagesChatBox
         conversation={conversation}
         initialMessages={messages}
         conversationParams={params}
-        userType="aluno"
+        userType="professor"
       />
     </div>
   );

@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 interface Props {
   initialConversations: FullConversationType[];
   conversationParams?: { conversationId: string };
-  userType: string;
+  userType: "aluno" | "professor";
 }
 
 const MessagesContacts = ({

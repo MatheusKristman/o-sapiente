@@ -50,6 +50,7 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
     setEditedMessage(e.target.value);
   }
 
+  // TODO: adicionar loading no delete
   function handleDelete() {
     axios
       .put("/api/messages/delete", { messageId: message.id })
@@ -116,11 +117,12 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
             />
           </div>
 
-          <span className="text-gray-primary text-[10px]">
+          <span className="text-gray-primary font-medium text-[10px]">
             {format(new Date(message.createdAt), "p")}
           </span>
         </div>
       ) : message.imageUrl && !message.isDeleted ? (
+        // TODO: adicionar função para abrir modal e ver imagem
         <div className="w-2/3 relative pb-2 xl:w-2/5 cursor-pointer">
           <div
             className={cn(
@@ -138,7 +140,7 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
             />
           </div>
 
-          <span className="text-gray-primary text-[10px]">
+          <span className="text-gray-primary font-medium text-[10px]">
             {format(new Date(message.createdAt), "p")}
           </span>
         </div>
@@ -149,8 +151,7 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
               "w-2/3 px-6 relative pt-6 pb-2 rounded-tl-lg rounded-br-lg rounded-bl-lg bg-green-primary xl:w-2/5",
               {
                 "bg-[#C8D6DF] rounded-tl-none rounded-tr-lg": otherMessage,
-                "pointer-events-none select-none":
-                  message.isDeleted,
+                "pointer-events-none select-none": message.isDeleted,
               },
             )}
           >
@@ -192,7 +193,11 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
               </p>
             )}
 
-            <span className="text-white text-[10px]">
+            <span
+              className={cn("text-white font-medium text-[10px]", {
+                "text-gray-primary/90": otherMessage,
+              })}
+            >
               {format(new Date(message.createdAt), "p")}
             </span>
           </div>
