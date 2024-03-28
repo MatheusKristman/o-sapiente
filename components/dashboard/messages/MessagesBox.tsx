@@ -5,6 +5,7 @@ import { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { format } from "date-fns";
 import { Check, MoreHorizontal, X } from "lucide-react";
+import ReactPlayer from "react-player";
 
 import { cn } from "@/libs/utils";
 import { FullMessageType } from "@/types";
@@ -14,7 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import ReactPlayer from "react-player";
+import useConversationStore from "@/stores/useConversationStore";
 
 interface Props {
   otherMessage?: boolean;
@@ -35,6 +36,8 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
     .filter((user) => user.email !== message?.sender?.email)
     .map((user) => user.firstName + " " + user.lastName)
     .join(", ");
+  const { openMessageImageModal, setMessageImageUrl } =
+    useConversationStore();
 
   function handleEditing() {
     setIsEditing(true);
@@ -64,6 +67,11 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
 
         console.error(error);
       });
+  }
+
+  function handleOpenImage(imageUrl: string) {
+    setMessageImageUrl(imageUrl);
+    openMessageImageModal();
   }
 
   function submitEdit() {
@@ -122,9 +130,10 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
           </span>
         </div>
       ) : message.imageUrl && !message.isDeleted ? (
-        // TODO: adicionar função para abrir modal e ver imagem
         <div className="w-2/3 relative pb-2 xl:w-2/5 cursor-pointer">
           <div
+            role="button"
+            onClick={() => handleOpenImage(message.imageUrl!)}
             className={cn(
               "relative w-full aspect-square rounded-tl-lg rounded-br-lg rounded-bl-lg overflow-hidden",
               {
@@ -150,8 +159,10 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
             className={cn(
               "w-2/3 px-6 relative pt-6 pb-2 rounded-tl-lg rounded-br-lg rounded-bl-lg bg-green-primary xl:w-2/5",
               {
-                "bg-[#C8D6DF] rounded-tl-none rounded-tr-lg": otherMessage,
-                "pointer-events-none select-none": message.isDeleted,
+                "bg-[#C8D6DF] rounded-tl-none rounded-tr-lg":
+                  otherMessage,
+                "pointer-events-none select-none":
+                  message.isDeleted,
               },
             )}
           >
@@ -194,9 +205,12 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
             )}
 
             <span
-              className={cn("text-white font-medium text-[10px]", {
-                "text-gray-primary/90": otherMessage,
-              })}
+              className={cn(
+                "text-white font-medium text-[10px]",
+                {
+                  "text-gray-primary/90": otherMessage,
+                },
+              )}
             >
               {format(new Date(message.createdAt), "p")}
             </span>

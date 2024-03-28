@@ -145,7 +145,10 @@ const MessagesImageModal = ({ conversationId }: Props) => {
                   <div className="w-full flex items-center justify-center mb-6">
                     <Button
                       disabled={
-                        !image || !imageUrl || isImageLoading || isUploading
+                        !image ||
+                        !imageUrl ||
+                        isImageLoading ||
+                        isUploading
                       }
                       onClick={handleDeleteButton}
                       className="flex items-center justify-center gap-2"
@@ -159,14 +162,20 @@ const MessagesImageModal = ({ conversationId }: Props) => {
                 <Button
                   className="w-full flex items-center gap-2"
                   disabled={
-                    !image || !imageUrl || isImageLoading || isUploading
+                    !image ||
+                    !imageUrl ||
+                    isImageLoading ||
+                    isUploading
                   }
                   onClick={() => startUpload(image!)}
                 >
                   {isImageLoading || isUploading ? (
                     <>
                       {imageModalInfo.sendingBtn}
-                      <Loader2 color="#fff" className="w-6 h-6 animate-spin" />
+                      <Loader2
+                        color="#fff"
+                        className="w-6 h-6 animate-spin"
+                      />
                     </>
                   ) : (
                     <>{imageModalInfo.sendBtn}</>

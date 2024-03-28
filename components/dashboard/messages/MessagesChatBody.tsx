@@ -10,6 +10,7 @@ import axios from "axios";
 import { find } from "lodash";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import MessagesBox from "./MessagesBox";
+import MessagesChatImageModal from "./MessagesChatImageModal";
 
 interface Props {
   initialMessages: FullMessageType[];
@@ -17,7 +18,8 @@ interface Props {
 }
 
 const MessagesChatBody = ({ initialMessages, conversationParams }: Props) => {
-  const [messages, setMessages] = useState<FullMessageType[]>(initialMessages);
+  const [messages, setMessages] =
+    useState<FullMessageType[]>(initialMessages);
 
   const { data: session, status } = useSession();
   const { conversationId } = useConversation(conversationParams);
@@ -68,6 +70,14 @@ const MessagesChatBody = ({ initialMessages, conversationParams }: Props) => {
     bottomRef?.current?.scrollIntoView({ block: "end" });
   }, [messages, status]);
 
+  function openMessageImageModal() {
+    setIsMessageImageModalOpen(true);
+  }
+
+  function closeMessageImageModal() {
+    setIsMessageImageModalOpen(false);
+  }
+
   if (status === "loading") {
     return (
       <div>
@@ -77,20 +87,26 @@ const MessagesChatBody = ({ initialMessages, conversationParams }: Props) => {
   }
 
   return (
-    <ScrollArea className="flex-1">
-      <div className="w-full flex flex-col gap-6 py-6 px-4">
-        {messages.map((message, index) => (
-          <MessagesBox
-            key={message.id}
-            isLast={index === messages.length - 1}
-            message={message}
-            otherMessage={session?.user?.email !== message.sender.email}
-          />
-        ))}
-      </div>
+    <>
+      <MessagesChatImageModal />
 
-      <div ref={bottomRef} />
-    </ScrollArea>
+      <ScrollArea className="flex-1">
+        <div className="w-full flex flex-col gap-6 py-6 px-4">
+          {messages.map((message, index) => (
+            <MessagesBox
+              key={message.id}
+              isLast={index === messages.length - 1}
+              message={message}
+              otherMessage={
+                session?.user?.email !== message.sender.email
+              }
+            />
+          ))}
+        </div>
+
+        <div ref={bottomRef} />
+      </ScrollArea>
+    </>
   );
 };
 
