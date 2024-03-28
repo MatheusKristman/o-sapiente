@@ -1,59 +1,142 @@
 import { prisma } from "@/libs/prismadb";
+import { pusherServer } from "@/libs/pusher";
 import { getServerSession } from "next-auth";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
+import { z } from "zod";
 
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
-
-// FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
-  // Define as many FileRoutes as you like, each with a unique routeSlug
-  imageUploader: f({ image: { maxFileSize: "4MB" } })
-    // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
-      // This code runs on your server before upload
-      const user = await auth(req);
+    profilePhotoUploader: f({ image: { maxFileSize: "4MB" } })
+        .middleware(async ({ req }) => {
+            const session = await getServerSession();
 
-      // If you throw, the user will not be able to upload
-      if (!user) throw new UploadThingError("Unauthorized");
+            if (!session || !session?.user) {
+                throw new UploadThingError("Não autorizado");
+            }
 
-      // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.id };
-    })
-    .onUploadComplete(async ({ metadata, file }) => {
-      // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId);
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: session.user.email!,
+                },
+            });
 
-      console.log("file url", file.url);
+            if (!user) {
+                throw new UploadThingError("Usuário não encontrado");
+            }
 
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
-    }),
-  imageMessage: f({ image: { maxFileSize: "2MB" } })
-    .middleware(async ({ req }) => {
-      const session = await getServerSession();
+            return { userId: user.id };
+        })
+        .onUploadComplete(async ({ metadata, file }) => {
+            // await prisma.user.update({
+            //   where: {
+            //     id: metadata.userId,
+            //   },
+            //   data: {
+            //     image: file.url,
+            //   },
+            // });
 
-      if (!session || !session?.user) {
-        throw new UploadThingError("Não autorizado");
-      }
+            return {};
+        }),
+    imageMessage: f({ image: { maxFileSize: "2MB" } })
+        .input(
+            z.object({
+                conversationId: z
+                    .string()
+                    .min(1, "É preciso passar o ID da conversa"),
+            }),
+        )
+        .middleware(async ({ req, input }) => {
+            const session = await getServerSession();
 
-      const user = await prisma.user.findUnique({
-        where: {
-          email: session.user.email!,
-        },
-      });
+            if (!session || !session?.user) {
+                throw new UploadThingError("Não autorizado");
+            }
 
-      if (!user) {
-        throw new UploadThingError("Usuário não encontrado");
-      }
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: session.user.email!,
+                },
+            });
 
-      return { userId: user.id };
-    })
-    .onUploadComplete(async ({ metadata, file }) => {
-      return { file };
-    }),
+            if (!user) {
+                throw new UploadThingError("Usuário não encontrado");
+            }
+
+            return { userId: user.id, conversationId: input.conversationId };
+        })
+        .onUploadComplete(async ({ metadata, file }) => {
+            const newMessage = await prisma.message.create({
+                data: {
+                    content: file.url,
+                    imageUrl: file.url,
+                    videoUrl: "",
+                    conversation: {
+                        connect: {
+                            id: metadata.conversationId,
+                        },
+                    },
+                    sender: {
+                        connect: {
+                            id: metadata.userId,
+                        },
+                    },
+                    seen: {
+                        connect: {
+                            id: metadata.userId,
+                        },
+                    },
+                },
+                include: {
+                    seen: true,
+                    sender: true,
+                },
+            });
+
+            const updatedConversation = await prisma.conversation.update({
+                where: {
+                    id: metadata.conversationId,
+                },
+                data: {
+                    lastMessageAt: new Date(),
+                    messages: {
+                        connect: {
+                            id: newMessage.id,
+                        },
+                    },
+                },
+                include: {
+                    users: true,
+                    messages: {
+                        include: {
+                            seen: true,
+                        },
+                    },
+                },
+            });
+
+            await pusherServer.trigger(
+                metadata.conversationId,
+                "messages:new",
+                newMessage,
+            );
+
+            const lastMessage =
+                updatedConversation.messages[
+                    updatedConversation.messages.length - 1
+                ];
+
+            updatedConversation.users.forEach((user) => {
+                pusherServer.trigger(user.email!, "conversation:update", {
+                    id: metadata.conversationId,
+                    messages: [lastMessage],
+                });
+            });
+
+            return {};
+        }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
