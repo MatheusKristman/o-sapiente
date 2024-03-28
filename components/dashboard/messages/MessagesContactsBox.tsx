@@ -4,6 +4,7 @@ import useOtherUser from "@/hooks/useOtherUser";
 import { cn } from "@/libs/utils";
 import useHeaderStore from "@/stores/useHeaderStore";
 import { FullConversationType } from "@/types";
+import { ImageIcon, VideoIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -34,12 +35,14 @@ export function MessagesContactsBox({
 
     console.log(
       messages.filter(
-        (message) => !message.seenIds.includes(userId) && !message.isDeleted,
+        (message) =>
+          !message.seenIds.includes(userId) && !message.isDeleted,
       ),
     );
 
     return messages.filter(
-      (message) => !message.seenIds.includes(userId) && !message.isDeleted,
+      (message) =>
+        !message.seenIds.includes(userId) && !message.isDeleted,
     ).length;
   }, [conversation.messages, userId]);
 
@@ -52,7 +55,6 @@ export function MessagesContactsBox({
     );
   }
 
-  // TODO: ajustar para quando é enviado um video ou imagem
   return (
     <Link
       href={`/painel-de-controle/${userType}/${userId}/mensagens/${conversation.id}`}
@@ -93,8 +95,31 @@ export function MessagesContactsBox({
           >
             <span className="font-semibold">{`${otherUser.firstName} ${otherUser.lastName}`}</span>
 
-            <span className="text-sm whitespace-nowrap truncate">
-              {lastMessage ? lastMessage.content : <>Conversa Iniciada</>}
+            <span className="text-sm whitespace-nowrap truncate flex items-center gap-2">
+              {lastMessage ? (
+                lastMessage.senderId === otherUser.id ? (
+                  otherUser.firstName + ": "
+                ) : (
+                  <>Voce: </>
+                )
+              ) : null}
+              {lastMessage ? (
+                lastMessage.imageUrl ? (
+                  <div className="flex items-center gap-1 text-sm whitespace-nowrap truncate">
+                    <ImageIcon size="20px" />
+                    Enviou uma imagem
+                  </div>
+                ) : lastMessage.videoUrl ? (
+                  <div className="flex items-center gap-1 text-sm whitespace-nowrap truncate">
+                    <VideoIcon size="20px" />
+                    Enviou um vídeo
+                  </div>
+                ) : (
+                  lastMessage.content
+                )
+              ) : (
+                <>Conversa Iniciada</>
+              )}
             </span>
           </div>
         </div>

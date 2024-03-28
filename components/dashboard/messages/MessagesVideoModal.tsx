@@ -35,7 +35,8 @@ const formSchema = z.object({
       message: "Link inválido, é preciso ser um vídeo do YouTube",
     })
     .refine((val) => val.includes("youtube"), {
-      message: "O link do vídeo precisa ser do YouTube para poder ser enviado",
+      message:
+        "O link do vídeo precisa ser do YouTube para poder ser enviado",
     }),
 });
 
@@ -43,6 +44,7 @@ interface Props {
   conversationId: string;
 }
 
+// TODO: Efeito de loading quando estiver enviando
 const MessagesVideoModal = ({ conversationId }: Props) => {
   const { isVideoModalOpen, closeVideoModal } = useConversationStore();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -134,10 +136,16 @@ const MessagesVideoModal = ({ conversationId }: Props) => {
                           <FormControl>
                             <Input
                               {...field}
-                              disabled={!!validVideoUrl}
-                              className={cn("w-full input", {
-                                "!pr-10": !!validVideoUrl,
-                              })}
+                              disabled={
+                                !!validVideoUrl
+                              }
+                              className={cn(
+                                "w-full input",
+                                {
+                                  "!pr-10":
+                                    !!validVideoUrl,
+                                },
+                              )}
                               placeholder="Insira o link do video"
                             />
                           </FormControl>
