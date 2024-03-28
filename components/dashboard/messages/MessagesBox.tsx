@@ -26,7 +26,6 @@ interface Props {
 const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
     const { data: session } = useSession();
 
-    // TODO talvez entre
     const [editedMessage, setEditedMessage] = useState<string>(message.content);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
@@ -82,7 +81,6 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
             return;
         }
 
-        // TODO: criar função de envio para edição
         axios
             .put("/api/messages/edit", { message, editedMessage })
             .then((res) => {

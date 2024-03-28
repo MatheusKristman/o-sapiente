@@ -12,6 +12,7 @@ import useConversation from "@/hooks/useConversation";
 import useConversationStore from "@/stores/useConversationStore";
 import MessagesImageModal from "./MessagesImageModal";
 import MessagesVideoModal from "./MessagesVideoModal";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
   conversationParams?: { conversationId: string };
@@ -63,11 +64,7 @@ const MessagesChatForm = ({
   }
 
   if (status === "loading") {
-    return (
-      <div>
-        <div>Carregando...</div>
-      </div>
-    );
+    return <SkeletonMessagesChatForm />;
   }
 
   return (
@@ -153,6 +150,28 @@ const MessagesChatForm = ({
       <MessagesImageModal conversationId={conversationId} />
       <MessagesVideoModal conversationId={conversationId} />
     </>
+  );
+};
+
+const SkeletonMessagesChatForm = () => {
+  return (
+    <div className="w-full flex bg-[#2C383F] mt-auto">
+      <div className="w-full flex flex-row px-6 py-4 gap-8 sm:px-16">
+        <div className="flex flex-row items-center justify-start gap-3.5">
+          <Skeleton className="w-12 h-12 md:hidden bg-[#40535E]" />
+
+          <Skeleton className="w-12 h-12 hidden md:block bg-[#40535E]" />
+
+          <Skeleton className="w-12 h-12 hidden md:block bg-[#40535E]" />
+        </div>
+
+        <div className="w-full flex items-center">
+          <Skeleton className="h-12 w-full bg-[#40535E]" />
+        </div>
+
+        <Skeleton className="w-36 h-12 bg-[#40535E]" />
+      </div>
+    </div>
   );
 };
 

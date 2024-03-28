@@ -1,5 +1,6 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import useOtherUser from "@/hooks/useOtherUser";
 import { cn } from "@/libs/utils";
 import useHeaderStore from "@/stores/useHeaderStore";
@@ -31,12 +32,13 @@ export function MessagesContactsBox({
         return messages[messages.length - 1];
     }, [conversation.messages]);
 
-    // TODO: adicionar skeleton enquanto não tem o otherUser
     if (!otherUser) {
         return (
-            <div>
-                <div>carregando...</div>
-            </div>
+            <>
+                <SkeletonMessagesContactsBox />
+                <SkeletonMessagesContactsBox />
+                <SkeletonMessagesContactsBox />
+            </>
         );
     }
 
@@ -125,3 +127,29 @@ export function MessagesContactsBox({
         </Link>
     );
 }
+
+const SkeletonMessagesContactsBox = () => {
+    return (
+        <div className={cn("w-full block bg-white px-9 py-6")}>
+            <div className="flex flex-row justify-between items-center w-full">
+                <div className="flex gap-5 items-center">
+                    <div className="relative flex justify-center items-center w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-full overflow-hidden">
+                        <Skeleton className="w-full h-full" />
+                    </div>
+
+                    <div
+                        className={cn(
+                            "flex flex-col gap-y-1 group-hover:text-white transition ease-in-out delay-150 max-w-[200px]",
+                        )}
+                    >
+                        <Skeleton className="w-32 h-6" />
+
+                        <Skeleton className="w-24 h-4" />
+                    </div>
+                </div>
+
+                <Skeleton className="rounded-3xl w-12 h-12" />
+            </div>
+        </div>
+    );
+};

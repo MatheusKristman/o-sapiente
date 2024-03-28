@@ -1,16 +1,17 @@
 "use cliente";
 
 import { useEffect, useRef, useState } from "react";
-
-import { FullMessageType } from "@/types";
-import { useSession } from "next-auth/react";
-import useConversation from "@/hooks/useConversation";
-import { pusherClient } from "@/libs/pusher";
 import axios from "axios";
 import { find } from "lodash";
+import { useSession } from "next-auth/react";
+
+import { FullMessageType } from "@/types";
+import useConversation from "@/hooks/useConversation";
+import { pusherClient } from "@/libs/pusher";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import MessagesBox from "./MessagesBox";
 import MessagesChatImageModal from "./MessagesChatImageModal";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
     initialMessages: FullMessageType[];
@@ -74,11 +75,7 @@ const MessagesChatBody = ({
     }, [messages, status]);
 
     if (status === "loading") {
-        return (
-            <div>
-                <div>Carregando...</div>
-            </div>
-        );
+        return <SkeletonMessagesChatBody />;
     }
 
     return (
@@ -102,6 +99,30 @@ const MessagesChatBody = ({
                 <div ref={bottomRef} />
             </ScrollArea>
         </>
+    );
+};
+
+const SkeletonMessagesChatBody = () => {
+    return (
+        <ScrollArea className="flex-1">
+            <div className="w-full flex flex-col gap-6 py-6 px-4">
+                <div className="w-full flex flex-row-reverse items-center justify-start group">
+                    <Skeleton className="w-2/3 relative h-40 bg-[#D6E5EE] rounded-tl-lg rounded-br-lg rounded-bl-lg rounded-tr-none xl:w-2/5" />
+                </div>
+
+                <div className="w-full flex flex-row items-center justify-start group">
+                    <Skeleton className="w-2/3 relative h-24 bg-[#D6E5EE] rounded-tl-none rounded-br-lg rounded-bl-lg rounded-tr-lg xl:w-2/5" />
+                </div>
+
+                <div className="w-full flex flex-row items-center justify-start group">
+                    <Skeleton className="w-2/3 relative h-32 bg-[#D6E5EE] rounded-tl-none rounded-br-lg rounded-bl-lg rounded-tr-lg xl:w-2/5" />
+                </div>
+
+                <div className="w-full flex flex-row-reverse items-center justify-start group">
+                    <Skeleton className="w-2/3 relative h-52 bg-[#D6E5EE] rounded-tl-lg rounded-br-lg rounded-bl-lg rounded-tr-none xl:w-2/5" />
+                </div>
+            </div>
+        </ScrollArea>
     );
 };
 
