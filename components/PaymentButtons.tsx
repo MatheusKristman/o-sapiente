@@ -31,11 +31,16 @@ export function PaymentButtons() {
       )}
 
       <div className="w-full flex items-center justify-between gap-4">
-        <Button variant="gray" onClick={handleBack} className="w-1/2">
+        <Button
+          type="button"
+          variant="gray"
+          onClick={handleBack}
+          className="w-1/2"
+        >
           {info.backButton}
         </Button>
 
-        <Button onClick={handleNext} className="w-1/2">
+        <Button type="submit" className="w-1/2">
           {info.nextButton}
         </Button>
       </div>

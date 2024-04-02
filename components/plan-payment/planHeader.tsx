@@ -1,30 +1,44 @@
 "use client";
 
 import { useState } from "react";
+import { Plan } from "@prisma/client";
 
 import { info } from "@/constants/plan-payment/plan-header-br";
 import { PlanOption } from "./planOption";
 import { cn } from "@/libs/utils";
 import { Button } from "@/components/ui/button";
+import usePaymentStore from "@/stores/usePaymentStore";
 
-export function PlanHeader() {
+interface Props {
+  plans: Plan[];
+}
+
+export function PlanHeader({ plans }: Props) {
   // TODO: para teste, depois aplicar logica do gateway de pagamento
-  const [paymentType, setPaymentType] = useState<"pix" | "credit">("pix");
+  const { paymentMethod, setPaymentMethod } = usePaymentStore();
 
   function handlePixSelect() {
-    if (paymentType === "pix") {
+    if (paymentMethod === "pix") {
       return;
     }
 
-    setPaymentType("pix");
+    setPaymentMethod("pix");
+  }
+
+  function handleBoletoSelect() {
+    if (paymentMethod === "boleto") {
+      return;
+    }
+
+    setPaymentMethod("boleto");
   }
 
   function handleCreditSelect() {
-    if (paymentType === "credit") {
+    if (paymentMethod === "credit_card") {
       return;
     }
 
-    setPaymentType("credit");
+    setPaymentMethod("credit_card");
   }
 
   return (
@@ -44,12 +58,14 @@ export function PlanHeader() {
         </h2>
 
         <div className="w-full flex flex-col gap-y-4 mb-6 sm:flex-row">
-          <PlanOption />
+          {plans.map((plan) => (
+            <PlanOption key={plan.id} name={plan.planName} cost={plan.cost} />
+          ))}
         </div>
 
         <div className="w-full flex flex-col gap-4 sm:flex-row">
           <Button
-            variant={paymentType === "pix" ? "default" : "outline"}
+            variant={paymentMethod === "pix" ? "default" : "outline"}
             type="button"
             onClick={handlePixSelect}
             className="w-full sm:w-[230.41px]"
@@ -58,7 +74,16 @@ export function PlanHeader() {
           </Button>
 
           <Button
-            variant={paymentType === "credit" ? "default" : "outline"}
+            variant={paymentMethod === "boleto" ? "default" : "outline"}
+            type="button"
+            onClick={handleBoletoSelect}
+            className="w-full sm:w-[230.41px]"
+          >
+            {info.boletoBtn}
+          </Button>
+
+          <Button
+            variant={paymentMethod === "credit_card" ? "default" : "outline"}
             type="button"
             onClick={handleCreditSelect}
             className="w-full sm:w-fit"

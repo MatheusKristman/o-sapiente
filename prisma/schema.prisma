@@ -108,7 +108,7 @@ model Conversation {
 model Plan {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
   planName     String
-  cost         String
+  cost         Int
   stripePlanId String
 
   users User[]

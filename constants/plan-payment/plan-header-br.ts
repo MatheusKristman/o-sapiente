@@ -4,5 +4,6 @@ export const info = {
   title: "Plano",
   titleGreen: "mensal",
   pixBtn: "PIX",
+  boletoBtn: "BOLETO",
   cardBtn: "CARTÃO DE CRÉDITO",
 };

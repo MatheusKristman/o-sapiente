@@ -1,15 +1,15 @@
-import { PaymentButtons } from "@/components/PaymentButtons";
-import { PaymentCardForm } from "@/components/PaymentCardForm";
-import { PaymentPersonalDataForm } from "@/components/PaymentPersonalDataForm";
 import { PlanHeader } from "@/components/plan-payment/planHeader";
+import getPlans from "../action/getPlans";
+import { PlanForm } from "@/components/plan-payment/planForm";
 
-function PlanPaymentPage() {
+async function PlanPaymentPage() {
+  const plans = await getPlans();
+
   return (
     <>
-      <PlanHeader />
+      <PlanHeader plans={plans} />
       {/* TODO: ver como sera feito o form */}
-      <PaymentPersonalDataForm />
-      <PaymentCardForm />
+      <PlanForm />
     </>
   );
 }

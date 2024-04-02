@@ -1,7 +1,12 @@
-import { cn } from "@/libs/utils";
+import { cn, formatPrice } from "@/libs/utils";
 import { ArrowRight } from "lucide-react";
 
-export function PlanOption() {
+interface Props {
+  name: string;
+  cost: number;
+}
+
+export function PlanOption({ name, cost }: Props) {
   return (
     // TODO: adicionar dinamicamente depois quando for feito a request
     <div
@@ -9,13 +14,13 @@ export function PlanOption() {
         "w-full bg-white border-2 border-white rounded-lg transition-colors px-4 py-3 flex justify-around gap-6 sm:w-fit",
         {
           "border-green-primary": true,
-        },
+        }
       )}
     >
       <div className="flex flex-col">
-        <span className="text-base text-gray-primary font-medium">30 dias</span>
+        <span className="text-base text-gray-primary font-medium">{name}</span>
         <span className="text-xl font-semibold text-green-primary">
-          R$ 49,99
+          {formatPrice(cost / 100)}
         </span>
       </div>
 
