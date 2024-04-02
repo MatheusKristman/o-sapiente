@@ -213,9 +213,10 @@ const RegisterForm = () => {
               {professorRegisterFormInfo.alreadyHasAccount.desc + " "}
               <Button
                 variant="link"
+                size="sm"
                 type="button"
                 onClick={handleOpenLoginModal}
-                className="text-green-primary cursor-pointer lg:hover:underline"
+                className="text-green-primary px-0 cursor-pointer lg:hover:underline"
               >
                 {professorRegisterFormInfo.alreadyHasAccount.link}
               </Button>
