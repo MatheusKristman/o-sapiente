@@ -7,6 +7,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Control } from "react-hook-form";
+import { ChangeEvent } from "react";
 
 interface Props {
   control: Control<
@@ -28,9 +29,10 @@ interface Props {
     },
     any
   >;
+  handleBirthFormat: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function PaymentPersonalDataForm({ control }: Props) {
+export function PaymentPersonalDataForm({ control, handleBirthFormat }: Props) {
   return (
     <div className="w-full px-6 mb-12 sm:px-16 lg:container lg:mx-auto">
       <div className="w-full bg-white px-6 py-9 rounded-2xl shadow-md shadow-black/25 flex flex-col gap-2">
@@ -52,7 +54,11 @@ export function PaymentPersonalDataForm({ control }: Props) {
                       className={cn("input", {
                         "input-error": false,
                       })}
-                      {...field}
+                      name={field.name}
+                      ref={field.ref}
+                      onBlur={field.onBlur}
+                      value={field.value}
+                      onChange={handleBirthFormat}
                     />
                   </FormControl>
                   <FormMessage />

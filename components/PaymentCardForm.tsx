@@ -2,41 +2,143 @@
 
 import { ChangeEvent, useState } from "react";
 import Cards from "react-credit-cards-2";
+import { Control, SetValueConfig, UseFormSetValue } from "react-hook-form";
 
 import { info } from "@/constants/paymentCardForm-br";
 import { cn } from "@/libs/utils";
 import { PaymentButtons } from "./PaymentButtons";
 import usePaymentStore from "@/stores/usePaymentStore";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import toast from "react-hot-toast";
 
 type stateType = {
-  number: string;
-  expiry: string;
-  cvc: string;
-  name: string;
+  creditNumber: string;
+  creditExpiry: string;
+  creditCvc: string;
+  creditOwner: string;
   focus: "name" | "cvc" | "expiry" | "number";
 };
 
-export function PaymentCardForm() {
+interface Props {
+  control: Control<
+    | {
+        birth: string;
+        ddd: string;
+        cel: string;
+        cep: string;
+        city: string;
+        state: string;
+        address: string;
+        addressNumber: string;
+        district: string;
+        complement: string;
+      }
+    | {
+        birth: string;
+        ddd: string;
+        cel: string;
+        cep: string;
+        city: string;
+        state: string;
+        address: string;
+        addressNumber: string;
+        district: string;
+        complement: string;
+        creditNumber: string;
+        creditExpiry: string;
+        creditOwner: string;
+        creditCvc: string;
+      }
+  >;
+  setValue: UseFormSetValue<
+    | {
+        birth: string;
+        ddd: string;
+        cel: string;
+        cep: string;
+        city: string;
+        state: string;
+        address: string;
+        addressNumber: string;
+        district: string;
+        complement: string;
+      }
+    | {
+        birth: string;
+        ddd: string;
+        cel: string;
+        cep: string;
+        city: string;
+        state: string;
+        address: string;
+        addressNumber: string;
+        district: string;
+        complement: string;
+        creditNumber: string;
+        creditExpiry: string;
+        creditOwner: string;
+        creditCvc: string;
+      }
+  >;
+  handleCreditNumberFormat: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleCreditExpiryFormat: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleCreditCvcFormat: (event: ChangeEvent<HTMLInputElement>) => void;
+  creditNumber: string;
+  creditOwner: string;
+  creditExpiry: string;
+  creditCvc: string;
+}
+
+export function PaymentCardForm({
+  control,
+  setValue,
+  handleCreditNumberFormat,
+  handleCreditExpiryFormat,
+  handleCreditCvcFormat,
+  creditNumber,
+  creditOwner,
+  creditExpiry,
+  creditCvc,
+}: Props) {
   const [state, setState] = useState<stateType>({
-    number: "",
-    expiry: "",
-    cvc: "",
-    name: "",
-    focus: "name",
+    creditNumber: "",
+    creditExpiry: "",
+    creditCvc: "",
+    creditOwner: "",
+    focus: "number",
   });
 
   const { paymentMethod } = usePaymentStore();
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-
-    setState((prev: stateType) => ({ ...prev, [name]: value }));
-  }
-
   function handleInputFocus(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.name;
+    let name: stateType["focus"];
+
+    switch (value) {
+      case "creditNumber":
+        name = "number";
+        break;
+      case "creditExpiry":
+        name = "expiry";
+        break;
+      case "creditOwner":
+        name = "name";
+        break;
+      case "creditCvc":
+        name = "cvc";
+        break;
+      default:
+        toast.error("Erro ao selecionar o campo dos dados do cartão");
+    }
+
     setState((prev: stateType) => ({
       ...prev,
-      focus: event.target.name as stateType["focus"],
+      focus: name,
     }));
   }
 
@@ -45,10 +147,10 @@ export function PaymentCardForm() {
       {paymentMethod === "credit_card" ? (
         <div className="w-full px-6 mb-12 flex flex-col gap-12 sm:px-16 lg:container lg:mx-auto lg:flex-row lg:justify-between">
           <Cards
-            number={state.number}
-            expiry={state.expiry}
-            cvc={state.cvc}
-            name={state.name}
+            number={creditNumber}
+            expiry={creditExpiry}
+            cvc={creditCvc}
+            name={creditOwner}
             focused={state.focus}
           />
 
@@ -59,51 +161,99 @@ export function PaymentCardForm() {
               </h3>
 
               <div className="w-full flex flex-col gap-4">
-                <input
-                  maxLength={16}
-                  name="number"
-                  value={state.number}
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus}
-                  placeholder={info.numberCardPlaceholder}
-                  className={cn("input", {
-                    "input-error": false,
-                  })}
+                <FormField
+                  control={control}
+                  name="creditNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <input
+                          maxLength={19}
+                          onFocus={handleInputFocus}
+                          placeholder={info.numberCardPlaceholder}
+                          className={cn("input", {
+                            "input-error": false,
+                          })}
+                          name={field.name}
+                          ref={field.ref}
+                          onBlur={field.onBlur}
+                          value={field.value}
+                          onChange={handleCreditNumberFormat}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
 
-                <input
-                  name="name"
-                  value={state.name}
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus}
-                  placeholder={info.ownerCardPlaceholder}
-                  className={cn("input", {
-                    "input-error": false,
-                  })}
+                <FormField
+                  control={control}
+                  name="creditOwner"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <input
+                          onFocus={handleInputFocus}
+                          placeholder={info.ownerCardPlaceholder}
+                          className={cn("input", {
+                            "input-error": false,
+                          })}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
 
-                <input
-                  maxLength={5}
-                  name="expiry"
-                  value={state.expiry}
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus}
-                  placeholder={info.validityCardPlaceholder}
-                  className={cn("input", {
-                    "input-error": false,
-                  })}
+                <FormField
+                  control={control}
+                  name="creditExpiry"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <input
+                          maxLength={5}
+                          onFocus={handleInputFocus}
+                          placeholder={info.validityCardPlaceholder}
+                          className={cn("input", {
+                            "input-error": false,
+                          })}
+                          name={field.name}
+                          ref={field.ref}
+                          onBlur={field.onBlur}
+                          value={field.value}
+                          onChange={handleCreditExpiryFormat}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
 
-                <input
-                  maxLength={3}
-                  name="cvc"
-                  value={state.cvc}
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus}
-                  placeholder={info.cvvCardPlaceholder}
-                  className={cn("input", {
-                    "input-error": false,
-                  })}
+                <FormField
+                  control={control}
+                  name="creditCvc"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <input
+                          maxLength={3}
+                          onFocus={handleInputFocus}
+                          placeholder={info.cvvCardPlaceholder}
+                          className={cn("input", {
+                            "input-error": false,
+                          })}
+                          name={field.name}
+                          ref={field.ref}
+                          onBlur={field.onBlur}
+                          value={field.value}
+                          onChange={handleCreditCvcFormat}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </div>
             </div>

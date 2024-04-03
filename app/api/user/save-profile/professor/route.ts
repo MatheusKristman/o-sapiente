@@ -37,7 +37,7 @@ export async function PATCH(req: NextRequest) {
 
       const fileParams = {
         Bucket: `${process.env.NEXT_S3_PUBLIC_BUCKET_NAME}/profile`,
-        Key: profilePhoto.name,
+        Key: profilePhoto.creditCvc,
         Expires: 600,
         ContentType: profilePhoto.type,
       };
@@ -52,7 +52,7 @@ export async function PATCH(req: NextRequest) {
         data: {
           themes,
           aboutMe,
-          profilePhoto: `${process.env.NEXT_S3_PUBLIC_URL}/profile/${profilePhoto.name}`,
+          profilePhoto: `${process.env.NEXT_S3_PUBLIC_URL}/profile/${profilePhoto.creditCvc}`,
           isCompleted: true,
         },
       });

@@ -28,7 +28,7 @@ export async function PATCH(req: NextRequest) {
 
     const fileParams = {
       Bucket: `${process.env.NEXT_S3_PUBLIC_BUCKET_NAME}/profile`,
-      Key: file.name,
+      Key: file.creditCvc,
       Expires: 600,
       ContentType: file.type,
     };
@@ -62,7 +62,7 @@ export async function PATCH(req: NextRequest) {
         email,
       },
       data: {
-        profilePhoto: `${process.env.NEXT_S3_PUBLIC_URL}/profile/${file.name}`,
+        profilePhoto: `${process.env.NEXT_S3_PUBLIC_URL}/profile/${file.creditCvc}`,
       },
     });
 
