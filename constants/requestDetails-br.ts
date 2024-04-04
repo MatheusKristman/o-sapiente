@@ -7,6 +7,13 @@ export const requestDetailsInfo = {
 
 export const requestDetailsOfferFormInfo = {
   title: "Mande sua proposta",
-  placeholder: "Descreva a sua proposta para o aluno",
+  lessonDateLabel: "Data da Aula",
+  lessonDatePlaceholder: "Selecione a data da aula",
+  lessonPriceLabel: "Valor da Aula",
+  lessonPricePlaceholder: "Digite o valor da aula",
+  detailsLabel: "Detalhes da proposta",
+  detailsPlaceholder: "Descreva a sua proposta para o aluno",
+  insideTabBtn: "Dentro da Plataforma",
+  outsideTabBtn: "Fora da Plataforma",
   btn: "ENVIAR",
 };

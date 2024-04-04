@@ -87,6 +87,10 @@
   @apply relative;
 }
 
+[data-radix-popper-content-wrapper] {
+  z-index: 99999 !important;
+}
+
 .input {
   @apply w-full h-12 px-4 py-3 bg-[#EBEFF1] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
 }

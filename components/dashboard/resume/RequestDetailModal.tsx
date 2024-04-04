@@ -65,7 +65,7 @@ const RequestDetailModal = ({
               animate="animate"
               exit="exit"
               variants={requestDetailsModalAnimation}
-              className="w-full max-w-[650px] min-h-[542.5px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
+              className="w-full max-w-[650px] min-h-[542.5px] bg-white p-9 rounded-2xl relative inline-block align-middle overflow-x-hidden"
             >
               <div className="w-full flex justify-end items-center">
                 <Button

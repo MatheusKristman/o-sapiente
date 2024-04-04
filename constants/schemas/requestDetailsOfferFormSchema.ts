@@ -1,12 +1,9 @@
-import * as yup from "yup";
+import { z } from "zod";
 
-export interface IRequestDetailsOfferForm {
-  message: string;
-}
-
-export const requestDetailsOfferFormSchema = yup.object({
-  message: yup
+export const offerSchema = z.object({
+  lessonDate: z.date(),
+  lessonPrice: z.number(),
+  details: z
     .string()
-    .min(100, "Mensagem precisa ter no mínimo 100 caracteres")
-    .required("Mensagem é obrigatória"),
+    .min(20, { message: "Detalhes precisam ter pelo menos 20 caracteres" }),
 });
