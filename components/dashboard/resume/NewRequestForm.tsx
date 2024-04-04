@@ -26,15 +26,18 @@ const NewRequestForm = () => {
   const {
     handleSubmit,
     register,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
       subject: studentNewRequestInfo.themePlaceholder,
+      subjectSpecific: "",
       description: "",
     },
     resolver: yupResolver(newRequestSchema),
   });
   const session = useSession();
+  const subjectValue = watch("subject");
 
   useEffect(() => {
     setIsLoading(true);
@@ -57,10 +60,18 @@ const NewRequestForm = () => {
 
   const onSubmit = (data: newRequestSchemaTypes) => {
     setIsSubmitting(true);
+
+    const subjectSelected =
+      data.subject === "Outro" &&
+        data.subjectSpecific &&
+        data.subjectSpecific.length > 0
+        ? data.subjectSpecific
+        : data.subject;
+
     axios
       .post("/api/request/create", {
         email: session?.data?.user?.email,
-        subject: data.subject,
+        subject: subjectSelected,
         description: data.description,
       })
       .then((res) => {
@@ -95,7 +106,7 @@ const NewRequestForm = () => {
           exit="exit"
           className={cn(
             "relative flex items-center mb-4 after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
-            errors.subject && "mb-2"
+            errors.subject && "mb-2",
           )}
         >
           <select
@@ -104,7 +115,7 @@ const NewRequestForm = () => {
             defaultValue={studentNewRequestInfo.themePlaceholder}
             className={cn(
               "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary/70 appearance-none outline-none focus:ring-2 focus:ring-green-primary lg:cursor-pointer",
-              errors.subject && "ring-2 ring-[#FF7373]"
+              errors.subject && "ring-2 ring-[#FF7373]",
             )}
           >
             <option value={studentNewRequestInfo.themePlaceholder} disabled>
@@ -115,12 +126,30 @@ const NewRequestForm = () => {
                 {subject.main}
               </option>
             ))}
+            <option value="Outro">Outro</option>
           </select>
         </motion.div>
         {errors.subject && (
           <span className="text-sm text-[#FF7373] font-medium text-left mb-4">
             {errors.subject?.message}
           </span>
+        )}
+
+        {subjectValue === "Outro" && (
+          <motion.input
+            {...register("subjectSpecific")}
+            variants={newRequestFormAnimation}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            disabled={isLoading || isSubmitting}
+            placeholder={studentNewRequestInfo.otherPlaceholder}
+            className={cn(
+              "w-full mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
+              errors.description &&
+              "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
+            )}
+          />
         )}
 
         <motion.textarea
@@ -134,7 +163,7 @@ const NewRequestForm = () => {
           className={cn(
             "w-full h-40 mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
             errors.description &&
-              "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2"
+            "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
           )}
         />
         {errors.description && (

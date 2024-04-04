@@ -54,7 +54,7 @@ const DashboardPage = () => {
           name={name}
         />
 
-        <div className="shadow-md shadow-[rgba(0,0,0,0.25)] rounded-lg">
+        <div className="w-4/5 shadow-md shadow-[rgba(0,0,0,0.25)] rounded-lg">
           <Button className="w-full" onClick={openModal}>
             {studentResumeInfos.newRequestBtn}
           </Button>

@@ -23,6 +23,7 @@ export const studentResumeInfos = {
 export const studentNewRequestInfo = {
   title: "Nova Solicitação",
   themePlaceholder: "Escolha a matéria",
+  otherPlaceholder: "Digite qual é a matéria que deseja adicionar",
   descPlaceholder: "Fale mais sobre o que precisa",
   submitBtn: "SOLICITAR",
   submittingBtn: "ENVIANDO",
