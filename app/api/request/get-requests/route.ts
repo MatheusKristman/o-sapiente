@@ -22,11 +22,6 @@ export async function POST(req: NextRequest) {
 
     if (teacherUser) {
       const request = await prisma.request.findMany({
-        where: {
-          subject: {
-            in: teacherUser.themes,
-          },
-        },
         include: {
           users: {
             select: {

@@ -80,22 +80,26 @@ const RequestDetailModal = ({
               </div>
 
               <AnimatePresence>
-                {isResume && (
-                  <RequestDetailsModalResume
-                    key="request-details-resume"
-                    AcceptRequest={AcceptRequest}
-                    type={type}
-                    plan={plan}
-                    handleCloseButton={handleCloseButton}
-                  />
-                )}
-                {isOfferForm && (
-                  <RequestDetailsModalOfferForm
-                    handleCloseButton={handleCloseButton}
-                    setOffers={setOffers}
-                    key="request-details-offer-form"
-                  />
-                )}
+                {
+                  /* isResume */ false && (
+                    <RequestDetailsModalResume
+                      key="request-details-resume"
+                      AcceptRequest={AcceptRequest}
+                      type={type}
+                      plan={plan}
+                      handleCloseButton={handleCloseButton}
+                    />
+                  )
+                }
+                {
+                  /* isOfferForm */ true && (
+                    <RequestDetailsModalOfferForm
+                      handleCloseButton={handleCloseButton}
+                      setOffers={setOffers}
+                      key="request-details-offer-form"
+                    />
+                  )
+                }
               </AnimatePresence>
             </motion.div>
           </motion.div>

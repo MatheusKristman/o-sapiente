@@ -10,16 +10,19 @@ import {
 import NewRequestForm from "./NewRequestForm";
 import NewRequestSuccess from "./NewRequestSuccess";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const NewRequestModal = () => {
   const { isModalOpen, closeModal, isForm, isMessage, resetModalContent } =
     useNewRequestStore();
+  const router = useRouter();
 
   function handleCloseButton() {
     closeModal();
 
     setTimeout(() => {
       resetModalContent();
+      router.refresh();
     }, 350);
   }
 
