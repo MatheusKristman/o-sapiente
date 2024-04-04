@@ -1,26 +1,33 @@
 import { cn, formatPrice } from "@/libs/utils";
+import usePaymentStore from "@/stores/usePaymentStore";
+import { Plan } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
 
 interface Props {
-  name: string;
-  cost: number;
+  plan: Plan;
+  selected: boolean;
 }
 
-export function PlanOption({ name, cost }: Props) {
+export function PlanOption({ plan, selected }: Props) {
+  const { setPlanSelected } = usePaymentStore();
+
   return (
     // TODO: adicionar dinamicamente depois quando for feito a request
     <div
+      onClick={() => setPlanSelected(plan)}
       className={cn(
-        "w-full bg-white border-2 border-white rounded-lg transition-colors px-4 py-3 flex justify-around gap-6 sm:w-fit",
+        "w-full bg-white border-2 cursor-pointer border-white rounded-lg transition-colors px-4 py-3 flex justify-around gap-6 sm:w-fit",
         {
-          "border-green-primary": true,
+          "border-green-primary": selected,
         }
       )}
     >
       <div className="flex flex-col">
-        <span className="text-base text-gray-primary font-medium">{name}</span>
+        <span className="text-base text-gray-primary font-medium">
+          {plan.planName}
+        </span>
         <span className="text-xl font-semibold text-green-primary">
-          {formatPrice(cost / 100)}
+          {formatPrice(plan.cost / 100)}
         </span>
       </div>
 

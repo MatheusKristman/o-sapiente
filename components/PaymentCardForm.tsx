@@ -27,7 +27,7 @@ type stateType = {
 interface Props {
   control: Control<
     | {
-        birth: string;
+        birth: Date;
         ddd: string;
         cel: string;
         cep: string;
@@ -39,7 +39,7 @@ interface Props {
         complement: string;
       }
     | {
-        birth: string;
+        birth: Date;
         ddd: string;
         cel: string;
         cep: string;
@@ -57,7 +57,7 @@ interface Props {
   >;
   setValue: UseFormSetValue<
     | {
-        birth: string;
+        birth: Date;
         ddd: string;
         cel: string;
         cep: string;
@@ -69,7 +69,7 @@ interface Props {
         complement: string;
       }
     | {
-        birth: string;
+        birth: Date;
         ddd: string;
         cel: string;
         cep: string;
@@ -238,7 +238,7 @@ export function PaymentCardForm({
                     <FormItem>
                       <FormControl>
                         <input
-                          maxLength={3}
+                          maxLength={4}
                           onFocus={handleInputFocus}
                           placeholder={info.cvvCardPlaceholder}
                           className={cn("input", {

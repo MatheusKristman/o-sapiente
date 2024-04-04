@@ -18,6 +18,7 @@ const buttonVariants = cva(
         gray: "bg-[#C8D6DF] text-gray-primary hover:bg-[#C8D6DF]/90",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary",
+        datePicker: "bg-[#EBEFF1] text-gray-primary hover:bg-[#EBEFF1]/90 ",
       },
       size: {
         default: "h-12 px-4 py-2",

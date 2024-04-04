@@ -8,7 +8,6 @@ async function PlanPaymentPage() {
   return (
     <>
       <PlanHeader plans={plans} />
-      {/* TODO: ver como sera feito o form */}
       <PlanForm />
     </>
   );

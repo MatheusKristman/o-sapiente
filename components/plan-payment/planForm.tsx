@@ -14,12 +14,7 @@ import usePaymentStore from "@/stores/usePaymentStore";
 const dateReg = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
 const planSchema = z.object({
-  birth: z
-    .string()
-    .min(8, { message: "Data de nascimento é obrigatório" })
-    .refine((val) => !dateReg.test(val), {
-      message: "Data de nascimento inválida",
-    }),
+  birth: z.date(),
   ddd: z.string().min(2, { message: "Formato do DDD inválido" }),
   cel: z.string().min(10, { message: "Telefone inválido" }),
   cep: z.string(),
@@ -32,12 +27,7 @@ const planSchema = z.object({
 });
 
 const planSchemaForCredit = z.object({
-  birth: z
-    .string()
-    .min(8, { message: "Data de nascimento é obrigatório" })
-    .refine((val) => !dateReg.test(val), {
-      message: "Data de nascimento inválida",
-    }),
+  birth: z.date(),
   ddd: z.string().min(2, { message: "Formato do DDD inválido" }),
   cel: z.string().min(10, { message: "Telefone inválido" }),
   cep: z.string(),
@@ -59,16 +49,16 @@ const planSchemaForCredit = z.object({
 });
 
 export const PlanForm = () => {
-  const { paymentMethod } = usePaymentStore();
+  const { paymentMethod, planSelected } = usePaymentStore();
 
   const form = useForm<z.infer<typeof planSchema | typeof planSchemaForCredit>>(
     {
       resolver: zodResolver(
         // @ts-ignore
-        paymentMethod === "credit_card" ? planSchemaForCredit : planSchema,
+        paymentMethod === "credit_card" ? planSchemaForCredit : planSchema
       ),
       defaultValues: {
-        birth: "",
+        birth: undefined,
         ddd: "",
         cel: "",
         cep: "",
@@ -83,7 +73,7 @@ export const PlanForm = () => {
         creditExpiry: "",
         creditCvc: "",
       },
-    },
+    }
   );
 
   const creditNumber = form.watch("creditNumber");
@@ -92,25 +82,45 @@ export const PlanForm = () => {
   const creditCvc = form.watch("creditCvc");
 
   function onSubmit(
-    values: z.infer<typeof planSchema | typeof planSchemaForCredit>,
+    values: z.infer<typeof planSchema | typeof planSchemaForCredit>
   ) {
     // TODO: adicionar request para /payment/plan e testar
+    console.log(values);
+
+    axios
+      .post("/api/payment/plan", {
+        ...values,
+        planName: planSelected?.planName,
+        planPrice: planSelected?.cost,
+        planId: planSelected?.id,
+        paymentMethod,
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
-  function handleBirthFormat(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 8);
-    const formattedDate = value.replace(/(\d{2})(\d{2})(\d{2})/, "$1/$2/$3");
+  function handleDDDFormat(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 2);
 
-    console.log(formattedDate);
+    form.setValue("ddd", value);
+  }
 
-    form.setValue("birth", formattedDate);
+  function handleCelFormat(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 9);
+    const formattedNumber = value.replace(/(\d{5})(\d{4})/, "$1-$2");
+
+    form.setValue("cel", formattedNumber);
   }
 
   function handleCreditNumberFormat(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 16);
     const formattedNumber = value.replace(
       /(\d{4})(\d{4})(\d{4})(\d{4})/,
-      "$1 $2 $3 $4",
+      "$1 $2 $3 $4"
     );
 
     form.setValue("creditNumber", formattedNumber);
@@ -124,7 +134,7 @@ export const PlanForm = () => {
   }
 
   function handleCreditCvcFormat(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 3);
+    const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 4);
 
     form.setValue("creditCvc", value);
   }
@@ -134,7 +144,8 @@ export const PlanForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <PaymentPersonalDataForm
           control={form.control}
-          handleBirthFormat={handleBirthFormat}
+          handleDDDFormat={handleDDDFormat}
+          handleCelFormat={handleCelFormat}
         />
         <PaymentCardForm
           control={form.control}

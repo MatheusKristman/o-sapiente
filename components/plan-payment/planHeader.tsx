@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plan } from "@prisma/client";
 
 import { info } from "@/constants/plan-payment/plan-header-br";
@@ -15,7 +15,12 @@ interface Props {
 
 export function PlanHeader({ plans }: Props) {
   // TODO: para teste, depois aplicar logica do gateway de pagamento
-  const { paymentMethod, setPaymentMethod } = usePaymentStore();
+  const { paymentMethod, setPaymentMethod, planSelected, setPlanSelected } =
+    usePaymentStore();
+
+  useEffect(() => {
+    setPlanSelected(plans[0]);
+  }, [plans, setPlanSelected]);
 
   function handlePixSelect() {
     if (paymentMethod === "pix") {
@@ -59,7 +64,11 @@ export function PlanHeader({ plans }: Props) {
 
         <div className="w-full flex flex-col gap-y-4 mb-6 sm:flex-row">
           {plans.map((plan) => (
-            <PlanOption key={plan.id} name={plan.planName} cost={plan.cost} />
+            <PlanOption
+              key={plan.id}
+              plan={plan}
+              selected={planSelected?.id === plan.id}
+            />
           ))}
         </div>
 
