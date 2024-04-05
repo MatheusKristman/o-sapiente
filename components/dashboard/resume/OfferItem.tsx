@@ -37,7 +37,7 @@ const OfferItem = ({ offer, handleCloseButton }: OfferItemProps) => {
       .then((res) => {
         handleCloseButton();
         router.push(
-          `/painel-de-controle/aluno/${userId}/mensagens/${res.data.id}`
+          `/painel-de-controle/aluno/${userId}/mensagens/${res.data.id}`,
         );
       })
       .catch((error) => toast.error(error))
@@ -80,7 +80,8 @@ const OfferItem = ({ offer, handleCloseButton }: OfferItemProps) => {
                 Proposta:
               </span>
               <span className="text-base text-left text-gray-primary">
-                {offer.message}
+                {/* TODO: atualizar OfferItem para novo formato de proposta */}
+                Atualizar componente de OfferItem
               </span>
             </div>
 
