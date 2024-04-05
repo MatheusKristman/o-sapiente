@@ -78,8 +78,11 @@ model Request {
 }
 
 model Offer {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  message String
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  lessonDate  DateTime
+  lessonPrice Float
+  details     String?
+  offerLink   String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

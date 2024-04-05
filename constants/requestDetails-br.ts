@@ -13,7 +13,11 @@ export const requestDetailsOfferFormInfo = {
   lessonPricePlaceholder: "Digite o valor da aula",
   detailsLabel: "Detalhes da proposta",
   detailsPlaceholder: "Descreva a sua proposta para o aluno",
+  generateLinkBtn: "Gerar Link",
+  generateLinkPlaceholder: "Gere o link da proposta",
+  tooltipCopyBtn: "Copiar Link",
   insideTabBtn: "Dentro da Plataforma",
   outsideTabBtn: "Fora da Plataforma",
   btn: "ENVIAR",
+  closeBtn: "FECHAR",
 };

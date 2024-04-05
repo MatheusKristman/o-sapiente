@@ -6,6 +6,8 @@ interface useRequestDetailsModalStoreProps {
   closeModal: () => void;
   requestId: string;
   setRequestId: (id: string) => void;
+  studentId: string;
+  setStudentId: (id: string) => void;
   studentImage: string | null;
   setStudentImage: (url: string | null) => void;
   studentName: string;
@@ -24,6 +26,8 @@ const useRequestDetailsModalStore = create<useRequestDetailsModalStoreProps>(
     closeModal: () => set(() => ({ isModalOpen: false })),
     requestId: "",
     setRequestId: (id) => set({ requestId: id }),
+    studentId: "",
+    setStudentId: (id) => set({ studentId: id }),
     studentImage: null,
     setStudentImage: (url) => set({ studentImage: url }),
     studentName: "",

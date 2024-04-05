@@ -23,6 +23,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
   const {
     openModal,
     setRequestId,
+    setStudentId,
     setStudentImage,
     setStudentName,
     setSubject,
@@ -36,11 +37,13 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
 
   function handleBtn() {
     if (type === "Professor") {
+      console.log("Request Info: ", request);
       openModal();
       setRequestId(request.id);
+      setStudentId(request.users[0].id);
       setStudentImage(request.users[0].profilePhoto);
       setStudentName(
-        `${request.users[0].firstName} ${request.users[0].lastName}`
+        `${request.users[0].firstName} ${request.users[0].lastName}`,
       );
       setSubject(request.subject);
       setMessage(request.description);
@@ -87,8 +90,8 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
         <div className="xl:flex xl:justify-end xl:w-5/12">
           <div className="flex items-center justify-center relative">
             {type === "Student" &&
-            request.offers.length > 0 &&
-            !request.isOfferAccepted ? (
+              request.offers.length > 0 &&
+              !request.isOfferAccepted ? (
               <span className="absolute -top-1 -right-1 z-10 rounded-full bg-gray-primary text-sm text-white font-semibold text-center h-6 w-6 flex items-center justify-center">
                 {request.offers.length}
               </span>
@@ -106,10 +109,10 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
                   ? professorResumeInfos.offerSended
                   : professorResumeInfos.seeOfferBtn
                 : type === "Student"
-                ? request.isOfferAccepted
-                  ? studentResumeInfos.offerAccepted
-                  : studentResumeInfos.seeOfferBtn
-                : ""}
+                  ? request.isOfferAccepted
+                    ? studentResumeInfos.offerAccepted
+                    : studentResumeInfos.seeOfferBtn
+                  : ""}
             </Button>
           </div>
         </div>
