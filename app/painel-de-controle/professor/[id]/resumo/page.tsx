@@ -3,15 +3,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { Offer } from "@prisma/client";
 
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
 import ResumeRequestBox from "@/components/dashboard/resume/ResumeRequestBox";
 import ResumeCurrentLessonBox from "@/components/dashboard/resume/ResumeCurrentLessonBox";
 import BalanceBox from "@/components/dashboard/resume/BalanceBox";
 import RequestDetailModal from "@/components/dashboard/resume/RequestDetailModal";
-
+import { FinishedLessonsBox } from "@/components/dashboard/resume/FinishedLessonsBox";
 import { RequestWithUsersAndOffers } from "@/types";
-import { Offer } from "@prisma/client";
 
 const ResumePage = () => {
   const [profilePhoto, setProfilePhoto] = useState<string>("");
@@ -63,11 +63,15 @@ const ResumePage = () => {
             themes={themes}
             plan={plan}
           />
-
-          <BalanceBox />
         </div>
 
         <div className="w-full flex flex-col gap-8">
+          <div className="w-full flex flex-col lg:grid lg:grid-cols-2 lg:grid-rows-1 gap-8">
+            <BalanceBox />
+
+            <FinishedLessonsBox />
+          </div>
+
           <ResumeRequestBox
             offers={offers}
             type="Professor"

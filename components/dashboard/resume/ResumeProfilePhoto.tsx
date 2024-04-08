@@ -27,7 +27,7 @@ const ResumeProfilePhoto = ({
   }
 
   return (
-    <div className="w-4/5 flex flex-col gap-5 bg-white rounded-2xl p-9 shadow-md shadow-[rgba(0,0,0,0.25)]">
+    <div className="w-full flex flex-col gap-5 bg-white rounded-2xl p-9 shadow-md shadow-[rgba(0,0,0,0.25)]">
       <div className="relative aspect-square overflow-hidden rounded-2xl">
         <Image
           src={
