@@ -1,12 +1,16 @@
 import getCurrentUser from "@/app/action/getCurrentUser";
 import axios from "axios";
+import { addDays } from "date-fns";
 
 export async function POST(req: Request) {
   try {
     const {
+      name,
+      email,
+      cpf,
       birth,
-      ddd,
       cel,
+      country,
       cep,
       city,
       state,
@@ -24,7 +28,20 @@ export async function POST(req: Request) {
       paymentMethod,
     } = await req.json();
 
-    if (!birth || !ddd || !cel) {
+    if (
+      !birth ||
+      !cel ||
+      !name ||
+      !email ||
+      !cpf ||
+      !country ||
+      !cep ||
+      !city ||
+      !state ||
+      !address ||
+      !addressNumber ||
+      !district
+    ) {
       return new Response("Dados inválidos, verifique e tente novamente", {
         status: 404,
       });
@@ -68,6 +85,7 @@ export async function POST(req: Request) {
       paymentOptions = {
         payment_method: "credit_card",
         credit_card: {
+          installments: 1,
           statement_descriptor: "O SAPIENTE",
           card: {
             number,
@@ -80,9 +98,8 @@ export async function POST(req: Request) {
               line_2,
               zip_code: cep,
               city,
-              state,
-              // TODO: por enquanto, depois alterar de forma dinâmica
-              country: "BR",
+              state: state.toUpperCase(),
+              country: country.toUpperCase(),
             },
           },
         },
@@ -98,12 +115,13 @@ export async function POST(req: Request) {
       paymentOptions = {
         payment_method: "boleto",
         boleto: {
-          type: "BDP",
+          instructions:
+            "Sr.Caixa, favor não aceitar o pagamento após o vencimento",
+          due_at: addDays(new Date(), 3),
         },
       };
     }
 
-    // TODO: adicionar opções para o pagarme e testar
     const options = {
       method: "POST",
       url: "https://api.pagar.me/core/v5/orders",
@@ -116,24 +134,29 @@ export async function POST(req: Request) {
       },
       data: {
         customer: {
-          name: `${currentUser.firstName} ${currentUser.lastName}`,
-          email: currentUser.email,
+          type: "individual",
+          name,
+          email,
+          document: cpf.replace(/[^0-9]/g, ""),
           code: currentUser.id,
           address: {
-            // TODO: Alterar país depois que ele for inserir outros idiomas
-            country: "BR",
-            state,
+            country: country.toUpperCase(),
+            state: state.toUpperCase(),
             city,
             zip_code: cep,
             line_1,
             line_2,
           },
           phones: {
+            home_phone: {
+              country_code: cel.substring(1, 3),
+              area_code: cel.substring(3, 5),
+              number: cel.substring(5),
+            },
             mobile_phone: {
-              // TODO: Alterar código depois que ele for inserir outros idiomas
-              country_code: "55",
-              area_code: ddd,
-              number: cel.split("-").join(""),
+              country_code: cel.substring(1, 3),
+              area_code: cel.substring(3, 5),
+              number: cel.substring(5),
             },
           },
           birthdate: birth,
@@ -152,11 +175,13 @@ export async function POST(req: Request) {
 
     const response = await axios.request(options);
 
-    console.log(response);
+    console.log(JSON.stringify(response.data));
 
-    return Response.json({ message: "teste" }, { status: 200 });
+    return Response.json({ ...response.data }, { status: 200 });
   } catch (error: any) {
-    console.log("[ERROR_PLAN_PAYMENT]", { error: error.response.data });
+    console.log("[ERROR_PLAN_PAYMENT]", {
+      error: error.response.data.errors,
+    });
 
     return Response.json(
       {
@@ -165,7 +190,7 @@ export async function POST(req: Request) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

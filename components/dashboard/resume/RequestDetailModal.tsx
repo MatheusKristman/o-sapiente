@@ -31,8 +31,6 @@ const RequestDetailModal = ({
 
   const { isModalOpen, closeModal, reset } = useRequestDetailsModalStore();
 
-  const router = useRouter();
-
   function handleCloseButton() {
     closeModal();
 

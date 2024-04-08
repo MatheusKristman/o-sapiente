@@ -27,9 +27,12 @@ type stateType = {
 interface Props {
   control: Control<
     | {
+        name: string;
+        email: string;
+        cpf: string;
         birth: Date;
-        ddd: string;
         cel: string;
+        country: string;
         cep: string;
         city: string;
         state: string;
@@ -39,9 +42,12 @@ interface Props {
         complement: string;
       }
     | {
+        name: string;
+        email: string;
+        cpf: string;
         birth: Date;
-        ddd: string;
         cel: string;
+        country: string;
         cep: string;
         city: string;
         state: string;
@@ -57,9 +63,12 @@ interface Props {
   >;
   setValue: UseFormSetValue<
     | {
+        name: string;
+        email: string;
+        cpf: string;
         birth: Date;
-        ddd: string;
         cel: string;
+        country: string;
         cep: string;
         city: string;
         state: string;
@@ -69,9 +78,12 @@ interface Props {
         complement: string;
       }
     | {
+        name: string;
+        email: string;
+        cpf: string;
         birth: Date;
-        ddd: string;
         cel: string;
+        country: string;
         cep: string;
         city: string;
         state: string;

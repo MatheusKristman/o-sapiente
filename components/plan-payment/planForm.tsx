@@ -10,32 +10,45 @@ import { PaymentCardForm } from "@/components/PaymentCardForm";
 import { PaymentPersonalDataForm } from "@/components/PaymentPersonalDataForm";
 import { Form } from "@/components/ui/form";
 import usePaymentStore from "@/stores/usePaymentStore";
+import { User } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const dateReg = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
 const planSchema = z.object({
+  name: z.string().min(4, { message: "Nome é obrigatório" }),
+  email: z.string().email({ message: "E-mail inválido" }),
+  cpf: z.string().min(14, { message: "CPF inválido" }),
   birth: z.date(),
-  ddd: z.string().min(2, { message: "Formato do DDD inválido" }),
-  cel: z.string().min(10, { message: "Telefone inválido" }),
-  cep: z.string(),
-  city: z.string(),
-  state: z.string(),
-  address: z.string(),
-  addressNumber: z.string(),
-  district: z.string(),
+  cel: z.string().min(12, { message: "Celular inválido" }),
+  country: z.string().min(2, { message: "País é obrigatório" }),
+  cep: z.string().min(9, { message: "CEP é obrigatório" }),
+  city: z.string().min(1, { message: "Cidade é obrigatória" }),
+  state: z.string().min(2, { message: "Estado é obrigatório" }),
+  address: z.string().min(1, { message: "Endereço é obrigatório" }),
+  addressNumber: z
+    .string()
+    .min(1, { message: "Numero do endereço é obrigatório" }),
+  district: z.string().min(1, { message: "Bairro é obrigatório" }),
   complement: z.string(),
 });
 
 const planSchemaForCredit = z.object({
+  name: z.string().min(4, { message: "Nome é obrigatório" }),
+  email: z.string().email({ message: "E-mail inválido" }),
+  cpf: z.string().min(14, { message: "CPF inválido" }),
   birth: z.date(),
-  ddd: z.string().min(2, { message: "Formato do DDD inválido" }),
-  cel: z.string().min(10, { message: "Telefone inválido" }),
-  cep: z.string(),
-  city: z.string(),
-  state: z.string(),
-  address: z.string(),
-  addressNumber: z.string(),
-  district: z.string(),
+  cel: z.string().min(12, { message: "Celular inválido" }),
+  country: z.string().min(2, { message: "País é obrigatório" }),
+  cep: z.string().min(9, { message: "CEP é obrigatório" }),
+  city: z.string().min(1, { message: "Cidade é obrigatória" }),
+  state: z.string().min(2, { message: "Estado é obrigatório" }),
+  address: z.string().min(1, { message: "Endereço é obrigatório" }),
+  addressNumber: z
+    .string()
+    .min(1, { message: "Numero do endereço é obrigatório" }),
+  district: z.string().min(1, { message: "Bairro é obrigatório" }),
   complement: z.string(),
   creditNumber: z.string().min(16, { message: "Numero do cartão inválido" }),
   creditOwner: z.string().min(4, { message: "Nome é obrigatório" }),
@@ -48,19 +61,28 @@ const planSchemaForCredit = z.object({
   creditCvc: z.string().min(3, { message: "Código de segurança inválido" }),
 });
 
-export const PlanForm = () => {
+interface Props {
+  currentUser: User;
+}
+
+export const PlanForm = ({ currentUser }: Props) => {
   const { paymentMethod, planSelected } = usePaymentStore();
+
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof planSchema | typeof planSchemaForCredit>>(
     {
       resolver: zodResolver(
         // @ts-ignore
-        paymentMethod === "credit_card" ? planSchemaForCredit : planSchema
+        paymentMethod === "credit_card" ? planSchemaForCredit : planSchema,
       ),
       defaultValues: {
+        name: `${currentUser.firstName} ${currentUser.lastName}`,
+        email: currentUser.email,
+        cpf: "",
         birth: undefined,
-        ddd: "",
         cel: "",
+        country: "",
         cep: "",
         city: "",
         state: "",
@@ -73,7 +95,7 @@ export const PlanForm = () => {
         creditExpiry: "",
         creditCvc: "",
       },
-    }
+    },
   );
 
   const creditNumber = form.watch("creditNumber");
@@ -82,7 +104,7 @@ export const PlanForm = () => {
   const creditCvc = form.watch("creditCvc");
 
   function onSubmit(
-    values: z.infer<typeof planSchema | typeof planSchemaForCredit>
+    values: z.infer<typeof planSchema | typeof planSchemaForCredit>,
   ) {
     // TODO: adicionar request para /payment/plan e testar
     console.log(values);
@@ -96,17 +118,24 @@ export const PlanForm = () => {
         paymentMethod,
       })
       .then((res) => {
-        console.log(res.data);
+        if (res.data.charges[0].payment_method === "pix") {
+          // TODO: passar dados necessários para pagamento do pix na search query
+          router.push("/pagamento-do-plano/pos-pagamento");
+        }
+
+        if (res.data.charges[0].payment_method === "boleto") {
+          // TODO: passar dados necessários para pagamento do pix na search query
+          router.push("/pagamento-do-plano/pos-pagamento");
+        }
+
+        router.push("/pagamento-do-plano/pos-pagamento");
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(
+          "Ocorreu um erro durante o pagamento, verifique os dados e tente novamente",
+        );
+        console.error(error);
       });
-  }
-
-  function handleDDDFormat(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 2);
-
-    form.setValue("ddd", value);
   }
 
   function handleCelFormat(event: ChangeEvent<HTMLInputElement>) {
@@ -116,11 +145,21 @@ export const PlanForm = () => {
     form.setValue("cel", formattedNumber);
   }
 
+  function handleCPFFormat(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 14);
+    const formattedNumber = value.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{2})/,
+      "$1.$2.$3-$4",
+    );
+
+    form.setValue("cpf", formattedNumber);
+  }
+
   function handleCreditNumberFormat(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 16);
     const formattedNumber = value.replace(
       /(\d{4})(\d{4})(\d{4})(\d{4})/,
-      "$1 $2 $3 $4"
+      "$1 $2 $3 $4",
     );
 
     form.setValue("creditNumber", formattedNumber);
@@ -144,8 +183,8 @@ export const PlanForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <PaymentPersonalDataForm
           control={form.control}
-          handleDDDFormat={handleDDDFormat}
-          handleCelFormat={handleCelFormat}
+          handleCPFFormat={handleCPFFormat}
+          currentUser={currentUser}
         />
         <PaymentCardForm
           control={form.control}
