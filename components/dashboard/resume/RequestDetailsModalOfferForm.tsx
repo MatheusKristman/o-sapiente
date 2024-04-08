@@ -348,8 +348,8 @@ const RequestDetailsModalOfferForm = ({
 
         <TabsContent value="outside" className="!mt-6">
           <div className="w-full flex flex-col gap-4">
-            <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-5">
-              <div className="w-full sm:w-1/2 flex flex-col gap-2">
+            <div className="w-full flex flex-col sm:grid sm:grid-cols-2 sm:grid-rows-1 justify-between gap-5">
+              <div className="w-full flex flex-col gap-2">
                 <label
                   htmlFor="lessonDate"
                   className="text-left text-base text-gray-primary font-medium"
@@ -394,7 +394,7 @@ const RequestDetailsModalOfferForm = ({
                 </Popover>
               </div>
 
-              <div className="w-full sm:w-1/2 flex flex-col gap-2">
+              <div className="w-full flex flex-col gap-2">
                 <label
                   htmlFor="lessonPrice"
                   className="text-left text-gray-primary text-base font-medium"
