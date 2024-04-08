@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 export const offerSchema = z.object({
-  lessonDate: z.date(),
+  lessonDate: z.date({
+    required_error: "Favor selecionar uma data para aula",
+  }),
   lessonPrice: z.number(),
   details: z
     .string()

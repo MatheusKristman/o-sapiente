@@ -48,7 +48,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Link from "next/link";
 
 interface RequestDetailsModalOfferFormProps {
   setOffers?: Dispatch<SetStateAction<Offer[]>>;
@@ -211,12 +210,12 @@ const RequestDetailsModalOfferForm = ({
               className="w-full flex flex-col gap-y-9"
             >
               <div className="w-full flex flex-col gap-y-4">
-                <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-5">
+                <div className="w-full flex flex-col sm:grid sm:grid-cols-2 sm:grid-rows-1 justify-between gap-5">
                   <FormField
                     control={form.control}
                     name="lessonDate"
                     render={({ field }) => (
-                      <FormItem className="w-full sm:w-1/2 flex flex-col">
+                      <FormItem className="w-full flex flex-col">
                         <FormLabel className="text-left text-base text-gray-primary">
                           {requestDetailsOfferFormInfo.lessonDateLabel}
                         </FormLabel>
@@ -261,7 +260,7 @@ const RequestDetailsModalOfferForm = ({
                           </PopoverContent>
                         </Popover>
 
-                        <FormMessage />
+                        <FormMessage className="text-left" />
                       </FormItem>
                     )}
                   />
@@ -270,7 +269,7 @@ const RequestDetailsModalOfferForm = ({
                     control={form.control}
                     name="lessonPrice"
                     render={({ field }) => (
-                      <FormItem className="w-full sm:w-1/2 flex flex-col">
+                      <FormItem className="w-full flex flex-col">
                         <FormLabel className="text-left text-base text-gray-primary">
                           {requestDetailsOfferFormInfo.lessonPriceLabel}
                         </FormLabel>
