@@ -4,6 +4,7 @@ import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Offer } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
 import {
@@ -30,6 +31,8 @@ const RequestDetailModal = ({
 
   const { isModalOpen, closeModal, reset } = useRequestDetailsModalStore();
 
+  const router = useRouter();
+
   function handleCloseButton() {
     closeModal();
 
@@ -37,6 +40,7 @@ const RequestDetailModal = ({
       reset();
       setIsResume(true);
       setIsOfferForm(false);
+      location.reload();
     }, 350);
   }
 
