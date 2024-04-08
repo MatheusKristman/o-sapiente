@@ -28,6 +28,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
     setStudentName,
     setSubject,
     setMessage,
+    setStudentCel,
   } = useRequestDetailsModalStore();
 
   const {
@@ -45,6 +46,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
       setStudentName(
         `${request.users[0].firstName} ${request.users[0].lastName}`,
       );
+      setStudentCel(request.users[0].tel);
       setSubject(request.subject);
       setMessage(request.description);
     }
@@ -90,8 +92,8 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
         <div className="xl:flex xl:justify-end xl:w-5/12">
           <div className="flex items-center justify-center relative">
             {type === "Student" &&
-              request.offers.length > 0 &&
-              !request.isOfferAccepted ? (
+            request.offers.length > 0 &&
+            !request.isOfferAccepted ? (
               <span className="absolute -top-1 -right-1 z-10 rounded-full bg-gray-primary text-sm text-white font-semibold text-center h-6 w-6 flex items-center justify-center">
                 {request.offers.length}
               </span>

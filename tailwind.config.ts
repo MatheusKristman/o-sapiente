@@ -71,6 +71,7 @@ export default withUt({
         galleryIcon: "url('/assets/icons/gallery.svg')",
         videoFile: "url('/assets/icons/video-file.svg')",
         logoIcon: "url('/assets/icons/logo-icon.svg')",
+        whatsappIcon: "url('/assets/icons/whatsapp.svg')",
       },
       transitionProperty: {
         "max-height": "max-height",

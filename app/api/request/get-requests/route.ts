@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
               firstName: true,
               lastName: true,
               email: true,
+              tel: true,
               accountType: true,
               profilePhoto: true,
               subjectIds: true,

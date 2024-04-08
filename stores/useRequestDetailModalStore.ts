@@ -12,6 +12,8 @@ interface useRequestDetailsModalStoreProps {
   setStudentImage: (url: string | null) => void;
   studentName: string;
   setStudentName: (name: string) => void;
+  studentCel: string | null;
+  setStudentCel: (cel: string | null) => void;
   subject: string;
   setSubject: (sub: string) => void;
   message: string;
@@ -32,6 +34,8 @@ const useRequestDetailsModalStore = create<useRequestDetailsModalStoreProps>(
     setStudentImage: (url) => set({ studentImage: url }),
     studentName: "",
     setStudentName: (name) => set({ studentName: name }),
+    studentCel: "",
+    setStudentCel: (cel) => set({ studentCel: cel }),
     subject: "",
     setSubject: (sub) => set({ subject: sub }),
     message: "",

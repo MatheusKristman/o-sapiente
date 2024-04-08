@@ -18,6 +18,7 @@ import { CalendarIcon, CopyIcon } from "lucide-react";
 import { z } from "zod";
 import { format } from "date-fns";
 import CurrencyInput from "react-currency-input-field";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { requestDetailsOfferFormInfo } from "@/constants/requestDetails-br";
@@ -47,6 +48,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Link from "next/link";
 
 interface RequestDetailsModalOfferFormProps {
   setOffers?: Dispatch<SetStateAction<Offer[]>>;
@@ -57,13 +59,17 @@ const RequestDetailsModalOfferForm = ({
   setOffers,
   handleCloseButton,
 }: RequestDetailsModalOfferFormProps) => {
-  const { requestId, studentId } = useRequestDetailsModalStore();
+  const { requestId, studentImage, studentName, studentCel } =
+    useRequestDetailsModalStore();
 
   const [isSending, setIsSending] = useState<boolean>(false);
   const [lessonDate, setLessonDate] = useState<Date | undefined>(undefined);
   const [lessonPrice, setLessonPrice] = useState<number>(10);
   const [offerLink, setOfferLink] = useState<string>("");
   const [linkCopied, setLinkCopied] = useState<boolean>(false);
+  const [whatsappLink, setWhatsappLink] = useState<string>(
+    `https://wa.me/55${studentCel?.replace(/\D/g, "")}`,
+  );
 
   const form = useForm<z.infer<typeof offerSchema>>({
     // @ts-ignore
@@ -143,6 +149,43 @@ const RequestDetailsModalOfferForm = ({
       <h3 className="text-3xl font-semibold text-gray-primary text-left mb-6">
         {requestDetailsOfferFormInfo.title}
       </h3>
+
+      <div className="w-full flex flex-col gap-4 items-center mb-6 sm:flex-row sm:justify-between">
+        <div className="flex items-center gap-4">
+          <div className="relative w-12 h-12 overflow-hidden rounded-full">
+            <Image
+              src={
+                studentImage
+                  ? studentImage
+                  : "/assets/images/default-user-photo.svg"
+              }
+              alt="Aluno"
+              fill
+              className="object-cover object-center"
+            />
+          </div>
+
+          <h5 className="text-lg font-semibold text-gray-primary">
+            {studentName}
+          </h5>
+        </div>
+
+        {studentCel ? (
+          <a
+            href={whatsappLink}
+            rel="noreferrer noopener"
+            target="_blank"
+            className="flex text-green-primary font-medium items-center gap-1"
+          >
+            <span className="block bg-whatsappIcon bg-contain w-9 min-w-[36px] h-9 min-h-[36px]" />
+            <span>{studentCel}</span>
+          </a>
+        ) : (
+          <span className="text-sm text-gray-primary/70 text-center">
+            Aluno não tem telefone cadastrado
+          </span>
+        )}
+      </div>
 
       <Tabs defaultValue="inside" className="w-full">
         <TabsList className="w-full h-auto bg-[#EBEFF1] rounded-lg">
@@ -296,7 +339,7 @@ const RequestDetailsModalOfferForm = ({
                 className="w-full"
                 disabled={isSending}
                 type="submit"
-                onClick={() => { }}
+                onClick={() => {}}
               >
                 {requestDetailsOfferFormInfo.btn}
               </Button>
