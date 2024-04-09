@@ -74,7 +74,7 @@ export const PlanForm = ({ currentUser }: Props) => {
     {
       resolver: zodResolver(
         // @ts-ignore
-        paymentMethod === "credit_card" ? planSchemaForCredit : planSchema,
+        paymentMethod === "credit_card" ? planSchemaForCredit : planSchema
       ),
       defaultValues: {
         name: `${currentUser.firstName} ${currentUser.lastName}`,
@@ -95,7 +95,7 @@ export const PlanForm = ({ currentUser }: Props) => {
         creditExpiry: "",
         creditCvc: "",
       },
-    },
+    }
   );
 
   const creditNumber = form.watch("creditNumber");
@@ -104,7 +104,7 @@ export const PlanForm = ({ currentUser }: Props) => {
   const creditCvc = form.watch("creditCvc");
 
   function onSubmit(
-    values: z.infer<typeof planSchema | typeof planSchemaForCredit>,
+    values: z.infer<typeof planSchema | typeof planSchemaForCredit>
   ) {
     // TODO: adicionar request para /payment/plan e testar
     console.log(values);
@@ -118,21 +118,29 @@ export const PlanForm = ({ currentUser }: Props) => {
         paymentMethod,
       })
       .then((res) => {
+        console.log(res.data);
+
         if (res.data.charges[0].payment_method === "pix") {
-          // TODO: passar dados necessários para pagamento do pix na search query
-          router.push("/pagamento-do-plano/pos-pagamento");
+          router.push(
+            `/pagamento-do-plano/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&qr_code_url=${res.data.charges[0].last_transaction.qr_code_url}&pix_code=${res.data.charges[0].last_transaction.qr_code}&expires_at=${res.data.charges[0].last_transaction.expires_at}`
+          );
+          return;
         }
 
         if (res.data.charges[0].payment_method === "boleto") {
-          // TODO: passar dados necessários para pagamento do pix na search query
-          router.push("/pagamento-do-plano/pos-pagamento");
+          router.push(
+            `/pagamento-do-plano/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&pdf=${res.data.charges[0].last_transaction.pdf}&boleto_code=${res.data.charges[0].last_transaction.line}`
+          );
+          return;
         }
 
-        router.push("/pagamento-do-plano/pos-pagamento");
+        router.push(
+          `/pagamento-do-plano/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}`
+        );
       })
       .catch((error) => {
         toast.error(
-          "Ocorreu um erro durante o pagamento, verifique os dados e tente novamente",
+          "Ocorreu um erro durante o pagamento, verifique os dados e tente novamente"
         );
         console.error(error);
       });
@@ -149,7 +157,7 @@ export const PlanForm = ({ currentUser }: Props) => {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 14);
     const formattedNumber = value.replace(
       /(\d{3})(\d{3})(\d{3})(\d{2})/,
-      "$1.$2.$3-$4",
+      "$1.$2.$3-$4"
     );
 
     form.setValue("cpf", formattedNumber);
@@ -159,7 +167,7 @@ export const PlanForm = ({ currentUser }: Props) => {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 16);
     const formattedNumber = value.replace(
       /(\d{4})(\d{4})(\d{4})(\d{4})/,
-      "$1 $2 $3 $4",
+      "$1 $2 $3 $4"
     );
 
     form.setValue("creditNumber", formattedNumber);

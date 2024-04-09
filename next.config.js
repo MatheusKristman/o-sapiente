@@ -9,7 +9,11 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["osapiente.s3.sa-east-1.amazonaws.com", "utfs.io"],
+    domains: [
+      "osapiente.s3.sa-east-1.amazonaws.com",
+      "utfs.io",
+      "api.pagar.me",
+    ],
   },
 };
 

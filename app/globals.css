@@ -96,6 +96,10 @@
   @apply bg-transparent outline-none;
 }
 
+.input-dark-gray {
+  @apply w-full h-12 px-4 py-3 bg-[#C8D6DF] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
+}
+
 .input {
   @apply w-full h-12 px-4 py-3 bg-[#EBEFF1] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
 }
