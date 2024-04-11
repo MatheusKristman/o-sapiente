@@ -1,12 +1,26 @@
 "use client";
 
 import Image from "next/image";
+import { format } from "date-fns";
 
 import { info } from "@/constants/offer/offerViaLink-br";
 import { Button } from "@/components/ui/button";
 import useOfferViaLinkStore from "@/stores/useOfferViaLinkStore";
+import { formatPrice } from "@/libs/utils";
 
-export function OfferViaLink() {
+interface Props {
+  professorName: string;
+  professorPhoto: string | null;
+  lessonDate: Date;
+  lessonPrice: number;
+}
+
+export function OfferViaLink({
+  professorName,
+  professorPhoto,
+  lessonDate,
+  lessonPrice,
+}: Props) {
   const { openModal } = useOfferViaLinkStore();
   // TODO: adicionar propriedades que vão ser apresentadas na tela
   return (
@@ -24,14 +38,18 @@ export function OfferViaLink() {
             <div className="w-14 min-w-[56px] h-14 min-h-[56px] rounded-full overflow-hidden relative">
               <Image
                 alt="Perfil"
-                src="/assets/images/avatar-example.png"
+                src={
+                  professorPhoto
+                    ? professorPhoto
+                    : "/assets/images/default-user-photo.svg"
+                }
                 fill
                 className="object-cover object-center"
               />
             </div>
 
             <span className="text-xl font-semibold text-gray-primary">
-              Nome do professor
+              {professorName}
             </span>
           </div>
 
@@ -42,7 +60,7 @@ export function OfferViaLink() {
               </span>
 
               <span className="text-green-primary font-semibold text-lg text-center">
-                01/10/2024
+                {format(lessonDate, "dd/MM/yyyy")}
               </span>
             </div>
 
@@ -52,7 +70,7 @@ export function OfferViaLink() {
               </span>
 
               <span className="text-green-primary font-semibold text-lg text-center">
-                R$ 10,00
+                {formatPrice(lessonPrice)}
               </span>
             </div>
           </div>

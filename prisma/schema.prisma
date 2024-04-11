@@ -61,12 +61,11 @@ model User {
 }
 
 model Request {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  subject           String
-  description       String
-  isConcluded       Boolean @default(false)
-  isOfferAccepted   Boolean @default(false)
-  isRequestAccepted Boolean @default(false)
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  subject         String
+  description     String
+  isConcluded     Boolean @default(false)
+  isOfferAccepted Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
