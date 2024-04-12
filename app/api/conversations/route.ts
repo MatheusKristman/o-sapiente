@@ -17,6 +17,47 @@ export async function POST(request: Request) {
       return new Response("Dados inválidos", { status: 404 });
     }
 
+    const existingConversation = await prisma.conversation.findMany({
+      where: {
+        OR: [
+          {
+            userIds: {
+              equals: [currentUser.id, otherUserId],
+            },
+          },
+          {
+            userIds: {
+              equals: [otherUserId, currentUser.id],
+            },
+          },
+        ],
+      },
+      include: {
+        users: true,
+      },
+    });
+
+    const singleConversation = existingConversation[0];
+
+    if (singleConversation) {
+      await prisma.request.update({
+        where: {
+          id: requestId,
+        },
+        data: {
+          isOfferAccepted: true,
+        },
+      });
+
+      singleConversation.users.map((user) => {
+        if (user.email) {
+          pusherServer.trigger(user.email, "conversation:new", newConversation);
+        }
+      });
+
+      return Response.json({ id: singleConversation.id });
+    }
+
     const newConversation = await prisma.conversation.create({
       data: {
         requestId,

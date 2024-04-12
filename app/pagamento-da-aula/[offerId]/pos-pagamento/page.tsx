@@ -53,6 +53,7 @@ function LessonAfterPaymentPage() {
           status === "waiting_capture" ||
           status === "partial_capture") && <ProcessingPayment />}
 
+      {/* TODO: criar um próprio da rota de pagamento da aula */}
       {transactionType === "credit_card" && status === "captured" && (
         <PaymentConfirmed />
       )}

@@ -4,6 +4,7 @@ import { BsXLg } from "react-icons/bs";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 import {
   ModalAnimation,
@@ -13,12 +14,22 @@ import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import { info } from "@/constants/offer/paymentMethodModal-br";
 import useOfferViaLinkStore from "@/stores/useOfferViaLinkStore";
+import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
+import toast from "react-hot-toast";
 
 interface Props {
   offerId: string;
+  otherUserId: string;
+  requestId: string;
+  currentUserId: string;
 }
 
-export function PaymentMethodModal({ offerId }: Props) {
+export function PaymentMethodModal({
+  offerId,
+  otherUserId,
+  requestId,
+  currentUserId,
+}: Props) {
   const [isPlatformSelected, setIsPlatformSelected] = useState<boolean>(true);
   const [isAgreedSelected, setIsAgreedSelected] = useState<boolean>(false);
 
@@ -46,6 +57,20 @@ export function PaymentMethodModal({ offerId }: Props) {
 
     if (isAgreedSelected) {
       // TODO: criar api para aceitar proposta e colocar solicitação como aceita
+      axios
+        .post("/api/conversations", { otherUserId, requestId })
+        .then(() =>
+          router.replace(
+            `${menuItems[0].studentHref}${currentUserId}${menuItems[0].pageHref}`
+          )
+        )
+        .catch((error) => {
+          console.error(error);
+          toast.error(
+            "Ocorreu um erro ao aceitar a proposta, tente novamente mais tarde!"
+          );
+        });
+
       return;
     }
   }
