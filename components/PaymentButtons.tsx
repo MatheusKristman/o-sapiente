@@ -24,11 +24,12 @@ export function PaymentButtons() {
 
   return (
     <div className="w-full flex flex-col gap-4 mb-12">
-      {pathname !== "/pagamento-do-plano" && (
-        <Button variant="gray" className="w-full">
-          {info.skipButton}
-        </Button>
-      )}
+      {pathname !== "/pagamento-do-plano" &&
+        !pathname?.includes("/pagamento-da-aula") && (
+          <Button variant="gray" className="w-full">
+            {info.skipButton}
+          </Button>
+        )}
 
       <div className="w-full flex items-center justify-between gap-4">
         <Button

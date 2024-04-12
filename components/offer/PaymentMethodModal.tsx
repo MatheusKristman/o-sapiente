@@ -3,6 +3,7 @@
 import { BsXLg } from "react-icons/bs";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   ModalAnimation,
@@ -13,11 +14,16 @@ import { Toggle } from "@/components/ui/toggle";
 import { info } from "@/constants/offer/paymentMethodModal-br";
 import useOfferViaLinkStore from "@/stores/useOfferViaLinkStore";
 
-export function PaymentMethodModal() {
+interface Props {
+  offerId: string;
+}
+
+export function PaymentMethodModal({ offerId }: Props) {
   const [isPlatformSelected, setIsPlatformSelected] = useState<boolean>(true);
   const [isAgreedSelected, setIsAgreedSelected] = useState<boolean>(false);
 
   const { isModalOpen, closeModal } = useOfferViaLinkStore();
+  const router = useRouter();
 
   function selectPlatform() {
     if (!isPlatformSelected) {
@@ -30,6 +36,17 @@ export function PaymentMethodModal() {
     if (!isAgreedSelected) {
       setIsPlatformSelected(false);
       setIsAgreedSelected(true);
+    }
+  }
+
+  function handlePayment() {
+    if (isPlatformSelected) {
+      router.push(`/pagamento-da-aula/${offerId}`);
+    }
+
+    if (isAgreedSelected) {
+      // TODO: criar api para aceitar proposta e colocar solicitação como aceita
+      return;
     }
   }
 
@@ -103,7 +120,9 @@ export function PaymentMethodModal() {
                   </Toggle>
                 </div>
 
-                <Button className="w-full">{info.nextButton}</Button>
+                <Button onClick={handlePayment} className="w-full">
+                  {info.nextButton}
+                </Button>
               </div>
             </motion.div>
           </motion.div>

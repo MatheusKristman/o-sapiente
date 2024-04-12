@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import { OfferViaLink } from "@/components/offer/OfferViaLink";
 import { PaymentMethodModal } from "@/components/offer/PaymentMethodModal";
 import { InvalidUser } from "@/components/offer/InvalidUser";
@@ -18,7 +20,11 @@ async function OfferViaLinkPage({
   const currentUser = await getCurrentUser();
   const offer = await getOfferById(searchParams.offerId);
 
-  if (!currentUser || !currentUser.id || !offer) {
+  if (!currentUser) {
+    redirect("/");
+  }
+
+  if (!currentUser?.id || !offer) {
     return <Loading />;
   }
 
@@ -34,7 +40,7 @@ async function OfferViaLinkPage({
       )}
       {currentUser.id !== searchParams.studentId && <InvalidUser />}
       {offer.request.isOfferAccepted && <InvalidLink />}
-      <PaymentMethodModal />
+      <PaymentMethodModal offerId={offer.id} />
     </section>
   );
 }

@@ -14,7 +14,6 @@ interface Props {
 }
 
 export function PlanHeader({ plans }: Props) {
-  // TODO: para teste, depois aplicar logica do gateway de pagamento
   const { paymentMethod, setPaymentMethod, planSelected, setPlanSelected } =
     usePaymentStore();
 

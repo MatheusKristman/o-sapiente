@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import useHeaderStore from "@/stores/useHeaderStore";
 import { info } from "@/constants/after-payment/paymentConfirmed-br";
@@ -10,6 +11,7 @@ import { Button } from "@/components/ui/button";
 
 export function PaymentConfirmed() {
   const { userId } = useHeaderStore();
+  const pathname = usePathname();
 
   return (
     <div className="w-full px-6 h-full mt-12 mb-24 sm:px-16 lg:container lg:mx-auto">
@@ -37,7 +39,11 @@ export function PaymentConfirmed() {
           </h1>
 
           <p className="text-base text-gray-primary text-center sm:text-lg">
-            {info.desc}
+            {pathname?.includes("/pagamento-do-plano")
+              ? info.planDesc
+              : pathname?.includes("/pagamento-da-aula")
+              ? info.lessonDesc
+              : null}
           </p>
         </div>
 
