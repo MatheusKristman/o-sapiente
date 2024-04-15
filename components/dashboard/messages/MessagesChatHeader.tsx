@@ -78,35 +78,6 @@ const MessagesChatHeader = ({
               </span>
             </div>
           </div>
-
-          <div className="flex items-center">
-            <Button
-              variant="link"
-              size="icon"
-              onClick={handleNavModal}
-              className="text-green-primary flex items-center ml-auto md:hidden"
-            >
-              {isModalNavOpen ? (
-                <XCircleIcon
-                  onClick={() => { }}
-                  size={35}
-                  strokeWidth={2}
-                />
-              ) : (
-                <MoreHorizontal
-                  onClick={() => { }}
-                  size={35}
-                  strokeWidth={2.7}
-                />
-              )}
-            </Button>
-
-            <div className="hidden md:flex justify-end ml-auto">
-              <Button className="w-full">
-                Confirmar Finalização
-              </Button>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -115,9 +86,7 @@ const MessagesChatHeader = ({
           <div className="flex w-full justify-end">
             <div className="flex w-full justify-end">
               <div className="flex px-6 justify-center items-center w-72 h-24 bg-white rounded-l-lg rounded-br-lg shadow-lg">
-                <Button className="w-full">
-                  Confirmar Finalização
-                </Button>
+                <Button className="w-full">Confirmar Finalização</Button>
               </div>
             </div>
           </div>
