@@ -70,10 +70,11 @@ model Request {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userIds      String[]       @db.ObjectId
-  users        User[]         @relation(fields: [userIds], references: [id])
-  Conversation Conversation[]
-  offers       Offer[]
+  userIds        String[]     @db.ObjectId
+  users          User[]       @relation(fields: [userIds], references: [id])
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String       @unique @db.ObjectId
+  offers         Offer[]
 }
 
 model Offer {
@@ -103,8 +104,7 @@ model Conversation {
   userIds String[] @db.ObjectId
   users   User[]   @relation(fields: [userIds], references: [id])
 
-  requestId String  @db.ObjectId
-  request   Request @relation(fields: [requestId], references: [id])
+  request Request[]
 }
 
 model Plan {

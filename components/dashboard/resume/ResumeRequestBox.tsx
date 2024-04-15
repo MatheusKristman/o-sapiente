@@ -24,6 +24,10 @@ const ResumeRequestBox = ({
     RequestWithUsersAndOffers[]
   >([]);
 
+  const filteredRequest = request?.filter(
+    (request) => !request.isOfferAccepted,
+  );
+
   useEffect(() => {
     if (request) {
       setOffersToStudent(request);
@@ -45,11 +49,11 @@ const ResumeRequestBox = ({
 
       <div className="relative w-full max-h-[300px] overflow-auto scrollbar scrollbar-thumb-slate-100">
         {type === "Professor" &&
-          (request && request.length > 0 ? (
+          (filteredRequest && filteredRequest.length > 0 ? (
             <>
               <div className="sticky top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-              {request.map((request, index) => (
+              {filteredRequest.map((request, index) => (
                 <OfferBox
                   offer={professorOffers ? offerFiltered(request.id) : null}
                   type={type}
@@ -69,11 +73,11 @@ const ResumeRequestBox = ({
           ))}
 
         {type === "Student" &&
-          (request && request.length > 0 ? (
+          (filteredRequest && filteredRequest.length > 0 ? (
             <>
               <div className="sticky top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-              {request.map((request, index) => (
+              {filteredRequest.map((request, index) => (
                 <OfferBox type={type} key={request.id} request={request} />
               ))}
 
