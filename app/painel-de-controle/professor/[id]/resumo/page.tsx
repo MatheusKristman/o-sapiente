@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { Offer } from "@prisma/client";
+import { Offer, Request } from "@prisma/client";
 
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
 import ResumeRequestBox from "@/components/dashboard/resume/ResumeRequestBox";
@@ -11,6 +11,8 @@ import ResumeCurrentLessonBox from "@/components/dashboard/resume/ResumeCurrentL
 import BalanceBox from "@/components/dashboard/resume/BalanceBox";
 import RequestDetailModal from "@/components/dashboard/resume/RequestDetailModal";
 import { FinishedLessonsBox } from "@/components/dashboard/resume/FinishedLessonsBox";
+import { RequestFinishModal } from "@/components/dashboard/resume/RequestFinishModal";
+import { RequestConfirmFinishModal } from "@/components/dashboard/resume/RequestConfirmFinishModal";
 import { RequestWithUsersAndOffers } from "@/types";
 
 const ResumePage = () => {
@@ -20,6 +22,9 @@ const ResumePage = () => {
   const [request, setRequest] = useState<RequestWithUsersAndOffers[]>([]);
   const [plan, setPlan] = useState<string>("");
   const [offers, setOffers] = useState<Offer[]>([]);
+  const [currentLesson, setCurrentLesson] = useState<
+    RequestWithUsersAndOffers[]
+  >([]);
 
   const session = useSession();
 
@@ -44,6 +49,11 @@ const ResumePage = () => {
           email: session?.data?.user?.email,
         });
         setRequest(requestResponse.data);
+        setCurrentLesson(
+          requestResponse.data.filter(
+            (request: Request) => request.isOfferAccepted,
+          ),
+        );
       } catch (error) {
         console.error(error);
       }
@@ -78,11 +88,13 @@ const ResumePage = () => {
             request={request}
           />
 
-          <ResumeCurrentLessonBox />
+          <ResumeCurrentLessonBox currentLesson={currentLesson} />
         </div>
       </div>
 
       <RequestDetailModal setOffers={setOffers} type="Professor" plan={plan} />
+      <RequestFinishModal type="PROFESSOR" />
+      <RequestConfirmFinishModal />
     </>
   );
 };

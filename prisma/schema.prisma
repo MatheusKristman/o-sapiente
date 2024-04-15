@@ -45,7 +45,10 @@ model User {
   subjects   Subject[] @relation(fields: [subjectIds], references: [id])
 
   requestIds String[]  @db.ObjectId
-  requests   Request[] @relation(fields: [requestIds], references: [id])
+  requests   Request[] @relation("requests", fields: [requestIds], references: [id])
+
+  requestsVotedToFinish   Request[] @relation("usersVotedToFinish", fields: [requestIdsVotedToFinish], references: [id])
+  requestIdsVotedToFinish String[]  @db.ObjectId
 
   conversationIds String[]       @db.ObjectId
   conversations   Conversation[] @relation(fields: [conversationIds], references: [id])
@@ -70,11 +73,13 @@ model Request {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userIds        String[]     @db.ObjectId
-  users          User[]       @relation(fields: [userIds], references: [id])
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-  conversationId String       @unique @db.ObjectId
-  offers         Offer[]
+  userIds               String[]      @db.ObjectId
+  users                 User[]        @relation("requests", fields: [userIds], references: [id])
+  usersVotedToFinish    User[]        @relation("usersVotedToFinish", fields: [usersIdsVotedToFinish], references: [id])
+  usersIdsVotedToFinish String[]      @db.ObjectId
+  conversation          Conversation? @relation(fields: [conversationId], references: [id])
+  conversationId        String?       @db.ObjectId
+  offers                Offer[]
 }
 
 model Offer {

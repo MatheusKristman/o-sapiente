@@ -9,6 +9,8 @@ export const professorResumeInfos = {
   redeemBtn: "RESGATAR",
   seeOfferBtn: "VER SOLICITAÇÃO",
   offerSended: "PROPOSTA ENVIADA",
+  finishLessonBtn: "FINALIZAR AULA",
+  confirmFinishLessonBtn: "CONFIRMAR FINALIZAÇÃO",
   requestBoxTitle: "Ultimas Solicitações",
 };
 
@@ -20,6 +22,8 @@ export const studentResumeInfos = {
   offerAccepted: "PROPOSTA ACEITA",
   currentLessonTitle: "Aulas em Andamento",
   seeMessageBtn: "VER MENSAGENS",
+  finishLessonBtn: "FINALIZAR AULA",
+  confirmFinishLessonBtn: "CONFIRMAR FINALIZAÇÃO",
   noCurrentLessonMessage: "Nenhuma aula em andamento",
 };
 
@@ -32,4 +36,25 @@ export const studentNewRequestInfo = {
   submittingBtn: "ENVIANDO",
   successMessage: "Solicitação enviada com sucesso!",
   closeBtn: "FECHAR",
+};
+
+// TODO checar como será o processo de solicitar certificado
+export const finishModalInfo = {
+  title: "Deseja finalizar a aula?",
+  descProfessor:
+    "Antes de finalizar, deixe avisa com o aluno que irá finalizar a aula.",
+  descStudent:
+    "Antes de finalizar, deixe avisa com o professor que irá finalizar a aula.",
+  cancelBtn: "CANCELAR",
+  confirmBtn: "FINALIZAR",
+};
+
+export const confirmFinishModalInfo = {
+  title: "Deseja confirmar a finalização da aula?",
+  desc: "finalizou a aula",
+  confirmBtn: "CONFIRMAR",
+  cancelBtn: "CANCELAR",
+  supportDesc:
+    "Não foi informado sobre a finalização da aula pelo outro usuário?",
+  supportBtn: "SUPORTE",
 };
