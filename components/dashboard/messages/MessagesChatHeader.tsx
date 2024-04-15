@@ -80,18 +80,6 @@ const MessagesChatHeader = ({
           </div>
         </div>
       </div>
-
-      {isModalNavOpen && (
-        <div className="absolute top-[80px] right-0 z-10 flex w-full">
-          <div className="flex w-full justify-end">
-            <div className="flex w-full justify-end">
-              <div className="flex px-6 justify-center items-center w-72 h-24 bg-white rounded-l-lg rounded-br-lg shadow-lg">
-                <Button className="w-full">Confirmar Finalização</Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
@@ -112,12 +100,6 @@ const SkeletonMessagesChatHeader = () => {
 
             <Skeleton className="h-4 w-14 sm:w-20 bg-[#40535E]" />
           </div>
-        </div>
-
-        <div className="flex items-center">
-          <Skeleton className="h-4 w-10 md:hidden bg-[#40535E]" />
-
-          <Skeleton className="hidden md:flex h-12 w-40 bg-[#40535E]" />
         </div>
       </div>
     </div>
