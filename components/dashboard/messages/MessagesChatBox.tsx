@@ -30,14 +30,9 @@ const MessagesChatBox = ({
   const { openImageModal, openVideoModal } = useConversationStore();
 
   const [isModalFooterOpen, setIsModalFooterOpen] = useState<boolean>(false);
-  const [isModalNavOpen, setIsModalNavOpen] = useState<boolean>(false);
 
   function handleFooterModal() {
     setIsModalFooterOpen((prev: boolean) => !prev);
-  }
-
-  function handleNavModal() {
-    setIsModalNavOpen((prev: boolean) => !prev);
   }
 
   function mobileOpenImageModal() {
@@ -53,7 +48,6 @@ const MessagesChatBox = ({
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth >= 768) {
-        setIsModalNavOpen(false);
         setIsModalFooterOpen(false);
       }
     }
@@ -72,12 +66,7 @@ const MessagesChatBox = ({
           isOpen ? "flex" : "hidden lg:flex",
         )}
       >
-        <MessagesChatHeader
-          conversation={conversation}
-          handleNavModal={handleNavModal}
-          isModalNavOpen={isModalNavOpen}
-          userType={userType}
-        />
+        <MessagesChatHeader conversation={conversation} userType={userType} />
 
         <MessagesChatBody
           initialMessages={initialMessages}

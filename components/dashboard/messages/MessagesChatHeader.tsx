@@ -13,17 +13,10 @@ interface Props {
   conversation: Conversation & {
     users: User[];
   };
-  handleNavModal: () => void;
-  isModalNavOpen: boolean;
   userType: "aluno" | "professor";
 }
 
-const MessagesChatHeader = ({
-  conversation,
-  handleNavModal,
-  isModalNavOpen,
-  userType,
-}: Props) => {
+const MessagesChatHeader = ({ conversation, userType }: Props) => {
   const otherUser = useOtherUser(conversation);
   const { userId } = useHeaderStore();
   const router = useRouter();
