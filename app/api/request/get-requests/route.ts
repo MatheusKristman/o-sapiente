@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/libs/prismadb";
 import { AccountRole } from "@prisma/client";
 
-export async function POST(req: NextRequest) {
-    try {
-        const body = await req.json();
-        const { email } = await body;
+import getCurrentUser from "@/app/action/getCurrentUser";
+import { prisma } from "@/libs/prismadb";
 
-        if (!email) {
+export async function GET(req: NextRequest) {
+    try {
+        const currentUser = await getCurrentUser();
+
+        if (!currentUser?.email) {
             return new NextResponse(
                 "Dados inválidos, verifique e tente novamente",
                 {
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
 
         const teacherUser = await prisma.user.findFirst({
             where: {
-                email,
+                email: currentUser.email,
                 accountType: AccountRole.PROFESSOR,
             },
         });
@@ -79,7 +80,7 @@ export async function POST(req: NextRequest) {
 
         const studentUser = await prisma.user.findUnique({
             where: {
-                email,
+                email: currentUser.email,
                 accountType: AccountRole.STUDENT,
             },
         });

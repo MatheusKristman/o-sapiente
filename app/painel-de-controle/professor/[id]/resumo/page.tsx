@@ -47,11 +47,8 @@ const ResumePage = () => {
                 );
                 setThemes(userResponse.data.themes);
 
-                const requestResponse = await axios.post(
+                const requestResponse = await axios.get(
                     "/api/request/get-requests",
-                    {
-                        email: session?.data?.user?.email,
-                    },
                 );
 
                 setRequest(

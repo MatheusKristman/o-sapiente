@@ -40,11 +40,8 @@ const DashboardPage = () => {
                     `${userResponse.data.firstName} ${userResponse.data.lastName}`,
                 );
 
-                const requestResponse = await axios.post(
+                const requestResponse = await axios.get(
                     "/api/request/get-requests",
-                    {
-                        email: userResponse.data.email,
-                    },
                 );
 
                 setRequest(
