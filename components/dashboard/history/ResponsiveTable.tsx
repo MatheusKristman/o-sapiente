@@ -10,7 +10,7 @@ import useHistoryStore from "@/stores/useHistoryStore";
 
 interface ResponsiveTableProps {
     requests: RequestWithUsersAndOffers[];
-    type: string;
+    type: "Professor" | "Student";
 }
 
 const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
