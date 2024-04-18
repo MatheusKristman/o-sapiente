@@ -1,5 +1,6 @@
 import getCurrentUser from "@/app/action/getCurrentUser";
 import { prisma } from "@/libs/prismadb";
+import { Status } from "@prisma/client";
 
 export async function PUT(req: Request) {
     try {
@@ -74,6 +75,14 @@ export async function PUT(req: Request) {
             },
             data: {
                 isConcluded: requestFiltered.usersIdsVotedToFinish.length === 1,
+                status:
+                    requestFiltered.usersIdsVotedToFinish.length === 1
+                        ? Status.finished
+                        : Status.finishing,
+                finishLessonDate:
+                    requestFiltered.usersIdsVotedToFinish.length === 1
+                        ? new Date()
+                        : null,
                 usersVotedToFinish: {
                     connect: {
                         id: currentUser.id,
