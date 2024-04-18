@@ -4,7 +4,7 @@ import { AccountRole } from "@prisma/client";
 import getCurrentUser from "@/app/action/getCurrentUser";
 import { prisma } from "@/libs/prismadb";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         const currentUser = await getCurrentUser();
 
