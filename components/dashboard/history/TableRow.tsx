@@ -5,7 +5,7 @@ import { RequestWithUsersAndOffers } from "@/types";
 import { Status } from "@prisma/client";
 import { formatPrice } from "@/libs/utils";
 
-export interface Props {
+interface Props {
     request: RequestWithUsersAndOffers;
 }
 
@@ -52,12 +52,15 @@ const TableRow = ({ request }: Props) => {
                     </span>
                 </div>
             </td>
+
             <td className="p-4 text-base text-[#879298] whitespace-nowrap">
                 {startDate ? format(startDate, "dd/MM/yyyy") : "--/--/----"}
             </td>
+
             <td className="p-4 text-base text-[#879298] whitespace-nowrap">
                 {endDate ? format(endDate, "dd/MM/yyyy") : "--/--/----"}
             </td>
+
             <td className="p-4 text-sm">
                 <span
                     className={`p-2 text-base font-medium whitespace-nowrap ${statusStyles[status]}`}
@@ -70,6 +73,7 @@ const TableRow = ({ request }: Props) => {
                         "Aguardando proposta"}
                 </span>
             </td>
+
             <td className="p-4 text-lg text-black font-semibold rounded-r-2xl whitespace-nowrap">
                 {formatPrice(price)}
             </td>

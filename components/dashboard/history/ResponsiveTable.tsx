@@ -55,11 +55,9 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
             <div className="relative w-full flex flex-col gap-y-5 overflow-y-auto max-h-80 md:max-h-[500px] lg:hidden">
                 <div className="sticky top-0 left-0 w-full h-6 min-h-[24px] bg-gradient-to-b from-[#F0F5F8] to-transparent z-[9]" />
 
-                {/* <ResultCard {...data[0]} /> */}
-                {/**/}
-                {/* <ResultCard {...data[1]} /> */}
-                {/**/}
-                {/* <ResultCard {...data[2]} /> */}
+                {requests.map((request, index) => (
+                    <ResultCard key={index} request={request} />
+                ))}
 
                 <div className="sticky bottom-0 left-0 w-full h-6 min-h-[24px] bg-gradient-to-t from-[#F0F5F8] to-transparent z-[9]" />
             </div>
