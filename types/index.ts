@@ -60,24 +60,32 @@ export type MessagesWithUser = Message & {
 };
 
 export type RequestWithUsersAndOffers = Request & {
-    users: User[];
-    usersVotedToFinish: User[];
+    users: UserFromRequest[];
+    usersVotedToFinish: UserFromRequest[];
     offers: OfferWithUser[];
 };
 
 export type UserFromRequest = {
+    id?: string;
     firstName: string;
     lastName: string;
     email: string;
-    themes: string[];
+    tel?: string | null;
     accountType: AccountRole;
     profilePhoto: string | null;
+    subjectIds: string[];
     requestIds: string[];
     seenMessageIds: string[];
 };
 
+export type UserFromOffer = {
+    firstName: string;
+    lastName: string;
+    profilePhoto: string | null;
+};
+
 export type OfferWithUser = Offer & {
-    user: User;
+    user: UserFromOffer;
 };
 
 export type FullMessageType = Message & {
