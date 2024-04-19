@@ -58,43 +58,61 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                     <tbody>
                         {searchValue.length > 0
                             ? requests
-                                .filter((request) => {
-                                    const isRequestDateOnRange: boolean =
-                                        compareAsc(
-                                            filterDate,
-                                            request.createdAt,
-                                        ) <= 0;
-                                    const hasOtherUser: boolean =
-                                        request.users.length === 2;
+                                  .filter((request) => {
+                                      const isRequestDateOnRange: boolean =
+                                          compareAsc(
+                                              filterDate,
+                                              request.createdAt,
+                                          ) <= 0;
+                                      const hasOtherUser: boolean =
+                                          request.users.length === 2;
 
-                                    if (!hasOtherUser) {
-                                        return false;
-                                    }
+                                      if (!hasOtherUser) {
+                                          return false;
+                                      }
 
-                                    const userFoundOnSearch: boolean =
-                                        `${request.users[1].firstName} ${request.users[1].lastName}`.includes(
-                                            searchValue,
-                                        );
+                                      const userFoundOnSearch: boolean =
+                                          `${request.users[1].firstName
+                                              .toLowerCase()
+                                              .normalize("NFD")
+                                              .replace(
+                                                  /[\u0300-\u036f]/g,
+                                                  "",
+                                              )} ${request.users[1].lastName
+                                              .toLowerCase()
+                                              .normalize("NFD")
+                                              .replace(
+                                                  /[\u0300-\u036f]/g,
+                                                  "",
+                                              )}`.includes(
+                                              searchValue
+                                                  .toLowerCase()
+                                                  .normalize("NFD")
+                                                  .replace(
+                                                      /[\u0300-\u036f]/g,
+                                                      "",
+                                                  ),
+                                          );
 
-                                    return (
-                                        isRequestDateOnRange &&
-                                        userFoundOnSearch
-                                    );
-                                })
-                                .map((request, index) => (
-                                    <TableRow key={index} request={request} />
-                                ))
+                                      return (
+                                          isRequestDateOnRange &&
+                                          userFoundOnSearch
+                                      );
+                                  })
+                                  .map((request, index) => (
+                                      <TableRow key={index} request={request} />
+                                  ))
                             : requests
-                                .filter(
-                                    (request) =>
-                                        compareAsc(
-                                            filterDate,
-                                            request.createdAt,
-                                        ) <= 0,
-                                )
-                                .map((request, index) => (
-                                    <TableRow key={index} request={request} />
-                                ))}
+                                  .filter(
+                                      (request) =>
+                                          compareAsc(
+                                              filterDate,
+                                              request.createdAt,
+                                          ) <= 0,
+                                  )
+                                  .map((request, index) => (
+                                      <TableRow key={index} request={request} />
+                                  ))}
                     </tbody>
                 </table>
             </div>
@@ -104,36 +122,51 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
 
                 {searchValue.length > 0
                     ? requests
-                        .filter((request) => {
-                            const isRequestDateOnRange: boolean =
-                                compareAsc(filterDate, request.createdAt) <=
-                                0;
-                            const hasOtherUser: boolean =
-                                request.users.length === 2;
+                          .filter((request) => {
+                              const isRequestDateOnRange: boolean =
+                                  compareAsc(filterDate, request.createdAt) <=
+                                  0;
+                              const hasOtherUser: boolean =
+                                  request.users.length === 2;
 
-                            if (!hasOtherUser) {
-                                return false;
-                            }
+                              if (!hasOtherUser) {
+                                  return false;
+                              }
 
-                            const userFoundOnSearch: boolean =
-                                `${request.users[1].firstName} ${request.users[1].lastName}`.includes(
-                                    searchValue,
-                                );
+                              const userFoundOnSearch: boolean =
+                                  `${request.users[1].firstName
+                                      .toLowerCase()
+                                      .normalize("NFD")
+                                      .replace(
+                                          /[\u0300-\u036f]/g,
+                                          "",
+                                      )} ${request.users[1].lastName
+                                      .toLowerCase()
+                                      .normalize("NFD")
+                                      .replace(
+                                          /[\u0300-\u036f]/g,
+                                          "",
+                                      )}`.includes(
+                                      searchValue
+                                          .toLowerCase()
+                                          .normalize("NFD")
+                                          .replace(/[\u0300-\u036f]/g, ""),
+                                  );
 
-                            return isRequestDateOnRange && userFoundOnSearch;
-                        })
-                        .map((request, index) => (
-                            <ResultCard key={index} request={request} />
-                        ))
+                              return isRequestDateOnRange && userFoundOnSearch;
+                          })
+                          .map((request, index) => (
+                              <ResultCard key={index} request={request} />
+                          ))
                     : requests
-                        .filter(
-                            (request) =>
-                                compareAsc(filterDate, request.createdAt) <=
-                                0,
-                        )
-                        .map((request, index) => (
-                            <ResultCard key={index} request={request} />
-                        ))}
+                          .filter(
+                              (request) =>
+                                  compareAsc(filterDate, request.createdAt) <=
+                                  0,
+                          )
+                          .map((request, index) => (
+                              <ResultCard key={index} request={request} />
+                          ))}
 
                 <div className="sticky bottom-0 left-0 w-full h-6 min-h-[24px] bg-gradient-to-t from-[#F0F5F8] to-transparent z-[9]" />
             </div>
