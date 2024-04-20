@@ -1,15 +1,15 @@
 import { usePathname, useRouter } from "next/navigation";
 
 import { info } from "@/constants/paymentButtons-br";
-import useHeaderStore from "@/stores/useHeaderStore";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import { Button } from "@/components/ui/button";
+import useUserStore from "@/stores/useUserStore";
 
 export function PaymentButtons() {
     const pathname = usePathname();
     const router = useRouter();
 
-    const { userId } = useHeaderStore();
+    const { userId } = useUserStore();
 
     function handleBack() {
         if (pathname?.includes("pagamento-do-plano")) {

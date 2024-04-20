@@ -1,31 +1,17 @@
 import { create } from "zustand";
 
 interface useUserInter {
-  user:
-    | {
-        address: string;
-        addressNumber: string;
-        birth: string;
-        cep: string;
-        city: string;
-        complement: string;
-        district: string;
-        email: string;
-        firstName: string;
-        id: string;
-        lastName: string;
-        password: string;
-        profilePhoto: string;
-        state: string;
-        tel: string;
-      }
-    | {};
-  setUser: (userData: { user: useUserInter["user"] }) => void;
+    userId: string;
+    setUserId: (id: string) => void;
+    accountType: string | null;
+    setAccountType: (value: string) => void;
 }
 
 const useUserStore = create<useUserInter>((set) => ({
-  user: {},
-  setUser: (userData) => set(() => ({ user: userData })),
+    userId: "",
+    setUserId: (id) => set(() => ({ userId: id })),
+    accountType: null,
+    setAccountType: (type) => set(() => ({ accountType: type })),
 }));
 
 export default useUserStore;

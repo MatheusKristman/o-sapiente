@@ -3,11 +3,11 @@
 import { usePathname, useRouter } from "next/navigation";
 
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
-import useHeaderStore from "@/stores/useHeaderStore";
 import { cn } from "@/libs/utils";
+import useUserStore from "@/stores/useUserStore";
 
 const DashboardNav = () => {
-    const { accountType, userId } = useHeaderStore();
+    const { accountType, userId } = useUserStore();
 
     const linkInactiveClass = "bg-green-primary text-white";
     const linkActiveClass = "bg-white text-green-primary";

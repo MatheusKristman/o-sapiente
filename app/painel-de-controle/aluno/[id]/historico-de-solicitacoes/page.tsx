@@ -22,7 +22,7 @@ const HistoryPage = async () => {
     }
 
     return (
-        <div className="w-full px-6 pt-12 mx-auto md:px-16 lg:container lg:pt-24 lg:pb-12">
+        <div className="w-full min-h-[calc(100vh-144px)] px-6 pt-12 mx-auto md:px-16 lg:container lg:pt-24 lg:pb-12">
             <TopStats requests={requests} />
 
             <FilterWrapper isTeacher={false} />

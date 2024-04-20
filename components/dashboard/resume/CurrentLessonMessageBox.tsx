@@ -11,7 +11,7 @@ import { RequestWithUsersAndOffers } from "@/types";
 import { usePathname } from "next/navigation";
 import useFinishModalStore from "@/stores/useFinishModalStore";
 import useConfirmFinishModalStore from "@/stores/useConfirmFinishModalStore";
-import useHeaderStore from "@/stores/useHeaderStore";
+import useUserStore from "@/stores/useUserStore";
 
 interface CurrentLessonMessageBoxProps {
     lesson: RequestWithUsersAndOffers;
@@ -30,7 +30,7 @@ const CurrentLessonMessageBox = ({
         openModal: openConfirmFinishModal,
         setRequestSelected: setConfirmFinishRequestSelected,
     } = useConfirmFinishModalStore();
-    const { userId } = useHeaderStore();
+    const { userId } = useUserStore();
 
     const pathname = usePathname();
 
@@ -79,7 +79,7 @@ const CurrentLessonMessageBox = ({
                 <div className="xl:flex xl:justify-end xl:w-5/12">
                     <div className="flex flex-col items-center justify-center gap-4">
                         {!lesson.isConcluded &&
-                            lesson.usersIdsVotedToFinish.length === 0 ? (
+                        lesson.usersIdsVotedToFinish.length === 0 ? (
                             <Button
                                 variant="secondary"
                                 onClick={handleOpenFinishModal}

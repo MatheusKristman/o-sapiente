@@ -1,14 +1,15 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
-import useOtherUser from "@/hooks/useOtherUser";
-import { cn } from "@/libs/utils";
-import useHeaderStore from "@/stores/useHeaderStore";
-import { FullConversationType } from "@/types";
 import { ImageIcon, VideoIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
+
+import { Skeleton } from "@/components/ui/skeleton";
+import useOtherUser from "@/hooks/useOtherUser";
+import { cn } from "@/libs/utils";
+import useUserStore from "@/stores/useUserStore";
+import { FullConversationType } from "@/types";
 
 interface Props {
     conversation: FullConversationType;
@@ -24,7 +25,7 @@ export function MessagesContactsBox({
     unreadMessages,
 }: Props) {
     const otherUser = useOtherUser(conversation);
-    const { userId } = useHeaderStore();
+    const { userId } = useUserStore();
 
     const lastMessage = useMemo(() => {
         const messages = conversation.messages || [];

@@ -1,20 +1,36 @@
-import { recentsRequestsInfo } from "@/constants/recentsRequests-br";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-const RecentsRequestsCard = () => {
-  return (
-    <div className="w-full px-6 py-8 bg-white rounded-2xl shadow-lg">
-      <h4 className="text-xl text-[#2C383F] font-semibold mb-6">
-        {recentsRequestsInfo.card.title}
-      </h4>
+interface Props {
+    title: string;
+    desc: string;
+    createdAt: Date;
+    student: string;
+}
 
-      <p className="text-base text-[#2C383F] mb-9">{recentsRequestsInfo.card.desc}</p>
+const RecentsRequestsCard = ({ title, desc, createdAt, student }: Props) => {
+    return (
+        <div className="w-full h-full px-6 py-8 bg-white rounded-2xl shadow-lg flex flex-col justify-between gap-9">
+            <div className="flex flex-col gap-6">
+                <h4 className="text-xl text-[#2C383F] font-semibold">
+                    {title}
+                </h4>
 
-      <div className="w-full flex justify-between items-center">
-        <p className="text-[13px] text-black text-opacity-50">{recentsRequestsInfo.card.date}</p>
-        <p className="text-[13px] text-black text-opacity-50">{recentsRequestsInfo.card.student}</p>
-      </div>
-    </div>
-  );
+                <p className="text-base text-[#2C383F]">{desc}</p>
+            </div>
+
+            <div className="w-full flex justify-between items-center">
+                <p className="text-[13px] text-black text-opacity-50">
+                    {format(new Date(createdAt), "MMMM 'de' yyyy", {
+                        locale: ptBR,
+                    })}
+                </p>
+                <p className="text-[13px] text-black text-opacity-50">
+                    {student}
+                </p>
+            </div>
+        </div>
+    );
 };
 
 export default RecentsRequestsCard;

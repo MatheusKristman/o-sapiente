@@ -126,7 +126,7 @@
 
 .rccs,
 .rccs__card {
-    @apply !w-full !max-w-[290px] lg:!max-w-[435px] lg:!h-[274.309496784px];
+    @apply !w-full !max-w-[290px] lg: !max-w-[435px] lg: !h-[274.309496784px];
 }
 
 body {
@@ -142,7 +142,7 @@ body {
 }
 
 .swiper-slide {
-    height: auto !important;
+    height: auto;
 }
 
 @media screen and (max-width: 640px) {

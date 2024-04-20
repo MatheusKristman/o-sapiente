@@ -2,6 +2,8 @@
 
 import { Search } from "lucide-react";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { find } from "lodash";
 
 import { cn } from "@/libs/utils";
@@ -9,10 +11,8 @@ import { Button } from "@/components/ui/button";
 import { FullConversationType } from "@/types";
 import useConversation from "@/hooks/useConversation";
 import { MessagesContactsBox } from "./MessagesContactsBox";
-import { useSession } from "next-auth/react";
 import { pusherClient } from "@/libs/pusher";
-import { useRouter } from "next/navigation";
-import useHeaderStore from "@/stores/useHeaderStore";
+import useUserStore from "@/stores/useUserStore";
 
 interface Props {
     initialConversations: FullConversationType[];
@@ -34,7 +34,7 @@ const MessagesContacts = ({
     const [searchValue, setSearchValue] = useState<string>("");
 
     const { isOpen, conversationId } = useConversation(conversationParams);
-    const { userId } = useHeaderStore();
+    const { userId } = useUserStore();
     const { data: session } = useSession();
     const router = useRouter();
 
