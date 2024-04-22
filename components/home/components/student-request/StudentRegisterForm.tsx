@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -12,8 +13,16 @@ import { studentRegisterInfo } from "@/constants/studentModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 import studentRegisterSchema from "@/constants/schemas/studentRegisterSchema";
-import { studentRegisterSchemaType } from "@/constants/schemas/studentRegisterSchema";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { cn } from "@/libs/utils";
 
 const StudentRegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -29,12 +38,7 @@ const StudentRegisterForm = () => {
     deactivateBackBtn,
   } = useStudentModalStore();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm({
+  const form = useForm<z.infer<typeof studentRegisterSchema>>({
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -43,7 +47,8 @@ const StudentRegisterForm = () => {
       password: "",
       passwordConfirm: "",
     },
-    resolver: yupResolver(studentRegisterSchema),
+    // @ts-ignore
+    resolver: zodResolver(studentRegisterSchema),
   });
 
   const router = useRouter();
@@ -61,7 +66,7 @@ const StudentRegisterForm = () => {
       return;
     }
 
-    setValue("tel", tel);
+    form.setValue("tel", tel);
   }
 
   function handleLoginLink() {
@@ -82,12 +87,12 @@ const StudentRegisterForm = () => {
     deactivateBackBtn();
   }
 
-  function onSubmit(data: studentRegisterSchemaType) {
+  function onSubmit(values: z.infer<typeof studentRegisterSchema>) {
     setIsSubmitting(true);
 
     if (subject && description) {
       const formData = {
-        ...data,
+        ...values,
         subject,
         description,
         accountType: "Student",
@@ -111,7 +116,7 @@ const StudentRegisterForm = () => {
     }
 
     axios
-      .post("/api/user/pre-register", { ...data, accountType: "Student" })
+      .post("/api/user/pre-register", { ...values, accountType: "Student" })
       .then((res) => {
         handleClose();
 
@@ -127,158 +132,195 @@ const StudentRegisterForm = () => {
 
   return (
     <div className="w-full flex flex-col gap-9">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full overflow-x-hidden"
-      >
-        <motion.div
-          variants={studentFormAnimation}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="grid grid-cols-2 grid-rows-4 gap-4 mb-6"
-        >
-          <div className="w-full col-start-1 col-end-2 flex flex-col gap-1">
-            <input
-              {...register("firstName")}
-              type="text"
-              placeholder={studentRegisterInfo.name}
-              name="firstName"
-              autoComplete="off"
-              autoCorrect="off"
-              disabled={isSubmitting}
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
-                errors.firstName && "border-[#FF7373] border-2 border-solid"
-              }`}
-            />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+          <motion.div
+            variants={studentFormAnimation}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="grid grid-cols-2 grid-rows-6 gap-4 mb-6 sm:grid-rows-4"
+          >
+            <div className="w-full col-start-1 col-end-3 flex flex-col gap-1 sm:col-end-2">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder={studentRegisterInfo.name}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        disabled={isSubmitting}
+                        className={cn(
+                          "input",
+                          form.formState.errors.firstName && "input-error"
+                        )}
+                        {...field}
+                      />
+                    </FormControl>
 
-            {errors.firstName && (
-              <small className="text-sm text-[#FF7373] font-medium text-left">
-                {errors.firstName?.message}
-              </small>
-            )}
-          </div>
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <div className="w-full col-start-2 col-end-3 flex flex-col gap-1">
-            <input
-              {...register("lastName")}
-              type="text"
-              placeholder={studentRegisterInfo.lastName}
-              name="lastName"
-              autoComplete="off"
-              autoCorrect="off"
-              disabled={isSubmitting}
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
-                errors.lastName && "border-[#FF7373] border-2 border-solid"
-              }`}
-            />
+            <div className="w-full col-start-1 col-end-3 flex flex-col gap-1 sm:col-start-2">
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder={studentRegisterInfo.lastName}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        disabled={isSubmitting}
+                        className={cn(
+                          "input",
+                          form.formState.errors.lastName && "input-error"
+                        )}
+                        {...field}
+                      />
+                    </FormControl>
 
-            {errors.lastName && (
-              <small className="text-sm text-[#FF7373] font-medium text-left">
-                {errors.lastName?.message}
-              </small>
-            )}
-          </div>
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <div className="col-start-1 col-end-3 w-full flex flex-col gap-1">
-            <input
-              {...register("email")}
-              type="text"
-              placeholder={studentRegisterInfo.email}
-              name="email"
-              autoComplete="off"
-              autoCorrect="off"
-              disabled={isSubmitting}
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
-                errors.email && "border-[#FF7373] border-2 border-solid"
-              }`}
-            />
+            <div className="col-start-1 col-end-3 w-full flex flex-col gap-1">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder={studentRegisterInfo.email}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        disabled={isSubmitting}
+                        className={cn(
+                          "input",
+                          form.formState.errors.email && "input-error"
+                        )}
+                        {...field}
+                      />
+                    </FormControl>
 
-            {errors.email && (
-              <small className="text-sm text-[#FF7373] font-medium text-left">
-                {errors.email?.message}
-              </small>
-            )}
-          </div>
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <div className="col-start-1 col-end-3 w-full flex flex-col gap-1">
-            <input
-              {...register("tel")}
-              type="text"
-              placeholder={studentRegisterInfo.tel}
-              name="tel"
-              onChange={handleTelFormat}
-              autoComplete="off"
-              autoCorrect="off"
-              maxLength={15}
-              disabled={isSubmitting}
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
-                errors.tel && "border-[#FF7373] border-2 border-solid"
-              }`}
-            />
+            <div className="col-start-1 col-end-3 w-full flex flex-col gap-1">
+              <FormField
+                control={form.control}
+                name="tel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder={studentRegisterInfo.tel}
+                        onChange={handleTelFormat}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        maxLength={15}
+                        disabled={isSubmitting}
+                        className={cn(
+                          "input",
+                          form.formState.errors.tel && "input-error"
+                        )}
+                        name={field.name}
+                        ref={field.ref}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                      />
+                    </FormControl>
 
-            {errors.tel && (
-              <small className="text-sm text-[#FF7373] font-medium text-left">
-                {errors.tel?.message}
-              </small>
-            )}
-          </div>
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <div className="col-start-1 col-end-2 w-full flex flex-col gap-1">
-            <input
-              {...register("password")}
-              type="password"
-              placeholder={studentRegisterInfo.password}
-              name="password"
-              autoComplete="off"
-              autoCorrect="off"
-              disabled={isSubmitting}
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
-                errors.password && "border-[#FF7373] border-2 border-solid"
-              }`}
-            />
+            <div className="col-start-1 col-end-3 w-full flex flex-col gap-1 sm:col-end-2">
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder={studentRegisterInfo.password}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        disabled={isSubmitting}
+                        className={cn(
+                          "input",
+                          form.formState.errors.password && "input-error"
+                        )}
+                        {...field}
+                      />
+                    </FormControl>
 
-            {errors.password && (
-              <small className="text-sm text-[#FF7373] font-medium text-left">
-                {errors.password?.message}
-              </small>
-            )}
-          </div>
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <div className="col-start-2 col-end-3 w-full flex flex-col gap-1">
-            <input
-              {...register("passwordConfirm")}
-              type="password"
-              placeholder={studentRegisterInfo.passwordConfirm}
-              name="passwordConfirm"
-              autoComplete="off"
-              autoCorrect="off"
-              disabled={isSubmitting}
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
-                errors.passwordConfirm &&
-                "border-[#FF7373] border-2 border-solid"
-              }`}
-            />
+            <div className="col-start-1 col-end-3 w-full flex flex-col gap-1 sm:col-start-2">
+              <FormField
+                control={form.control}
+                name="passwordConfirm"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder={studentRegisterInfo.passwordConfirm}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        disabled={isSubmitting}
+                        className={cn(
+                          "input",
+                          form.formState.errors.passwordConfirm && "input-error"
+                        )}
+                        {...field}
+                      />
+                    </FormControl>
 
-            {errors.passwordConfirm && (
-              <small className="text-sm text-[#FF7373] font-medium text-left">
-                {errors.passwordConfirm?.message}
-              </small>
-            )}
-          </div>
-        </motion.div>
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </motion.div>
 
-        <motion.div
-          variants={studentFormAnimation}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          <Button type="submit" disabled={isSubmitting} className="w-full">
-            {studentRegisterInfo.nextButton}
-          </Button>
-        </motion.div>
-      </form>
+          <motion.div
+            variants={studentFormAnimation}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <Button type="submit" disabled={isSubmitting} className="w-full">
+              {studentRegisterInfo.nextButton}
+            </Button>
+          </motion.div>
+        </form>
+      </Form>
 
       <div className="w-full h-[1px] bg-[#EBEFF1]" />
 

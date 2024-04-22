@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
@@ -10,8 +11,16 @@ import { studentLoginInfo } from "@/constants/studentModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 import studentLoginSchema from "@/constants/schemas/studentLoginSchema";
-import { studentLoginType } from "@/constants/schemas/studentLoginSchema";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/libs/utils";
 
 const StudentLoginForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -27,16 +36,13 @@ const StudentLoginForm = () => {
     deactivateBackBtn,
   } = useStudentModalStore();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const form = useForm<z.infer<typeof studentLoginSchema>>({
     defaultValues: {
       email: "",
       password: "",
     },
-    resolver: yupResolver(studentLoginSchema),
+    // @ts-ignore
+    resolver: zodResolver(studentLoginSchema),
   });
 
   function handleRegisterLink() {
@@ -73,7 +79,7 @@ const StudentLoginForm = () => {
       .finally(() => setIsSubmitting(false));
   }
 
-  async function onSubmit(data: studentLoginType) {
+  async function onSubmit(data: z.infer<typeof studentLoginSchema>) {
     setIsSubmitting(true);
 
     if (subject && description) {
@@ -101,71 +107,78 @@ const StudentLoginForm = () => {
 
   return (
     <div className="w-full flex flex-col gap-9">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full overflow-x-hidden"
-      >
-        <motion.div
-          variants={studentFormAnimation}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="grid grid-cols-1 grid-rows-2 gap-4 mb-6"
-        >
-          <div className="flex flex-col gap-1">
-            <input
-              {...register("email")}
-              type="text"
-              placeholder={studentLoginInfo.email}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+          <motion.div
+            variants={studentFormAnimation}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="grid grid-cols-1 grid-rows-2 gap-4 mb-6"
+          >
+            <FormField
+              control={form.control}
               name="email"
-              autoComplete="off"
-              autoCorrect="off"
-              disabled={isSubmitting}
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
-                errors.email && "border-[#FF7373] border-2 border-solid"
-              }`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder={studentLoginInfo.email}
+                      autoComplete="off"
+                      autoCorrect="off"
+                      disabled={isSubmitting}
+                      className={cn(
+                        "input",
+                        form.formState.errors.email && "input-error"
+                      )}
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                </FormItem>
+              )}
             />
 
-            {errors.email && (
-              <small className="text-sm text-[#FF7373] font-medium text-left">
-                {errors.email?.message}
-              </small>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <input
-              {...register("password")}
-              type="password"
-              placeholder={studentLoginInfo.password}
+            <FormField
+              control={form.control}
               name="password"
-              autoComplete="off"
-              autoCorrect="off"
-              disabled={isSubmitting}
-              className={`px-4 py-2 w-full h-11 rounded-lg bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 ${
-                errors.password && "border-[#FF7373] border-2 border-solid"
-              }`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder={studentLoginInfo.password}
+                      autoComplete="off"
+                      autoCorrect="off"
+                      disabled={isSubmitting}
+                      className={cn(
+                        "input",
+                        form.formState.errors.password && "input-error"
+                      )}
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                </FormItem>
+              )}
             />
+          </motion.div>
 
-            {errors.password && (
-              <small className="text-sm text-[#FF7373] font-medium text-left">
-                {errors.password?.message}
-              </small>
-            )}
-          </div>
-        </motion.div>
-
-        <motion.div
-          variants={studentFormAnimation}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          <Button type="submit" disabled={isSubmitting} className="w-full">
-            {studentLoginInfo.loginButton}
-          </Button>
-        </motion.div>
-      </form>
+          <motion.div
+            variants={studentFormAnimation}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <Button type="submit" disabled={isSubmitting} className="w-full">
+              {studentLoginInfo.loginButton}
+            </Button>
+          </motion.div>
+        </form>
+      </Form>
 
       <div className="w-full h-[1px] bg-[#EBEFF1]" />
 

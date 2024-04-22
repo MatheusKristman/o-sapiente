@@ -1,18 +1,11 @@
-import * as yup from "yup";
+import { z } from "zod";
 
-export type newRequestSchemaTypes = {
-  subject: string;
-  subjectSpecific?: string | undefined;
-  description: string;
-};
-
-const newRequestSchema = yup.object({
-  subject: yup.string().required("Matéria é obrigatória"),
-  subjectSpecific: yup.string(),
-  description: yup
-    .string()
-    .min(20, "Descrição precisa ser acima de 20 caracteres")
-    .required("Descrição é obrigatória"),
+const newRequestSchema = z.object({
+    subject: z.string().min(1, { message: "Matéria é obrigatória" }),
+    subjectSpecific: z.string(),
+    description: z
+        .string()
+        .min(20, "Descrição precisa ser acima de 20 caracteres"),
 });
 
 export default newRequestSchema;

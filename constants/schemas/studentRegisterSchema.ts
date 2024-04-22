@@ -1,39 +1,32 @@
-import * as yup from "yup";
+import { z } from "zod";
 
-export type studentRegisterSchemaType = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  tel: string;
-  password: string;
-  passwordConfirm: string;
-};
-
-const studentRegisterSchema = yup.object({
-  firstName: yup
-    .string()
-    .min(3, "Nome precisa ter no mínimo 3 caracteres")
-    .required("Nome é obrigatório"),
-  lastName: yup.string().required("Sobrenome é obrigatório"),
-  email: yup
-    .string()
-    .email("E-mail inválido, verifique e tente novamente")
-    .required("E-mail é obrigatório"),
-  tel: yup
-    .string()
-    .matches(/^\(\d{2}\)\s\d{4,5}-\d{4}$/, "Telefone inválido")
-    .required("Telefone é obrigatório"),
-  password: yup
-    .string()
-    .min(6, "Senha precisa ter no mínimo 6 caracteres")
-    .required("Senha é obrigatória"),
-  passwordConfirm: yup
-    .string()
-    .oneOf(
-      [yup.ref("password")],
-      "As senhas não se coincidem, verifique e tente novamente",
-    )
-    .required("Confirmação da senha é obrigatória"),
-});
+const studentRegisterSchema = z
+  .object({
+    firstName: z.string().min(3, { message: "Nome é obrigatório" }),
+    lastName: z.string().min(3, { message: "Sobrenome é obrigatório" }),
+    email: z
+      .string()
+      .email("E-mail inválido, verifique e tente novamente")
+      .min(1, { message: "E-mail é obrigatório" }),
+    tel: z
+      .string()
+      .min(1, { message: "Telefone é obrigatório" })
+      .refine((val) => val.match(/^\(\d{2}\)\s\d{4,5}-\d{4}$/), {
+        message: "Telefone inválido",
+      }),
+    password: z.string().min(6, { message: "Senha é obrigatória" }),
+    passwordConfirm: z
+      .string()
+      .min(6, { message: "Confirmação da senha é obrigatória" }),
+  })
+  .superRefine(({ password, passwordConfirm }, ctx) => {
+    if (passwordConfirm !== password) {
+      ctx.addIssue({
+        path: ["passwordConfirm"],
+        code: "custom",
+        message: "As senhas não se coincidem, verifique e tente novamente",
+      });
+    }
+  });
 
 export default studentRegisterSchema;

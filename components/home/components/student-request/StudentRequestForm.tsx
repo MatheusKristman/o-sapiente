@@ -1,88 +1,237 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
+import studentNewRequestSchema from "@/constants/schemas/newRequestSchema";
 import { studentRequestInfo } from "@/constants/studentModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 import { Button } from "@/components/ui/button";
+import { studentNewRequestInfo } from "@/constants/dashboard/resume-br";
+import { cn } from "@/libs/utils";
+import { Subject } from "@prisma/client";
+import {
+    Form,
+    FormField,
+    FormItem,
+    FormControl,
+    FormMessage,
+} from "@/components/ui/form";
 
 const StudentRequestForm = () => {
-  const [isNextEnabled, setIsNextEnabled] = useState(true);
+    const [subjects, setSubjects] = useState<Subject[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isNextEnabled, setIsNextEnabled] = useState(true);
 
-  const {
-    setToNotRequest,
-    setToRegister,
-    subject,
-    setSubject,
-    description,
-    setDescription,
-    activateBackBtn,
-  } = useStudentModalStore();
+    const {
+        setToNotRequest,
+        setToRegister,
+        subject,
+        setSubject,
+        description,
+        setDescription,
+        activateBackBtn,
+    } = useStudentModalStore();
+    const form = useForm<z.infer<typeof studentNewRequestSchema>>({
+        // @ts-ignore
+        resolver: zodResolver(studentNewRequestSchema),
+        defaultValues: {
+            subject: studentNewRequestInfo.themePlaceholder,
+            subjectSpecific: "",
+            description: "",
+        },
+    });
+    const subjectValue = form.watch("subject");
+    const descriptionValue = form.watch("description");
 
-  useEffect(() => {
-    if (subject !== "" && description.length > 100) {
-      setIsNextEnabled(false);
-    } else {
-      setIsNextEnabled(true);
+    useEffect(() => {
+        setIsLoading(true);
+
+        axios
+            .get("/api/subject?lang=br")
+            .then((res) => {
+                setSubjects(res.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (subjectValue !== "" && descriptionValue.length > 100) {
+            setIsNextEnabled(false);
+        } else {
+            setIsNextEnabled(true);
+        }
+    }, [subjectValue, descriptionValue, setIsNextEnabled]);
+
+    function onSubmit(values: z.infer<typeof studentNewRequestSchema>) {
+        if (values.subject === "Outro" && values.subjectSpecific.length !== 0) {
+            setSubject(values.subjectSpecific);
+        } else {
+            setSubject(values.subject);
+        }
+
+        setDescription(values.description);
+        handleNextButton();
     }
-  }, [subject, description, setIsNextEnabled]);
 
-  function handleNextButton() {
-    setToNotRequest();
-    activateBackBtn();
+    function handleNextButton() {
+        setToNotRequest();
+        activateBackBtn();
 
-    setTimeout(() => {
-      setToRegister();
-    }, 350);
-  }
+        setTimeout(() => {
+            setToRegister();
+        }, 350);
+    }
 
-  return (
-    <form className="overflow-x-hidden">
-      <motion.input
-        variants={studentFormAnimation}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        placeholder={studentRequestInfo.themePlaceholder}
-        name="subject"
-        autoComplete="off"
-        autoCorrect="off"
-        value={subject}
-        onChange={(e) => setSubject(e.target.value)}
-        className="w-full h-11 rounded-lg px-4 py-2 bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors mb-4"
-      />
+    return (
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <motion.div
+                    variants={studentFormAnimation}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    className={cn(
+                        "relative flex items-center mb-4 after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
+                        form.formState.errors.subject && "mb-2",
+                    )}
+                >
+                    <FormField
+                        control={form.control}
+                        name="subject"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <FormControl>
+                                    <select
+                                        defaultValue={
+                                            studentNewRequestInfo.themePlaceholder
+                                        }
+                                        className={cn(
+                                            "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary/70 appearance-none outline-none focus:ring-2 focus:ring-green-primary lg:cursor-pointer",
+                                            form.formState.errors.subject &&
+                                            "ring-2 ring-[#FF7373]",
+                                        )}
+                                        {...field}
+                                    >
+                                        <option
+                                            value={
+                                                studentNewRequestInfo.themePlaceholder
+                                            }
+                                            disabled
+                                        >
+                                            {
+                                                studentNewRequestInfo.themePlaceholder
+                                            }
+                                        </option>
 
-      <motion.textarea
-        variants={studentFormAnimation}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        placeholder={studentRequestInfo.messagePlaceholder}
-        name="description"
-        autoComplete="off"
-        autoCorrect="off"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className="w-full h-24 rounded-lg px-4 py-2 bg-[#EBEFF1] outline-none text-[#2C383F] placeholder:text-[#9DA5AA] focus:bg-[#DAE2E7] transition-colors resize-none mb-6 sm:h-40"
-      />
+                                        {subjects.map((sub) => (
+                                            <option
+                                                key={sub.id}
+                                                value={sub.main}
+                                            >
+                                                {sub.main}
+                                            </option>
+                                        ))}
 
-      <motion.div
-        variants={studentFormAnimation}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-      >
-        <Button
-          disabled={isNextEnabled}
-          type="button"
-          onClick={handleNextButton}
-          className="w-full"
-        >
-          {studentRequestInfo.nextButton}
-        </Button>
-      </motion.div>
-    </form>
-  );
+                                        <option value="Outro">Outro</option>
+                                    </select>
+                                </FormControl>
+
+                                <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                            </FormItem>
+                        )}
+                    />
+                </motion.div>
+
+                {subjectValue === "Outro" && (
+                    <motion.div
+                        variants={studentFormAnimation}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                    >
+                        <FormField
+                            control={form.control}
+                            name="subjectSpecific"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <motion.input
+                                            disabled={isLoading}
+                                            placeholder={
+                                                studentNewRequestInfo.otherPlaceholder
+                                            }
+                                            className={cn(
+                                                "w-full mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
+                                                form.formState.errors
+                                                    .description &&
+                                                "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
+                                            )}
+                                            {...field}
+                                        />
+                                    </FormControl>
+
+                                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                                </FormItem>
+                            )}
+                        />
+                    </motion.div>
+                )}
+
+                <motion.div
+                    variants={studentFormAnimation}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                >
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <textarea
+                                        placeholder={
+                                            studentRequestInfo.messagePlaceholder
+                                        }
+                                        autoComplete="off"
+                                        autoCorrect="off"
+                                        className="textarea mb-6 sm:h-40"
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                            </FormItem>
+                        )}
+                    />
+                </motion.div>
+
+                <motion.div
+                    variants={studentFormAnimation}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                >
+                    <Button
+                        disabled={isNextEnabled}
+                        type="submit"
+                        className="w-full"
+                    >
+                        {studentRequestInfo.nextButton}
+                    </Button>
+                </motion.div>
+            </form>
+        </Form>
+    );
 };
 
 export default StudentRequestForm;

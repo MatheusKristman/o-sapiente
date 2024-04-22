@@ -5,149 +5,153 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
-        --background: 0 0% 100%;
-        --foreground: 222.2 84% 4.9%;
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-        --card: 0 0% 100%;
-        --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-        --popover: 0 0% 100%;
-        --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-        --primary: 222.2 47.4% 11.2%;
-        --primary-foreground: 210 40% 98%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
-        --secondary: 210 40% 96.1%;
-        --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-        --muted: 210 40% 96.1%;
-        --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-        --accent: 210 40% 96.1%;
-        --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-        --border: 214.3 31.8% 91.4%;
-        --input: 214.3 31.8% 91.4%;
-        --ring: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
 
-        --radius: 0.5rem;
-    }
+    --radius: 0.5rem;
+  }
 
-    .dark {
-        --background: 222.2 84% 4.9%;
-        --foreground: 210 40% 98%;
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-        --card: 222.2 84% 4.9%;
-        --card-foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
 
-        --popover: 222.2 84% 4.9%;
-        --popover-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
 
-        --primary: 210 40% 98%;
-        --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-        --secondary: 217.2 32.6% 17.5%;
-        --secondary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
 
-        --muted: 217.2 32.6% 17.5%;
-        --muted-foreground: 215 20.2% 65.1%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-        --accent: 217.2 32.6% 17.5%;
-        --accent-foreground: 210 40% 98%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-        --border: 217.2 32.6% 17.5%;
-        --input: 217.2 32.6% 17.5%;
-        --ring: 212.7 26.8% 83.9%;
-    }
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
 }
 
 @layer base {
-    * {
-        @apply border-border;
-    }
+  * {
+    @apply border-border;
+  }
 
-    body {
-        @apply bg-background text-foreground;
-    }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
 * {
-    font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 :root {
-    @apply h-full;
-    @apply overflow-x-hidden;
-    @apply relative;
+  @apply h-full;
+  @apply overflow-x-hidden;
+  @apply relative;
 }
 
 [data-radix-popper-content-wrapper] {
-    z-index: 99999 !important;
+  z-index: 99999 !important;
 }
 
 .PhoneInputInput {
-    @apply bg-transparent outline-none;
+  @apply bg-transparent outline-none;
 }
 
 .input-dark-gray {
-    @apply w-full h-12 px-4 py-3 bg-[#C8D6DF] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
+  @apply w-full h-12 px-4 py-3 bg-[#C8D6DF] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
 }
 
 .input {
-    @apply w-full h-12 px-4 py-3 bg-[#EBEFF1] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
+  @apply w-full h-12 px-4 py-3 bg-[#EBEFF1] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
 }
 
 .input-message {
-    @apply w-full h-12 px-4 py-3 bg-[#40535E] text-base font-medium text-white rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#708F9F] placeholder:text-[#708F9F];
+  @apply w-full h-12 px-4 py-3 bg-[#40535E] text-base font-medium text-white rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#708F9F] placeholder:text-[#708F9F];
 }
 
 .input-error {
-    @apply border-2 border-[#FF7373] focus-visible:ring-[#FF7373];
+  @apply border-2 border-[#FF7373] focus-visible:ring-[#FF7373];
+}
+
+.textarea {
+  @apply w-full h-24 resize-none px-4 py-3 bg-[#EBEFF1] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
 }
 
 .gray-button {
-    @apply bg-[#C8D6DF] border-[#C8D6DF] py-1.5 px-8 flex items-center justify-center gap-2 text-base text-gray-primary rounded-lg border-2 font-medium disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 hover:brightness-90 transition;
+  @apply bg-[#C8D6DF] border-[#C8D6DF] py-1.5 px-8 flex items-center justify-center gap-2 text-base text-gray-primary rounded-lg border-2 font-medium disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 hover:brightness-90 transition;
 }
 
 .green-button {
-    @apply bg-green-primary border-green-primary py-1.5 px-8 flex items-center justify-center gap-2 text-base text-white rounded-lg border-2 font-medium disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 hover:brightness-90 transition;
+  @apply bg-green-primary border-green-primary py-1.5 px-8 flex items-center justify-center gap-2 text-base text-white rounded-lg border-2 font-medium disabled:brightness-75 disabled:cursor-not-allowed disabled:hover:brightness-75 hover:brightness-90 transition;
 }
 
 .outline-green-button {
-    @apply bg-green-primary/10 border-green-primary py-1.5 px-8 flex items-center justify-center gap-2 text-base text-green-primary rounded-lg border-2 font-medium disabled:bg-green-primary/25 disabled:cursor-not-allowed disabled:hover:bg-green-primary/25 hover:bg-green-primary/25 transition;
+  @apply bg-green-primary/10 border-green-primary py-1.5 px-8 flex items-center justify-center gap-2 text-base text-green-primary rounded-lg border-2 font-medium disabled:bg-green-primary/25 disabled:cursor-not-allowed disabled:hover:bg-green-primary/25 hover:bg-green-primary/25 transition;
 }
 
 .rccs,
 .rccs__card {
-    @apply !w-full !max-w-[290px] lg:!max-w-[435px] lg:!h-[274.309496784px];
+  @apply !w-full !max-w-[290px] lg:!max-w-[435px] lg:!h-[274.309496784px];
 }
 
 body {
-    background-color: #f0f5f8;
+  background-color: #f0f5f8;
 
-    @apply h-full;
-    @apply overflow-x-hidden;
-    @apply relative;
+  @apply h-full;
+  @apply overflow-x-hidden;
+  @apply relative;
 }
 
 .swiper {
-    overflow: visible !important;
+  overflow: visible !important;
 }
 
 .swiper-slide {
-    height: auto !important;
+  height: auto !important;
 }
 
 @media screen and (max-width: 640px) {
-    .swiper {
-        padding-left: 24px !important;
-        padding-right: 24px !important;
-    }
+  .swiper {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
 }

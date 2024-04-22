@@ -80,7 +80,7 @@ const StudentModal = () => {
               animate="animate"
               exit="exit"
               variants={studentModalAnimation}
-              className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle"
+              className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
             >
               <div
                 className={`flex ${

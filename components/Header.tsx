@@ -22,9 +22,9 @@ import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import { cn } from "@/libs/utils";
 import useUserStore from "@/stores/useUserStore";
 
-// TODO ao deslogar enviar para a home
-
 const Header = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const { isMobileMenuOpen, openMobileMenu } = useHeaderStore();
     const { accountType, setAccountType, userId, setUserId } = useUserStore();
     const { openModal: openStudentModal, setToRegister } =
@@ -37,15 +37,20 @@ const Header = () => {
 
     useEffect(() => {
         if (session) {
+            setIsLoading(true);
+
             axios
                 .get("/api/user/get-user")
                 .then((res) => {
                     setAccountType(res.data.type);
                     setUserId(res.data.id);
                 })
-                .catch((error) => console.error(error));
+                .catch((error) => console.error(error))
+                .finally(() => {
+                    setIsLoading(false);
+                });
         }
-    }, [session, setAccountType, setUserId]);
+    }, [session, setAccountType, setUserId, setIsLoading]);
 
     function scrollTo(id: string) {
         if (pathname !== "/") {
@@ -109,6 +114,7 @@ const Header = () => {
                 variant="link"
                 size="icon"
                 type="button"
+                disabled={isLoading}
                 onClick={openMobileMenu}
                 className={cn(
                     "flex lg:hidden items-center justify-center cursor-pointer",
@@ -140,6 +146,7 @@ const Header = () => {
                                 variant="link"
                                 size="sm"
                                 type="button"
+                                disabled={isLoading}
                                 onClick={handleLogOut}
                                 className="flex gap-2 items-center justify-center text-green-primary text-lg"
                             >
@@ -149,6 +156,7 @@ const Header = () => {
 
                             <Button
                                 type="button"
+                                disabled={isLoading}
                                 onClick={handleDashboardStudentBtn}
                                 className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
                             >
@@ -166,6 +174,7 @@ const Header = () => {
                         <>
                             <Button
                                 variant="link"
+                                disabled={isLoading}
                                 size="sm"
                                 type="button"
                                 onClick={handleLogOut}
@@ -177,6 +186,7 @@ const Header = () => {
 
                             <Button
                                 type="button"
+                                disabled={isLoading}
                                 onClick={handleDashboardProfessorBtn}
                                 className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
                             >
@@ -195,12 +205,16 @@ const Header = () => {
                     <>
                         <Button
                             variant="outline"
+                            disabled={isLoading}
                             onClick={openProfessorLoginModal}
                         >
                             {professorHeaderButton.label}
                         </Button>
 
-                        <Button onClick={openStudentRegisterModal}>
+                        <Button
+                            disabled={isLoading}
+                            onClick={openStudentRegisterModal}
+                        >
                             {studentHeaderButton.label}
                         </Button>
                     </>
