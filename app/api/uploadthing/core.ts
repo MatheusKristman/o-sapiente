@@ -8,135 +8,121 @@ import { z } from "zod";
 const f = createUploadthing();
 
 export const ourFileRouter = {
-    profilePhotoUploader: f({ image: { maxFileSize: "4MB" } })
-        .middleware(async ({ req }) => {
-            const session = await getServerSession();
+  profilePhotoUploader: f({ image: { maxFileSize: "4MB" } })
+    .input(
+      z.object({
+        id: z.string().min(1, "É preciso passar o ID do usuário"),
+      })
+    )
+    .middleware(async ({ req, input }) => {
+      return { userId: input.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log(file.url);
+      await prisma.user.update({
+        where: {
+          id: metadata.userId,
+        },
+        data: {
+          profilePhoto: file.url,
+        },
+      });
 
-            if (!session || !session?.user) {
-                throw new UploadThingError("Não autorizado");
-            }
+      return {};
+    }),
+  imageMessage: f({ image: { maxFileSize: "2MB" } })
+    .input(
+      z.object({
+        conversationId: z.string().min(1, "É preciso passar o ID da conversa"),
+      })
+    )
+    .middleware(async ({ req, input }) => {
+      const session = await getServerSession();
 
-            const user = await prisma.user.findUnique({
-                where: {
-                    email: session.user.email!,
-                },
-            });
+      if (!session || !session?.user) {
+        throw new UploadThingError("Não autorizado");
+      }
 
-            if (!user) {
-                throw new UploadThingError("Usuário não encontrado");
-            }
+      const user = await prisma.user.findUnique({
+        where: {
+          email: session.user.email!,
+        },
+      });
 
-            return { userId: user.id };
-        })
-        .onUploadComplete(async ({ metadata, file }) => {
-            // await prisma.user.update({
-            //   where: {
-            //     id: metadata.userId,
-            //   },
-            //   data: {
-            //     image: file.url,
-            //   },
-            // });
+      if (!user) {
+        throw new UploadThingError("Usuário não encontrado");
+      }
 
-            return {};
-        }),
-    imageMessage: f({ image: { maxFileSize: "2MB" } })
-        .input(
-            z.object({
-                conversationId: z
-                    .string()
-                    .min(1, "É preciso passar o ID da conversa"),
-            }),
-        )
-        .middleware(async ({ req, input }) => {
-            const session = await getServerSession();
+      return { userId: user.id, conversationId: input.conversationId };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      const newMessage = await prisma.message.create({
+        data: {
+          content: file.url,
+          imageUrl: file.url,
+          videoUrl: "",
+          conversation: {
+            connect: {
+              id: metadata.conversationId,
+            },
+          },
+          sender: {
+            connect: {
+              id: metadata.userId,
+            },
+          },
+          seen: {
+            connect: {
+              id: metadata.userId,
+            },
+          },
+        },
+        include: {
+          seen: true,
+          sender: true,
+        },
+      });
 
-            if (!session || !session?.user) {
-                throw new UploadThingError("Não autorizado");
-            }
+      const updatedConversation = await prisma.conversation.update({
+        where: {
+          id: metadata.conversationId,
+        },
+        data: {
+          lastMessageAt: new Date(),
+          messages: {
+            connect: {
+              id: newMessage.id,
+            },
+          },
+        },
+        include: {
+          users: true,
+          messages: {
+            include: {
+              seen: true,
+            },
+          },
+        },
+      });
 
-            const user = await prisma.user.findUnique({
-                where: {
-                    email: session.user.email!,
-                },
-            });
+      await pusherServer.trigger(
+        metadata.conversationId,
+        "messages:new",
+        newMessage
+      );
 
-            if (!user) {
-                throw new UploadThingError("Usuário não encontrado");
-            }
+      const lastMessage =
+        updatedConversation.messages[updatedConversation.messages.length - 1];
 
-            return { userId: user.id, conversationId: input.conversationId };
-        })
-        .onUploadComplete(async ({ metadata, file }) => {
-            const newMessage = await prisma.message.create({
-                data: {
-                    content: file.url,
-                    imageUrl: file.url,
-                    videoUrl: "",
-                    conversation: {
-                        connect: {
-                            id: metadata.conversationId,
-                        },
-                    },
-                    sender: {
-                        connect: {
-                            id: metadata.userId,
-                        },
-                    },
-                    seen: {
-                        connect: {
-                            id: metadata.userId,
-                        },
-                    },
-                },
-                include: {
-                    seen: true,
-                    sender: true,
-                },
-            });
+      updatedConversation.users.forEach((user) => {
+        pusherServer.trigger(user.email!, "conversation:update", {
+          id: metadata.conversationId,
+          messages: [lastMessage],
+        });
+      });
 
-            const updatedConversation = await prisma.conversation.update({
-                where: {
-                    id: metadata.conversationId,
-                },
-                data: {
-                    lastMessageAt: new Date(),
-                    messages: {
-                        connect: {
-                            id: newMessage.id,
-                        },
-                    },
-                },
-                include: {
-                    users: true,
-                    messages: {
-                        include: {
-                            seen: true,
-                        },
-                    },
-                },
-            });
-
-            await pusherServer.trigger(
-                metadata.conversationId,
-                "messages:new",
-                newMessage,
-            );
-
-            const lastMessage =
-                updatedConversation.messages[
-                    updatedConversation.messages.length - 1
-                ];
-
-            updatedConversation.users.forEach((user) => {
-                pusherServer.trigger(user.email!, "conversation:update", {
-                    id: metadata.conversationId,
-                    messages: [lastMessage],
-                });
-            });
-
-            return {};
-        }),
+      return {};
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
