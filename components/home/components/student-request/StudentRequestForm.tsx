@@ -29,9 +29,7 @@ const StudentRequestForm = () => {
     const {
         setToNotRequest,
         setToRegister,
-        subject,
         setSubject,
-        description,
         setDescription,
         activateBackBtn,
     } = useStudentModalStore();
@@ -64,7 +62,7 @@ const StudentRequestForm = () => {
     }, []);
 
     useEffect(() => {
-        if (subjectValue !== "" && descriptionValue.length > 100) {
+        if (subjectValue !== "" && descriptionValue.length > 20) {
             setIsNextEnabled(false);
         } else {
             setIsNextEnabled(true);

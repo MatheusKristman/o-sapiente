@@ -4,9 +4,11 @@ import { professorResumeInfos } from "@/constants/dashboard/resume-br";
 import { Button } from "@/components/ui/button";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import useUserStore from "@/stores/useUserStore";
+import useResumeStore from "@/stores/useResumeStore";
 
 export function FinishedLessonsBox() {
     const { userId } = useUserStore();
+    const { finishedLessons } = useResumeStore();
 
     return (
         <div className="w-full bg-white rounded-2xl p-9 shadow-md shadow-black/25">
@@ -18,7 +20,7 @@ export function FinishedLessonsBox() {
 
                     {/* TODO: passar valor atraves de requisição */}
                     <span className="text-2xl text-green-primary font-semibold">
-                        10
+                        {finishedLessons}
                     </span>
                 </div>
 

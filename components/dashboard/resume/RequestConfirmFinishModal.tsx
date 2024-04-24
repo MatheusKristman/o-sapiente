@@ -13,16 +13,10 @@ import { confirmFinishModalInfo } from "@/constants/dashboard/resume-br";
 import Image from "next/image";
 import useConfirmFinishModalStore from "@/stores/useConfirmFinishModalStore";
 import { RequestWithUsersAndOffers } from "@/types";
+import useResumeStore from "@/stores/useResumeStore";
 
-interface Props {
-    setCurrentLesson: Dispatch<SetStateAction<RequestWithUsersAndOffers[]>>;
-    setRequest: Dispatch<SetStateAction<RequestWithUsersAndOffers[]>>;
-}
-
-export function RequestConfirmFinishModal({
-    setRequest,
-    setCurrentLesson,
-}: Props) {
+export function RequestConfirmFinishModal() {
+    const { setRequests, setCurrentLesson } = useResumeStore();
     const { isModalOpen, closeModal, requestSelected } =
         useConfirmFinishModalStore();
 
@@ -36,7 +30,7 @@ export function RequestConfirmFinishModal({
             .put("/api/request/finish", { requestId: requestSelected.id })
             .then((res) => {
                 console.log("request from finish: ", res.data);
-                setRequest(res.data);
+                setRequests(res.data);
                 setCurrentLesson(
                     res.data.filter(
                         (request: RequestWithUsersAndOffers) =>
@@ -97,8 +91,8 @@ export function RequestConfirmFinishModal({
                                                         .usersVotedToFinish[0]
                                                         .profilePhoto
                                                         ? requestSelected
-                                                            .usersVotedToFinish[0]
-                                                            .profilePhoto
+                                                              .usersVotedToFinish[0]
+                                                              .profilePhoto
                                                         : "/assets/images/default-user-photo.svg"
                                                 }
                                                 className="object-center object-contain rounded-full"

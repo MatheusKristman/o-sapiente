@@ -60,3 +60,14 @@ export const confirmFinishModalInfo = {
         "Não foi informado sobre a finalização da aula pelo outro usuário?",
     supportBtn: "SUPORTE",
 };
+
+export const retrievePaymentModalInfo = {
+    title: "Resgate seu valor",
+    desc: "Receba seu valor na conta direto pelo pix",
+    noPixKey: "Nenhuma chave pix cadastrada",
+    inputPlaceholder: "Insira sua chave pix",
+    btn: "SOLICITAR",
+    successTitle: "Solicitação enviada com sucesso!",
+    successDesc: "Dentro de 24 horas você receberá seu pix!",
+    closeBtn: "FECHAR",
+};

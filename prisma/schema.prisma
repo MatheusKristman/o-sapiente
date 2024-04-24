@@ -28,26 +28,28 @@ enum Status {
 }
 
 model User {
-    id            String      @id @default(auto()) @map("_id") @db.ObjectId
-    firstName     String
-    lastName      String
-    email         String      @unique
-    tel           String?
-    birth         String?
-    cep           String?
-    city          String?
-    state         String?
-    address       String?
-    addressNumber String?
-    district      String?
-    complement    String?
-    password      String
-    themes        String[]
-    aboutMe       String?
-    accountType   AccountRole
-    isCompleted   Boolean     @default(false)
-    isConfirmed   Boolean     @default(false)
-    profilePhoto  String?
+    id                 String      @id @default(auto()) @map("_id") @db.ObjectId
+    firstName          String
+    lastName           String
+    email              String      @unique
+    tel                String?
+    birth              String?
+    cep                String?
+    city               String?
+    state              String?
+    address            String?
+    addressNumber      String?
+    district           String?
+    complement         String?
+    password           String
+    themes             String[]
+    aboutMe            String?
+    accountType        AccountRole
+    isCompleted        Boolean     @default(false)
+    isConfirmed        Boolean     @default(false)
+    profilePhoto       String?
+    paymentRetrievable Float       @default(0)
+    pixCode            String?
 
     subjectIds String[]  @db.ObjectId
     subjects   Subject[] @relation(fields: [subjectIds], references: [id])

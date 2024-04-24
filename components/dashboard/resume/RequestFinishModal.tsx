@@ -12,18 +12,14 @@ import { Button } from "@/components/ui/button";
 import { finishModalInfo } from "@/constants/dashboard/resume-br";
 import useFinishModalStore from "@/stores/useFinishModalStore";
 import { RequestWithUsersAndOffers } from "@/types";
+import useResumeStore from "@/stores/useResumeStore";
 
 interface Props {
     type: "PROFESSOR" | "STUDENT";
-    setCurrentLesson: Dispatch<SetStateAction<RequestWithUsersAndOffers[]>>;
-    setRequest: Dispatch<SetStateAction<RequestWithUsersAndOffers[]>>;
 }
 
-export function RequestFinishModal({
-    type,
-    setCurrentLesson,
-    setRequest,
-}: Props) {
+export function RequestFinishModal({ type }: Props) {
+    const { setRequests, setCurrentLesson } = useResumeStore();
     const { isModalOpen, closeModal, requestSelected } = useFinishModalStore();
 
     function handleFinish() {
@@ -35,7 +31,7 @@ export function RequestFinishModal({
         axios
             .put("/api/request/finish", { requestId: requestSelected.id })
             .then((res) => {
-                setRequest(res.data);
+                setRequests(res.data);
                 setCurrentLesson(
                     res.data.filter(
                         (request: RequestWithUsersAndOffers) =>
