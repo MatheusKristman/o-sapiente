@@ -1,8 +1,11 @@
+// TODO: NÃO É PRIORIDADE - adicionar um botão para apresentar mais 5 cards quando na versão desktop, mandando uma solicitação para servidor e retornar mais 5
+
 import TopStats from "@/components/dashboard/history/TopStats";
 import ResponsiveTable from "@/components/dashboard/history/ResponsiveTable";
 import FilterWrapper from "@/components/dashboard/history/FilterWrapper";
 import { RequestWithUsersAndOffers } from "@/types";
 import getRequests from "@/app/action/getRequests";
+import { LoadingComponent } from "@/components/LoadingComponent";
 
 export type StatsType = {
     finished: number;
@@ -14,11 +17,7 @@ const HistoryPage = async () => {
     const requests: RequestWithUsersAndOffers[] = await getRequests();
 
     if (!requests) {
-        return (
-            <div>
-                <div>Carregando...</div>
-            </div>
-        );
+        return <LoadingComponent />;
     }
 
     return (

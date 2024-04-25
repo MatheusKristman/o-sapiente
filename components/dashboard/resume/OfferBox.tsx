@@ -75,7 +75,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
                         alt="Perfil"
                         width={50}
                         height={40}
-                        className="object-cover rounded-3xl lg:w-12 lg:h-12"
+                        className="object-cover rounded-3xl w-12 min-w-[48px] h-12 min-h-[48px]"
                     />
                 </div>
 

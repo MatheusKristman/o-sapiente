@@ -22,12 +22,14 @@ import {
     FormControl,
     FormMessage,
 } from "@/components/ui/form";
+import useResumeStore from "@/stores/useResumeStore";
 
 const NewRequestForm = () => {
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+    const { setRequests } = useResumeStore();
     const { activateMessage, deactivateForm } = useNewRequestStore();
     const form = useForm({
         defaultValues: {
@@ -65,8 +67,8 @@ const NewRequestForm = () => {
 
         const subjectSelected =
             data.subject === "Outro" &&
-                data.subjectSpecific &&
-                data.subjectSpecific.length > 0
+            data.subjectSpecific &&
+            data.subjectSpecific.length > 0
                 ? data.subjectSpecific
                 : data.subject;
 
@@ -79,6 +81,8 @@ const NewRequestForm = () => {
             .then((res) => {
                 if (res.data.sended) {
                     handleMessage();
+
+                    setRequests(res.data.requests);
                 }
             })
             .catch((error) => {
@@ -129,7 +133,7 @@ const NewRequestForm = () => {
                                             className={cn(
                                                 "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary/70 appearance-none outline-none focus:ring-2 focus:ring-green-primary lg:cursor-pointer",
                                                 form.formState.errors.subject &&
-                                                "ring-2 ring-[#FF7373]",
+                                                    "ring-2 ring-[#FF7373]",
                                             )}
                                             {...field}
                                         >
@@ -185,7 +189,7 @@ const NewRequestForm = () => {
                                                     "w-full mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
                                                     form.formState.errors
                                                         .description &&
-                                                    "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
+                                                        "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
                                                 )}
                                                 {...field}
                                             />
@@ -219,7 +223,7 @@ const NewRequestForm = () => {
                                                 "w-full h-40 mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
                                                 form.formState.errors
                                                     .description &&
-                                                "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
+                                                    "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
                                             )}
                                             {...field}
                                         />

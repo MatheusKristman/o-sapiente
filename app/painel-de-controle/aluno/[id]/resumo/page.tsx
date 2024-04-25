@@ -15,15 +15,11 @@ import NewRequestModal from "@/components/dashboard/resume/NewRequestModal";
 import OffersModal from "@/components/dashboard/resume/OffersModal";
 import { RequestFinishModal } from "@/components/dashboard/resume/RequestFinishModal";
 import { RequestConfirmFinishModal } from "@/components/dashboard/resume/RequestConfirmFinishModal";
-import { RequestWithUsersAndOffers } from "@/types";
+import useResumeStore from "@/stores/useResumeStore";
 
 const DashboardPage = () => {
-    const [profilePhoto, setProfilePhoto] = useState<string>("");
-    const [name, setName] = useState<string>("");
-    const [request, setRequest] = useState<RequestWithUsersAndOffers[]>([]);
-    const [currentLesson, setCurrentLesson] = useState<
-        RequestWithUsersAndOffers[]
-    >([]);
+    const { setProfilePhoto, setName, setCurrentLesson, setRequests } =
+        useResumeStore();
 
     const session = useSession();
 
@@ -44,7 +40,7 @@ const DashboardPage = () => {
                     "/api/request/get-requests",
                 );
 
-                setRequest(
+                setRequests(
                     requestResponse.data.filter(
                         (request: Request) => !request.isConcluded,
                     ),
@@ -61,16 +57,18 @@ const DashboardPage = () => {
         };
 
         fetchData();
-    }, [session?.data?.user?.email]);
+    }, [
+        session?.data?.user?.email,
+        setCurrentLesson,
+        setName,
+        setProfilePhoto,
+        setRequests,
+    ]);
 
     return (
         <div className="flex-1 w-full px-6 pt-9 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:mb-12">
             <div className="w-full flex flex-col-reverse gap-9 md:flex-col lg:w-4/12 xl:w-6/12">
-                <ResumeProfilePhoto
-                    type="Student"
-                    profilePhoto={profilePhoto}
-                    name={name}
-                />
+                <ResumeProfilePhoto type="Student" />
 
                 <div className="w-full shadow-md shadow-[rgba(0,0,0,0.25)] rounded-lg">
                     <Button className="w-full" onClick={openModal}>
@@ -80,22 +78,15 @@ const DashboardPage = () => {
             </div>
 
             <div className="w-full flex flex-col gap-8">
-                <ResumeRequestBox type="Student" request={request} />
+                <ResumeRequestBox type="Student" />
 
-                <ResumeCurrentLessonBox currentLesson={currentLesson} />
+                <ResumeCurrentLessonBox />
             </div>
 
             <NewRequestModal />
             <OffersModal />
-            <RequestFinishModal
-                type="STUDENT"
-                setCurrentLesson={setCurrentLesson}
-                setRequest={setRequest}
-            />
-            <RequestConfirmFinishModal
-                setCurrentLesson={setCurrentLesson}
-                setRequest={setRequest}
-            />
+            <RequestFinishModal type="STUDENT" />
+            <RequestConfirmFinishModal />
         </div>
     );
 };

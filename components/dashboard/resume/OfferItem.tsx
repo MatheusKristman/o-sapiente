@@ -3,6 +3,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 import { OfferWithUser } from "@/types";
 import { offersModalInfo } from "@/constants/offersModal-br";
@@ -14,6 +16,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import useUserStore from "@/stores/useUserStore";
+import { formatPrice } from "@/libs/utils";
 
 interface OfferItemProps {
     offer: OfferWithUser;
@@ -25,6 +28,8 @@ const OfferItem = ({ offer, handleCloseButton }: OfferItemProps) => {
     const { userId } = useUserStore();
 
     const [submitting, setSubmitting] = useState<boolean>(false);
+
+    console.log("Offer: ", offer);
 
     function AcceptOffer() {
         setSubmitting(true);
@@ -75,14 +80,38 @@ const OfferItem = ({ offer, handleCloseButton }: OfferItemProps) => {
 
                 <AccordionContent>
                     <div className="w-full flex flex-col gap-6">
-                        <div className="w-full flex gap-2">
-                            <span className="text-base font-medium text-gray-primary">
-                                Proposta:
-                            </span>
-                            <span className="text-base text-left text-gray-primary">
-                                {/* TODO: atualizar OfferItem para novo formato de proposta */}
-                                Atualizar componente de OfferItem
-                            </span>
+                        <div className="w-full flex flex-col gap-4">
+                            <div className="w-full flex gap-2">
+                                <span className="text-base font-medium text-gray-primary">
+                                    Proposta:
+                                </span>
+
+                                <span className="text-base text-left text-gray-primary">
+                                    {offer.details}
+                                </span>
+                            </div>
+
+                            <div className="w-full flex gap-2">
+                                <span className="text-base font-medium text-gray-primary">
+                                    Data da aula:
+                                </span>
+
+                                <span className="text-base text-left text-gray-primary">
+                                    {format(new Date(offer.lessonDate), "PPP", {
+                                        locale: ptBR,
+                                    })}
+                                </span>
+                            </div>
+
+                            <div className="w-full flex gap-2">
+                                <span className="text-base font-medium text-gray-primary">
+                                    Valor:
+                                </span>
+
+                                <span className="text-base text-left text-gray-primary">
+                                    {formatPrice(offer.lessonPrice)}
+                                </span>
+                            </div>
                         </div>
 
                         <Button onClick={AcceptOffer} disabled={submitting}>

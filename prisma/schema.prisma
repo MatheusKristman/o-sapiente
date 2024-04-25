@@ -33,7 +33,7 @@ model User {
     lastName           String
     email              String      @unique
     tel                String?
-    birth              String?
+    birth              DateTime?
     cep                String?
     city               String?
     state              String?

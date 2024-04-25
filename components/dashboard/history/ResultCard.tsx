@@ -39,8 +39,8 @@ const ResultCard = ({ request }: Props) => {
     const price: number = request.offers[0]?.lessonPrice || 0;
 
     return (
-        <div className="w-full bg-white px-7 py-4 rounded-2xl flex flex-col md:grid md:grid-cols-4 md:grid-rows-2">
-            <div className="flex flex-col justify-center items-center gap-y-2 pb-2 border-b border-gray-100 md:col-span-full md:row-start-1 md:row-end-1 md:border-0">
+        <div className="w-full bg-white px-7 py-4 rounded-2xl flex flex-col md:grid md:grid-cols-3 md:grid-rows-3">
+            <div className="flex flex-col justify-center items-center gap-y-2 pb-2 border-b border-gray-100 md:col-span-full md:row-start-1 md:row-end-2 md:border-0">
                 <div className="relative w-16 h-16 rounded-full overflow-hidden">
                     <Image
                         src={profileImageUrl}
@@ -50,11 +50,13 @@ const ResultCard = ({ request }: Props) => {
                     />
                 </div>
 
-                <span className="text-lg font-semibold">{profileName}</span>
+                <span className="text-lg md:text-xl font-semibold">
+                    {profileName}
+                </span>
             </div>
 
-            <div className="flex justify-center items-center gap-x-2 py-2 border-b border-gray-100 md:col-start-1 md:col-end-1 md:row-start-2 md:row-end-2 md:flex-col md:border-0">
-                <span className="text-base font-medium text-[#879298]">
+            <div className="flex justify-center items-center gap-x-2 py-2 border-b border-gray-100 md:col-start-1 md:col-end-2 md:row-start-2 md:row-end-3 md:flex-col md:border-0">
+                <span className="text-base md:text-lg font-medium text-[#879298]">
                     Data Início:
                 </span>
                 <span className="text-base text-gray-primary">
@@ -62,8 +64,8 @@ const ResultCard = ({ request }: Props) => {
                 </span>
             </div>
 
-            <div className="flex justify-center items-center gap-x-2 py-2 border-b border-gray-100 md:col-start-2 md:col-end-2 md:row-start-2 md:row-end-2 md:flex-col md:border-0">
-                <span className="text-base font-medium text-[#879298]">
+            <div className="flex justify-center items-center gap-x-2 py-2 border-b border-gray-100 md:col-start-2 md:col-end-3 md:row-start-2 md:row-end-3 md:flex-col md:border-0">
+                <span className="text-base md:text-lg font-medium text-[#879298]">
                     Data Finalização:
                 </span>
                 <span className="text-base text-gray-primary">
@@ -71,8 +73,8 @@ const ResultCard = ({ request }: Props) => {
                 </span>
             </div>
 
-            <div className="flex justify-center items-center gap-x-2 py-2 border-b border-gray-100 md:col-start-3 md:col-end-3 md:row-start-2 md:row-end-2 md:flex-col md:border-0">
-                <span className="text-base font-medium text-[#879298]">
+            <div className="flex justify-center items-center gap-x-2 py-2 border-b border-gray-100 md:col-start-1 md:col-end-4 md:row-start-3 md:row-end-4 md:flex-col md:border-0">
+                <span className="text-base md:text-lg font-medium text-[#879298]">
                     Status:{" "}
                 </span>
                 <span
@@ -88,8 +90,8 @@ const ResultCard = ({ request }: Props) => {
                 </span>
             </div>
 
-            <div className="flex justify-center items-center gap-x-2 pt-2 md:col-start-4 md:col-end-4 md:row-start-2 md:row-end-2 md:flex-col">
-                <span className="text-base font-medium text-[#879298]">
+            <div className="flex justify-center items-center gap-x-2 pt-2 md:col-start-3 md:col-end-4 md:row-start-2 md:row-end-3 md:flex-col">
+                <span className="text-base md:text-lg font-medium text-[#879298]">
                     Valor:{" "}
                 </span>
                 <span className="text-lg font-semibold text-gray-primary">

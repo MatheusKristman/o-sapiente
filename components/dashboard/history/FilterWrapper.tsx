@@ -20,13 +20,7 @@ const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
     } = useHistoryStore();
 
     return (
-        <div
-            className={
-                isTeacher
-                    ? "flex flex-col pt-9 md:flex-row lg:justify-between"
-                    : "flex flex-col pt-9 lg:flex-row lg:justify-between"
-            }
-        >
+        <div className="flex flex-col pt-9 md:flex-row md:justify-between">
             <div className="w-full flex items-center justify-between input-light focus-within:ring-2 focus-within:ring-[#9DA5AA] peer md:w-7/12 lg:w-96">
                 <Input
                     type="text"
@@ -47,24 +41,18 @@ const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
                 />
             </div>
 
-            <div
-                className={
-                    isTeacher
-                        ? "flex flex-col md:flex-row w-full md:justify-end mt-6 gap-6 lg:w-fit md:mt-0"
-                        : "flex flex-col md:flex-row w-full mt-6 gap-6 lg:w-fit lg:mt-0"
-                }
-            >
-                <div
-                    className={
-                        isTeacher
-                            ? "hidden"
-                            : "flex w-full md:w-6/12 md:whitespace-nowrap lg:w-fit"
-                    }
-                >
-                    <Button onClick={() => {}} className="w-full">
-                        Consultar Certificado
-                    </Button>
-                </div>
+            <div className="flex flex-col md:flex-row w-full md:justify-end mt-6 gap-6 lg:w-fit md:mt-0">
+                {/* <div */}
+                {/*     className={ */}
+                {/*         isTeacher */}
+                {/*             ? "hidden" */}
+                {/*             : "flex w-full md:w-6/12 md:whitespace-nowrap lg:w-fit" */}
+                {/*     } */}
+                {/* > */}
+                {/*     <Button onClick={() => {}} className="w-full"> */}
+                {/*         Consultar Certificado */}
+                {/*     </Button> */}
+                {/* </div> */}
 
                 <div
                     className={

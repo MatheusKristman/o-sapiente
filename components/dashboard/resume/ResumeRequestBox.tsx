@@ -17,19 +17,9 @@ interface ResumeRequestBoxProps {
 const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
     const { requests, offers: professorOffers } = useResumeStore();
 
-    const [offersToStudent, setOffersToStudent] = useState<
-        RequestWithUsersAndOffers[]
-    >([]);
-
     const filteredRequest = requests?.filter(
         (request) => !request.isOfferAccepted,
     );
-
-    useEffect(() => {
-        if (requests) {
-            setOffersToStudent(requests);
-        }
-    }, [requests]);
 
     function offerFiltered(requestId: string) {
         if (professorOffers) {
@@ -48,7 +38,7 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
                 {type === "Student" ? studentResumeInfos.newOffersTitle : null}
             </h2>
 
-            <div className="relative w-full max-h-[600px] overflow-auto scrollbar scrollbar-thumb-slate-100">
+            <div className="relative w-full max-h-[600px] lg:max-h-[400px] overflow-auto scrollbar scrollbar-thumb-slate-100">
                 {type === "Professor" &&
                     (filteredRequest && filteredRequest.length > 0 ? (
                         <>
