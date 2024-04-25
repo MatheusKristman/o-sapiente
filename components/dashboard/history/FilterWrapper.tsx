@@ -5,6 +5,7 @@ import { Search, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useHistoryStore from "@/stores/useHistoryStore";
 import { ChangeEvent } from "react";
+import { Input } from "@/components/ui/input";
 
 interface FilterWrapperProps {
     isTeacher: boolean;
@@ -26,8 +27,8 @@ const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
                     : "flex flex-col pt-9 lg:flex-row lg:justify-between"
             }
         >
-            <div className="w-full flex items-center justify-between h-[46px] bg-[#C8D6DF] rounded-lg px-5 peer md:w-7/12 lg:w-96">
-                <input
+            <div className="w-full flex items-center justify-between input-light focus-within:ring-2 focus-within:ring-[#9DA5AA] peer md:w-7/12 lg:w-96">
+                <Input
                     type="text"
                     name="search"
                     value={searchValue}
@@ -60,7 +61,7 @@ const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
                             : "flex w-full md:w-6/12 md:whitespace-nowrap lg:w-fit"
                     }
                 >
-                    <Button onClick={() => { }} className="w-full">
+                    <Button onClick={() => {}} className="w-full">
                         Consultar Certificado
                     </Button>
                 </div>
@@ -78,7 +79,7 @@ const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
                         onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                             setFilterDateNumber(Number(event.target.value))
                         }
-                        className="bg-[#2C383F] border border-[#2C383F] text-white text-lg rounded-lg w-full pl-5 h-[46px] appearance-none text-center md:text-start outline-green-primary lg:cursor-pointer"
+                        className="bg-[#2C383F] border border-[#2C383F] text-white text-lg rounded-lg w-full pl-0 sm:pl-5 h-[46px] appearance-none text-center md:text-start outline-green-primary lg:cursor-pointer"
                     >
                         <option value={30} defaultChecked>
                             30 Dias

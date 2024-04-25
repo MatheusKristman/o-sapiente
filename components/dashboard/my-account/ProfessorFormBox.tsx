@@ -2,19 +2,35 @@ import { Loader2, Plus, X } from "lucide-react";
 import { useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
+import { z } from "zod";
+
+// TODO: Verificar se todos os valores estão sendo enviado corretamente
 
 import { cn } from "@/libs/utils";
-import { Button } from "@/components/ui/button";
 import { MyAccountInfo } from "@/constants/dashboard/my-account-br";
-import {
-  professorUpdateFormSchema,
-  professorUpdateFormSchemaType,
-} from "@/constants/schemas/professorUpdateFormSchema";
+import { professorUpdateFormSchema } from "@/constants/schemas/professorUpdateFormSchema";
 import { cityOptionsType, stateOptionsType } from "@/types";
 import { Subject } from "@prisma/client";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ProfessorFormBox = () => {
   const [stateOptions, setStateOptions] = useState<stateOptionsType[]>([]);
@@ -33,31 +49,28 @@ const ProfessorFormBox = () => {
   const inputStyle =
     "w-full h-12 bg-[#EBEFF1] px-4 py-2 rounded-lg focus:outline-[#9DA5AA] text-base text-gray-primary";
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-  } = useForm({
+  const form = useForm<z.infer<typeof professorUpdateFormSchema>>({
     defaultValues: {
       firstName: "",
       lastName: "",
       birth: "",
-      city: MyAccountInfo.personalDataPlaceholders.city,
+      city: undefined,
       address: "",
       addressNumber: "",
-      state: MyAccountInfo.personalDataPlaceholders.state,
+      state: undefined,
       ddd: "",
       cel: "",
       district: "",
       complement: "",
       aboutMe: "",
     },
-    resolver: yupResolver(professorUpdateFormSchema),
+    // @ts-ignore
+    resolver: zodResolver(professorUpdateFormSchema),
   });
 
-  const state = watch("state");
+  const state = form.watch("state");
+
+  console.log("State: ", state);
 
   useEffect(() => {
     if (session) {
@@ -66,20 +79,17 @@ const ProfessorFormBox = () => {
       axios
         .get("/api/user/get-user")
         .then((res) => {
-          setValue("firstName", res.data.firstName);
-          setValue("lastName", res.data.lastName);
-          setValue("birth", res.data.birth);
-          setValue(
-            "state",
-            res.data.state ?? MyAccountInfo.personalDataPlaceholders.state
-          );
-          setValue("address", res.data.address);
-          setValue("addressNumber", res.data.addressNumber);
-          setValue("ddd", res.data.tel.substring(1, 3));
-          setValue("cel", res.data.tel.substring(5));
-          setValue("district", res.data.district);
-          setValue("complement", res.data.complement);
-          setValue("aboutMe", res.data.aboutMe);
+          form.setValue("firstName", res.data.firstName);
+          form.setValue("lastName", res.data.lastName);
+          form.setValue("birth", res.data.birth);
+          form.setValue("state", res.data.state ?? undefined);
+          form.setValue("address", res.data.address);
+          form.setValue("addressNumber", res.data.addressNumber);
+          form.setValue("ddd", res.data.tel.substring(1, 3));
+          form.setValue("cel", res.data.tel.substring(5));
+          form.setValue("district", res.data.district);
+          form.setValue("complement", res.data.complement);
+          form.setValue("aboutMe", res.data.aboutMe);
           setThemes(res.data.themes);
 
           setSelectedCity(res.data.city);
@@ -89,7 +99,7 @@ const ProfessorFormBox = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [session, setValue]);
+  }, [session, form]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -107,12 +117,14 @@ const ProfessorFormBox = () => {
     if (stateOptions.length > 0) {
       setIsLoading(true);
 
+      form.setValue("city", "");
+
       const ufSelected = stateOptions.filter((option) => option.nome === state);
 
       if (ufSelected.length > 0) {
         axios
           .get(
-            `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufSelected[0].id}/municipios`
+            `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufSelected[0].id}/municipios`,
           )
           .then((res) => setCityOptions(res.data))
           .catch((error) => console.error(error))
@@ -121,14 +133,14 @@ const ProfessorFormBox = () => {
         setCityOptions([]);
       }
     }
-  }, [state, stateOptions, setIsLoading]);
+  }, [state, stateOptions, setIsLoading, form]);
 
   useEffect(() => {
     if (cityOptions.length > 0 && selectedCity) {
-      setValue("city", selectedCity);
+      form.setValue("city", selectedCity);
       setSelectedCity("");
     }
-  }, [cityOptions, selectedCity, setValue]);
+  }, [cityOptions, selectedCity, form]);
 
   useEffect(() => {
     function getAllSubjectsOptions() {
@@ -173,8 +185,8 @@ const ProfessorFormBox = () => {
                 searchValue
                   .toLowerCase()
                   .normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, "")
-              )
+                  .replace(/[\u0300-\u036f]/g, ""),
+              ),
           ) &&
           option.main
             .toLowerCase()
@@ -184,13 +196,13 @@ const ProfessorFormBox = () => {
               searchValue
                 .toLowerCase()
                 .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-            )
+                .replace(/[\u0300-\u036f]/g, ""),
+            ),
       );
 
       if (filteredSubjects.length > 0) {
         const filteredOpt = filteredSubjects[0].subs.filter(
-          (sub) => !themes.includes(sub)
+          (sub) => !themes.includes(sub),
         );
 
         setFilteredOptions(filteredOpt);
@@ -209,8 +221,8 @@ const ProfessorFormBox = () => {
               searchValue
                 .toLowerCase()
                 .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-            )
+                .replace(/[\u0300-\u036f]/g, ""),
+            ),
       );
 
       setFilteredOptions(filteredOpt);
@@ -221,7 +233,7 @@ const ProfessorFormBox = () => {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 8);
     const formattedDate = value.replace(/(\d{2})(\d{2})(\d{4})/, "$1/$2/$3");
 
-    setValue("birth", formattedDate);
+    form.setValue("birth", formattedDate);
   }
 
   function handleDDD(event: ChangeEvent<HTMLInputElement>) {
@@ -229,7 +241,7 @@ const ProfessorFormBox = () => {
       .replace(/[^0-9]/g, "")
       .substring(0, 2);
 
-    setValue("ddd", DDDFormatted);
+    form.setValue("ddd", DDDFormatted);
   }
 
   function handleCel(event: ChangeEvent<HTMLInputElement>) {
@@ -239,7 +251,7 @@ const ProfessorFormBox = () => {
       celValue = celValue.replace(/(\d{5})(\d{0,4})/, "$1-$2");
     }
 
-    setValue("cel", celValue);
+    form.setValue("cel", celValue);
   }
 
   function handleOptionSelect(option: string) {
@@ -265,394 +277,458 @@ const ProfessorFormBox = () => {
     setSearchValue(value);
   }
 
-  function onSubmit(data: professorUpdateFormSchemaType) {
-    if (themes.length === 0) {
-      toast.error(MyAccountInfo.themeErrorMessage);
+  function onSubmit(data: z.infer<typeof professorUpdateFormSchema>) {
+    console.log(data);
 
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    axios
-      .patch("/api/user/update-account/professor", {
-        ...data,
-        themes,
-        email: session.data?.user?.email,
-      })
-      .then((res) => {
-        toast.success("Cadastro atualizado com sucesso");
-
-        setValue("firstName", res.data.firstName);
-        setValue("lastName", res.data.lastName);
-        setValue("birth", res.data.birth);
-        setValue(
-          "city",
-          res.data.city ?? MyAccountInfo.personalDataPlaceholders.city
-        );
-        setValue(
-          "state",
-          res.data.state ?? MyAccountInfo.personalDataPlaceholders.state
-        );
-        setValue("address", res.data.address);
-        setValue("addressNumber", res.data.addressNumber);
-        setValue("ddd", res.data.tel.substring(1, 3));
-        setValue("cel", res.data.tel.substring(5));
-        setValue("district", res.data.district);
-        setValue("complement", res.data.complement);
-        setValue("aboutMe", res.data.aboutMe);
-        setThemes(res.data.themes);
-      })
-      .catch((error) => {
-        console.error(error);
-
-        toast.error(error.response.data);
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
+    // if (themes.length === 0) {
+    //     toast.error(MyAccountInfo.themeErrorMessage);
+    //
+    //     return;
+    // }
+    //
+    // setIsSubmitting(true);
+    //
+    // axios
+    //     .patch("/api/user/update-account/professor", {
+    //         ...data,
+    //         themes,
+    //         email: session.data?.user?.email,
+    //     })
+    //     .then((res) => {
+    //         toast.success("Cadastro atualizado com sucesso");
+    //
+    //         setValue("firstName", res.data.firstName);
+    //         setValue("lastName", res.data.lastName);
+    //         setValue("birth", res.data.birth);
+    //         setValue(
+    //             "city",
+    //             res.data.city ??
+    //                 MyAccountInfo.personalDataPlaceholders.city,
+    //         );
+    //         setValue(
+    //             "state",
+    //             res.data.state ??
+    //                 MyAccountInfo.personalDataPlaceholders.state,
+    //         );
+    //         setValue("address", res.data.address);
+    //         setValue("addressNumber", res.data.addressNumber);
+    //         setValue("ddd", res.data.tel.substring(1, 3));
+    //         setValue("cel", res.data.tel.substring(5));
+    //         setValue("district", res.data.district);
+    //         setValue("complement", res.data.complement);
+    //         setValue("aboutMe", res.data.aboutMe);
+    //         setThemes(res.data.themes);
+    //     })
+    //     .catch((error) => {
+    //         console.error(error);
+    //
+    //         toast.error(error.response.data);
+    //     })
+    //     .finally(() => {
+    //         setIsSubmitting(false);
+    //     });
   }
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]"
-    >
-      <h2 className="text-2xl text-gray-primary font-semibold mb-6">
-        {MyAccountInfo.personalDataTitle}
-      </h2>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]"
+      >
+        <h2 className="text-2xl text-gray-primary font-semibold mb-6">
+          {MyAccountInfo.personalDataTitle}
+        </h2>
 
-      <div className="w-full flex flex-col gap-y-4 mb-9">
-        <div className="w-full flex flex-col gap-y-1">
-          <input
-            {...register("firstName")}
-            type="text"
-            disabled={isSubmitting || isLoading}
-            className={cn(
-              inputStyle,
-              errors.firstName &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
+        <div className="w-full flex flex-col gap-y-4 mb-9">
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    disabled={isSubmitting || isLoading}
+                    className={cn(
+                      "input",
+                      form.formState.errors.firstName && "input-error",
+                    )}
+                    placeholder={
+                      MyAccountInfo.personalDataPlaceholders.firstName
+                    }
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+              </FormItem>
             )}
-            placeholder={MyAccountInfo.personalDataPlaceholders.firstName}
           />
-          {errors.firstName && (
-            <span className="text-sm text-[#ff7373] font-medium text-left">
-              {errors.firstName?.message}
-            </span>
-          )}
-        </div>
 
-        <div className="w-full flex flex-col gap-y-1">
-          <input
-            {...register("lastName")}
-            type="text"
-            disabled={isSubmitting || isLoading}
-            className={cn(
-              inputStyle,
-              errors.lastName &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    disabled={isSubmitting || isLoading}
+                    className={cn(
+                      "input",
+                      form.formState.errors.lastName && "input-error",
+                    )}
+                    placeholder={
+                      MyAccountInfo.personalDataPlaceholders.lastName
+                    }
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+              </FormItem>
             )}
-            placeholder={MyAccountInfo.personalDataPlaceholders.lastName}
           />
-          {errors.lastName && (
-            <span className="text-sm text-[#ff7373] font-medium text-left">
-              {errors.lastName?.message}
-            </span>
-          )}
-        </div>
 
-        <div className="w-full flex flex-col gap-y-1">
-          <input
-            {...register("birth")}
-            type="text"
-            className={cn(
-              inputStyle,
-              errors.birth &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
+          <FormField
+            control={form.control}
+            name="birth"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    className={cn(
+                      "input",
+                      form.formState.errors.birth && "input-error",
+                    )}
+                    disabled={isSubmitting || isLoading}
+                    autoComplete="off"
+                    autoCorrect="off"
+                    onChange={handleBirth}
+                    name={field.name}
+                    ref={field.ref}
+                    value={field.value}
+                    onBlur={field.onBlur}
+                    placeholder={
+                      MyAccountInfo.personalDataPlaceholders.birthDate
+                    }
+                  />
+                </FormControl>
+
+                <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+              </FormItem>
             )}
-            disabled={isSubmitting || isLoading}
-            autoComplete="off"
-            autoCorrect="off"
-            onChange={handleBirth}
-            placeholder={MyAccountInfo.personalDataPlaceholders.birthDate}
           />
-          {errors.birth && (
-            <span className="text-sm text-[#ff7373] font-medium text-left">
-              {errors.birth?.message}
-            </span>
-          )}
-        </div>
 
-        <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
-          <div
-            className={cn(
-              "flex flex-col gap-y-1 w-1/2",
-              "sm:grow lg:grow-0 xl:grow"
-            )}
-          >
+          <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
             <div
               className={cn(
-                "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu"
+                "flex flex-col gap-y-1 sm:w-1/2",
+                "sm:grow lg:grow-0 xl:grow",
               )}
             >
-              <select
-                {...register("state")}
-                disabled={isSubmitting || isLoading}
-                defaultValue={MyAccountInfo.personalDataPlaceholders.state}
-                className={cn(
-                  "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed"
+              <FormField
+                control={form.control}
+                name="state"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Select
+                        disabled={isSubmitting || isLoading}
+                        defaultValue={field.value}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        name={field.name}
+                      >
+                        <SelectTrigger className="input placeholder:text-white">
+                          <SelectValue
+                            placeholder={
+                              MyAccountInfo.personalDataPlaceholders.state
+                            }
+                          />
+                        </SelectTrigger>
+
+                        <SelectContent>
+                          {stateOptions.map((state) => (
+                            <SelectItem key={state.id} value={state.nome}>
+                              {state.nome}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
                 )}
-              >
-                <option
-                  value={MyAccountInfo.personalDataPlaceholders.state}
-                  disabled
-                  hidden
-                >
-                  {MyAccountInfo.personalDataPlaceholders.state}
-                </option>
-                {stateOptions.map((state) => (
-                  <option key={state.id} value={state.nome}>
-                    {state.nome}
-                  </option>
-                ))}
-              </select>
+              />
+            </div>
+
+            <div
+              className={cn(
+                "flex flex-col gap-y-1 sm:w-1/2",
+                "sm:grow lg:grow-0 xl:grow",
+              )}
+            >
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Select
+                        disabled={isSubmitting || isLoading}
+                        defaultValue={field.value}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        name={field.name}
+                      >
+                        <SelectTrigger className="input">
+                          <SelectValue
+                            placeholder={
+                              MyAccountInfo.personalDataPlaceholders.city
+                            }
+                          />
+                        </SelectTrigger>
+
+                        <SelectContent>
+                          {cityOptions.map((city) => (
+                            <SelectItem key={city.id} value={city.nome}>
+                              {city.nome}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
 
-          <div
-            className={cn(
-              "flex flex-col gap-y-1 w-1/2",
-              "sm:grow lg:grow-0 xl:grow"
-            )}
-          >
-            <div
-              className={cn(
-                "relative flex items-center after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu"
+          <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem
+                  className={cn(
+                    "flex flex-col gap-y-1",
+                    "sm:grow lg:grow-0 xl:grow",
+                  )}
+                >
+                  <FormControl>
+                    <Input
+                      type="text"
+                      disabled={isSubmitting || isLoading}
+                      className={cn(
+                        "input",
+                        form.formState.errors.address && "input-error",
+                      )}
+                      placeholder={
+                        MyAccountInfo.personalDataPlaceholders.address
+                      }
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                </FormItem>
               )}
-            >
-              <select
-                {...register("city")}
-                disabled={isSubmitting || isLoading}
-                defaultValue={MyAccountInfo.personalDataPlaceholders.city}
-                className={cn(
-                  "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary appearance-none focus:outline-[#9DA5AA] lg:cursor-pointer disabled:brightness-90 disabled:cursor-not-allowed"
-                )}
+            />
+
+            <FormField
+              control={form.control}
+              name="addressNumber"
+              render={({ field }) => (
+                <FormItem
+                  className={cn(
+                    "flex flex-col gap-y-1",
+                    "sm:w-2/5 lg:w-full xl:w-2/5",
+                  )}
+                >
+                  <FormControl>
+                    <Input
+                      type="text"
+                      disabled={isSubmitting || isLoading}
+                      className={cn(
+                        "input",
+                        form.formState.errors.addressNumber && "input-error",
+                      )}
+                      placeholder={
+                        MyAccountInfo.personalDataPlaceholders.addressNumber
+                      }
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
+            <FormField
+              control={form.control}
+              name="ddd"
+              render={({ field }) => (
+                <FormItem
+                  className={cn(
+                    "flex flex-col gap-y-1",
+                    "sm:w-2/5 lg:w-full xl:w-2/5",
+                  )}
+                >
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting || isLoading}
+                      onChange={handleDDD}
+                      name={field.name}
+                      ref={field.ref}
+                      value={field.value}
+                      onBlur={field.onBlur}
+                      className={cn(
+                        "input",
+                        form.formState.errors.ddd && "input-error",
+                      )}
+                      placeholder={MyAccountInfo.personalDataPlaceholders.ddd}
+                    />
+                  </FormControl>
+
+                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="cel"
+              render={({ field }) => (
+                <FormItem
+                  className={cn(
+                    "flex flex-col gap-y-1",
+                    "sm:grow lg:grow-0 xl:grow",
+                  )}
+                >
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting || isLoading}
+                      onChange={handleCel}
+                      name={field.name}
+                      value={field.value}
+                      ref={field.ref}
+                      onBlur={field.onBlur}
+                      className={cn(
+                        "input",
+                        form.formState.errors.cel && "input-error",
+                      )}
+                      placeholder={MyAccountInfo.personalDataPlaceholders.cel}
+                    />
+                  </FormControl>
+
+                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="w-full flex flex-col gap-y-1">
+            <FormField
+              control={form.control}
+              name="district"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting || isLoading}
+                      className={cn(
+                        "input",
+                        form.formState.errors.district && "input-error",
+                      )}
+                      placeholder={
+                        MyAccountInfo.personalDataPlaceholders.district
+                      }
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="w-full flex flex-col gap-y-1">
+            <FormField
+              control={form.control}
+              name="complement"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting || isLoading}
+                      className={cn(
+                        "input",
+                        form.formState.errors.complement && "input-error",
+                      )}
+                      placeholder={
+                        MyAccountInfo.personalDataPlaceholders.complement
+                      }
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <h2 className="text-2xl text-gray-primary font-semibold mb-6">
+          {MyAccountInfo.themeTitle}
+        </h2>
+
+        <input
+          type="text"
+          disabled={isLoading}
+          onChange={handleSearch}
+          value={searchValue}
+          className={cn(inputStyle, "mb-9")}
+          placeholder={MyAccountInfo.inputPlaceholder}
+        />
+
+        <div className="w-full flex flex-col gap-y-1 mb-9">
+          <h3 className="text-lg font-medium text-gray-primary">
+            {MyAccountInfo.themeSelectedTitle}
+          </h3>
+
+          <ul className="w-full flex flex-col gap-y-4">
+            {themes?.map((option, index) => (
+              <li
+                key={`${option}-${index}`}
+                onClick={() => handleOptionSelect(option)}
+                className="w-full h-12 px-4 py-3 rounded-lg bg-green-primary text-base font-medium text-white flex items-center justify-between group lg:cursor-pointer"
               >
-                <option
-                  value={MyAccountInfo.personalDataPlaceholders.city}
-                  disabled
-                  hidden
-                >
-                  {MyAccountInfo.personalDataPlaceholders.city}
-                </option>
-                {cityOptions.map((city) => (
-                  <option key={city.id} value={city.nome}>
-                    {city.nome}
-                  </option>
-                ))}
-              </select>
+                {option}
+                <X className="h-7 w-7 block lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="w-full flex flex-col gap-y-1 mb-9">
+          <h3 className="text-lg font-medium text-gray-primary">
+            {MyAccountInfo.themesAvailableTitle}
+          </h3>
+
+          {isLoading ? (
+            <div className="w-full flex items-center justify-center">
+              <Loader2 className="h-10 w-10 text-green-primary animate-spin" />
             </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
-          <div
-            className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}
-          >
-            <input
-              {...register("address")}
-              type="text"
-              disabled={isSubmitting || isLoading}
-              className={cn(
-                inputStyle,
-                errors.address &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
-              )}
-              placeholder={MyAccountInfo.personalDataPlaceholders.address}
-            />
-            {errors.address && (
-              <span className="text-sm text-[#ff7373] font-medium text-left">
-                {errors.address?.message}
-              </span>
-            )}
-          </div>
-
-          <div
-            className={cn(
-              "flex flex-col gap-y-1",
-              "sm:w-2/5 lg:w-full xl:w-2/5"
-            )}
-          >
-            <input
-              {...register("addressNumber")}
-              type="text"
-              disabled={isSubmitting || isLoading}
-              className={cn(
-                inputStyle,
-                errors.addressNumber &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
-              )}
-              placeholder={MyAccountInfo.personalDataPlaceholders.addressNumber}
-            />
-            {errors.addressNumber && (
-              <span className="text-sm text-[#ff7373] font-medium text-left">
-                {errors.addressNumber?.message}
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
-          <div
-            className={cn(
-              "flex flex-col gap-y-1",
-              "sm:w-2/5 lg:w-full xl:w-2/5"
-            )}
-          >
-            <input
-              {...register("ddd")}
-              type="text"
-              disabled={isSubmitting || isLoading}
-              onChange={handleDDD}
-              className={cn(
-                inputStyle,
-                errors.ddd &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
-              )}
-              placeholder={MyAccountInfo.personalDataPlaceholders.ddd}
-            />
-            {errors.ddd && (
-              <span className="text-sm text-[#ff7373] font-medium text-left">
-                {errors.ddd?.message}
-              </span>
-            )}
-          </div>
-
-          <div
-            className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}
-          >
-            <input
-              {...register("cel")}
-              type="text"
-              disabled={isSubmitting || isLoading}
-              onChange={handleCel}
-              className={cn(
-                inputStyle,
-                errors.cel &&
-                  "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
-              )}
-              placeholder={MyAccountInfo.personalDataPlaceholders.cel}
-            />
-            {errors.cel && (
-              <span className="text-sm text-[#ff7373] font-medium text-left">
-                {errors.cel?.message}
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="w-full flex flex-col gap-y-1">
-          <input
-            {...register("district")}
-            type="text"
-            disabled={isSubmitting || isLoading}
-            className={cn(
-              inputStyle,
-              errors.district &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
-            )}
-            placeholder={MyAccountInfo.personalDataPlaceholders.district}
-          />
-          {errors.district && (
-            <span className="text-sm text-[#ff7373] font-medium text-left">
-              {errors.district?.message}
-            </span>
-          )}
-        </div>
-
-        <div className="w-full flex flex-col gap-y-1">
-          <input
-            {...register("complement")}
-            type="text"
-            disabled={isSubmitting || isLoading}
-            className={cn(
-              inputStyle,
-              errors.complement &&
-                "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373]"
-            )}
-            placeholder={MyAccountInfo.personalDataPlaceholders.complement}
-          />
-          {errors.complement && (
-            <span className="text-sm text-[#ff7373] font-medium text-left">
-              {errors.complement?.message}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <h2 className="text-2xl text-gray-primary font-semibold mb-6">
-        {MyAccountInfo.themeTitle}
-      </h2>
-
-      <input
-        type="text"
-        disabled={isLoading}
-        onChange={handleSearch}
-        value={searchValue}
-        className={cn(inputStyle, "mb-9")}
-        placeholder={MyAccountInfo.inputPlaceholder}
-      />
-
-      <div className="w-full flex flex-col gap-y-1 mb-9">
-        <h3 className="text-lg font-medium text-gray-primary">
-          {MyAccountInfo.themeSelectedTitle}
-        </h3>
-
-        <ul className="w-full flex flex-col gap-y-4">
-          {themes?.map((option, index) => (
-            <li
-              key={`${option}-${index}`}
-              onClick={() => handleOptionSelect(option)}
-              className="w-full h-12 px-4 py-3 rounded-lg bg-green-primary text-base font-medium text-white flex items-center justify-between group lg:cursor-pointer"
-            >
-              {option}
-              <X className="h-7 w-7 block lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="w-full flex flex-col gap-y-1 mb-9">
-        <h3 className="text-lg font-medium text-gray-primary">
-          {MyAccountInfo.themesAvailableTitle}
-        </h3>
-
-        {isLoading ? (
-          <div className="w-full flex items-center justify-center">
-            <Loader2 className="h-10 w-10 text-green-primary animate-spin" />
-          </div>
-        ) : (
-          <ul className="w-full flex flex-col gap-y-4 overflow-y-auto max-h-80 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-[#C8D6DF] scrollbar-track-transparent scrollbar-gutter-stable">
-            {searchValue.length > 3 && filteredOptions.length > 0 ? (
-              filteredOptions.map((option, index) => (
-                <li
-                  key={`${option}-${index}`}
-                  onClick={() => handleOptionSelect(option)}
-                  className="w-full h-12 px-4 py-3 rounded-lg bg-[#EBEFF1] text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer"
-                >
-                  {option}
-                  <Plus className="h-7 w-7 block text-green-primary lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
-                </li>
-              ))
-            ) : searchValue.length > 3 && filteredOptions.length == 0 ? (
-              <div className="w-full h-12 px-4 py-3 rounded-lg bg-[#E5ECF0] flex items-center justify-center">
-                <span className="text-base text-center text-[#96A3AB]">
-                  Resultado não encontrado
-                </span>
-              </div>
-            ) : (
-              availableThemes
-                .filter((option) => !themes?.includes(option))
-                .map((option, index) => (
+          ) : (
+            <ul className="w-full flex flex-col gap-y-4 overflow-y-auto max-h-80 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-[#C8D6DF] scrollbar-track-transparent scrollbar-gutter-stable">
+              {searchValue.length > 3 && filteredOptions.length > 0 ? (
+                filteredOptions.map((option, index) => (
                   <li
                     key={`${option}-${index}`}
                     onClick={() => handleOptionSelect(option)}
@@ -662,39 +738,65 @@ const ProfessorFormBox = () => {
                     <Plus className="h-7 w-7 block text-green-primary lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
                   </li>
                 ))
-            )}
-          </ul>
-        )}
-      </div>
+              ) : searchValue.length > 3 && filteredOptions.length == 0 ? (
+                <div className="w-full h-12 px-4 py-3 rounded-lg bg-[#E5ECF0] flex items-center justify-center">
+                  <span className="text-base text-center text-[#96A3AB]">
+                    Resultado não encontrado
+                  </span>
+                </div>
+              ) : (
+                availableThemes
+                  .filter((option) => !themes?.includes(option))
+                  .map((option, index) => (
+                    <li
+                      key={`${option}-${index}`}
+                      onClick={() => handleOptionSelect(option)}
+                      className="w-full h-12 px-4 py-3 rounded-lg bg-[#EBEFF1] text-base font-medium text-gray-primary flex items-center justify-between group lg:cursor-pointer"
+                    >
+                      {option}
+                      <Plus className="h-7 w-7 block text-green-primary lg:opacity-0 lg:group-hover:opacity-100 transition-opacity" />
+                    </li>
+                  ))
+              )}
+            </ul>
+          )}
+        </div>
 
-      <h2 className="text-2xl text-gray-primary font-semibold mb-6">
-        {MyAccountInfo.aboutTitle}
-      </h2>
+        <h2 className="text-2xl text-gray-primary font-semibold mb-6">
+          {MyAccountInfo.aboutTitle}
+        </h2>
 
-      <textarea
-        {...register("aboutMe")}
-        disabled={isSubmitting || isLoading}
-        className={cn(
-          "w-full h-64 bg-[#EBEFF1] px-4 py-2 rounded-lg resize-none text-base text-gray-primary focus:outline-[#9DA5AA] mb-9",
-          errors.aboutMe &&
-            "border-[#FF7373] border-2 border-solid focus:outline-[#FF7373] mb-0"
-        )}
-        placeholder={MyAccountInfo.aboutPlaceholder}
-      />
-      {errors.aboutMe && (
-        <span className="block text-sm text-[#ff7373] font-medium text-left mb-9">
-          {errors.aboutMe?.message}
-        </span>
-      )}
+        <FormField
+          control={form.control}
+          name="aboutMe"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Textarea
+                  disabled={isSubmitting || isLoading}
+                  className={cn(
+                    "textarea !h-[150px] mb-9",
+                    form.formState.errors.aboutMe && "input-error",
+                  )}
+                  placeholder={MyAccountInfo.aboutPlaceholder}
+                  {...field}
+                />
+              </FormControl>
 
-      <Button
-        className="w-full"
-        type="submit"
-        disabled={isSubmitting || isLoading}
-      >
-        {MyAccountInfo.submitButton}
-      </Button>
-    </form>
+              <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+            </FormItem>
+          )}
+        />
+
+        <Button
+          className="w-full"
+          type="submit"
+          disabled={isSubmitting || isLoading}
+        >
+          {MyAccountInfo.submitButton}
+        </Button>
+      </form>
+    </Form>
   );
 };
 

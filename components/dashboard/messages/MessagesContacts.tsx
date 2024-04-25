@@ -13,6 +13,7 @@ import useConversation from "@/hooks/useConversation";
 import { MessagesContactsBox } from "./MessagesContactsBox";
 import { pusherClient } from "@/libs/pusher";
 import useUserStore from "@/stores/useUserStore";
+import { Input } from "@/components/ui/input";
 
 interface Props {
     initialConversations: FullConversationType[];
@@ -147,14 +148,14 @@ const MessagesContacts = ({
             )}
         >
             <div className="px-9 w-full">
-                <div className="w-full flex items-center justify-between h-[46px] bg-[#EBEFF1] rounded-lg px-5 peer">
-                    <input
+                <div className="w-full flex items-center justify-between input focus-within:ring-2 focus-within:ring-[#9DA5AA]">
+                    <Input
                         value={searchValue}
                         onChange={handleSearch}
                         type="text"
                         name="search"
                         placeholder="Faça sua pesquisa aqui..."
-                        className="bg-transparent outline-none w-full"
+                        className="bg-transparent outline-none w-full "
                     />
 
                     <Search
@@ -194,7 +195,9 @@ const MessagesContacts = ({
                         />
                     ))
                 ) : (
-                    <span>Nenhum contato</span>
+                    <span className="mx-auto block text-lg font-medium text-center text-gray-primary/50">
+                        Nenhum contato
+                    </span>
                 )}
             </div>
 

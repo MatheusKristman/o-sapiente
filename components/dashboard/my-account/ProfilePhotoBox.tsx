@@ -1,103 +1,165 @@
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 
 import { MyAccountInfo } from "@/constants/dashboard/my-account-br";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/libs/utils";
+import useUserStore from "@/stores/useUserStore";
+import { useUploadThing } from "@/libs/uploadthing";
+import { useDropzone } from "@uploadthing/react";
+import { generateClientDropzoneAccept } from "uploadthing/client";
+import { Button } from "@/components/ui/button";
 
-interface ProfilePhotoBoxProps {
-  profilePhotoUrl: string;
-  setProfilePhotoUrl: Dispatch<SetStateAction<string>>;
-  email: string | null | undefined;
-  profileType: "Professor" | "Student";
-}
+const ProfilePhotoBox = () => {
+    const [profilePhoto, setProfilePhoto] = useState<File[] | null>(null);
 
-const ProfilePhotoBox = ({
-  profilePhotoUrl,
-  setProfilePhotoUrl,
-  email,
-  profileType,
-}: ProfilePhotoBoxProps) => {
-  const [isSendingImage, setSendingImage] = useState<boolean>(false);
+    const {
+        setProfilePhoto: setProfilePhotoUrl,
+        profilePhoto: profilePhotoUrl,
+        userId,
+    } = useUserStore();
 
-  function handleImage(event: React.ChangeEvent<HTMLInputElement>) {
-    setSendingImage(true);
+    const fileInput = useRef<HTMLInputElement | null>(null);
 
-    if (!event.target.files) {
-      return;
+    const onDrop = useCallback(
+        (acceptedFiles: File[]) => {
+            setProfilePhoto(acceptedFiles);
+            setProfilePhotoUrl(URL.createObjectURL(acceptedFiles[0]));
+        },
+        [setProfilePhotoUrl],
+    );
+
+    const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
+        "profilePhotoUploader",
+        {
+            onClientUploadComplete: () => {
+                toast.success(MyAccountInfo.changePhotoSuccessMessage);
+            },
+            onUploadError: () => {
+                toast.error(
+                    "Ocorreu um erro ao enviar a imagem, tente novamente mais tarde",
+                );
+            },
+        },
+    );
+
+    const fileTypes = permittedFileInfo?.config
+        ? Object.keys(permittedFileInfo?.config)
+        : [];
+
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
+    });
+
+    function handleDeleteButton() {
+        if (fileInput.current) {
+            fileInput.current.value = "";
+        }
+
+        setProfilePhoto(null);
+        setProfilePhotoUrl("");
     }
 
-    const file = event.target.files[0];
+    function handleNextButton() {
+        if (!profilePhoto) {
+            return;
+        }
 
-    if (!file) {
-      return;
+        // setSubmitting(true);
+
+        // if (type === "student") {
+        //     const data = new FormData();
+        //     data.set("id", id);
+        //
+        //     axios
+        //         .patch(`/api/user/save-profile/${type}`, data)
+        //         .then((res) => {
+        //             setProfileData(res.data);
+        //             setSteps((prev: number) => prev + 1);
+        //         })
+        //         .catch((error) => {
+        //             console.error(error);
+        //
+        //             toast.error(error.response.data);
+        //         })
+        //         .finally(() => setSubmitting(false));
+        // } else if (type === "professor") {
+        //     const data = new FormData();
+        //     data.set("themes", JSON.stringify(selectedOptions));
+        //     data.set("aboutMe", aboutMeValue!);
+        //     data.set("id", id);
+        //
+        //     axios
+        //         .patch(`/api/user/save-profile/${type}`, data)
+        //         .then((res) => {
+        //             setProfileData(res.data);
+        //             setSteps((prev: number) => prev + 1);
+        //         })
+        //         .catch((error) => {
+        //             console.error(error);
+        //
+        //             toast.error(error.response.data);
+        //         })
+        //         .finally(() => setSubmitting(false));
+        // }
     }
 
-    if (file && file.type.startsWith("image/")) {
-      const formData = new FormData();
+    return (
+        <div className="bg-white w-full p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)] flex flex-col gap-y-6 sm:max-w-[290px] lg:max-w-none">
+            <div
+                {...getRootProps()}
+                className="relative aspect-square cursor-pointer rounded-2xl overflow-hidden group"
+            >
+                <div
+                    className={cn(
+                        "hidden lg:flex w-full h-full bg-gray-primary/70 absolute top-0 left-0 right-0 bottom-0 opacity-0 group-hover:opacity-100 z-10 items-center justify-center p-6 transition-all duration-500",
+                        {
+                            "group-hover:opacity-0": !!profilePhoto,
+                        },
+                    )}
+                >
+                    <span className="text-lg text-white font-medium text-center">
+                        {MyAccountInfo.tipPhoto}
+                    </span>
+                </div>
 
-      formData.append("profilePhoto", file);
-      formData.append("email", email!);
-      formData.append("profileType", profileType);
+                <Image
+                    src={
+                        profilePhotoUrl
+                            ? profilePhotoUrl
+                            : "/assets/images/default-user-photo.svg"
+                    }
+                    alt="Foto de perfil"
+                    fill
+                    className="object-cover w-full h-full"
+                />
+            </div>
 
-      axios
-        .patch("/api/user/update-photo", formData)
-        .then((res) => setProfilePhotoUrl(res.data.profilePhoto))
-        .catch((error) => {
-          console.error(error);
-          toast.error(error.response.data);
-        })
-        .finally(() => setSendingImage(false));
+            <span className="text-sm flex lg:hidden font-medium text-center text-gray-primary/60">
+                {MyAccountInfo.tipPhotoMobile}
+            </span>
 
-      return;
-    }
+            <Button
+                disabled={isUploading || !profilePhoto}
+                onClick={() => startUpload(profilePhoto!, { id: userId })}
+                className="flex items-center justify-center gap-2"
+            >
+                {isUploading ? (
+                    <Loader2 className="w-8 h-8 text-white animate-spin" />
+                ) : (
+                    <>
+                        <span className="bg-camera-white bg-cover bg-no-repeat block w-6 h-6 min-w-[24px] min-h-[24px]" />
+                        <span>{MyAccountInfo.changePhotoBtn}</span>
+                    </>
+                )}
+            </Button>
 
-    toast.error("Formado da image é inválido");
-
-    setSendingImage(false);
-  }
-
-  return (
-    <div className="bg-white w-full p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)] flex flex-col gap-y-6 sm:max-w-[290px] lg:max-w-none">
-      <div className="relative aspect-square rounded-2xl overflow-hidden">
-        <Image
-          src={profilePhotoUrl ? profilePhotoUrl : "/assets/images/default-user-photo.svg"}
-          alt="Foto de perfil"
-          fill
-          className="object-cover w-full h-full"
-        />
-      </div>
-
-      <label
-        htmlFor="profilePhoto"
-        className={cn(
-          "w-full bg-green-primary border-green-primary text-white hover:brightness-90 transition disabled:brightness-75 disabled:hover:brightness-75 py-1.5 px-8 flex items-center justify-center gap-2 text-base rounded-lg border-2 font-medium disabled:cursor-not-allowed lg:cursor-pointer",
-          isSendingImage &&
-            "cursor-not-allowed brightness-75 hover:brightness-75 lg:cursor-not-allowed",
-        )}
-      >
-        {isSendingImage ? (
-          <Loader2 className="w-8 h-8 text-white animate-spin" />
-        ) : (
-          <>
-            <span className="bg-camera-white bg-cover bg-no-repeat block w-6 h-6 min-w-[24px] min-h-[24px]" />
-            <span>{MyAccountInfo.changePhotoBtn}</span>
-          </>
-        )}
-      </label>
-
-      <input
-        type="file"
-        id="profilePhoto"
-        name="profilePhoto"
-        className="hidden"
-        onChange={(event) => handleImage(event)}
-        disabled={isSendingImage}
-      />
-    </div>
-  );
+            <input {...getInputProps()} disabled={isUploading} />
+        </div>
+    );
 };
 
 export default ProfilePhotoBox;

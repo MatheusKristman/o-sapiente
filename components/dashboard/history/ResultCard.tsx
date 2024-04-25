@@ -35,7 +35,8 @@ const ResultCard = ({ request }: Props) => {
     const startDate: Date | null = request.beginLessonDate;
     const endDate: Date | null = request.finishLessonDate;
     const status: Status = request.status;
-    const price: number = request.offers[0].lessonPrice;
+    // TODO: ajustar para apresentar somente as solicitações que o professor está vinculado e retirar os opcionais
+    const price: number = request.offers[0]?.lessonPrice || 0;
 
     return (
         <div className="w-full bg-white px-7 py-4 rounded-2xl flex flex-col md:grid md:grid-cols-4 md:grid-rows-2">

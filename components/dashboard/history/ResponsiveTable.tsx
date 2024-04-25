@@ -117,7 +117,7 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                 </table>
             </div>
 
-            <div className="relative w-full flex flex-col gap-y-5 overflow-y-auto max-h-80 md:max-h-[500px] lg:hidden">
+            <div className="relative w-full flex flex-col gap-y-5 overflow-y-auto max-h-[500px] lg:hidden">
                 <div className="sticky top-0 left-0 w-full h-6 min-h-[24px] bg-gradient-to-b from-[#F0F5F8] to-transparent z-[9]" />
 
                 {searchValue.length > 0

@@ -221,7 +221,6 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
                         <input
                             disabled={isUploading || isSubmitting}
                             {...getInputProps()}
-                        //   onChange={(event) => handleImage(event)}
                         />
 
                         {profilePhotoUrl && profilePhoto && (

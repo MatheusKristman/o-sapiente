@@ -43,7 +43,7 @@ model User {
     complement         String?
     password           String
     themes             String[]
-    aboutMe            String?
+    aboutMe            String      @default("")
     accountType        AccountRole
     isCompleted        Boolean     @default(false)
     isConfirmed        Boolean     @default(false)
