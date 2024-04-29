@@ -60,7 +60,6 @@ const MessagesVideoModal = ({ conversationId }: Props) => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         if (validVideoUrl) {
-            console.log("video pronto para upload");
             axios
                 .post("/api/messages", {
                     message: validVideoUrl,

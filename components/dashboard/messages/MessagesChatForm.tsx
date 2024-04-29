@@ -94,7 +94,7 @@ const MessagesChatForm = ({
       <div className="w-full flex bg-[#2C383F] mt-auto">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-full flex flex-row px-6 py-4 gap-8 sm:px-16"
+          className="w-full flex flex-row px-6 py-4 gap-4 sm:gap-6 sm:px-16"
         >
           <div className="flex flex-row items-center justify-start gap-3.5">
             <Button

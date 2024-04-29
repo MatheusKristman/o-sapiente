@@ -1,9 +1,4 @@
-import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
-import { NextResponse } from "next/server";
-
-import { prisma } from "@/libs/prismadb";
-import { AccountRole } from "@prisma/client";
 
 export async function POST(req: Request) {
     try {
@@ -11,90 +6,22 @@ export async function POST(req: Request) {
         const emailUser: string = process.env.EMAIL_USER!;
         const emailPass: string = process.env.EMAIL_PASS!;
         const emailPort: number = Number(process.env.EMAIL_PORT!);
-        const body = await req.json();
-        const {
-            firstName,
-            lastName,
-            email,
-            tel,
-            password,
-            passwordConfirm,
-            accountType,
-        } = body;
+        const { email } = await req.json();
 
-        if (
-            !firstName ||
-            !lastName ||
-            !email ||
-            !tel ||
-            !password ||
-            !passwordConfirm ||
-            !accountType
-        ) {
-            return new NextResponse(
-                "Dados inválidos, verifique e tente novamente",
-                { status: 401 },
-            );
-        }
-
-        const userExists = await prisma.user.findFirst({
-            where: {
-                email,
+        const transport = nodemailer.createTransport({
+            host: emailHost,
+            port: emailPort,
+            auth: {
+                user: emailUser,
+                pass: emailPass,
             },
         });
 
-        if (userExists) {
-            return new NextResponse("Usuário já está cadastrado", {
-                status: 405,
-            });
-        }
-
-        if (password !== passwordConfirm) {
-            return new NextResponse(
-                "Senhas não coincidem, verifique e tente novamente",
-                { status: 401 },
-            );
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 12);
-        let user;
-
-        if (accountType === "Student") {
-            user = await prisma.user.create({
-                data: {
-                    firstName,
-                    lastName,
-                    email,
-                    tel,
-                    password: hashedPassword,
-                    accountType: AccountRole.STUDENT,
-                },
-            });
-
-            if (body.subject && body.description) {
-                await prisma.request.create({
-                    data: {
-                        subject: body.subject,
-                        description: body.description,
-                        userIds: [user.id],
-                    },
-                });
-            }
-
-            const transport = nodemailer.createTransport({
-                host: emailHost,
-                port: emailPort,
-                auth: {
-                    user: emailUser,
-                    pass: emailPass,
-                },
-            });
-
-            const mailData = {
-                from: emailUser,
-                to: email,
-                subject: "Confirme sua conta - O Sapiente",
-                html: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        const mailData = {
+            from: emailUser,
+            to: email,
+            subject: "Confirme sua conta - O Sapiente",
+            html: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
 <!--[if gte mso 9]>
@@ -296,8 +223,8 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
         
   <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
 <div class="v-text-align" align="left">
-  <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://localhost:3000/?id=${user.id}&confirmed=true&type=student" style="height:39px; v-text-anchor:middle; width:214px;" arcsize="10.5%"  stroke="f" fillcolor="#03c988"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
-    <a href="http://localhost:3000/?id=${user.id}&confirmed=true&type=student" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #03c988; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 16px;font-weight: 700; ">
+  <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://localhost:3000/" style="height:39px; v-text-anchor:middle; width:214px;" arcsize="10.5%"  stroke="f" fillcolor="#03c988"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
+    <a href="http://localhost:3000/" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #03c988; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 16px;font-weight: 700; ">
       <span style="display:block;padding:10px 20px;line-height:120%;"><span style="line-height: 19.2px;">Confirmar minha conta</span></span>
     </a>
     <!--[if mso]></center></v:roundrect><![endif]-->
@@ -407,64 +334,38 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
 </html>
 `,
-                attachments: [
-                    {
-                        filename: "image-1.png",
-                        path: "public/assets/images/image-1.png",
-                        cid: "image-1",
-                    },
-                    {
-                        filename: "image-2.png",
-                        path: "public/assets/images/image-2.png",
-                        cid: "image-2",
-                    },
-                ],
-            };
-
-            transport.sendMail(mailData, (error) => {
-                if (error) {
-                    console.log("[ERROR_ON_CONFIRMATION_EMAIL]", error);
-
-                    return new NextResponse(
-                        "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-                        {
-                            status: 400,
-                        },
-                    );
-                }
-            });
-        }
-
-        if (accountType === "Professor") {
-            user = await prisma.user.create({
-                data: {
-                    firstName,
-                    lastName,
-                    email,
-                    tel,
-                    password: hashedPassword,
-                    accountType: AccountRole.PROFESSOR,
-                },
-            });
-        }
-
-        if (!user) {
-            return new NextResponse(
-                "Ocorreu um erro durante a criação da conta, tente novamente",
+            attachments: [
                 {
-                    status: 400,
+                    filename: "image-1.png",
+                    path: "public/assets/images/image-1.png",
+                    cid: "image-1",
                 },
-            );
-        }
+                {
+                    filename: "image-2.png",
+                    path: "public/assets/images/image-2.png",
+                    cid: "image-2",
+                },
+            ],
+        };
 
-        return NextResponse.json({ id: user.id });
-    } catch (error: any) {
-        console.log("[ERROR_PROFESSOR_PRE_REGISTER]", error);
-        return new NextResponse(
-            "Ocorreu um erro durante o cadastro, tente novamente!",
-            {
-                status: 400,
-            },
-        );
+        transport.sendMail(mailData, (error: any) => {
+            if (error) {
+                console.log("[ERROR_ON_CONFIRMATION_EMAIL]", error);
+
+                return new Response(
+                    "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
+                    {
+                        status: 400,
+                    },
+                );
+            }
+        });
+
+        return Response.json({ message: "Mensagem enviada" }, { status: 200 });
+    } catch (error) {
+        console.log(error);
+        return new Response("Ocorreu um erro ao enviar a mensagem", {
+            status: 500,
+        });
     }
 }

@@ -100,6 +100,10 @@
     @apply w-full h-12 px-4 py-3 bg-[#C8D6DF] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
 }
 
+.input-contact {
+    @apply w-full h-12 px-4 py-3 bg-[#26343A] text-base text-white rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-green-primary;
+}
+
 .input {
     @apply w-full h-12 px-4 py-3 bg-[#EBEFF1] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
 }
@@ -118,6 +122,10 @@
 
 .textarea {
     @apply w-full h-24 resize-none px-4 py-3 bg-[#EBEFF1] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
+}
+
+.textarea-contact {
+    @apply w-full h-48 resize-none px-4 py-3 bg-[#26343A] text-base text-white rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-green-primary;
 }
 
 .textarea-light {
