@@ -9,52 +9,52 @@ import { Button } from "@/components/ui/button";
 import useRetrievePaymentModalStore from "@/stores/useRetrievePaymentModalStore";
 
 export function RetrievePaymentMessage() {
-    const { closeModal, setIsForm, setIsMessage } =
-        useRetrievePaymentModalStore();
+  const { closeModal, setIsForm, setIsMessage } =
+    useRetrievePaymentModalStore();
 
-    function handleClose() {
-        closeModal();
-        setIsForm(true);
+  function handleClose() {
+    closeModal();
+    setIsForm(true);
 
-        setTimeout(() => {
-            setIsMessage(false);
-        }, 350);
-    }
+    setTimeout(() => {
+      setIsMessage(false);
+    }, 350);
+  }
 
-    return (
-        <>
-            <div className="w-full flex flex-col items-center">
-                <div className="relative w-36 h-36 mb-9">
-                    <Image
-                        src="/assets/icons/confirm.gif"
-                        alt="Confirmado"
-                        fill
-                        className="object-cover"
-                    />
-                </div>
+  return (
+    <>
+      <div className="w-full flex flex-col items-center">
+        <div className="relative w-36 h-36 mb-9">
+          <Image
+            src="/assets/icons/confirm.gif"
+            alt="Confirmado"
+            fill
+            className="object-cover"
+          />
+        </div>
 
-                <motion.h4
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    variants={newRequestMessageAnimation}
-                    className="text-xl text-gray-primary font-semibold text-center mb-12"
-                >
-                    {retrievePaymentModalInfo.successTitle}
-                </motion.h4>
+        <motion.h4
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={newRequestMessageAnimation}
+          className="text-xl text-gray-primary font-semibold text-center mb-12"
+        >
+          {retrievePaymentModalInfo.successTitle}
+        </motion.h4>
 
-                <motion.div
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    variants={newRequestMessageAnimation}
-                    className="w-full"
-                >
-                    <Button className="w-full" onClick={handleClose}>
-                        {retrievePaymentModalInfo.closeBtn}
-                    </Button>
-                </motion.div>
-            </div>
-        </>
-    );
+        <motion.div
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={newRequestMessageAnimation}
+          className="w-full"
+        >
+          <Button className="w-full" onClick={handleClose}>
+            {retrievePaymentModalInfo.closeBtn}
+          </Button>
+        </motion.div>
+      </div>
+    </>
+  );
 }

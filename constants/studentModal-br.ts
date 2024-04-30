@@ -25,4 +25,18 @@ export const studentLoginInfo = {
   loginButton: "Entrar",
   noAccountText: "Você não possui uma conta?",
   noAccountLink: "Cadastre-se aqui",
+  forgotPasswordText: "Esqueceu a senha?",
+  forgotPasswordLink: "Clique aqui",
+};
+
+export const studentForgotPasswordInfo = {
+  email: "E-mail para recuperar a senha",
+  nextButton: "Enviar",
+  rememberedPasswordText: "Lembrou-se da senha?",
+  rememberedPasswordLink: "Clique aqui",
+};
+
+export const studentRecoverMessageInfo = {
+  text: "Você receberá um email em breve com instruções sobre como recuperar sua senha. Fique de olho na sua caixa de entrada para mais detalhes.",
+  closeBtn: "FECHAR",
 };
