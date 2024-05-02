@@ -10,13 +10,16 @@ import {
   Hr,
   Tailwind,
 } from "@react-email/components";
+import { formatDistance } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface Props {
   url: string;
   userName: string;
+  hoursLeft: Date;
 }
 
-export function EmailForgotPassword({ url, userName }: Props) {
+export function EmailForgotPassword({ url, userName, hoursLeft }: Props) {
   return (
     <Html>
       <Head />
@@ -65,9 +68,14 @@ export function EmailForgotPassword({ url, userName }: Props) {
               <strong>Importante</strong>
               <br />
               Por motivos de segurança, este link é <strong>válido </strong>
-              apenas por <strong>[número de horas] horas</strong>. Se você não
-              redefinir sua senha dentro desse período, será necessário
-              solicitar novamente a recuperação de senha.
+              apenas por{" "}
+              <strong>
+                {formatDistance(new Date(), new Date(hoursLeft), {
+                  locale: ptBR,
+                })}
+              </strong>
+              . Se você não redefinir sua senha dentro desse período, será
+              necessário solicitar novamente a recuperação de senha.
             </Text>
 
             <Text className="text-base">

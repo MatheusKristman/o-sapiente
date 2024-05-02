@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 import { prisma } from "@/libs/prismadb";
 
 export async function POST(req: Request) {
@@ -15,12 +17,14 @@ export async function POST(req: Request) {
       );
     }
 
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
     const user = await prisma.user.update({
       where: {
         id,
       },
       data: {
-        password: newPassword,
+        password: hashedPassword,
       },
     });
 

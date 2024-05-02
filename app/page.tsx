@@ -32,14 +32,32 @@ export default function Home() {
   const confirmed = searchParams?.get("confirmed");
   const type = searchParams?.get("type");
   const recoverPassword = searchParams?.get("recover-password");
+  const recoverDate = searchParams?.get("recover-date");
   let redirected = searchParams?.get("redirected");
 
   const router = useRouter();
 
   useEffect(() => {
-    if (id && recoverPassword) {
-      openRecoverPasswordModal();
-      setIdUser(id);
+    if (id && recoverPassword && recoverDate) {
+      axios
+        .post("/api/forgot-password/confirm", {
+          passwordRequested: recoverPassword,
+          passwordDate: recoverDate,
+          userId: id,
+        })
+        .then((res) => {
+          if (res.data.confirmed) {
+            openRecoverPasswordModal();
+            setIdUser(id);
+          } else {
+            router.replace("/");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+
+          router.replace("/");
+        });
     }
   }, []);
 
