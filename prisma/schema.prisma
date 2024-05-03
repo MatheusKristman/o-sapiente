@@ -76,14 +76,17 @@ model User {
 }
 
 model Request {
-  id               String    @id @default(auto()) @map("_id") @db.ObjectId
-  subject          String
-  description      String
-  isConcluded      Boolean   @default(false)
-  isOfferAccepted  Boolean   @default(false)
-  beginLessonDate  DateTime?
-  finishLessonDate DateTime?
-  status           Status    @default(searchingProfessor)
+  id                   String    @id @default(auto()) @map("_id") @db.ObjectId
+  subject              String
+  description          String
+  isConcluded          Boolean   @default(false)
+  isOfferAccepted      Boolean   @default(false)
+  beginLessonDate      DateTime?
+  finishLessonDate     DateTime?
+  status               Status    @default(searchingProfessor)
+  lessonDate           DateTime?
+  lessonPrice          Float?
+  certificateRequested Boolean   @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

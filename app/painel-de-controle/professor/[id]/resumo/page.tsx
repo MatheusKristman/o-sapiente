@@ -17,110 +17,107 @@ import { RetrievePaymentModal } from "@/components/dashboard/resume/RetrievePaym
 import useResumeStore from "@/stores/useResumeStore";
 import useRetrievePaymentModalStore from "@/stores/useRetrievePaymentModalStore";
 
+// TODO: se o usuário errado entrar, redirecionar para a home
+
 const ResumePage = () => {
-    const {
-        setProfilePhoto,
-        setName,
-        setThemes,
-        setPlan,
-        setPaymentRetrievable,
-        setOffers,
-        setCurrentLesson,
-        setRequests,
-        setFinishedLessons,
-    } = useResumeStore();
-    const { setPixCode } = useRetrievePaymentModalStore();
+  const {
+    setProfilePhoto,
+    setName,
+    setThemes,
+    setPlan,
+    setPaymentRetrievable,
+    setOffers,
+    setCurrentLesson,
+    setRequests,
+    setFinishedLessons,
+  } = useResumeStore();
+  const { setPixCode } = useRetrievePaymentModalStore();
 
-    const session = useSession();
+  const session = useSession();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userResponse = await axios.get("/api/user/get-user");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userResponse = await axios.get("/api/user/get-user");
 
-                if (userResponse.data.profilePhoto) {
-                    setProfilePhoto(userResponse.data.profilePhoto);
-                }
+        if (userResponse.data.profilePhoto) {
+          setProfilePhoto(userResponse.data.profilePhoto);
+        }
 
-                if (userResponse.data.plan) {
-                    setPlan(userResponse.data.plan.planName);
-                }
+        if (userResponse.data.plan) {
+          setPlan(userResponse.data.plan.planName);
+        }
 
-                setOffers(userResponse.data.offers);
-                setName(
-                    `${userResponse.data.firstName} ${userResponse.data.lastName}`,
-                );
-                setThemes(userResponse.data.themes);
-                setPaymentRetrievable(userResponse.data.paymentRetrievable);
-                setPixCode(userResponse.data.pixCode);
+        setOffers(userResponse.data.offers);
+        setName(`${userResponse.data.firstName} ${userResponse.data.lastName}`);
+        setThemes(userResponse.data.themes);
+        setPaymentRetrievable(userResponse.data.paymentRetrievable);
+        setPixCode(userResponse.data.pixCode);
 
-                const requestResponse = await axios.get(
-                    "/api/request/get-requests",
-                );
+        const requestResponse = await axios.get("/api/request/get-requests");
 
-                setRequests(
-                    requestResponse.data.filter(
-                        (request: Request) => !request.isConcluded,
-                    ),
-                );
-                setCurrentLesson(
-                    requestResponse.data.filter(
-                        (request: Request) =>
-                            request.isOfferAccepted && !request.isConcluded,
-                    ),
-                );
-                setFinishedLessons(
-                    requestResponse.data.filter(
-                        (request: Request) =>
-                            request.status === Status.finished,
-                    ).length,
-                );
-            } catch (error) {
-                console.error(error);
-            }
-        };
+        setRequests(
+          requestResponse.data.filter(
+            (request: Request) => !request.isConcluded
+          )
+        );
+        setCurrentLesson(
+          requestResponse.data.filter(
+            (request: Request) =>
+              request.isOfferAccepted && !request.isConcluded
+          )
+        );
+        setFinishedLessons(
+          requestResponse.data.filter(
+            (request: Request) => request.status === Status.finished
+          ).length
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-        fetchData();
-    }, [
-        session?.data?.user?.email,
-        setCurrentLesson,
-        setName,
-        setOffers,
-        setPlan,
-        setProfilePhoto,
-        setRequests,
-        setThemes,
-        setPaymentRetrievable,
-        setPixCode,
-        setFinishedLessons,
-    ]);
+    fetchData();
+  }, [
+    session?.data?.user?.email,
+    setCurrentLesson,
+    setName,
+    setOffers,
+    setPlan,
+    setProfilePhoto,
+    setRequests,
+    setThemes,
+    setPaymentRetrievable,
+    setPixCode,
+    setFinishedLessons,
+  ]);
 
-    return (
-        <>
-            <div className="flex-1 w-full px-6 pt-9 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:mb-12">
-                <div className="w-full flex flex-col-reverse gap-9 md:flex-col lg:w-4/12 xl:w-6/12">
-                    <ResumeProfilePhoto type="Professor" />
-                </div>
+  return (
+    <>
+      <div className="flex-1 w-full px-6 pt-9 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:mb-12">
+        <div className="w-full flex flex-col-reverse gap-9 md:flex-col lg:w-4/12 xl:w-6/12">
+          <ResumeProfilePhoto type="Professor" />
+        </div>
 
-                <div className="w-full flex flex-col gap-8">
-                    <div className="w-full flex flex-col lg:grid lg:grid-cols-2 lg:grid-rows-1 gap-8">
-                        <BalanceBox />
+        <div className="w-full flex flex-col gap-8">
+          <div className="w-full flex flex-col lg:grid lg:grid-cols-2 lg:grid-rows-1 gap-8">
+            <BalanceBox />
 
-                        <FinishedLessonsBox />
-                    </div>
+            <FinishedLessonsBox />
+          </div>
 
-                    <ResumeRequestBox type="Professor" />
+          <ResumeRequestBox type="Professor" />
 
-                    <ResumeCurrentLessonBox />
-                </div>
-            </div>
+          <ResumeCurrentLessonBox />
+        </div>
+      </div>
 
-            <RequestDetailModal type="Professor" />
-            <RequestFinishModal type="PROFESSOR" />
-            <RequestConfirmFinishModal />
-            <RetrievePaymentModal />
-        </>
-    );
+      <RequestDetailModal type="Professor" />
+      <RequestFinishModal type="PROFESSOR" />
+      <RequestConfirmFinishModal />
+      <RetrievePaymentModal />
+    </>
+  );
 };
 
 export default ResumePage;

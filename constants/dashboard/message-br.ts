@@ -18,3 +18,9 @@ export const videoModalInfo = {
 export const noConversationInfo = {
   desc: "Clique na conversa ao lado para abrir",
 };
+
+export const supportModalInfo = {
+  title: "Entre em contato com o suporte",
+  messagePlaceholder: "Insira sua mensagem",
+  sendBtn: "Enviar",
+};
