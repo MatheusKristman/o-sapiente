@@ -14,6 +14,7 @@ import { MessagesContactsBox } from "./MessagesContactsBox";
 import { pusherClient } from "@/libs/pusher";
 import useUserStore from "@/stores/useUserStore";
 import { Input } from "@/components/ui/input";
+import useSupportModalStore from "@/stores/useSupportModalStore";
 
 interface Props {
   initialConversations: FullConversationType[];
@@ -34,6 +35,7 @@ const MessagesContacts = ({
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
   const [searchValue, setSearchValue] = useState<string>("");
 
+  const { openModal } = useSupportModalStore();
   const { isOpen, conversationId } = useConversation(conversationParams);
   const { userId } = useUserStore();
   const { data: session } = useSession();
@@ -71,13 +73,13 @@ const MessagesContacts = ({
           }
 
           return currentConversation;
-        })
+        }),
       );
 
       const messages = conversation.messages || [];
 
       setUnreadMessages(
-        messages.filter((message) => !message.seenIds.includes(userId)).length
+        messages.filter((message) => !message.seenIds.includes(userId)).length,
       );
     };
 
@@ -98,7 +100,7 @@ const MessagesContacts = ({
                 searchValue
                   .normalize("NFD")
                   .replace(/[\u0300-\u036f]/g, "")
-                  .toLowerCase()
+                  .toLowerCase(),
               ) ||
             conversation.users[0].lastName
               .toLowerCase()
@@ -108,7 +110,7 @@ const MessagesContacts = ({
                 searchValue
                   .normalize("NFD")
                   .replace(/[\u0300-\u036f]/g, "")
-                  .toLowerCase()
+                  .toLowerCase(),
               ) ||
             conversation.users[1].firstName
               .toLowerCase()
@@ -118,7 +120,7 @@ const MessagesContacts = ({
                 searchValue
                   .normalize("NFD")
                   .replace(/[\u0300-\u036f]/g, "")
-                  .toLowerCase()
+                  .toLowerCase(),
               ) ||
             conversation.users[1].lastName
               .toLowerCase()
@@ -128,9 +130,9 @@ const MessagesContacts = ({
                 searchValue
                   .normalize("NFD")
                   .replace(/[\u0300-\u036f]/g, "")
-                  .toLowerCase()
-              )
-        )
+                  .toLowerCase(),
+              ),
+        ),
       );
     }
   }, [searchValue, conversations]);
@@ -143,7 +145,7 @@ const MessagesContacts = ({
     <div
       className={cn(
         "flex-1 w-full flex flex-col bg-white lg:max-w-md lg:min-w-[448px] pt-9",
-        isOpen ? "hidden lg:flex" : "flex"
+        isOpen ? "hidden lg:flex" : "flex",
       )}
     >
       <div className="px-9 w-full">
@@ -201,7 +203,9 @@ const MessagesContacts = ({
       </div>
 
       <div className="flex px-9 pb-6 mt-auto">
-        <Button className="w-full">Suporte</Button>
+        <Button onClick={openModal} className="w-full">
+          Suporte
+        </Button>
       </div>
     </div>
   );

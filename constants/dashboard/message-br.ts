@@ -21,6 +21,8 @@ export const noConversationInfo = {
 
 export const supportModalInfo = {
   title: "Entre em contato com o suporte",
+  subjectPlaceholder: "Insira o assunto que deseja tratar",
   messagePlaceholder: "Insira sua mensagem",
   sendBtn: "Enviar",
+  backBtn: "Voltar",
 };

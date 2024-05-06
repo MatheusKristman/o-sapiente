@@ -4,6 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 import useSupportModalStore from "@/stores/useSupportModalStore";
 import {
@@ -21,36 +24,46 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/libs/utils";
+import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
 
 export function SupportModal() {
+  const [isSending, setIsSending] = useState<boolean>(false);
+
   const { isModalOpen, closeModal } = useSupportModalStore();
 
   const form = useForm<z.infer<typeof supportModalSchema>>({
     // @ts-ignore
     resolver: zodResolver(supportModalSchema),
     defaultValues: {
-      requestId: "",
+      subject: "",
       message: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof supportModalSchema>) {
-    console.log(values);
+    setIsSending(true);
+
+    axios
+      .post("/api/support", values)
+      .then((res) => {
+        closeModal();
+        toast.success(res.data.message);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   }
 
   return (
     <>
       <AnimatePresence>
-        {true && (
+        {isModalOpen && (
           <motion.div
             key="support-modal"
             initial="initial"
@@ -92,37 +105,23 @@ export function SupportModal() {
                     <div className="w-full flex flex-col gap-4">
                       <FormField
                         control={form.control}
-                        name="requestId"
+                        name="subject"
                         render={({ field }) => (
                           <FormItem className="w-full">
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger className="input placeholder:text-white">
-                                  <SelectValue placeholder="Selecione a solicitação que deseja ser atendida" />
-                                </SelectTrigger>
-                              </FormControl>
-
-                              <SelectContent>
-                                <SelectItem value="Id1">
-                                  Nome da solicitação 1
-                                </SelectItem>
-                                <SelectItem value="Id2">
-                                  Nome da solicitação 2
-                                </SelectItem>
-                                <SelectItem value="Id3">
-                                  Nome da solicitação 3
-                                </SelectItem>
-                                <SelectItem value="Id4">
-                                  Nome da solicitação 4
-                                </SelectItem>
-                                <SelectItem value="Id5">
-                                  Nome da solicitação 5
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <FormControl>
+                              <Input
+                                disabled={isSending}
+                                className={cn(
+                                  "input",
+                                  form.formState.errors.subject &&
+                                    "input-error",
+                                )}
+                                placeholder={
+                                  supportModalInfo.subjectPlaceholder
+                                }
+                                {...field}
+                              />
+                            </FormControl>
 
                             <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
                           </FormItem>
@@ -136,10 +135,11 @@ export function SupportModal() {
                           <FormItem>
                             <FormControl>
                               <Textarea
-                                // disabled={isSubmitting || isLoading}
+                                disabled={isSending}
                                 className={cn(
                                   "textarea !h-[150px] mb-9",
-                                  form.formState.errors.message && "input-error"
+                                  form.formState.errors.message &&
+                                    "input-error",
                                 )}
                                 placeholder={
                                   supportModalInfo.messagePlaceholder
@@ -154,7 +154,14 @@ export function SupportModal() {
                       />
                     </div>
 
-                    <Button type="submit">{supportModalInfo.sendBtn}</Button>
+                    <Button
+                      disabled={isSending}
+                      type="submit"
+                      className="flex items-center gap-2"
+                    >
+                      {isSending && <Loader2 className="animate-spin" />}
+                      {supportModalInfo.sendBtn}
+                    </Button>
                   </form>
                 </Form>
               </div>

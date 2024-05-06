@@ -1,12 +1,11 @@
 import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
 
-import { prisma } from "@/libs/prismadb";
 import { EmailSupport } from "@/emails/EmailSupport";
 
 export async function POST(req: Request) {
   try {
-    const { requestId, message } = await req.json();
+    const { subject, message } = await req.json();
     const emailHost: string = process.env.EMAIL_SMTP!;
     const emailUser: string = process.env.EMAIL_USER!;
     const emailPass: string = process.env.EMAIL_PASS!;
@@ -20,42 +19,16 @@ export async function POST(req: Request) {
       },
     });
 
-    const request = await prisma.request.findUnique({
-      where: {
-        id: requestId,
-      },
-      include: {
-        users: {
-          select: {
-            firstName: true,
-            lastName: true,
-            tel: true,
-          },
-        },
-      },
-    });
-
-    if (!request) {
-      return new Response("Solicitação não encontrada", { status: 404 });
-    }
-
     const emailHtml = render(
       EmailSupport({
         message,
-        lessonDate: request.lessonDate,
-        lessonPrice: request.lessonPrice,
-        certificateRequested: request.certificateRequested,
-        studentName: `${request.users[0].firstName} ${request.users[0].lastName}`,
-        studentContact: request.users[0].tel!,
-        professorName: `${request.users[1].firstName} ${request.users[1].lastName}`,
-        professorContact: request.users[1].tel!,
-      })
+      }),
     );
 
     const options = {
       from: emailUser,
       to: emailUser,
-      subject: "Nova mensagem de suporte - O Sapiente",
+      subject: `Nova mensagem de suporte - Assunto: ${subject} - O Sapiente`,
       html: emailHtml,
     };
 
@@ -67,14 +40,14 @@ export async function POST(req: Request) {
           "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
           {
             status: 400,
-          }
+          },
         );
       }
     });
 
     return Response.json(
-      { message: "Mensagem para o suporte enviada, aguarde o contato" },
-      { status: 200 }
+      { message: "Mensagem enviada para o suporte, aguarde o contato" },
+      { status: 200 },
     );
   } catch (error) {
     console.log("[ERROR_ON_SUPPORT]", error);

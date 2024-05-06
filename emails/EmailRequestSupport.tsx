@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 import {
   Html,
   Head,
@@ -6,15 +8,34 @@ import {
   Container,
   Img,
   Text,
+  Row,
+  Section,
   Hr,
   Tailwind,
 } from "@react-email/components";
+import { formatPrice } from "@/libs/utils";
 
 interface Props {
   message: string;
+  lessonDate: Date | null;
+  lessonPrice: number | null;
+  certificateRequested: boolean;
+  studentName: string;
+  studentContact: string;
+  professorName: string;
+  professorContact: string;
 }
 
-export function EmailSupport({ message }: Props) {
+export function EmailRequestSupport({
+  message,
+  lessonDate,
+  lessonPrice,
+  certificateRequested,
+  studentName,
+  studentContact,
+  professorName,
+  professorContact,
+}: Props) {
   return (
     <Html>
       <Head />
@@ -41,6 +62,49 @@ export function EmailSupport({ message }: Props) {
             <Text className="text-base">Segue a mensagem que foi enviado:</Text>
 
             <Text className="text-base">{message}</Text>
+
+            <Section style={{ marginBottom: "35px" }}>
+              {lessonDate && (
+                <Row>
+                  <strong>Data da aula: </strong>
+                  {format(new Date(lessonDate), "dd/MM/yyyy")}
+                </Row>
+              )}
+
+              {lessonPrice && (
+                <Row>
+                  <strong>Valor: </strong>
+                  {formatPrice(lessonPrice)}
+                </Row>
+              )}
+
+              {lessonDate && lessonPrice && (
+                <Row className="mb-4">
+                  <strong>Certificado: </strong>
+                  {certificateRequested ? "Solicitado" : "Não Solicitado"}
+                </Row>
+              )}
+
+              <Row>
+                <strong>Nome do aluno: </strong>
+                {studentName}
+              </Row>
+
+              <Row className="mb-4">
+                <strong>Contato do aluno: </strong>
+                {studentContact}
+              </Row>
+
+              <Row>
+                <strong>Nome do professor: </strong>
+                {professorName}
+              </Row>
+
+              <Row>
+                <strong>Contato do professor: </strong>
+                {professorContact}
+              </Row>
+            </Section>
 
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
