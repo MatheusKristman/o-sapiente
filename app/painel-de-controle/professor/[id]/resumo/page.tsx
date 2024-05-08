@@ -19,6 +19,7 @@ import useResumeStore from "@/stores/useResumeStore";
 import useRetrievePaymentModalStore from "@/stores/useRetrievePaymentModalStore";
 
 // TODO: se o usuário errado entrar, redirecionar para a home
+// TODO: ajustar loadings das requests para um skeleton
 
 const ResumePage = () => {
   const {
@@ -57,6 +58,7 @@ const ResumePage = () => {
 
         const requestResponse = await axios.get("/api/request/get-requests");
 
+        // TODO: ajustar requests para o usuário correto
         setRequests(
           requestResponse.data.filter(
             (request: Request) => !request.isConcluded,

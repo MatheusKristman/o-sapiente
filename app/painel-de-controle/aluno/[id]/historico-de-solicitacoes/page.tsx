@@ -8,27 +8,29 @@ import getRequests from "@/app/action/getRequests";
 import { LoadingComponent } from "@/components/LoadingComponent";
 
 export type StatsType = {
-    finished: number;
-    current: number;
-    total: number;
+  finished: number;
+  current: number;
+  total: number;
 };
 
+//TODO: ajustar para receber as requests corretas
+
 const HistoryPage = async () => {
-    const requests: RequestWithUsersAndOffers[] = await getRequests();
+  const requests: RequestWithUsersAndOffers[] = await getRequests();
 
-    if (!requests) {
-        return <LoadingComponent />;
-    }
+  if (!requests) {
+    return <LoadingComponent />;
+  }
 
-    return (
-        <div className="w-full min-h-[calc(100vh-144px)] px-6 pt-12 mx-auto md:px-16 lg:container lg:pt-24 lg:pb-12">
-            <TopStats requests={requests} />
+  return (
+    <div className="w-full min-h-[calc(100vh-144px)] px-6 pt-12 mx-auto md:px-16 lg:container lg:pt-24 lg:pb-12">
+      <TopStats requests={requests} />
 
-            <FilterWrapper isTeacher={false} />
+      <FilterWrapper isTeacher={false} />
 
-            <ResponsiveTable requests={requests} type="Student" />
-        </div>
-    );
+      <ResponsiveTable requests={requests} type="Student" />
+    </div>
+  );
 };
 
 export default HistoryPage;

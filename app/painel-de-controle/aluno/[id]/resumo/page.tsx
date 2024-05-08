@@ -19,6 +19,7 @@ import { ResumeCurrentLessonModal } from "@/components/dashboard/resume/ResumeCu
 import useResumeStore from "@/stores/useResumeStore";
 
 // TODO: se o usuário errado entrar, redirecionar para a home
+// TODO: ajustar loadings das requests para um skeleton
 
 const DashboardPage = () => {
   const { setProfilePhoto, setName, setCurrentLesson, setRequests } =
@@ -38,6 +39,8 @@ const DashboardPage = () => {
         setName(`${userResponse.data.firstName} ${userResponse.data.lastName}`);
 
         const requestResponse = await axios.get("/api/request/get-requests");
+
+        // TODO: ajustar requests para o usuário correto
 
         setRequests(
           requestResponse.data.filter(
