@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -17,40 +17,44 @@ import {
 import { Button } from "@/components/ui/button";
 import useUserStore from "@/stores/useUserStore";
 import { formatPrice } from "@/libs/utils";
+import usePaymentStore from "@/stores/usePaymentStore";
+import useOffersModalStore from "@/stores/useOffersModalStore";
 
 interface OfferItemProps {
   offer: OfferWithUser;
   handleCloseButton: () => void;
 }
 
-const OfferItem = ({ offer, handleCloseButton }: OfferItemProps) => {
-  const router = useRouter();
-  const { userId } = useUserStore();
+const OfferItem = ({ offer }: OfferItemProps) => {
+  const { openModal, setOfferId, setOtherUserId, setRequestId } =
+    usePaymentStore();
+  const { closeModal } = useOffersModalStore();
 
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  console.log("Offer: ", offer);
-
-  // TODO: transformar isso em um modal para forma de pagamento, para caso tenha solicitado certificado, enviar na solicitação
   function AcceptOffer() {
     setSubmitting(true);
 
     axios
-      .post("/api/conversations", {
-        otherUserId: offer.userId,
-        requestId: offer.requestId,
-        lessonDate: offer.lessonDate,
-        lessonPrice: offer.lessonPrice,
-        certificateRequested: true,
-      })
+      .get(`/api/offer/${offer.id}`)
       .then((res) => {
-        handleCloseButton();
-        router.push(
-          `/painel-de-controle/aluno/${userId}/mensagens/${res.data.id}`
-        );
+        setOfferId(res.data.id);
+        setOtherUserId(res.data.otherUserId);
+        setRequestId(res.data.requestId);
+        closeModal();
+
+        setTimeout(() => {
+          openModal();
+        }, 350);
       })
-      .catch((error) => toast.error(error))
-      .finally(() => setSubmitting(false));
+      .catch((error) => {
+        console.error(error);
+
+        toast.error("Ocorreu um erro ao aceitar a proposta");
+      })
+      .finally(() => {
+        setSubmitting(false);
+      });
   }
 
   return (

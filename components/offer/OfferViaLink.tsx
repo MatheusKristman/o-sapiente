@@ -5,8 +5,8 @@ import { format } from "date-fns";
 
 import { info } from "@/constants/offer/offerViaLink-br";
 import { Button } from "@/components/ui/button";
-import useOfferViaLinkStore from "@/stores/useOfferViaLinkStore";
 import { formatPrice } from "@/libs/utils";
+import usePaymentStore from "@/stores/usePaymentStore";
 
 interface Props {
   professorName: string;
@@ -21,7 +21,7 @@ export function OfferViaLink({
   lessonDate,
   lessonPrice,
 }: Props) {
-  const { openModal } = useOfferViaLinkStore();
+  const { openModal } = usePaymentStore();
   // TODO: adicionar propriedades que vão ser apresentadas na tela
   return (
     <div className="w-full min-h-[calc(100vh-184px)] flex items-start justify-center sm:items-center">

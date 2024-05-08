@@ -9,10 +9,15 @@ import {
   offersOverlayAnimation,
 } from "@/constants/framer-animations/offers-modal";
 import { Button } from "@/components/ui/button";
+import useUserStore from "@/stores/useUserStore";
+import usePaymentStore from "@/stores/usePaymentStore";
+import { PaymentMethodModal } from "@/components/offer/PaymentMethodModal";
 
 const OffersModal = () => {
   const { isModalOpen, closeModal, requestSelectedOffers } =
     useOffersModalStore();
+  const { userId } = useUserStore();
+  const { offerId, otherUserId, requestId } = usePaymentStore();
 
   function handleCloseButton() {
     closeModal();
@@ -74,6 +79,13 @@ const OffersModal = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <PaymentMethodModal
+        offerId={offerId}
+        otherUserId={otherUserId}
+        requestId={requestId}
+        currentUserId={userId}
+      />
     </>
   );
 };

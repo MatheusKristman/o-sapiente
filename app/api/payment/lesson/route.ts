@@ -26,6 +26,10 @@ export async function POST(req: Request) {
       requestId,
       paymentMethod,
     } = await req.json();
+    const pagarMeSecretKey =
+      process.env.NODE_ENV === "development"
+        ? process.env.PAGARME_SECRET_KEY_DEV!
+        : process.env.PAGARME_SECRET_KEY!;
 
     if (
       !birth ||
@@ -128,8 +132,7 @@ export async function POST(req: Request) {
         accept: "application/json",
         "content-type": "application/json",
         authorization:
-          "Basic " +
-          Buffer.from(`${process.env.PAGARME_SECRET_KEY!}:`).toString("base64"),
+          "Basic " + Buffer.from(`${pagarMeSecretKey}:`).toString("base64"),
       },
       data: {
         customer: {
@@ -189,7 +192,7 @@ export async function POST(req: Request) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
