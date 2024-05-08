@@ -8,10 +8,6 @@ interface IUseConfirmFinishModalStore {
   closeModal: () => void;
   requestSelected: RequestWithUsersAndOffers | null;
   setRequestSelected: (request: RequestWithUsersAndOffers) => void;
-  isForm: boolean;
-  setForm: () => void;
-  isSupport: boolean;
-  setSupport: () => void;
 }
 
 const useConfirmFinishModalStore = create<IUseConfirmFinishModalStore>(
@@ -21,10 +17,6 @@ const useConfirmFinishModalStore = create<IUseConfirmFinishModalStore>(
     closeModal: () => set({ isModalOpen: false }),
     requestSelected: null,
     setRequestSelected: (request) => set({ requestSelected: request }),
-    isForm: true,
-    setForm: () => set({ isForm: true, isSupport: false }),
-    isSupport: false,
-    setSupport: () => set({ isForm: false, isSupport: true }),
   }),
 );
 

@@ -1,62 +1,74 @@
 "use client";
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { motion } from "framer-motion";
+import { Request } from "@prisma/client";
 
-import useSupportModalStore from "@/stores/useSupportModalStore";
-import { Button } from "@/components/ui/button";
-import { supportModalInfo } from "@/constants/dashboard/message-br";
-import { supportModalSchema } from "@/constants/schemas/supportModalSchema";
 import {
   Form,
-  FormField,
   FormItem,
+  FormField,
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { FormAnimation } from "@/constants/framer-animations/modal";
+import { Button } from "@/components/ui/button";
+import { supportModalSchema } from "@/constants/schemas/supportModalSchema";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/libs/utils";
-import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
-import useConfirmFinishModalStore from "@/stores/useConfirmFinishModalStore";
-import { FormAnimation } from "@/constants/framer-animations/modal";
+import { currentLessonModalInfo } from "@/constants/dashboard/resume-br";
+import useCurrentLessonModalStore from "@/stores/useCurrentLessonModalStore";
+import useResumeStore from "@/stores/useResumeStore";
 
-export function RequestConfirmFinishSupport() {
+export function ResumeCurrentLessonSupportForm() {
   const [isSending, setIsSending] = useState<boolean>(false);
 
-  const { requestSelected, closeModal, setForm } = useConfirmFinishModalStore();
+  const { setBtns, lesson, closeModal } = useCurrentLessonModalStore();
+  const { setRequests, setCurrentLesson } = useResumeStore();
 
   const form = useForm<z.infer<typeof supportModalSchema>>({
-    // @ts-ignore
-    resolver: zodResolver(supportModalSchema),
     defaultValues: {
       subject: "",
       message: "",
     },
+    // @ts-ignore
+    resolver: zodResolver(supportModalSchema),
   });
 
   function handleClose() {
     closeModal();
 
     setTimeout(() => {
-      setForm();
+      setBtns();
     }, 350);
   }
 
   function onSubmit(values: z.infer<typeof supportModalSchema>) {
-    if (requestSelected) {
+    if (lesson) {
       setIsSending(true);
 
       axios
-        .post(`/api/support/${requestSelected.id}`, values)
+        .post(`/api/support/${lesson.id}`, values)
         .then((res) => {
           toast.success(res.data.message);
-
+          setRequests(
+            res.data.requests.filter(
+              (request: Request) => !request.isConcluded,
+            ),
+          );
+          setCurrentLesson(
+            res.data.requests.filter(
+              (request: Request) =>
+                request.isOfferAccepted && !request.isConcluded,
+            ),
+          );
           handleClose();
         })
         .catch((error) => {
@@ -76,7 +88,12 @@ export function RequestConfirmFinishSupport() {
       animate="animate"
       exit="exit"
       variants={FormAnimation}
+      className="w-full"
     >
+      <h5 className="w-full text-left text-lg sm:text-xl font-semibold text-gray-primary mb-4">
+        {currentLessonModalInfo.supportTitle}
+      </h5>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -93,9 +110,9 @@ export function RequestConfirmFinishSupport() {
                       disabled={isSending}
                       className={cn(
                         "input",
-                        form.formState.errors.subject && "input-error"
+                        form.formState.errors.subject && "input-error",
                       )}
-                      placeholder={supportModalInfo.subjectPlaceholder}
+                      placeholder={currentLessonModalInfo.subjectPlaceholder}
                       {...field}
                     />
                   </FormControl>
@@ -115,9 +132,9 @@ export function RequestConfirmFinishSupport() {
                       disabled={isSending}
                       className={cn(
                         "textarea !h-[150px] mb-9",
-                        form.formState.errors.message && "input-error"
+                        form.formState.errors.message && "input-error",
                       )}
-                      placeholder={supportModalInfo.messagePlaceholder}
+                      placeholder={currentLessonModalInfo.messagePlaceholder}
                       {...field}
                     />
                   </FormControl>
@@ -135,17 +152,18 @@ export function RequestConfirmFinishSupport() {
               className="flex items-center gap-2"
             >
               {isSending && <Loader2 className="animate-spin" />}
-              {supportModalInfo.sendBtn}
+              {currentLessonModalInfo.sendBtn}
             </Button>
 
             <Button
               disabled={isSending}
               variant="outline"
               type="button"
-              onClick={setForm}
+              onClick={setBtns}
               className="flex items-center gap-2"
             >
-              {supportModalInfo.backBtn}
+              {isSending && <Loader2 className="animate-spin" />}
+              {currentLessonModalInfo.backBtn}
             </Button>
           </div>
         </form>

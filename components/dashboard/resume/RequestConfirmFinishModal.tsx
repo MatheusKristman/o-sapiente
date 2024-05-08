@@ -1,5 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { BsXLg } from "react-icons/bs";
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import Image from "next/image";
 
 import {
   OverlayAnimation,
@@ -8,19 +11,36 @@ import {
 import { Button } from "@/components/ui/button";
 import { confirmFinishModalInfo } from "@/constants/dashboard/resume-br";
 import useConfirmFinishModalStore from "@/stores/useConfirmFinishModalStore";
-import { RequestConfirmFinishForm } from "./RequestConfirmFinishForm";
-import { RequestConfirmFinishSupport } from "./RequestConfirmFinishSupport";
+import useResumeStore from "@/stores/useResumeStore";
+import { RequestWithUsersAndOffers } from "@/types";
 
 export function RequestConfirmFinishModal() {
-  const { isModalOpen, closeModal, isSupport, isForm, setForm } =
+  const { setRequests, setCurrentLesson } = useResumeStore();
+  const { isModalOpen, closeModal, requestSelected } =
     useConfirmFinishModalStore();
 
-  function handleClose() {
-    closeModal();
+  function handleFinish() {
+    if (!requestSelected) {
+      toast.error("Ocorreu um erro ao finalizar a solicitação");
+      return;
+    }
 
-    setTimeout(() => {
-      setForm();
-    }, 350);
+    axios
+      .put("/api/request/finish", { requestId: requestSelected.id })
+      .then((res) => {
+        console.log("request from finish: ", res.data);
+        setRequests(res.data);
+        setCurrentLesson(
+          res.data.filter(
+            (request: RequestWithUsersAndOffers) => request.isOfferAccepted,
+          ),
+        );
+        closeModal();
+      })
+      .catch((error) => {
+        toast.error("Ocorreu um erro ao finalizar a solicitação");
+        console.error(error);
+      });
   }
 
   return (
@@ -49,7 +69,7 @@ export function RequestConfirmFinishModal() {
                     variant="link"
                     size="icon"
                     className="text-green-primary"
-                    onClick={handleClose}
+                    onClick={closeModal}
                   >
                     <BsXLg size={26} />
                   </Button>
@@ -59,14 +79,51 @@ export function RequestConfirmFinishModal() {
                   {confirmFinishModalInfo.title}
                 </h1>
 
-                <AnimatePresence mode="wait">
-                  {isForm && (
-                    <RequestConfirmFinishForm key="confirm-finish-form" />
-                  )}
-                  {isSupport && (
-                    <RequestConfirmFinishSupport key="confirm-finish-support" />
-                  )}
-                </AnimatePresence>
+                <div className="w-full flex items-center justify-center mb-12">
+                  <div className="bg-green-primary p-4 flex items-center gap-4 rounded-xl">
+                    {requestSelected ? (
+                      <Image
+                        alt="Perfil"
+                        src={
+                          requestSelected.usersVotedToFinish[0].profilePhoto
+                            ? requestSelected.usersVotedToFinish[0].profilePhoto
+                            : "/assets/images/default-user-photo.svg"
+                        }
+                        className="object-center object-contain rounded-full"
+                        width={40}
+                        height={40}
+                      />
+                    ) : (
+                      <Image
+                        alt="Perfil"
+                        src="/assets/images/default-user-photo.svg"
+                        className="object-center object-contain rounded-full"
+                        width={40}
+                        height={40}
+                      />
+                    )}
+
+                    <span className="text-lg font-semibold text-white">
+                      {requestSelected
+                        ? `${requestSelected.usersVotedToFinish[0].firstName} ${requestSelected.usersVotedToFinish[0].lastName} ${confirmFinishModalInfo.desc}`
+                        : `O outro usuário ${confirmFinishModalInfo.desc}`}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-full flex flex-col sm:flex-row gap-4 mb-6">
+                  <Button
+                    variant="outline"
+                    onClick={closeModal}
+                    className="w-full sm:w-1/2"
+                  >
+                    {confirmFinishModalInfo.cancelBtn}
+                  </Button>
+
+                  <Button onClick={handleFinish} className="w-full sm:w-1/2">
+                    {confirmFinishModalInfo.confirmBtn}
+                  </Button>
+                </div>
               </div>
             </motion.div>
           </motion.div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Dot } from "lucide-react";
+import { Dot, Plus } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import useFinishModalStore from "@/stores/useFinishModalStore";
 import useConfirmFinishModalStore from "@/stores/useConfirmFinishModalStore";
 import useUserStore from "@/stores/useUserStore";
 import { Status } from "@prisma/client";
+import useCurrentLessonModalStore from "@/stores/useCurrentLessonModalStore";
 
 interface CurrentLessonMessageBoxProps {
   lesson: RequestWithUsersAndOffers;
@@ -32,6 +33,7 @@ const CurrentLessonMessageBox = ({
     setRequestSelected: setConfirmFinishRequestSelected,
   } = useConfirmFinishModalStore();
   const { userId } = useUserStore();
+  const { openModal, setLesson } = useCurrentLessonModalStore();
 
   const pathname = usePathname();
 
@@ -43,6 +45,11 @@ const CurrentLessonMessageBox = ({
   function handleOpenConfirmFinishModal() {
     openConfirmFinishModal();
     setConfirmFinishRequestSelected(lesson);
+  }
+
+  function handleOpenCurrentLessonModal() {
+    setLesson(lesson);
+    openModal();
   }
 
   return (
@@ -76,37 +83,7 @@ const CurrentLessonMessageBox = ({
         </div>
 
         <div className="xl:flex xl:justify-end xl:w-5/12">
-          <div className="flex flex-col items-center justify-center gap-4">
-            {!lesson.isConcluded &&
-            lesson.usersIdsVotedToFinish.length === 0 ? (
-              <Button
-                variant="secondary"
-                onClick={handleOpenFinishModal}
-                className="w-full"
-                disabled={lesson.usersIdsVotedToFinish.includes(userId)}
-              >
-                {lesson.usersIdsVotedToFinish.includes(userId)
-                  ? studentResumeInfos.finishLessonDisabledBtn
-                  : studentResumeInfos.finishLessonBtn}
-              </Button>
-            ) : lesson.usersIdsVotedToFinish.length === 1 ? (
-              <Button
-                variant="secondary"
-                onClick={handleOpenConfirmFinishModal}
-                className="w-full"
-                disabled={
-                  lesson.usersIdsVotedToFinish.includes(userId) ||
-                  lesson.status === Status.support
-                }
-              >
-                {lesson.status === Status.support
-                  ? studentResumeInfos.supportDisabledBtn
-                  : lesson.usersIdsVotedToFinish.includes(userId)
-                  ? studentResumeInfos.finishLessonDisabledBtn
-                  : studentResumeInfos.confirmFinishLessonBtn}
-              </Button>
-            ) : null}
-
+          <div className="flex items-center justify-center gap-4">
             <Button variant="secondary" className="w-full" asChild>
               <Link
                 href={`${pathname
@@ -116,6 +93,14 @@ const CurrentLessonMessageBox = ({
               >
                 {studentResumeInfos.seeMessageBtn}
               </Link>
+            </Button>
+
+            <Button
+              onClick={handleOpenCurrentLessonModal}
+              variant="secondary"
+              className="px-3"
+            >
+              <Plus />
             </Button>
           </div>
         </div>

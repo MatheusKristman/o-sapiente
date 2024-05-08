@@ -84,6 +84,7 @@ model Request {
   beginLessonDate      DateTime?
   finishLessonDate     DateTime?
   status               Status    @default(searchingProfessor)
+  previousStatus       Status?
   lessonDate           DateTime?
   lessonPrice          Float?
   certificateRequested Boolean   @default(false)

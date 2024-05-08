@@ -15,6 +15,7 @@ import NewRequestModal from "@/components/dashboard/resume/NewRequestModal";
 import OffersModal from "@/components/dashboard/resume/OffersModal";
 import { RequestFinishModal } from "@/components/dashboard/resume/RequestFinishModal";
 import { RequestConfirmFinishModal } from "@/components/dashboard/resume/RequestConfirmFinishModal";
+import { ResumeCurrentLessonModal } from "@/components/dashboard/resume/ResumeCurrentLessonModal";
 import useResumeStore from "@/stores/useResumeStore";
 
 // TODO: se o usuário errado entrar, redirecionar para a home
@@ -40,14 +41,14 @@ const DashboardPage = () => {
 
         setRequests(
           requestResponse.data.filter(
-            (request: Request) => !request.isConcluded
-          )
+            (request: Request) => !request.isConcluded,
+          ),
         );
         setCurrentLesson(
           requestResponse.data.filter(
             (request: Request) =>
-              request.isOfferAccepted && !request.isConcluded
-          )
+              request.isOfferAccepted && !request.isConcluded,
+          ),
         );
       } catch (error) {
         console.error(error);
@@ -85,6 +86,7 @@ const DashboardPage = () => {
       <OffersModal />
       <RequestFinishModal type="STUDENT" />
       <RequestConfirmFinishModal />
+      <ResumeCurrentLessonModal />
     </div>
   );
 };

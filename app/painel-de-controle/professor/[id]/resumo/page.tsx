@@ -14,6 +14,7 @@ import { FinishedLessonsBox } from "@/components/dashboard/resume/FinishedLesson
 import { RequestFinishModal } from "@/components/dashboard/resume/RequestFinishModal";
 import { RequestConfirmFinishModal } from "@/components/dashboard/resume/RequestConfirmFinishModal";
 import { RetrievePaymentModal } from "@/components/dashboard/resume/RetrievePaymentModal";
+import { ResumeCurrentLessonModal } from "@/components/dashboard/resume/ResumeCurrentLessonModal";
 import useResumeStore from "@/stores/useResumeStore";
 import useRetrievePaymentModalStore from "@/stores/useRetrievePaymentModalStore";
 
@@ -58,19 +59,19 @@ const ResumePage = () => {
 
         setRequests(
           requestResponse.data.filter(
-            (request: Request) => !request.isConcluded
-          )
+            (request: Request) => !request.isConcluded,
+          ),
         );
         setCurrentLesson(
           requestResponse.data.filter(
             (request: Request) =>
-              request.isOfferAccepted && !request.isConcluded
-          )
+              request.isOfferAccepted && !request.isConcluded,
+          ),
         );
         setFinishedLessons(
           requestResponse.data.filter(
-            (request: Request) => request.status === Status.finished
-          ).length
+            (request: Request) => request.status === Status.finished,
+          ).length,
         );
       } catch (error) {
         console.error(error);
@@ -116,6 +117,7 @@ const ResumePage = () => {
       <RequestFinishModal type="PROFESSOR" />
       <RequestConfirmFinishModal />
       <RetrievePaymentModal />
+      <ResumeCurrentLessonModal />
     </>
   );
 };

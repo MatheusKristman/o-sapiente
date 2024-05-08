@@ -23,10 +23,7 @@ export const studentResumeInfos = {
   offerAccepted: "PROPOSTA ACEITA",
   currentLessonTitle: "Aulas em Andamento",
   seeMessageBtn: "VER MENSAGENS",
-  finishLessonBtn: "FINALIZAR AULA",
-  confirmFinishLessonBtn: "CONFIRMAR FINALIZAÇÃO",
-  finishLessonDisabledBtn: "AGUARDANDO FINALIZAÇÃO",
-  supportDisabledBtn: "EM SUPORTE",
+
   noCurrentLessonMessage: "Nenhuma aula em andamento",
 };
 
@@ -71,4 +68,23 @@ export const retrievePaymentModalInfo = {
   successTitle: "Solicitação enviada com sucesso!",
   successDesc: "Dentro de 24 horas você receberá seu pix!",
   closeBtn: "FECHAR",
+};
+
+export const currentLessonModalInfo = {
+  title: "Aula em andamento",
+  finishBtn: "FINALIZAR",
+  confirmBtn: "CONFIRMAR FINALIZAÇÃO",
+  supportTitle: "Mensagem para suporte",
+  supportDesc: "Precisa de ajuda com a solicitação?",
+  supportActiveDesc: "Conseguiu resolver o seu problema?",
+  supportBtn: "SUPORTE",
+  supportActiveBtn: "FINALIZAR SUPORTE",
+  finishLessonBtn: "FINALIZAR AULA",
+  confirmFinishLessonBtn: "CONFIRMAR FINALIZAÇÃO",
+  finishLessonDisabledBtn: "AGUARDANDO FINALIZAÇÃO",
+  supportDisabledBtn: "EM SUPORTE",
+  subjectPlaceholder: "Insira o assunto que deseja tratar",
+  messagePlaceholder: "Insira sua mensagem",
+  sendBtn: "ENVIAR",
+  backBtn: "VOLTAR",
 };
