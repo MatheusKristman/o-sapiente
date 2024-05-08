@@ -29,10 +29,16 @@ export function RequestConfirmFinishModal() {
       .put("/api/request/finish", { requestId: requestSelected.id })
       .then((res) => {
         console.log("request from finish: ", res.data);
-        setRequests(res.data);
+        setRequests(
+          res.data.filter(
+            (request: RequestWithUsersAndOffers) =>
+              !request.isConcluded && !request.isOfferAccepted,
+          ),
+        );
         setCurrentLesson(
           res.data.filter(
-            (request: RequestWithUsersAndOffers) => request.isOfferAccepted,
+            (request: RequestWithUsersAndOffers) =>
+              !request.isConcluded && request.isOfferAccepted,
           ),
         );
         closeModal();

@@ -42,9 +42,17 @@ const DashboardPage = () => {
 
         // TODO: ajustar requests para o usuário correto
 
+        console.log(
+          "requests: ",
+          requestResponse.data.filter(
+            (req: Request) => !req.isConcluded && req.isOfferAccepted,
+          ),
+        );
+
         setRequests(
           requestResponse.data.filter(
-            (request: Request) => !request.isConcluded,
+            (request: Request) =>
+              !request.isConcluded && !request.isOfferAccepted,
           ),
         );
         setCurrentLesson(
@@ -68,21 +76,23 @@ const DashboardPage = () => {
   ]);
 
   return (
-    <div className="flex-1 w-full px-6 pt-9 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:mb-12">
-      <div className="w-full flex flex-col-reverse gap-9 md:flex-col lg:w-4/12 xl:w-6/12">
-        <ResumeProfilePhoto type="Student" />
+    <>
+      <div className="flex-1 w-full px-6 pt-9 mx-auto flex flex-col gap-9 md:flex-row md:px-16 lg:container lg:mb-12">
+        <div className="w-full flex flex-col-reverse gap-9 md:flex-col lg:w-4/12 xl:w-6/12">
+          <ResumeProfilePhoto type="Student" />
 
-        <div className="w-full shadow-md shadow-[rgba(0,0,0,0.25)] rounded-lg">
-          <Button className="w-full" onClick={openModal}>
-            {studentResumeInfos.newRequestBtn}
-          </Button>
+          <div className="w-full shadow-md shadow-[rgba(0,0,0,0.25)] rounded-lg">
+            <Button className="w-full" onClick={openModal}>
+              {studentResumeInfos.newRequestBtn}
+            </Button>
+          </div>
         </div>
-      </div>
 
-      <div className="w-full flex flex-col gap-8">
-        <ResumeRequestBox type="Student" />
+        <div className="w-full flex flex-col gap-8">
+          <ResumeRequestBox type="Student" />
 
-        <ResumeCurrentLessonBox />
+          <ResumeCurrentLessonBox />
+        </div>
       </div>
 
       <NewRequestModal />
@@ -90,7 +100,7 @@ const DashboardPage = () => {
       <RequestFinishModal type="STUDENT" />
       <RequestConfirmFinishModal />
       <ResumeCurrentLessonModal />
-    </div>
+    </>
   );
 };
 

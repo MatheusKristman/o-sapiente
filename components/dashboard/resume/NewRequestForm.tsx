@@ -23,13 +23,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import useResumeStore from "@/stores/useResumeStore";
+import { RequestWithUsersAndOffers } from "@/types";
 
 const NewRequestForm = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const { setRequests } = useResumeStore();
+  const { setRequests, setCurrentLesson } = useResumeStore();
   const { activateMessage, deactivateForm } = useNewRequestStore();
   const form = useForm({
     defaultValues: {
@@ -82,7 +83,18 @@ const NewRequestForm = () => {
         if (res.data.sended) {
           handleMessage();
 
-          setRequests(res.data.requests);
+          setRequests(
+            res.data.requests.filter(
+              (req: RequestWithUsersAndOffers) =>
+                !req.isConcluded && !req.isOfferAccepted,
+            ),
+          );
+          setCurrentLesson(
+            res.data.requests.filter(
+              (req: RequestWithUsersAndOffers) =>
+                !req.isConcluded && req.isOfferAccepted,
+            ),
+          );
         }
       })
       .catch((error) => {

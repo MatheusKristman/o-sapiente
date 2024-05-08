@@ -17,6 +17,7 @@ import { RetrievePaymentModal } from "@/components/dashboard/resume/RetrievePaym
 import { ResumeCurrentLessonModal } from "@/components/dashboard/resume/ResumeCurrentLessonModal";
 import useResumeStore from "@/stores/useResumeStore";
 import useRetrievePaymentModalStore from "@/stores/useRetrievePaymentModalStore";
+import useUserStore from "@/stores/useUserStore";
 
 // TODO: se o usuário errado entrar, redirecionar para a home
 // TODO: ajustar loadings das requests para um skeleton
@@ -34,6 +35,7 @@ const ResumePage = () => {
     setFinishedLessons,
   } = useResumeStore();
   const { setPixCode } = useRetrievePaymentModalStore();
+  const { userId } = useUserStore();
 
   const session = useSession();
 
@@ -58,16 +60,18 @@ const ResumePage = () => {
 
         const requestResponse = await axios.get("/api/request/get-requests");
 
-        // TODO: ajustar requests para o usuário correto
         setRequests(
           requestResponse.data.filter(
-            (request: Request) => !request.isConcluded,
+            (request: Request) =>
+              !request.isConcluded && !request.isOfferAccepted,
           ),
         );
         setCurrentLesson(
           requestResponse.data.filter(
             (request: Request) =>
-              request.isOfferAccepted && !request.isConcluded,
+              request.isOfferAccepted &&
+              !request.isConcluded &&
+              request.userIds.includes(userId),
           ),
         );
         setFinishedLessons(
@@ -111,7 +115,7 @@ const ResumePage = () => {
 
           <ResumeRequestBox type="Professor" />
 
-          <ResumeCurrentLessonBox />
+          <ResumeCurrentLessonBox type="Professor" />
         </div>
       </div>
 
@@ -119,7 +123,7 @@ const ResumePage = () => {
       <RequestFinishModal type="PROFESSOR" />
       <RequestConfirmFinishModal />
       <RetrievePaymentModal />
-      <ResumeCurrentLessonModal />
+      <ResumeCurrentLessonModal type="Professor" />
     </>
   );
 };

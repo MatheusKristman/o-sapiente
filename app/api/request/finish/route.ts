@@ -3,10 +3,12 @@ import nodemailer from "nodemailer";
 
 import getCurrentUser from "@/app/action/getCurrentUser";
 import { prisma } from "@/libs/prismadb";
-import { Status } from "@prisma/client";
+import { AccountRole, Status } from "@prisma/client";
 import { EmailFinishingLessonNotification } from "@/emails/EmailFinishingLessonNotification";
+import { RequestWithUsersAndOffers } from "@/types";
 
 export async function PUT(req: Request) {
+  //TODO: ajustar para o retorno das solicitações ser igual ao do get-requests, pois é tanto o professor quanto o aluno que usa a request
   try {
     const { requestId } = await req.json();
     const emailHost: string = process.env.EMAIL_SMTP!;
@@ -15,53 +17,122 @@ export async function PUT(req: Request) {
     const emailPort: number = Number(process.env.EMAIL_PORT!);
     const currentUser = await getCurrentUser();
 
+    let requests;
+
     if (!currentUser?.id) {
       return new Response("Usuário não encontrado", { status: 404 });
     }
 
-    const requests = await prisma.request.findMany({
-      include: {
-        users: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-            tel: true,
-            accountType: true,
-            profilePhoto: true,
-            subjectIds: true,
-            requestIds: true,
-            seenMessageIds: true,
+    if (currentUser.accountType === AccountRole.STUDENT) {
+      requests = await prisma.request.findMany({
+        where: {
+          userIds: {
+            has: currentUser.id,
           },
         },
-        usersVotedToFinish: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-            tel: true,
-            accountType: true,
-            profilePhoto: true,
-            subjectIds: true,
-            requestIds: true,
-            seenMessageIds: true,
+        include: {
+          users: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              tel: true,
+              accountType: true,
+              profilePhoto: true,
+              subjectIds: true,
+              requestIds: true,
+              seenMessageIds: true,
+            },
           },
-        },
-        offers: {
-          include: {
-            user: {
-              select: {
-                firstName: true,
-                lastName: true,
-                profilePhoto: true,
+          usersVotedToFinish: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              tel: true,
+              accountType: true,
+              profilePhoto: true,
+              subjectIds: true,
+              requestIds: true,
+              seenMessageIds: true,
+            },
+          },
+          offers: {
+            include: {
+              user: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                  profilePhoto: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      });
+
+      if (
+        requests.some(
+          (request: RequestWithUsersAndOffers) => request.id !== requestId,
+        )
+      ) {
+        return new Response("Solicitação inválida", { status: 401 });
+      }
+    }
+
+    if (currentUser.accountType === AccountRole.PROFESSOR) {
+      requests = await prisma.request.findMany({
+        include: {
+          users: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              tel: true,
+              accountType: true,
+              profilePhoto: true,
+              subjectIds: true,
+              requestIds: true,
+              seenMessageIds: true,
+            },
+          },
+          usersVotedToFinish: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              tel: true,
+              accountType: true,
+              profilePhoto: true,
+              subjectIds: true,
+              requestIds: true,
+              seenMessageIds: true,
+            },
+          },
+          offers: {
+            include: {
+              user: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                  profilePhoto: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    if (!requests) {
+      return new Response("Ocorreu um erro ao resgatar as solicitações", {
+        status: 404,
+      });
+    }
 
     const requestFiltered = requests.filter(
       (request) => request.id === requestId,

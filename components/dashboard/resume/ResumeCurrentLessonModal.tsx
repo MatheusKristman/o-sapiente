@@ -13,7 +13,11 @@ import useCurrentLessonModalStore from "@/stores/useCurrentLessonModalStore";
 import { ResumeCurrentLessonBtns } from "./ResumeCurrentLessonBtns";
 import { ResumeCurrentLessonSupportForm } from "./ResumeCurrentLessonSupportForm";
 
-export function ResumeCurrentLessonModal() {
+interface Props {
+  type?: "Professor" | null;
+}
+
+export function ResumeCurrentLessonModal({ type }: Props) {
   const { isModalOpen, closeModal, lesson, isBtns, isSupport, setBtns } =
     useCurrentLessonModalStore();
 
@@ -67,11 +71,15 @@ export function ResumeCurrentLessonModal() {
               <div className="relative w-10 h-10 rounded-full overflow-hidden">
                 <Image
                   src={
-                    lesson.users[0].profilePhoto
+                    type === "Professor"
                       ? lesson.users[0].profilePhoto
-                      : "/assets/images/default-user-photo.svg"
+                        ? lesson.users[0].profilePhoto
+                        : "/assets/images/default-user-photo.svg"
+                      : lesson.users[1].profilePhoto
+                        ? lesson.users[1].profilePhoto
+                        : "/assets/images/default-user-photo.svg"
                   }
-                  alt="Professor"
+                  alt={type === "Professor" ? "Aluno" : "Professor"}
                   fill
                   className="object-cover object-center"
                 />
@@ -83,7 +91,9 @@ export function ResumeCurrentLessonModal() {
               />
 
               <span className="text-gray-primary text-lg font-semibold">
-                {`${lesson.users[0].firstName} ${lesson.users[0].lastName}`}
+                {type === "Professor"
+                  ? `${lesson.users[0].firstName} ${lesson.users[0].lastName}`
+                  : `${lesson.users[1].firstName} ${lesson.users[1].lastName}`}
               </span>
 
               <Dot
