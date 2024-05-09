@@ -40,12 +40,7 @@ async function OfferViaLinkPage({
       )}
       {currentUser.id !== searchParams.studentId && <InvalidUser />}
       {offer.request.isOfferAccepted && <InvalidLink />}
-      <PaymentMethodModal
-        offerId={offer.id}
-        otherUserId={offer.userId}
-        requestId={offer.requestId}
-        currentUserId={currentUser.id}
-      />
+      <PaymentMethodModal offer={offer} currentUserId={currentUser.id} />
     </section>
   );
 }
