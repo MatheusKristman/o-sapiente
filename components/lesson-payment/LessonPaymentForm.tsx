@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import axios from "axios";
 
 import { PaymentCardForm } from "@/components/PaymentCardForm";
@@ -67,37 +67,39 @@ interface Props {
 }
 
 export function LessonPaymentForm({ currentUser, offer }: Props) {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const { paymentMethod } = usePaymentStore();
 
   const router = useRouter();
 
-  const form = useForm<
-    z.infer<typeof planSchema | typeof planSchemaForCredit>
-  >({
-    resolver: zodResolver(
-      // @ts-ignore
-      paymentMethod === "credit_card" ? planSchemaForCredit : planSchema,
-    ),
-    defaultValues: {
-      name: `${currentUser.firstName} ${currentUser.lastName}`,
-      email: currentUser.email,
-      cpf: "",
-      birth: undefined,
-      cel: "",
-      country: "",
-      cep: "",
-      city: "",
-      state: "",
-      address: "",
-      addressNumber: "",
-      district: "",
-      complement: "",
-      creditNumber: "",
-      creditOwner: "",
-      creditExpiry: "",
-      creditCvc: "",
+  const form = useForm<z.infer<typeof planSchema | typeof planSchemaForCredit>>(
+    {
+      resolver: zodResolver(
+        // @ts-ignore
+        paymentMethod === "credit_card" ? planSchemaForCredit : planSchema,
+      ),
+      defaultValues: {
+        name: `${currentUser.firstName} ${currentUser.lastName}`,
+        email: currentUser.email,
+        cpf: "",
+        birth: undefined,
+        cel: "",
+        country: "",
+        cep: "",
+        city: "",
+        state: "",
+        address: "",
+        addressNumber: "",
+        district: "",
+        complement: "",
+        creditNumber: "",
+        creditOwner: "",
+        creditExpiry: "",
+        creditCvc: "",
+      },
     },
-  });
+  );
 
   const creditNumber = form.watch("creditNumber");
   const creditOwner = form.watch("creditOwner");
@@ -117,24 +119,24 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
         paymentMethod,
       })
       .then((res) => {
-        console.log(res.data);
+        setIsSubmitting(true);
 
         if (res.data.charges[0].payment_method === "pix") {
-          router.push(
-            `/pagamento-da-aula/${offer.id}/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&qr_code_url=${res.data.charges[0].last_transaction.qr_code_url}&pix_code=${res.data.charges[0].last_transaction.qr_code}&expires_at=${res.data.charges[0].last_transaction.expires_at}`,
+          router.replace(
+            `/pagamento-da-aula/${offer.id}/pos-pagamento?user_type=${res.data.userType}&transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&qr_code_url=${res.data.charges[0].last_transaction.qr_code_url}&pix_code=${res.data.charges[0].last_transaction.qr_code}&expires_at=${res.data.charges[0].last_transaction.expires_at}`,
           );
           return;
         }
 
         if (res.data.charges[0].payment_method === "boleto") {
-          router.push(
-            `/pagamento-da-aula/${offer.id}/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&pdf=${res.data.charges[0].last_transaction.pdf}&boleto_code=${res.data.charges[0].last_transaction.line}`,
+          router.replace(
+            `/pagamento-da-aula/${offer.id}/pos-pagamento?user_type=${res.data.userType}&transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&pdf=${res.data.charges[0].last_transaction.pdf}&boleto_code=${res.data.charges[0].last_transaction.line}`,
           );
           return;
         }
 
-        router.push(
-          `/pagamento-da-aula/${offer.id}/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}`,
+        router.replace(
+          `/pagamento-da-aula/${offer.id}/pos-pagamento?user_type=${res.data.userType}&transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}`,
         );
       })
       .catch((error) => {
@@ -142,13 +144,14 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
           "Ocorreu um erro durante o pagamento, verifique os dados e tente novamente",
         );
         console.error(error);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   }
 
   function handleCPFFormat(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value
-      .replace(/[^0-9]/g, "")
-      .substring(0, 14);
+    const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 14);
     const formattedNumber = value.replace(
       /(\d{3})(\d{3})(\d{3})(\d{2})/,
       "$1.$2.$3-$4",
@@ -158,9 +161,7 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
   }
 
   function handleCreditNumberFormat(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value
-      .replace(/[^0-9]/g, "")
-      .substring(0, 16);
+    const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 16);
     const formattedNumber = value.replace(
       /(\d{4})(\d{4})(\d{4})(\d{4})/,
       "$1 $2 $3 $4",
@@ -189,6 +190,7 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
           control={form.control}
           handleCPFFormat={handleCPFFormat}
           currentUser={currentUser}
+          isSubmitting={isSubmitting}
         />
         <PaymentCardForm
           control={form.control}
@@ -200,6 +202,7 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
           creditOwner={creditOwner}
           creditExpiry={creditExpiry}
           creditCvc={creditCvc}
+          isSubmitting={isSubmitting}
         />
       </form>
     </Form>

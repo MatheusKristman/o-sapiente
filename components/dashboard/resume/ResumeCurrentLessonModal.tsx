@@ -12,6 +12,7 @@ import { Dot } from "lucide-react";
 import useCurrentLessonModalStore from "@/stores/useCurrentLessonModalStore";
 import { ResumeCurrentLessonBtns } from "./ResumeCurrentLessonBtns";
 import { ResumeCurrentLessonSupportForm } from "./ResumeCurrentLessonSupportForm";
+import useUserStore from "@/stores/useUserStore";
 
 interface Props {
   type?: "Professor" | null;
@@ -20,11 +21,14 @@ interface Props {
 export function ResumeCurrentLessonModal({ type }: Props) {
   const { isModalOpen, closeModal, lesson, isBtns, isSupport, setBtns } =
     useCurrentLessonModalStore();
+  const { userId } = useUserStore();
 
   if (!lesson) {
     // TODO: colocar skeleton para carregar modal
     return null;
   }
+
+  const filteredUser = lesson.users.filter((user) => user.id !== userId)[0];
 
   function handleClose() {
     closeModal();
@@ -71,13 +75,9 @@ export function ResumeCurrentLessonModal({ type }: Props) {
               <div className="relative w-10 h-10 rounded-full overflow-hidden">
                 <Image
                   src={
-                    type === "Professor"
-                      ? lesson.users[0].profilePhoto
-                        ? lesson.users[0].profilePhoto
-                        : "/assets/images/default-user-photo.svg"
-                      : lesson.users[1].profilePhoto
-                        ? lesson.users[1].profilePhoto
-                        : "/assets/images/default-user-photo.svg"
+                    filteredUser.profilePhoto
+                      ? filteredUser.profilePhoto
+                      : "/assets/images/default-user-photo.svg"
                   }
                   alt={type === "Professor" ? "Aluno" : "Professor"}
                   fill
@@ -91,9 +91,7 @@ export function ResumeCurrentLessonModal({ type }: Props) {
               />
 
               <span className="text-gray-primary text-lg font-semibold">
-                {type === "Professor"
-                  ? `${lesson.users[0].firstName} ${lesson.users[0].lastName}`
-                  : `${lesson.users[1].firstName} ${lesson.users[1].lastName}`}
+                {`${filteredUser.firstName} ${filteredUser.lastName}`}
               </span>
 
               <Dot

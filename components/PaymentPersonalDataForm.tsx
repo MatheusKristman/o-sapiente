@@ -50,12 +50,14 @@ interface Props {
   >;
   handleCPFFormat: (event: React.ChangeEvent<HTMLInputElement>) => void;
   currentUser: User;
+  isSubmitting: boolean;
 }
 
 export function PaymentPersonalDataForm({
   control,
   handleCPFFormat,
   currentUser,
+  isSubmitting,
 }: Props) {
   const currentYear = getYear(new Date());
 
@@ -79,7 +81,7 @@ export function PaymentPersonalDataForm({
                       className={cn("input", {
                         "input-error": false,
                       })}
-                      disabled={!!currentUser}
+                      disabled={!!currentUser || isSubmitting}
                       value={
                         !!currentUser
                           ? `${currentUser.firstName} ${currentUser.lastName}`
@@ -108,7 +110,7 @@ export function PaymentPersonalDataForm({
                         className={cn("input", {
                           "input-error": false,
                         })}
-                        disabled={!!currentUser}
+                        disabled={!!currentUser || isSubmitting}
                         value={!!currentUser ? currentUser.email : field.value}
                         name={field.name}
                         ref={field.ref}
@@ -138,6 +140,7 @@ export function PaymentPersonalDataForm({
                         onBlur={field.onBlur}
                         value={field.value}
                         onChange={handleCPFFormat}
+                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormMessage />
@@ -156,6 +159,7 @@ export function PaymentPersonalDataForm({
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
+                            disabled={isSubmitting}
                             variant="datePicker"
                             className={cn(
                               "w-full pl-3 text-left font-normal",
@@ -212,6 +216,8 @@ export function PaymentPersonalDataForm({
                   <FormItem>
                     <FormControl>
                       <PhoneInput
+                        disabled={isSubmitting}
+                        limitMaxLength
                         placeholder={info.telPlaceholder}
                         className={cn("input", {
                           "input-error": false,
@@ -238,6 +244,7 @@ export function PaymentPersonalDataForm({
                   <FormItem>
                     <FormControl>
                       <input
+                        disabled={isSubmitting}
                         maxLength={2}
                         placeholder={info.countryPlaceholder}
                         className={cn("input", {
@@ -259,6 +266,7 @@ export function PaymentPersonalDataForm({
                   <FormItem>
                     <FormControl>
                       <input
+                        disabled={isSubmitting}
                         placeholder={info.cepPlaceholder}
                         className={cn("input", {
                           "input-error": false,
@@ -282,6 +290,7 @@ export function PaymentPersonalDataForm({
                   <FormItem>
                     <FormControl>
                       <input
+                        disabled={isSubmitting}
                         placeholder={info.cityPlaceholder}
                         className={cn("input", {
                           "input-error": false,
@@ -302,6 +311,7 @@ export function PaymentPersonalDataForm({
                     <FormControl>
                       <input
                         maxLength={2}
+                        disabled={isSubmitting}
                         placeholder={info.statePlaceholder}
                         className={cn("input", {
                           "input-error": false,
@@ -323,6 +333,7 @@ export function PaymentPersonalDataForm({
                   <FormItem className="w-full sm:w-2/3">
                     <FormControl>
                       <input
+                        disabled={isSubmitting}
                         placeholder={info.addressPlaceholder}
                         className={cn("input", {
                           "input-error": false,
@@ -342,6 +353,7 @@ export function PaymentPersonalDataForm({
                   <FormItem className="w-full sm:w-1/3">
                     <FormControl>
                       <input
+                        disabled={isSubmitting}
                         placeholder={info.addressNumberPlaceholder}
                         className={cn("input", {
                           "input-error": false,
@@ -362,6 +374,7 @@ export function PaymentPersonalDataForm({
                 <FormItem>
                   <FormControl>
                     <input
+                      disabled={isSubmitting}
                       placeholder={info.districtPlaceholder}
                       className={cn("input", {
                         "input-error": false,
@@ -381,6 +394,7 @@ export function PaymentPersonalDataForm({
                 <FormItem>
                   <FormControl>
                     <input
+                      disabled={isSubmitting}
                       placeholder={info.complementPlaceholder}
                       className={cn("input", {
                         "input-error": false,

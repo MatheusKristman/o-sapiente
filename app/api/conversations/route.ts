@@ -37,7 +37,7 @@ function generateEmailOptions({
       studentContact,
       professorName,
       professorContact,
-    })
+    }),
   );
 
   return {
@@ -136,12 +136,18 @@ export async function POST(request: Request) {
         },
       });
 
+      if (!request) {
+        return new Response("Ocorreu um erro ao atualizar a solicitação", {
+          status: 400,
+        });
+      }
+
       singleConversation.users.map((user) => {
         if (user.email) {
           pusherServer.trigger(
             user.email,
             "conversation:new",
-            singleConversation
+            singleConversation,
           );
         }
       });
@@ -165,7 +171,7 @@ export async function POST(request: Request) {
             "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
             {
               status: 400,
-            }
+            },
           );
         }
       });
@@ -257,7 +263,7 @@ export async function POST(request: Request) {
           "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
           {
             status: 400,
-          }
+          },
         );
       }
     });

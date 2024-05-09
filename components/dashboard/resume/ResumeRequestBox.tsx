@@ -9,6 +9,7 @@ import { request } from "http";
 import { RequestWithUsersAndOffers } from "@/types";
 import { Offer } from "@prisma/client";
 import useResumeStore from "@/stores/useResumeStore";
+import useUserStore from "@/stores/useUserStore";
 
 interface ResumeRequestBoxProps {
   type: string;
@@ -18,10 +19,7 @@ interface ResumeRequestBoxProps {
 
 const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
   const { requests, offers: professorOffers } = useResumeStore();
-
-  const filteredRequest = requests?.filter(
-    (request) => !request.isOfferAccepted,
-  );
+  const { userId } = useUserStore();
 
   function offerFiltered(requestId: string) {
     if (professorOffers) {
@@ -38,11 +36,11 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
 
       <div className="relative w-full max-h-[600px] lg:max-h-[400px] overflow-auto scrollbar scrollbar-thumb-slate-100">
         {type === "Professor" &&
-          (filteredRequest && filteredRequest.length > 0 ? (
+          (requests && requests.length > 0 ? (
             <>
               <div className="sticky top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-              {filteredRequest.map((request) => (
+              {requests.map((request) => (
                 <OfferBox
                   offer={professorOffers ? offerFiltered(request.id) : null}
                   type={type}
@@ -62,11 +60,11 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
           ))}
 
         {type === "Student" &&
-          (filteredRequest && filteredRequest.length > 0 ? (
+          (requests && requests.length > 0 ? (
             <>
               <div className="sticky top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-              {filteredRequest.map((request) => (
+              {requests.map((request) => (
                 <OfferBox type={type} key={request.id} request={request} />
               ))}
 

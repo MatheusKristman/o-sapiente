@@ -1,4 +1,5 @@
 import getCurrentUser from "@/app/action/getCurrentUser";
+import { AccountRole } from "@prisma/client";
 import axios from "axios";
 import { addDays } from "date-fns";
 
@@ -64,6 +65,16 @@ export async function POST(req: Request) {
 
     if (!currentUser?.id || !currentUser?.email) {
       return new Response("Usuário não encontrado", { status: 404 });
+    }
+
+    let userType;
+
+    if (currentUser.accountType === AccountRole.STUDENT) {
+      userType = "Student";
+    }
+
+    if (currentUser.accountType === AccountRole.PROFESSOR) {
+      userType = "Professor";
     }
 
     let line_1: string = "";
@@ -180,7 +191,7 @@ export async function POST(req: Request) {
 
     console.log(JSON.stringify(response.data));
 
-    return Response.json({ ...response.data }, { status: 200 });
+    return Response.json({ ...response.data, userType }, { status: 200 });
   } catch (error: any) {
     console.log("[ERROR_PLAN_PAYMENT]", {
       error: error.response.data.errors,

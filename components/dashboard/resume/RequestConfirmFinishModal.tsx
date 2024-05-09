@@ -13,11 +13,22 @@ import { confirmFinishModalInfo } from "@/constants/dashboard/resume-br";
 import useConfirmFinishModalStore from "@/stores/useConfirmFinishModalStore";
 import useResumeStore from "@/stores/useResumeStore";
 import { RequestWithUsersAndOffers } from "@/types";
+import useUserStore from "@/stores/useUserStore";
 
 export function RequestConfirmFinishModal() {
   const { setRequests, setCurrentLesson } = useResumeStore();
   const { isModalOpen, closeModal, requestSelected } =
     useConfirmFinishModalStore();
+  const { userId } = useUserStore();
+
+  if (!requestSelected) {
+    //TODO: loading skeleton
+    return null;
+  }
+
+  const filteredUser = requestSelected?.usersVotedToFinish.filter(
+    (user) => user.id !== userId,
+  )[0];
 
   function handleFinish() {
     if (!requestSelected) {
@@ -91,8 +102,8 @@ export function RequestConfirmFinishModal() {
                       <Image
                         alt="Perfil"
                         src={
-                          requestSelected.usersVotedToFinish[0].profilePhoto
-                            ? requestSelected.usersVotedToFinish[0].profilePhoto
+                          filteredUser.profilePhoto
+                            ? filteredUser.profilePhoto
                             : "/assets/images/default-user-photo.svg"
                         }
                         className="object-center object-contain rounded-full"
@@ -111,7 +122,7 @@ export function RequestConfirmFinishModal() {
 
                     <span className="text-lg font-semibold text-white">
                       {requestSelected
-                        ? `${requestSelected.usersVotedToFinish[0].firstName} ${requestSelected.usersVotedToFinish[0].lastName} ${confirmFinishModalInfo.desc}`
+                        ? `${filteredUser.firstName} ${filteredUser.lastName} ${confirmFinishModalInfo.desc}`
                         : `O outro usuário ${confirmFinishModalInfo.desc}`}
                     </span>
                   </div>

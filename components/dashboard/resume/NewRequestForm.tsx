@@ -239,7 +239,7 @@ const NewRequestForm = () => {
             <Button
               type="submit"
               disabled={isLoading || isSubmitting}
-              className="w-full"
+              className="w-full flex items-center gap-2"
             >
               {isSubmitting ? (
                 <Loader2 className="h-5 w-5 ml-2 animate-spin" />

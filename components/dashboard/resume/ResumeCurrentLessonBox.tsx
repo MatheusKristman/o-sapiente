@@ -4,11 +4,7 @@ import { studentResumeInfos } from "@/constants/dashboard/resume-br";
 import CurrentLessonMessageBox from "./CurrentLessonMessageBox";
 import useResumeStore from "@/stores/useResumeStore";
 
-interface Props {
-  type?: "Professor" | null;
-}
-
-const ResumeCurrentLessonBox = ({ type }: Props) => {
+const ResumeCurrentLessonBox = () => {
   const { currentLesson } = useResumeStore();
 
   return (
@@ -27,7 +23,6 @@ const ResumeCurrentLessonBox = ({ type }: Props) => {
                 key={index}
                 lesson={lesson}
                 last={index === currentLesson.length - 1}
-                type={type}
               />
             ))}
 

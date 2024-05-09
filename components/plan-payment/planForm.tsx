@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import axios from "axios";
 
 import { PaymentCardForm } from "@/components/PaymentCardForm";
@@ -66,6 +66,8 @@ interface Props {
 }
 
 export const PlanForm = ({ currentUser }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const { paymentMethod, planSelected } = usePaymentStore();
 
   const router = useRouter();
@@ -74,7 +76,7 @@ export const PlanForm = ({ currentUser }: Props) => {
     {
       resolver: zodResolver(
         // @ts-ignore
-        paymentMethod === "credit_card" ? planSchemaForCredit : planSchema
+        paymentMethod === "credit_card" ? planSchemaForCredit : planSchema,
       ),
       defaultValues: {
         name: `${currentUser.firstName} ${currentUser.lastName}`,
@@ -95,7 +97,7 @@ export const PlanForm = ({ currentUser }: Props) => {
         creditExpiry: "",
         creditCvc: "",
       },
-    }
+    },
   );
 
   const creditNumber = form.watch("creditNumber");
@@ -104,10 +106,9 @@ export const PlanForm = ({ currentUser }: Props) => {
   const creditCvc = form.watch("creditCvc");
 
   function onSubmit(
-    values: z.infer<typeof planSchema | typeof planSchemaForCredit>
+    values: z.infer<typeof planSchema | typeof planSchemaForCredit>,
   ) {
-    // TODO: adicionar request para /payment/plan e testar
-    console.log(values);
+    setIsSubmitting(true);
 
     axios
       .post("/api/payment/plan", {
@@ -121,28 +122,31 @@ export const PlanForm = ({ currentUser }: Props) => {
         console.log(res.data);
 
         if (res.data.charges[0].payment_method === "pix") {
-          router.push(
-            `/pagamento-do-plano/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&qr_code_url=${res.data.charges[0].last_transaction.qr_code_url}&pix_code=${res.data.charges[0].last_transaction.qr_code}&expires_at=${res.data.charges[0].last_transaction.expires_at}`
+          router.replace(
+            `/pagamento-do-plano/pos-pagamento?user_type=${res.data.userType}&transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&qr_code_url=${res.data.charges[0].last_transaction.qr_code_url}&pix_code=${res.data.charges[0].last_transaction.qr_code}&expires_at=${res.data.charges[0].last_transaction.expires_at}`,
           );
           return;
         }
 
         if (res.data.charges[0].payment_method === "boleto") {
-          router.push(
-            `/pagamento-do-plano/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&pdf=${res.data.charges[0].last_transaction.pdf}&boleto_code=${res.data.charges[0].last_transaction.line}`
+          router.replace(
+            `/pagamento-do-plano/pos-pagamento?user_type=${res.data.userType}&transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&pdf=${res.data.charges[0].last_transaction.pdf}&boleto_code=${res.data.charges[0].last_transaction.line}`,
           );
           return;
         }
 
-        router.push(
-          `/pagamento-do-plano/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}`
+        router.replace(
+          `/pagamento-do-plano/pos-pagamento?user_type=${res.data.userType}&transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}`,
         );
       })
       .catch((error) => {
         toast.error(
-          "Ocorreu um erro durante o pagamento, verifique os dados e tente novamente"
+          "Ocorreu um erro durante o pagamento, verifique os dados e tente novamente",
         );
         console.error(error);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   }
 
@@ -157,7 +161,7 @@ export const PlanForm = ({ currentUser }: Props) => {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 14);
     const formattedNumber = value.replace(
       /(\d{3})(\d{3})(\d{3})(\d{2})/,
-      "$1.$2.$3-$4"
+      "$1.$2.$3-$4",
     );
 
     form.setValue("cpf", formattedNumber);
@@ -167,7 +171,7 @@ export const PlanForm = ({ currentUser }: Props) => {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 16);
     const formattedNumber = value.replace(
       /(\d{4})(\d{4})(\d{4})(\d{4})/,
-      "$1 $2 $3 $4"
+      "$1 $2 $3 $4",
     );
 
     form.setValue("creditNumber", formattedNumber);
@@ -193,6 +197,7 @@ export const PlanForm = ({ currentUser }: Props) => {
           control={form.control}
           handleCPFFormat={handleCPFFormat}
           currentUser={currentUser}
+          isSubmitting={isSubmitting}
         />
         <PaymentCardForm
           control={form.control}
@@ -204,6 +209,7 @@ export const PlanForm = ({ currentUser }: Props) => {
           creditOwner={creditOwner}
           creditExpiry={creditExpiry}
           creditCvc={creditCvc}
+          isSubmitting={isSubmitting}
         />
       </form>
     </Form>

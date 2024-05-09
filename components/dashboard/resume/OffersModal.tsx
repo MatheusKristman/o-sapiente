@@ -17,7 +17,7 @@ const OffersModal = () => {
   const { isModalOpen, closeModal, requestSelectedOffers } =
     useOffersModalStore();
   const { userId } = useUserStore();
-  const { offerId, otherUserId, requestId } = usePaymentStore();
+  const { offer } = usePaymentStore();
 
   function handleCloseButton() {
     closeModal();
@@ -80,12 +80,7 @@ const OffersModal = () => {
         )}
       </AnimatePresence>
 
-      <PaymentMethodModal
-        offerId={offerId}
-        otherUserId={otherUserId}
-        requestId={requestId}
-        currentUserId={userId}
-      />
+      <PaymentMethodModal offer={offer} currentUserId={userId} />
     </>
   );
 };

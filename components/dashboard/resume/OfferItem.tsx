@@ -15,7 +15,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import useUserStore from "@/stores/useUserStore";
 import { formatPrice } from "@/libs/utils";
 import usePaymentStore from "@/stores/usePaymentStore";
 import useOffersModalStore from "@/stores/useOffersModalStore";
@@ -26,8 +25,7 @@ interface OfferItemProps {
 }
 
 const OfferItem = ({ offer }: OfferItemProps) => {
-  const { openModal, setOfferId, setOtherUserId, setRequestId } =
-    usePaymentStore();
+  const { openModal, setOffer } = usePaymentStore();
   const { closeModal } = useOffersModalStore();
 
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -38,9 +36,7 @@ const OfferItem = ({ offer }: OfferItemProps) => {
     axios
       .get(`/api/offer/${offer.id}`)
       .then((res) => {
-        setOfferId(res.data.id);
-        setOtherUserId(res.data.otherUserId);
-        setRequestId(res.data.requestId);
+        setOffer(res.data);
         closeModal();
 
         setTimeout(() => {

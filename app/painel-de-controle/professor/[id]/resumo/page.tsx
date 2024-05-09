@@ -115,7 +115,7 @@ const ResumePage = () => {
 
           <ResumeRequestBox type="Professor" />
 
-          <ResumeCurrentLessonBox type="Professor" />
+          <ResumeCurrentLessonBox />
         </div>
       </div>
 

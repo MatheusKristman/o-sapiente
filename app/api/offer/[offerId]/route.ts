@@ -37,10 +37,7 @@ export async function GET(
       return new Response("Proposta não encontrada", { status: 404 });
     }
 
-    return Response.json(
-      { id: offer.id, otherUserId: offer.userId, requestId: offer.requestId },
-      { status: 200 },
-    );
+    return Response.json(offer, { status: 200 });
   } catch (error) {
     console.log("[ERROR_GET_OFFER]", error);
 

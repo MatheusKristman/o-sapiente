@@ -16,22 +16,18 @@ import { info } from "@/constants/offer/paymentMethodModal-br";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import toast from "react-hot-toast";
 import usePaymentStore from "@/stores/usePaymentStore";
+import { OfferWithUserAndRequest } from "@/types";
+import { Loader2 } from "lucide-react";
 
 interface Props {
-  offerId: string;
-  otherUserId: string;
-  requestId: string;
+  offer: OfferWithUserAndRequest | undefined;
   currentUserId: string;
 }
 
-export function PaymentMethodModal({
-  offerId,
-  otherUserId,
-  requestId,
-  currentUserId,
-}: Props) {
+export function PaymentMethodModal({ offer, currentUserId }: Props) {
   const [isPlatformSelected, setIsPlatformSelected] = useState<boolean>(true);
   const [isAgreedSelected, setIsAgreedSelected] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const { isModalOpen, closeModal } = usePaymentStore();
   const router = useRouter();
@@ -51,23 +47,42 @@ export function PaymentMethodModal({
   }
 
   function handlePayment() {
+    if (!offer) {
+      return;
+    }
+
     if (isPlatformSelected) {
-      router.push(`/pagamento-da-aula/${offerId}`);
+      router.push(`/pagamento-da-aula/${offer.id}`);
     }
 
     if (isAgreedSelected) {
+      setIsSubmitting(true);
+
       axios
-        .post("/api/conversations", { otherUserId, requestId })
-        .then(() =>
-          router.replace(
-            `${menuItems[0].studentHref}${currentUserId}${menuItems[0].pageHref}`,
-          ),
-        )
+        .post("/api/conversations", {
+          otherUserId: offer.userId,
+          requestId: offer.requestId,
+          lessonDate: offer.lessonDate,
+          lessonPrice: offer.lessonPrice,
+          certificateRequested: offer.request.certificateRequested,
+        })
+        .then((res) => {
+          closeModal();
+
+          setTimeout(() => {
+            router.replace(
+              `${menuItems[1].studentHref}${currentUserId}${menuItems[1].pageHref}/${res.data.id}`,
+            );
+          }, 350);
+        })
         .catch((error) => {
           console.error(error);
           toast.error(
             "Ocorreu um erro ao aceitar a proposta, tente novamente mais tarde!",
           );
+        })
+        .finally(() => {
+          setIsSubmitting(false);
         });
 
       return;
@@ -97,6 +112,7 @@ export function PaymentMethodModal({
               <div className="w-full flex flex-col">
                 <div className="w-full flex items-center justify-end">
                   <Button
+                    disabled={isSubmitting}
                     variant="link"
                     size="icon"
                     className="text-green-primary"
@@ -144,7 +160,12 @@ export function PaymentMethodModal({
                   </Toggle>
                 </div>
 
-                <Button onClick={handlePayment} className="w-full">
+                <Button
+                  disabled={isSubmitting}
+                  onClick={handlePayment}
+                  className="w-full flex items-center gap-2"
+                >
+                  {isSubmitting && <Loader2 className="animate-spin" />}
                   {info.nextButton}
                 </Button>
               </div>

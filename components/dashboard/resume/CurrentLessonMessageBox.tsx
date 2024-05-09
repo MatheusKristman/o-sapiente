@@ -9,45 +9,23 @@ import { studentResumeInfos } from "@/constants/dashboard/resume-br";
 import { cn } from "@/libs/utils";
 import { RequestWithUsersAndOffers } from "@/types";
 import { usePathname } from "next/navigation";
-import useFinishModalStore from "@/stores/useFinishModalStore";
-import useConfirmFinishModalStore from "@/stores/useConfirmFinishModalStore";
 import useUserStore from "@/stores/useUserStore";
-import { Status } from "@prisma/client";
 import useCurrentLessonModalStore from "@/stores/useCurrentLessonModalStore";
 
 interface CurrentLessonMessageBoxProps {
   lesson: RequestWithUsersAndOffers;
   last?: boolean;
-  type?: "Professor" | null;
 }
 
 const CurrentLessonMessageBox = ({
   lesson,
   last,
-  type,
 }: CurrentLessonMessageBoxProps) => {
-  const {
-    openModal: openFinishModal,
-    setRequestSelected: setFinishRequestSelected,
-  } = useFinishModalStore();
-  const {
-    openModal: openConfirmFinishModal,
-    setRequestSelected: setConfirmFinishRequestSelected,
-  } = useConfirmFinishModalStore();
   const { userId } = useUserStore();
   const { openModal, setLesson } = useCurrentLessonModalStore();
 
   const pathname = usePathname();
-
-  function handleOpenFinishModal() {
-    openFinishModal();
-    setFinishRequestSelected(lesson);
-  }
-
-  function handleOpenConfirmFinishModal() {
-    openConfirmFinishModal();
-    setConfirmFinishRequestSelected(lesson);
-  }
+  const filteredUser = lesson.users.filter((user) => user.id !== userId)[0];
 
   function handleOpenCurrentLessonModal() {
     setLesson(lesson);
@@ -65,13 +43,9 @@ const CurrentLessonMessageBox = ({
         <div className="flex justify-center xl:w-1/12">
           <Image
             src={
-              type === "Professor"
-                ? lesson.users[0].profilePhoto
-                  ? lesson.users[0].profilePhoto
-                  : "/assets/images/default-user-photo.svg"
-                : lesson.users[1].profilePhoto
-                  ? lesson.users[1].profilePhoto
-                  : "/assets/images/default-user-photo.svg"
+              filteredUser.profilePhoto
+                ? filteredUser.profilePhoto
+                : "/assets/images/default-user-photo.svg"
             }
             alt="Perfil"
             width={50}
@@ -81,7 +55,7 @@ const CurrentLessonMessageBox = ({
         </div>
 
         <div className="flex flex-col items-center justify-center p-2.5 text-white text-lg font-semibold lg:p-1 lg:flex-row xl:w-6/12 xl:justify-start">
-          <span className="-mb-3 lg:mb-0">{`${type === "Professor" ? lesson.users[0].firstName : lesson.users[1].firstName} ${type === "Professor" ? lesson.users[0].lastName : lesson.users[1].lastName}`}</span>
+          <span className="-mb-3 lg:mb-0">{`${filteredUser.firstName} ${filteredUser.lastName}`}</span>
 
           <Dot style={{ width: "35px", height: "35px" }} />
 

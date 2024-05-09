@@ -1,3 +1,4 @@
+import { OfferWithUserAndRequest } from "@/types";
 import { Plan } from "@prisma/client";
 import { create } from "zustand";
 
@@ -5,12 +6,8 @@ interface iPaymentStore {
   isModalOpen: boolean;
   openModal: () => void;
   closeModal: () => void;
-  offerId: string;
-  setOfferId: (value: string) => void;
-  otherUserId: string;
-  setOtherUserId: (value: string) => void;
-  requestId: string;
-  setRequestId: (value: string) => void;
+  offer: OfferWithUserAndRequest | undefined;
+  setOffer: (offer: OfferWithUserAndRequest) => void;
   paymentMethod: "pix" | "boleto" | "credit_card";
   setPaymentMethod: (method: "pix" | "boleto" | "credit_card") => void;
   planSelected: Plan | null;
@@ -23,12 +20,8 @@ const usePaymentStore = create<iPaymentStore>((set) => ({
   isModalOpen: false,
   openModal: () => set({ isModalOpen: true }),
   closeModal: () => set({ isModalOpen: false }),
-  offerId: "",
-  setOfferId: (value) => set({ offerId: value }),
-  otherUserId: "",
-  setOtherUserId: (value) => set({ otherUserId: value }),
-  requestId: "",
-  setRequestId: (value) => set({ requestId: value }),
+  offer: undefined,
+  setOffer: (offer) => set({ offer }),
   paymentMethod: "pix",
   setPaymentMethod: (method) => set(() => ({ paymentMethod: method })),
   planSelected: null,
