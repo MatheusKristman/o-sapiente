@@ -18,6 +18,7 @@ function LessonAfterPaymentPage() {
   const [expiresAt, setExpiresAt] = useState<Date | null>(null);
   const [pdf, setPdf] = useState<string | null>(null);
   const [boletoCode, setBoletoCode] = useState<string | null>(null);
+  const [userType, setUserType] = useState<string | null>(null);
 
   const searchParams = useSearchParams();
 
@@ -29,6 +30,7 @@ function LessonAfterPaymentPage() {
       setQrCode(searchParams.get("pix_code"));
       setPdf(searchParams.get("pdf"));
       setBoletoCode(searchParams.get("boleto_code"));
+      setUserType(searchParams.get("user_type"));
 
       const expiresDate = searchParams.get("expires_at");
 
@@ -51,11 +53,13 @@ function LessonAfterPaymentPage() {
       {transactionType === "credit_card" &&
         (status === "authorized_pending_capture" ||
           status === "waiting_capture" ||
-          status === "partial_capture") && <ProcessingPayment />}
+          status === "partial_capture") && (
+          <ProcessingPayment userType={userType} />
+        )}
 
       {/* TODO: criar um próprio da rota de pagamento da aula */}
       {transactionType === "credit_card" && status === "captured" && (
-        <PaymentConfirmed />
+        <PaymentConfirmed userType={userType} />
       )}
 
       {transactionType === "credit_card" &&
@@ -64,16 +68,17 @@ function LessonAfterPaymentPage() {
           status === "error_on_voiding" ||
           status === "waiting_cancellation" ||
           status === "with_error" ||
-          status === "failed") && <PaymentDenied />}
+          status === "failed") && <PaymentDenied userType={userType} />}
 
       {transactionType === "boleto" && (
-        <PaymentBoleto pdf={pdf} boletoCode={boletoCode} />
+        <PaymentBoleto pdf={pdf} boletoCode={boletoCode} userType={userType} />
       )}
       {transactionType === "pix" && (
         <PaymentPix
           qrCodeUrl={qrCodeUrl}
           pixCode={qrCode}
           expiresAt={expiresAt}
+          userType={userType}
         />
       )}
     </div>
