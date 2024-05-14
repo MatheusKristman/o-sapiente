@@ -29,7 +29,7 @@ export function PaymentMethodModal({ offer, currentUserId }: Props) {
   const [isAgreedSelected, setIsAgreedSelected] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const { isModalOpen, closeModal } = usePaymentStore();
+  const { isModalOpen, closeModal, certificateIncluded } = usePaymentStore();
   const router = useRouter();
 
   function selectPlatform() {
@@ -64,21 +64,21 @@ export function PaymentMethodModal({ offer, currentUserId }: Props) {
           requestId: offer.requestId,
           lessonDate: offer.lessonDate,
           lessonPrice: offer.lessonPrice,
-          certificateRequested: offer.request.certificateRequested,
+          certificateRequested: certificateIncluded,
         })
         .then((res) => {
           closeModal();
 
           setTimeout(() => {
             router.replace(
-              `${menuItems[1].studentHref}${currentUserId}${menuItems[1].pageHref}/${res.data.id}`,
+              `${menuItems[1].studentHref}${currentUserId}${menuItems[1].pageHref}/${res.data.id}`
             );
           }, 350);
         })
         .catch((error) => {
           console.error(error);
           toast.error(
-            "Ocorreu um erro ao aceitar a proposta, tente novamente mais tarde!",
+            "Ocorreu um erro ao aceitar a proposta, tente novamente mais tarde!"
           );
         })
         .finally(() => {

@@ -37,7 +37,7 @@ function generateEmailOptions({
       studentContact,
       professorName,
       professorContact,
-    }),
+    })
   );
 
   return {
@@ -147,7 +147,7 @@ export async function POST(request: Request) {
           pusherServer.trigger(
             user.email,
             "conversation:new",
-            singleConversation,
+            singleConversation
           );
         }
       });
@@ -171,7 +171,7 @@ export async function POST(request: Request) {
             "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
             {
               status: 400,
-            },
+            }
           );
         }
       });
@@ -263,7 +263,7 @@ export async function POST(request: Request) {
           "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
           {
             status: 400,
-          },
+          }
         );
       }
     });

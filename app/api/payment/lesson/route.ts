@@ -24,8 +24,9 @@ export async function POST(req: Request) {
       creditExpiry,
       creditCvc,
       lessonPrice,
-      requestId,
+      offerId,
       paymentMethod,
+      certificateRequested,
     } = await req.json();
     // const pagarMeSecretKey =
     //   process.env.NODE_ENV === "development"
@@ -174,13 +175,16 @@ export async function POST(req: Request) {
             },
           },
           birthdate: birth,
+          metadata: {
+            certificateRequested,
+          },
         },
         items: [
           {
             amount: Number(lessonPrice) * 100,
             description: "Pagamento da aula",
             quantity: 1,
-            code: requestId,
+            code: offerId,
           },
         ],
         payments: [paymentOptions],
@@ -204,7 +208,7 @@ export async function POST(req: Request) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }
