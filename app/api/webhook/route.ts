@@ -1,82 +1,10 @@
-// PAGAMENTO CRIADO
-// webhook:  {
-//   id: 'hook_4Bw5xoEDS1H0MZn6',
-//   account: { id: 'acc_b2QpJ4JfYGIjPNa4', name: 'O Sapiente - test' },
-//   type: 'order.created',
-//   created_at: '2024-05-14T20:48:04.527Z',
-//   data: {
-//     id: 'or_ynKJoQ5SD8u2ogR0',
-//     code: 'YJ4RB5XAW0',
-//     amount: 1000,
-//     currency: 'BRL',
-//     closed: true,
-//     items: [ [Object] ],
-//     customer: {
-//       id: 'cus_Ga4nprOIq5fwpXZM',
-//       name: 'Matheus Kristman',
-//       email: 'kristman058@gmail.com',
-//       code: '663181530801d826e599d1b4',
-//       document: '46283551858',
-//       type: 'individual',
-//       delinquent: false,
-//       address: [Object],
-//       created_at: '2024-05-09T18:28:53',
-//       updated_at: '2024-05-14T20:48:03',
-//       birthdate: '1998-01-31T02:00:00',
-//       phones: [Object]
-//     },
-//     status: 'failed',
-//     created_at: '2024-05-14T20:48:03',
-//     updated_at: '2024-05-14T20:48:04',
-//     closed_at: '2024-05-14T20:48:03',
-//     charges: [ [Object] ],
-//     checkouts: []
-//   }
-// }
+import nodemailer from "nodemailer";
+import { Status } from "@prisma/client";
+import { render } from "@react-email/render";
 
-import getCurrentUser from "@/app/action/getCurrentUser";
 import { EmailAdminNewLesson } from "@/emails/EmailAdminNewLesson";
 import { prisma } from "@/libs/prismadb";
 import { pusherServer } from "@/libs/pusher";
-import { Status } from "@prisma/client";
-import { render } from "@react-email/render";
-import nodemailer from "nodemailer";
-
-// DEPOIS DO PAGAMENTO
-// webhook:  {
-//   id: 'hook_qrXp4n8c2I1wJnb3',
-//   account: { id: 'acc_b2QpJ4JfYGIjPNa4', name: 'O Sapiente - test' },
-//   type: 'order.payment_failed',
-//   created_at: '2024-05-14T20:48:04.51Z',
-//   data: {
-//     id: 'or_ynKJoQ5SD8u2ogR0',
-//     code: 'YJ4RB5XAW0',
-//     amount: 1000,
-//     currency: 'BRL',
-//     closed: true,
-//     items: [ [Object] ],
-//     customer: {
-//       id: 'cus_Ga4nprOIq5fwpXZM',
-//       name: 'Matheus Kristman',
-//       email: 'kristman058@gmail.com',
-//       code: '663181530801d826e599d1b4',
-//       document: '46283551858',
-//       type: 'individual',
-//       delinquent: false,
-//       address: [Object],
-//       created_at: '2024-05-09T18:28:53',
-//       updated_at: '2024-05-14T20:48:03',
-//       birthdate: '1998-01-31T02:00:00',
-//       phones: [Object]
-//     },
-//     status: 'failed',
-//     created_at: '2024-05-14T20:48:03',
-//     updated_at: '2024-05-14T20:48:04',
-//     closed_at: '2024-05-14T20:48:03',
-//     charges: [ [Object] ],
-//     checkouts: []
-//   }
-// }
 
 interface IGenerateEmailOptions {
   emailUser: string;
@@ -128,6 +56,9 @@ export async function POST(req: Request) {
     if (body.type === "order.paid") {
       const offerId = body.data.items[0].code;
       const metadata = body.data.charges[0].last_transaction.metadata;
+
+      console.log("metadata: ", metadata);
+
       const emailHost: string = process.env.EMAIL_SMTP!;
       const emailUser: string = process.env.EMAIL_USER!;
       const emailPass: string = process.env.EMAIL_PASS!;
