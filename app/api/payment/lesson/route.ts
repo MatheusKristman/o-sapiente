@@ -32,7 +32,6 @@ export async function POST(req: Request) {
     //     ? process.env.PAGARME_SECRET_KEY_DEV!
     //     : process.env.PAGARME_SECRET_KEY!;
     const pagarMeSecretKey = process.env.PAGARME_SECRET_KEY_DEV!;
-    console.log(pagarMeSecretKey);
 
     if (
       !birth ||
