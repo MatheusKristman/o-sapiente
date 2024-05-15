@@ -52,6 +52,8 @@ model User {
   pixCode                  String?
   passwordRecoverDate      DateTime?
   passwordRecoverRequested Boolean     @default(false)
+  planActivationDate       DateTime?
+  planValidationDate       DateTime?
 
   subjectIds String[]  @db.ObjectId
   subjects   Subject[] @relation(fields: [subjectIds], references: [id])
