@@ -47,7 +47,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
       setStudentId(filteredStudent.id!);
       setStudentImage(filteredStudent.profilePhoto);
       setStudentName(
-        `${filteredStudent.firstName} ${filteredStudent.lastName}`,
+        `${filteredStudent.firstName} ${filteredStudent.lastName}`
       );
       setStudentCel(filteredStudent.tel!);
       setSubject(request.subject);
@@ -62,11 +62,11 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
 
   return (
     <div className={cn("w-full rounded-lg bg-white p-5 mb-4", last && "mb-0")}>
-      <div className="flex flex-col lg:flex-row lg:gap-6 xl:w-full">
+      <div className="flex flex-col lg:flex-row lg:gap-6 lg:w-full">
         <div className="flex justify-center xl:w-1/12">
           <Image
             src={
-              filteredStudent.profilePhoto
+              filteredStudent?.profilePhoto
                 ? filteredStudent.profilePhoto
                 : "N/A"
             }
@@ -79,7 +79,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
 
         <div className="flex flex-col items-center justify-center p-2.5 text-green-primary text-lg font-semibold lg:p-1 lg:flex-row xl:w-6/12 xl:justify-start">
           <span className="-mb-3 lg:mb-0">
-            {filteredStudent.firstName + " " + filteredStudent.lastName}
+            {filteredStudent?.firstName + " " + filteredStudent?.lastName}
           </span>
 
           <Dot
@@ -92,7 +92,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
           <span className="text-base -mt-3 lg:mt-0">{request.subject}</span>
         </div>
 
-        <div className="xl:flex xl:justify-end xl:w-5/12">
+        <div className="lg:flex lg:justify-end lg:w-5/12">
           <div className="flex items-center justify-center relative">
             {type === "Student" &&
             request.offers.length > 0 &&
@@ -114,10 +114,10 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
                   ? professorResumeInfos.offerSended
                   : professorResumeInfos.seeOfferBtn
                 : type === "Student"
-                  ? request.isOfferAccepted
-                    ? studentResumeInfos.offerAccepted
-                    : studentResumeInfos.seeOfferBtn
-                  : ""}
+                ? request.isOfferAccepted
+                  ? studentResumeInfos.offerAccepted
+                  : studentResumeInfos.seeOfferBtn
+                : ""}
             </Button>
           </div>
         </div>

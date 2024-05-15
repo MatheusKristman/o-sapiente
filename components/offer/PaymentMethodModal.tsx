@@ -52,7 +52,11 @@ export function PaymentMethodModal({ offer, currentUserId }: Props) {
     }
 
     if (isPlatformSelected) {
-      router.push(`/pagamento-da-aula/${offer.id}`);
+      closeModal();
+
+      setTimeout(() => {
+        router.push(`/pagamento-da-aula/${offer.id}`);
+      }, 350);
     }
 
     if (isAgreedSelected) {
