@@ -74,12 +74,11 @@ export async function PUT(req: Request) {
       });
 
       if (
-        requests.some(
-          (request: RequestWithUsersAndOffers) => request.id !== requestId
-        )
+        requests.filter(
+          (request: RequestWithUsersAndOffers) => request.id === requestId
+        ).length === 0
       ) {
-        console.log("requests: ", requests);
-        return new Response("Solicitação inválida, não foi encontrada.", {
+        return new Response("Solicitação inválida", {
           status: 401,
         });
       }
