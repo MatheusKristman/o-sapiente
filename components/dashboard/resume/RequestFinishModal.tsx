@@ -34,14 +34,14 @@ export function RequestFinishModal({ type }: Props) {
         setRequests(
           res.data.filter(
             (request: RequestWithUsersAndOffers) =>
-              !request.isConcluded && !request.isOfferAccepted,
-          ),
+              !request.isConcluded && !request.isOfferAccepted
+          )
         );
         setCurrentLesson(
           res.data.filter(
             (request: RequestWithUsersAndOffers) =>
-              !request.isConcluded && request.isOfferAccepted,
-          ),
+              !request.isConcluded && request.isOfferAccepted
+          )
         );
         closeModal();
       })
@@ -110,6 +110,7 @@ export function RequestFinishModal({ type }: Props) {
                     {finishModalInfo.cancelBtn}
                   </Button>
 
+                  {/* TODO: adicionar loading */}
                   <Button onClick={handleFinish} className="w-full sm:w-1/2">
                     {finishModalInfo.confirmBtn}
                   </Button>

@@ -15,6 +15,7 @@ import useResumeStore from "@/stores/useResumeStore";
 import { RequestWithUsersAndOffers } from "@/types";
 import useUserStore from "@/stores/useUserStore";
 
+// TODO: ajustar foto de perfil para deixar redonda e adicionar loading no botão
 export function RequestConfirmFinishModal() {
   const { setRequests, setCurrentLesson } = useResumeStore();
   const { isModalOpen, closeModal, requestSelected } =
@@ -27,7 +28,7 @@ export function RequestConfirmFinishModal() {
   }
 
   const filteredUser = requestSelected?.usersVotedToFinish.filter(
-    (user) => user.id !== userId,
+    (user) => user.id !== userId
   )[0];
 
   function handleFinish() {
@@ -43,14 +44,14 @@ export function RequestConfirmFinishModal() {
         setRequests(
           res.data.filter(
             (request: RequestWithUsersAndOffers) =>
-              !request.isConcluded && !request.isOfferAccepted,
-          ),
+              !request.isConcluded && !request.isOfferAccepted
+          )
         );
         setCurrentLesson(
           res.data.filter(
             (request: RequestWithUsersAndOffers) =>
-              !request.isConcluded && request.isOfferAccepted,
-          ),
+              !request.isConcluded && request.isOfferAccepted
+          )
         );
         closeModal();
       })

@@ -225,7 +225,7 @@ export async function PUT(req: Request) {
       (user) => user.id !== currentUser.id
     )[0];
 
-    if (requestUpdated.isConcluded) {
+    if (requestFiltered.usersIdsVotedToFinish.length === 1) {
       const professor = requestUpdated.users.filter(
         (user) => user.accountType === AccountRole.PROFESSOR
       )[0];
