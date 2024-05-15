@@ -53,15 +53,9 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    console.log(body.data.items[0]);
-
     if (body.type === "order.paid") {
-      console.log("body response: ", body.data.customer);
-
       const offerId = body.data.items[0].code;
-      const metadata = body.data.charges[0].last_transaction.metadata;
-
-      console.log("metadata: ", metadata);
+      const metadata = body.data.customer.metadata;
 
       const emailHost: string = process.env.EMAIL_SMTP!;
       const emailUser: string = process.env.EMAIL_USER!;
@@ -123,7 +117,7 @@ export async function POST(req: Request) {
             beginLessonDate: new Date(),
             lessonDate: offer.lessonDate,
             lessonPrice: offer.lessonPrice,
-            certificateRequested: metadata.certificateRequested,
+            certificateRequested: JSON.parse(metadata.certificateRequested),
             users: {
               connect: {
                 id: offer.userId,
@@ -228,7 +222,7 @@ export async function POST(req: Request) {
           isOfferAccepted: true,
           status: Status.inProgress,
           beginLessonDate: new Date(),
-          certificateRequested: metadata.certificateRequested,
+          certificateRequested: JSON.parse(metadata.certificateRequested),
           users: {
             connect: {
               id: offer.userId,
