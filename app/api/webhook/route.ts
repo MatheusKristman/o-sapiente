@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { Status } from "@prisma/client";
+import { AccountRole, Status } from "@prisma/client";
 import { render } from "@react-email/render";
 
 import { EmailAdminNewLesson } from "@/emails/EmailAdminNewLesson";
@@ -46,8 +46,6 @@ function generateEmailOptions({
     html: emailHtml,
   };
 }
-
-// TODO: testar metadata para receber a solicitação do certificado
 
 export async function POST(req: Request) {
   try {
@@ -135,6 +133,7 @@ export async function POST(req: Request) {
                 firstName: true,
                 lastName: true,
                 tel: true,
+                accountType: true,
               },
             },
           },
@@ -156,15 +155,22 @@ export async function POST(req: Request) {
           }
         });
 
+        const student = request.users.filter(
+          (user) => user.accountType === AccountRole.STUDENT
+        )[0];
+        const professor = request.users.filter(
+          (user) => user.accountType === AccountRole.PROFESSOR
+        )[0];
+
         const options = generateEmailOptions({
           emailUser,
           lessonDate: offer.lessonDate,
           lessonPrice: offer.lessonPrice,
           certificateRequested: JSON.parse(metadata.certificateRequested),
-          studentName: `${request.users[0].firstName} ${request.users[0].lastName}`,
-          studentContact: request.users[0].tel!,
-          professorName: `${request.users[1].firstName} ${request.users[1].lastName}`,
-          professorContact: request.users[1].tel!,
+          studentName: `${student.firstName} ${student.lastName}`,
+          studentContact: student.tel!,
+          professorName: `${professor.firstName} ${professor.lastName}`,
+          professorContact: professor.tel!,
         });
 
         transport.sendMail(options, (error) => {
@@ -240,6 +246,7 @@ export async function POST(req: Request) {
               firstName: true,
               lastName: true,
               tel: true,
+              accountType: true,
             },
           },
         },
@@ -251,15 +258,22 @@ export async function POST(req: Request) {
         }
       });
 
+      const student = requestUpdated.users.filter(
+        (user) => user.accountType === AccountRole.STUDENT
+      )[0];
+      const professor = requestUpdated.users.filter(
+        (user) => user.accountType === AccountRole.PROFESSOR
+      )[0];
+
       const options = generateEmailOptions({
         emailUser,
         lessonDate: offer.lessonDate,
         lessonPrice: offer.lessonPrice,
         certificateRequested: JSON.parse(metadata.certificateRequested),
-        studentName: `${requestUpdated.users[0].firstName} ${requestUpdated.users[0].lastName}`,
-        studentContact: requestUpdated.users[0].tel!,
-        professorName: `${requestUpdated.users[1].firstName} ${requestUpdated.users[1].lastName}`,
-        professorContact: requestUpdated.users[1].tel!,
+        studentName: `${student.firstName} ${student.lastName}`,
+        studentContact: student.tel!,
+        professorName: `${professor.firstName} ${professor.lastName}`,
+        professorContact: professor.tel!,
       });
 
       transport.sendMail(options, (error) => {
@@ -289,9 +303,6 @@ export async function POST(req: Request) {
       const offer = await prisma.offer.findUnique({
         where: {
           id: offerId,
-        },
-        include: {
-          request: true,
         },
       });
 
