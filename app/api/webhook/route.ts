@@ -56,6 +56,8 @@ export async function POST(req: Request) {
     console.log(body.data.items[0]);
 
     if (body.type === "order.paid") {
+      console.log("body response: ", body);
+
       const offerId = body.data.items[0].code;
       const metadata = body.data.charges[0].last_transaction.metadata;
 
