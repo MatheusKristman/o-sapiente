@@ -78,7 +78,10 @@ export async function PUT(req: Request) {
           (request: RequestWithUsersAndOffers) => request.id !== requestId
         )
       ) {
-        return new Response("Solicitação inválida", { status: 401 });
+        console.log("requests: ", requests);
+        return new Response("Solicitação inválida, não foi encontrada.", {
+          status: 401,
+        });
       }
     }
 
