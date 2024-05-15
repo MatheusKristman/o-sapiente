@@ -47,6 +47,8 @@ function generateEmailOptions({
   };
 }
 
+// TODO: testar metadata para receber a solicitação do certificado
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
