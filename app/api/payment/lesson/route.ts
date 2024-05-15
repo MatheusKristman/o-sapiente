@@ -138,6 +138,10 @@ export async function POST(req: Request) {
       };
     }
 
+    const finalLessonPrice: number = certificateRequested
+      ? lessonPrice + 20
+      : lessonPrice;
+
     const options = {
       method: "POST",
       url: "https://api.pagar.me/core/v5/orders",
@@ -181,7 +185,7 @@ export async function POST(req: Request) {
         },
         items: [
           {
-            amount: Number(lessonPrice) * 100,
+            amount: Number(finalLessonPrice) * 100,
             description: "Pagamento da aula",
             quantity: 1,
             code: offerId,

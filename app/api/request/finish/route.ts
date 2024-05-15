@@ -75,7 +75,7 @@ export async function PUT(req: Request) {
 
       if (
         requests.some(
-          (request: RequestWithUsersAndOffers) => request.id !== requestId,
+          (request: RequestWithUsersAndOffers) => request.id !== requestId
         )
       ) {
         return new Response("Solicitação inválida", { status: 401 });
@@ -135,7 +135,7 @@ export async function PUT(req: Request) {
     }
 
     const requestFiltered = requests.filter(
-      (request) => request.id === requestId,
+      (request) => request.id === requestId
     )[0];
 
     if (
@@ -180,6 +180,7 @@ export async function PUT(req: Request) {
             subjectIds: true,
             requestIds: true,
             seenMessageIds: true,
+            paymentRetrievable: true,
           },
         },
         usersVotedToFinish: {
@@ -221,8 +222,33 @@ export async function PUT(req: Request) {
     newRequests.push(requestUpdated);
 
     const otherUser = requestUpdated.users.filter(
-      (user) => user.id !== currentUser.id,
+      (user) => user.id !== currentUser.id
     )[0];
+
+    if (requestUpdated.isConcluded) {
+      const professor = requestUpdated.users.filter(
+        (user) => user.accountType === AccountRole.PROFESSOR
+      )[0];
+
+      const payment =
+        professor.paymentRetrievable + requestUpdated.lessonPrice!;
+
+      const professorUpdated = await prisma.user.update({
+        where: {
+          id: professor.id,
+        },
+        data: {
+          paymentRetrievable: payment,
+        },
+      });
+
+      if (!professorUpdated) {
+        return new Response(
+          "Ocorreu um erro ao enviar o valor para o professor",
+          { status: 401 }
+        );
+      }
+    }
 
     const transport = nodemailer.createTransport({
       host: emailHost,
@@ -237,7 +263,7 @@ export async function PUT(req: Request) {
       EmailFinishingLessonNotification({
         name: `${currentUser.firstName} ${currentUser.lastName}`,
         otherUserName: `${otherUser.firstName} ${otherUser.lastName}`,
-      }),
+      })
     );
 
     const options = {
