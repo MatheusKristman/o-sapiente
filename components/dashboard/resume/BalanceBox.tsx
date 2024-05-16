@@ -27,7 +27,12 @@ const BalanceBox = () => {
           </span>
         </div>
 
-        <Button onClick={openModal} variant="secondary" className="w-full">
+        <Button
+          onClick={openModal}
+          disabled={paymentRetrievable === 0}
+          variant="secondary"
+          className="w-full"
+        >
           {professorResumeInfos.redeemBtn}
         </Button>
       </div>
