@@ -110,6 +110,7 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
     values: z.infer<typeof planSchema | typeof planSchemaForCredit>
   ) {
     console.log(values);
+    //TODO: adicionar um loading enquanto está concluindo o pagamento
 
     axios
       .post("/api/payment/lesson", {

@@ -231,9 +231,14 @@ export async function PUT(req: Request) {
       const professor = requestUpdated.users.filter(
         (user) => user.accountType === AccountRole.PROFESSOR
       )[0];
+      let payment: number;
 
-      const payment =
-        professor.paymentRetrievable + requestUpdated.lessonPrice!;
+      if (requestUpdated.certificateRequested) {
+        payment =
+          professor.paymentRetrievable + (requestUpdated.lessonPrice! + 20);
+      } else {
+        payment = professor.paymentRetrievable + requestUpdated.lessonPrice!;
+      }
 
       const professorUpdated = await prisma.user.update({
         where: {
