@@ -28,7 +28,8 @@ const Header = () => {
   const { isMobileMenuOpen, openMobileMenu } = useHeaderStore();
   const { accountType, setAccountType, userId, setUserId } = useUserStore();
   const { openModal: openStudentModal, setToRegister } = useStudentModalStore();
-  const { openModal: openProfessorModal } = useProfessorModalStore();
+  const { openModal: openProfessorModal, setToLogin } =
+    useProfessorModalStore();
 
   const session = useSession();
   const router = useRouter();
@@ -74,6 +75,7 @@ const Header = () => {
 
   function openProfessorLoginModal() {
     openProfessorModal();
+    setToLogin();
   }
 
   function handleDashboardStudentBtn() {

@@ -72,13 +72,15 @@ export const professorRegisterFaqInfo = {
     },
     {
       order: "02",
-      question: "Quais são os requisitos para me tornar um educador na plataforma?",
+      question:
+        "Quais são os requisitos para me tornar um educador na plataforma?",
       answer:
         "Para se tornar um educador, você precisa ter expertise em uma área específica e paixão por compartilhar conhecimento. Não é necessário ter formação acadêmica, mas suas habilidades e experiência são valorizadas.",
     },
     {
       order: "03",
-      question: "Posso cadastrar mais de uma matéria para lecionar na plataforma?",
+      question:
+        "Posso cadastrar mais de uma matéria para lecionar na plataforma?",
       answer:
         "Sim, você pode cadastrar múltiplas áreas de ensino em seu perfil. Isso amplia suas oportunidades de inspirar alunos em diferentes tópicos, tornando sua experiência como educador ainda mais diversificada e enriquecedora.",
     },
@@ -92,4 +94,18 @@ export const professorLoginInfo = {
   loginButton: "Entrar",
   noAccountText: "Você não possui uma conta?",
   noAccountLink: "Cadastre-se aqui",
+  forgotPasswordText: "Esqueceu a senha?",
+  forgotPasswordLink: "Clique aqui",
+};
+
+export const professorForgotPasswordInfo = {
+  email: "E-mail para recuperar a senha",
+  nextButton: "Enviar",
+  rememberedPasswordText: "Lembrou-se da senha?",
+  rememberedPasswordLink: "Clique aqui",
+};
+
+export const professorRecoverMessageInfo = {
+  text: "Você receberá um email em breve com instruções sobre como recuperar sua senha. Fique de olho na sua caixa de entrada para mais detalhes.",
+  closeBtn: "FECHAR",
 };

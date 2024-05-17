@@ -17,6 +17,7 @@ import { professorFormAnimation } from "@/constants/framer-animations/professor-
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import { professorLoginInfo } from "@/constants/register/professor-register-br";
 import { Button } from "@/components/ui/button";
+import useProfessorModalStore from "@/stores/useProfessorModalStore";
 
 interface Props {
   isSubmitting: boolean;
@@ -30,6 +31,8 @@ export function ProfessorLoginForm({
   handleCloseButton,
 }: Props) {
   const router = useRouter();
+
+  const { setToNotLogin, setToRecoverPassword } = useProfessorModalStore();
 
   function handleSignin(email: string, password: string) {
     setIsSubmitting(true);
@@ -76,8 +79,24 @@ export function ProfessorLoginForm({
     resolver: yupResolver(professorLoginSchema),
   });
 
+  function handleProfessorRegisterLink() {
+    handleCloseButton();
+
+    setTimeout(() => {
+      router.push("/cadastro/professor");
+    }, 350);
+  }
+
+  function handleForgotPassword() {
+    setToNotLogin();
+
+    setTimeout(() => {
+      setToRecoverPassword();
+    }, 350);
+  }
+
   return (
-    <div>
+    <div className="w-full flex flex-col gap-9">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full overflow-x-hidden"
@@ -148,6 +167,30 @@ export function ProfessorLoginForm({
           </Button>
         </motion.div>
       </form>
+
+      <div className="w-full h-[1px] bg-[#EBEFF1]" />
+
+      <div className="w-full flex flex-col items-center justify-center gap-4">
+        <p className="text-base font-semibold text-[#2C383F]">
+          {professorLoginInfo.noAccountText}{" "}
+          <span
+            onClick={handleProfessorRegisterLink}
+            className="text-green-primary cursor-pointer"
+          >
+            {professorLoginInfo.noAccountLink}
+          </span>
+        </p>
+
+        <p className="text-base font-semibold text-[#2C383F]">
+          {professorLoginInfo.forgotPasswordText}{" "}
+          <span
+            onClick={handleForgotPassword}
+            className="text-green-primary cursor-pointer"
+          >
+            {professorLoginInfo.forgotPasswordLink}
+          </span>
+        </p>
+      </div>
     </div>
   );
 }

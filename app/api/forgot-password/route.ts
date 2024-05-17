@@ -21,7 +21,17 @@ export async function POST(req: Request) {
       return new Response("E-mail inválido", { status: 400 });
     }
 
-    const userExists = await prisma.user.update({
+    const userExists = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!userExists) {
+      return new Response("E-mail não cadastrado", { status: 404 });
+    }
+
+    const user = await prisma.user.update({
       where: {
         email,
       },
@@ -30,13 +40,6 @@ export async function POST(req: Request) {
         passwordRecoverRequested: true,
       },
     });
-
-    if (!userExists) {
-      return Response.json(
-        { message: "E-mail não cadastrado" },
-        { status: 404 },
-      );
-    }
 
     const transport = nodemailer.createTransport({
       host: emailHost,
@@ -49,10 +52,10 @@ export async function POST(req: Request) {
 
     const emailHtml = render(
       EmailForgotPassword({
-        url: `${baseUrl}?id=${userExists.id}&recover-password=${userExists.passwordRecoverRequested}&recover-date=${userExists.passwordRecoverDate}`,
-        userName: `${userExists.firstName} ${userExists.lastName}`,
-        hoursLeft: userExists.passwordRecoverDate!,
-      }),
+        url: `${baseUrl}?id=${user.id}&recover-password=${user.passwordRecoverRequested}&recover-date=${user.passwordRecoverDate}`,
+        userName: `${user.firstName} ${user.lastName}`,
+        hoursLeft: user.passwordRecoverDate!,
+      })
     );
 
     const options = {
@@ -70,14 +73,14 @@ export async function POST(req: Request) {
           "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
           {
             status: 400,
-          },
+          }
         );
       }
     });
 
     return Response.json(
       { message: "E-mail enviado para recuperar a senha" },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
     console.log("[ERROR_ON_FORGOT_PASSWORD]", error);

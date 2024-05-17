@@ -2,38 +2,34 @@
 
 import { useState } from "react";
 import { BsXLg } from "react-icons/bs";
-
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 
 import {
   professorOverlayAnimation,
   professorModalAnimation,
-  professorFormAnimation,
 } from "@/constants/framer-animations/professor-modal";
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
 import { professorLoginInfo } from "@/constants/register/professor-register-br";
-
 import { Button } from "@/components/ui/button";
 import { ProfessorLoginForm } from "./ProfessorLoginForm";
+import { ProfessorForgotPasswordForm } from "./ProfessorForgotPasswordForm";
+import { ProfessorRecoverPasswordMessage } from "./ProfessorRecoverPasswordMessage";
 
 const ProfessorModal = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const { isModalOpen, closeModal } = useProfessorModalStore();
-
-  const router = useRouter();
+  const {
+    isModalOpen,
+    closeModal,
+    isLogin,
+    setToLogin,
+    forgotPassword,
+    isRecoverPasswordMessage,
+  } = useProfessorModalStore();
 
   function handleCloseButton() {
     closeModal();
-  }
-
-  function handleProfessorRegisterLink() {
-    handleCloseButton();
-
-    setTimeout(() => {
-      router.push("/cadastro/professor");
-    }, 350);
+    setToLogin();
   }
 
   return (
@@ -54,7 +50,7 @@ const ProfessorModal = () => {
               animate="animate"
               exit="exit"
               variants={professorModalAnimation}
-              className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle"
+              className="w-full max-w-[550px] bg-white p-9 rounded-2xl overflow-x-hidden inline-block align-middle"
             >
               <div className="flex justify-end mb-6">
                 <Button
@@ -74,27 +70,20 @@ const ProfessorModal = () => {
               </h4>
 
               <AnimatePresence>
-                <div className="w-full flex flex-col gap-9">
+                {isLogin && (
                   <ProfessorLoginForm
                     setIsSubmitting={setIsSubmitting}
                     isSubmitting={isSubmitting}
                     handleCloseButton={handleCloseButton}
+                    key="professor-login"
                   />
-
-                  <div className="w-full h-[1px] bg-[#EBEFF1]" />
-
-                  <div className="w-full flex flex-col items-center justify-center gap-4">
-                    <p className="text-base font-semibold text-[#2C383F]">
-                      {professorLoginInfo.noAccountText}{" "}
-                      <span
-                        onClick={handleProfessorRegisterLink}
-                        className="text-green-primary cursor-pointer"
-                      >
-                        {professorLoginInfo.noAccountLink}
-                      </span>
-                    </p>
-                  </div>
-                </div>
+                )}
+                {forgotPassword && (
+                  <ProfessorForgotPasswordForm key="professor-forgot-password" />
+                )}
+                {isRecoverPasswordMessage && (
+                  <ProfessorRecoverPasswordMessage key="professor-recover-password" />
+                )}
               </AnimatePresence>
             </motion.div>
           </motion.div>
