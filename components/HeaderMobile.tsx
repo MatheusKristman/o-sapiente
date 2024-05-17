@@ -25,7 +25,8 @@ const HeaderMobile = () => {
   const { isMobileMenuOpen, closeMobileMenu } = useHeaderStore();
   const { accountType, userId } = useUserStore();
   const { openModal: openStudentModal, setToRegister } = useStudentModalStore();
-  const { openModal: openProfessorModal } = useProfessorModalStore();
+  const { openModal: openProfessorModal, setToLogin } =
+    useProfessorModalStore();
 
   const session = useSession();
   const router = useRouter();
@@ -86,6 +87,7 @@ const HeaderMobile = () => {
 
     setTimeout(() => {
       openProfessorModal();
+      setToLogin();
     }, 500);
   }
 
