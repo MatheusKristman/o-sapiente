@@ -159,6 +159,13 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
     form.setValue("cpf", formattedNumber);
   }
 
+  function handleCepFormat(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value.replace(/[^0-8]/g, "").substring(0, 8);
+    const formattedNumber = value.replace(/(\d{5})(\d{3})/, "$1-$2");
+
+    form.setValue("cep", formattedNumber);
+  }
+
   function handleCreditNumberFormat(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 16);
     const formattedNumber = value.replace(
@@ -188,6 +195,7 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
         <PaymentPersonalDataForm
           control={form.control}
           handleCPFFormat={handleCPFFormat}
+          handleCepFormat={handleCepFormat}
           currentUser={currentUser}
           isSubmitting={isSubmitting}
         />
