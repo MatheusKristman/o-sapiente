@@ -11,13 +11,13 @@ import {
   studentChangePasswordSchema,
   studentChangePasswordSchemaType,
 } from "@/constants/schemas/studentChangePasswordSchema";
-import { useSession } from "next-auth/react";
+import useUserStore from "@/stores/useUserStore";
 
 const ChangePasswordBox = () => {
   const [isInputsActive, setIsInputsActive] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const session = useSession();
+  const { userId } = useUserStore();
 
   const {
     register,
@@ -43,7 +43,7 @@ const ChangePasswordBox = () => {
   }
 
   function onSubmit(data: studentChangePasswordSchemaType) {
-    if (session && data) {
+    if (!userId && data) {
       setIsSubmitting(true);
 
       axios
@@ -78,7 +78,7 @@ const ChangePasswordBox = () => {
       <div
         className={cn(
           "w-full flex flex-col transition-[max-height]",
-          isInputsActive ? "max-h-52 mb-4" : "max-h-0 overflow-hidden",
+          isInputsActive ? "max-h-52 mb-4" : "max-h-0 overflow-hidden"
         )}
       >
         <input
@@ -88,7 +88,7 @@ const ChangePasswordBox = () => {
           placeholder={MyAccountInfo.newPasswordPlaceholder}
           className={cn(
             "w-full h-12 rounded-lg px-4 py-2 bg-gray-primary/40 text-white text-base placeholder:text-green-primary outline-none focus:border-white focus:border-2 mb-4 disabled:cursor-not-allowed disabled:bg-gray-primary/20",
-            errors.newPassword && "border-[#BD5B5B] border-2 border-solid mb-1",
+            errors.newPassword && "border-[#BD5B5B] border-2 border-solid mb-1"
           )}
         />
         {errors.newPassword && (
@@ -105,7 +105,7 @@ const ChangePasswordBox = () => {
           className={cn(
             "w-full h-12 rounded-lg px-4 py-2 bg-gray-primary/40 text-white text-base placeholder:text-green-primary outline-none focus:border-white focus:border-2 disabled:cursor-not-allowed disabled:bg-gray-primary/20",
             errors.newPasswordConfirm &&
-              "border-[#BD5B5B] border-2 border-solid mb-1",
+              "border-[#BD5B5B] border-2 border-solid mb-1"
           )}
         />
         {errors.newPasswordConfirm && (
@@ -123,7 +123,7 @@ const ChangePasswordBox = () => {
             ? "submit"
             : "button"
         }
-        disabled={isSubmitting}
+        disabled={isSubmitting || !userId}
         onClick={toggleInputsVisibility}
       >
         {isInputsActive

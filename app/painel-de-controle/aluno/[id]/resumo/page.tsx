@@ -19,7 +19,7 @@ import { ResumeCurrentLessonModal } from "@/components/dashboard/resume/ResumeCu
 import useResumeStore from "@/stores/useResumeStore";
 
 // TODO: se o usuário errado entrar, redirecionar para a home
-// TODO: ajustar loadings das requests para um skeleton
+// TODO: checar loadings de modals para aluno
 
 const DashboardPage = () => {
   const { setProfilePhoto, setName, setCurrentLesson, setRequests, requests } =
@@ -33,23 +33,14 @@ const DashboardPage = () => {
     const fetchData = async () => {
       try {
         const userResponse = await axios.get("/api/user/get-user");
+
         if (userResponse.data.profilePhoto) {
           setProfilePhoto(userResponse.data.profilePhoto);
         }
+
         setName(`${userResponse.data.firstName} ${userResponse.data.lastName}`);
 
         const requestResponse = await axios.get("/api/request/get-requests");
-
-        // TODO: ajustar requests para o usuário correto
-        // TODO: ajustar requests igual ao do professor com o if do userId
-        // TODO: checar loadings de modals para aluno
-
-        console.log(
-          "requests: ",
-          requestResponse.data.filter(
-            (req: Request) => !req.isConcluded && req.isOfferAccepted
-          )
-        );
 
         setRequests(
           requestResponse.data.filter(
