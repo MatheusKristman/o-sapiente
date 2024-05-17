@@ -39,7 +39,7 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
         {type === "Student" ? studentResumeInfos.newOffersTitle : null}
       </h2>
 
-      <div className="relative w-full max-h-[600px] lg:max-h-[400px] overflow-auto scrollbar scrollbar-thumb-slate-100">
+      <div className="relative w-full max-h-[600px] lg:max-h-[400px] overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
         {type === "Professor" &&
           (requests && requests.length > 0 ? (
             <>

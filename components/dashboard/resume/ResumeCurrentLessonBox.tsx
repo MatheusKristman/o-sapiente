@@ -20,7 +20,7 @@ const ResumeCurrentLessonBox = () => {
         {studentResumeInfos.currentLessonTitle}
       </h2>
 
-      <div className="relative w-full max-h-[600px] lg:max-h-[400px] overflow-auto scrollbar scrollbar-thumb-slate-100">
+      <div className="relative w-full max-h-[600px] lg:max-h-[400px] overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
         {currentLesson.length > 0 ? (
           <>
             <div className="sticky top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />

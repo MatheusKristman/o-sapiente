@@ -46,8 +46,8 @@ export function PlanHeader({ plans }: Props) {
   }
 
   return (
-    <div className="w-full px-6 my-12 sm:px-16 lg:container lg:mx-auto lg:flex lg:justify-between lg:items-center lg:gap-12">
-      <div className="w-full bg-green-primary px-6 py-9 rounded-xl mb-9 lg:mb-0 lg:max-w-md">
+    <div className="w-full px-6 my-12 sm:px-16 lg:container lg:mx-auto xl:flex xl:justify-between xl:items-center xl:gap-12">
+      <div className="w-full bg-green-primary px-6 py-9 rounded-xl mb-9 xl:mb-0 xl:max-w-md">
         <p className="text-white font-normal text-base sm:text-lg">
           {info.greenBox}
         </p>

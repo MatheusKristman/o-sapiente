@@ -23,6 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/libs/utils";
+import { Loader2 } from "lucide-react";
 
 const StudentRegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -315,7 +316,12 @@ const StudentRegisterForm = () => {
             animate="animate"
             exit="exit"
           >
-            <Button type="submit" disabled={isSubmitting} className="w-full">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full flex items-center gap-2"
+            >
+              {isSubmitting && <Loader2 className="animate-spin" />}
               {studentRegisterInfo.nextButton}
             </Button>
           </motion.div>

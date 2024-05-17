@@ -49,6 +49,7 @@ interface Props {
     any
   >;
   handleCPFFormat: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleCepFormat: (event: React.ChangeEvent<HTMLInputElement>) => void;
   currentUser: User;
   isSubmitting: boolean;
 }
@@ -56,6 +57,7 @@ interface Props {
 export function PaymentPersonalDataForm({
   control,
   handleCPFFormat,
+  handleCepFormat,
   currentUser,
   isSubmitting,
 }: Props) {
@@ -163,7 +165,7 @@ export function PaymentPersonalDataForm({
                             variant="datePicker"
                             className={cn(
                               "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground",
+                              !field.value && "text-muted-foreground"
                             )}
                           >
                             {field.value ? (
@@ -241,7 +243,7 @@ export function PaymentPersonalDataForm({
                 control={control}
                 name="country"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full sm:w-1/2">
                     <FormControl>
                       <input
                         disabled={isSubmitting}
@@ -263,15 +265,20 @@ export function PaymentPersonalDataForm({
                 control={control}
                 name="cep"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full sm:w-1/2">
                     <FormControl>
                       <input
+                        maxLength={9}
                         disabled={isSubmitting}
                         placeholder={info.cepPlaceholder}
                         className={cn("input", {
                           "input-error": false,
                         })}
-                        {...field}
+                        name={field.name}
+                        ref={field.ref}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        onChange={handleCepFormat}
                       />
                     </FormControl>
                     <FormMessage />
@@ -287,7 +294,7 @@ export function PaymentPersonalDataForm({
                 control={control}
                 name="city"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full sm:w-1/2">
                     <FormControl>
                       <input
                         disabled={isSubmitting}
@@ -307,7 +314,7 @@ export function PaymentPersonalDataForm({
                 control={control}
                 name="state"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full sm:w-1/2">
                     <FormControl>
                       <input
                         maxLength={2}

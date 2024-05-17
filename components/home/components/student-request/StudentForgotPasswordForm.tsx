@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/libs/utils";
+import { Loader2 } from "lucide-react";
 
 function StudentForgotPasswordForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -94,7 +95,7 @@ function StudentForgotPasswordForm() {
                       disabled={isSubmitting}
                       className={cn(
                         "input",
-                        form.formState.errors.email && "input-error",
+                        form.formState.errors.email && "input-error"
                       )}
                       {...field}
                     />
@@ -112,7 +113,12 @@ function StudentForgotPasswordForm() {
             animate="animate"
             exit="exit"
           >
-            <Button type="submit" disabled={isSubmitting} className="w-full">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full flex items-center gap-2"
+            >
+              {isSubmitting && <Loader2 className="animate-spin" />}
               {studentForgotPasswordInfo.nextButton}
             </Button>
           </motion.div>
