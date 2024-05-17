@@ -7,6 +7,7 @@ import ResultCard from "@/components/dashboard/history/ResultCard";
 import TableRow from "@/components/dashboard/history/TableRow";
 import { RequestWithUsersAndOffers } from "@/types";
 import useHistoryStore from "@/stores/useHistoryStore";
+import { AccountRole } from "@prisma/client";
 
 interface ResponsiveTableProps {
   requests: RequestWithUsersAndOffers[];
@@ -67,14 +68,21 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                       return false;
                     }
 
+                    const professor = request.users.filter(
+                      (user) => user.accountType === AccountRole.PROFESSOR
+                    )[0];
+                    const student = request.users.filter(
+                      (user) => user.accountType === AccountRole.STUDENT
+                    )[0];
+
                     const firstName =
                       type === "Professor"
-                        ? request.users[0].firstName
-                        : request.users[1].firstName;
+                        ? student.firstName
+                        : professor.firstName;
                     const lastName =
                       type === "Professor"
-                        ? request.users[0].lastName
-                        : request.users[1].lastName;
+                        ? student.lastName
+                        : professor.lastName;
 
                     const userFoundOnSearch: boolean = `${firstName
                       .toLowerCase()
@@ -86,7 +94,7 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                       searchValue
                         .toLowerCase()
                         .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, ""),
+                        .replace(/[\u0300-\u036f]/g, "")
                     );
 
                     return isRequestDateOnRange && userFoundOnSearch;
@@ -96,7 +104,7 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                   ))
               : requests
                   .filter(
-                    (request) => compareAsc(filterDate, request.createdAt) <= 0,
+                    (request) => compareAsc(filterDate, request.createdAt) <= 0
                   )
                   .map((request, index) => (
                     <TableRow key={index} request={request} />
@@ -119,14 +127,19 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                   return false;
                 }
 
+                const professor = request.users.filter(
+                  (user) => user.accountType === AccountRole.PROFESSOR
+                )[0];
+                const student = request.users.filter(
+                  (user) => user.accountType === AccountRole.STUDENT
+                )[0];
+
                 const firstName =
                   type === "Professor"
-                    ? request.users[0].firstName
-                    : request.users[1].firstName;
+                    ? student.firstName
+                    : professor.firstName;
                 const lastName =
-                  type === "Professor"
-                    ? request.users[0].lastName
-                    : request.users[1].lastName;
+                  type === "Professor" ? student.lastName : professor.lastName;
 
                 const userFoundOnSearch: boolean = `${firstName
                   .toLowerCase()
@@ -138,7 +151,7 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                   searchValue
                     .toLowerCase()
                     .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, ""),
+                    .replace(/[\u0300-\u036f]/g, "")
                 );
 
                 return isRequestDateOnRange && userFoundOnSearch;
@@ -148,7 +161,7 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
               ))
           : requests
               .filter(
-                (request) => compareAsc(filterDate, request.createdAt) <= 0,
+                (request) => compareAsc(filterDate, request.createdAt) <= 0
               )
               .map((request, index) => (
                 <ResultCard key={index} request={request} />

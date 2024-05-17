@@ -13,7 +13,7 @@ import Steps from "@/components/home/Steps";
 import Benefits from "@/components/home/Benefits";
 import RecentsRequests from "@/components/home/RecentsRequests";
 import Contact from "@/components/home/Contact";
-import ProfessorLoginForm from "@/components/home/components/professor-login/ProfessorLoginForm";
+import ProfessorModal from "@/components/home/components/professor-login/ProfessorModal";
 import RecoverPasswordModal from "@/components/home/RecoverPasswordModal";
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
 import useStudentModalStore from "@/stores/useStudentModalStore";
@@ -98,7 +98,7 @@ export default function Home() {
 
   return (
     <>
-      <ProfessorLoginForm />
+      <ProfessorModal />
       <StudentModal />
       <RecoverPasswordModal />
       <Hero />

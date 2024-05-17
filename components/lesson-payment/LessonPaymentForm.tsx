@@ -160,7 +160,7 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
   }
 
   function handleCepFormat(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value.replace(/[^0-8]/g, "").substring(0, 8);
+    const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 8);
     const formattedNumber = value.replace(/(\d{5})(\d{3})/, "$1-$2");
 
     form.setValue("cep", formattedNumber);
