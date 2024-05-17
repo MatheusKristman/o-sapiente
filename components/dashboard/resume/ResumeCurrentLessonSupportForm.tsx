@@ -59,15 +59,13 @@ export function ResumeCurrentLessonSupportForm() {
         .then((res) => {
           toast.success(res.data.message);
           setRequests(
-            res.data.requests.filter(
-              (request: Request) => !request.isConcluded,
-            ),
+            res.data.requests.filter((request: Request) => !request.isConcluded)
           );
           setCurrentLesson(
             res.data.requests.filter(
               (request: Request) =>
-                request.isOfferAccepted && !request.isConcluded,
-            ),
+                request.isOfferAccepted && !request.isConcluded
+            )
           );
           handleClose();
         })
@@ -110,7 +108,7 @@ export function ResumeCurrentLessonSupportForm() {
                       disabled={isSending}
                       className={cn(
                         "input",
-                        form.formState.errors.subject && "input-error",
+                        form.formState.errors.subject && "input-error"
                       )}
                       placeholder={currentLessonModalInfo.subjectPlaceholder}
                       {...field}
@@ -132,7 +130,7 @@ export function ResumeCurrentLessonSupportForm() {
                       disabled={isSending}
                       className={cn(
                         "textarea !h-[150px] mb-9",
-                        form.formState.errors.message && "input-error",
+                        form.formState.errors.message && "input-error"
                       )}
                       placeholder={currentLessonModalInfo.messagePlaceholder}
                       {...field}
@@ -162,7 +160,6 @@ export function ResumeCurrentLessonSupportForm() {
               onClick={setBtns}
               className="flex items-center gap-2"
             >
-              {isSending && <Loader2 className="animate-spin" />}
               {currentLessonModalInfo.backBtn}
             </Button>
           </div>

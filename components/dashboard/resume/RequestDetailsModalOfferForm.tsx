@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, CopyIcon } from "lucide-react";
+import { CalendarIcon, CopyIcon, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { format } from "date-fns";
 import CurrencyInput from "react-currency-input-field";
@@ -60,7 +60,7 @@ const RequestDetailsModalOfferForm = ({
   const [offerLink, setOfferLink] = useState<string>("");
   const [linkCopied, setLinkCopied] = useState<boolean>(false);
   const [whatsappLink, setWhatsappLink] = useState<string>(
-    `https://wa.me/55${studentCel?.replace(/\D/g, "")}`,
+    `https://wa.me/55${studentCel?.replace(/\D/g, "")}`
   );
 
   const form = useForm<z.infer<typeof offerSchema>>({
@@ -225,7 +225,7 @@ const RequestDetailsModalOfferForm = ({
                                 variant="datePicker"
                                 className={cn(
                                   "w-full pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground",
+                                  !field.value && "text-muted-foreground"
                                 )}
                               >
                                 {field.value ? (
@@ -285,7 +285,7 @@ const RequestDetailsModalOfferForm = ({
                               onValueChange={(value, name) =>
                                 form.setValue(
                                   name as "lessonPrice",
-                                  Number(value),
+                                  Number(value)
                                 )
                               }
                               className="input !pl-10"
@@ -332,11 +332,11 @@ const RequestDetailsModalOfferForm = ({
               </div>
 
               <Button
-                className="w-full"
+                className="w-full flex items-center gap-2"
                 disabled={isSending}
                 type="submit"
-                onClick={() => {}}
               >
+                {isSending && <Loader2 className="animate-spin" />}
                 {requestDetailsOfferFormInfo.btn}
               </Button>
             </form>
@@ -361,7 +361,7 @@ const RequestDetailsModalOfferForm = ({
                       variant="datePicker"
                       className={cn(
                         "w-full pl-3 text-left font-normal",
-                        !lessonDate && "text-muted-foreground",
+                        !lessonDate && "text-muted-foreground"
                       )}
                     >
                       {lessonDate ? (
@@ -468,7 +468,11 @@ const RequestDetailsModalOfferForm = ({
                   type="button"
                   className="w-full sm:w-fit"
                 >
-                  {requestDetailsOfferFormInfo.generateLinkBtn}
+                  {isSending ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    <>{requestDetailsOfferFormInfo.generateLinkBtn}</>
+                  )}
                 </Button>
               </div>
             </div>

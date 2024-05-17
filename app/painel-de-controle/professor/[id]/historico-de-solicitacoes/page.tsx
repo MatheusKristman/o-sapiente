@@ -15,6 +15,8 @@ export type StatsType = {
 const HistoryPage = async () => {
   const requests: RequestWithUsersAndOffers[] = await getRequests();
 
+  console.log("Requests: ", requests);
+
   if (!requests) {
     return (
       <div>

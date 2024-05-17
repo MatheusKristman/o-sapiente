@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Request, Status } from "@prisma/client";
 
@@ -18,11 +18,16 @@ import { ResumeCurrentLessonModal } from "@/components/dashboard/resume/ResumeCu
 import useResumeStore from "@/stores/useResumeStore";
 import useRetrievePaymentModalStore from "@/stores/useRetrievePaymentModalStore";
 import useUserStore from "@/stores/useUserStore";
+import { RequestWithUsersAndOffers } from "@/types";
 
 // TODO: se o usuário errado entrar, redirecionar para a home
 // TODO: ajustar loadings das requests para um skeleton
 
 const ResumePage = () => {
+  const [lesson, setLessons] = useState<RequestWithUsersAndOffers[] | null>(
+    null
+  );
+
   const {
     setProfilePhoto,
     setName,
@@ -32,6 +37,7 @@ const ResumePage = () => {
     setOffers,
     setCurrentLesson,
     setRequests,
+    requests,
     setFinishedLessons,
   } = useResumeStore();
   const { setPixCode } = useRetrievePaymentModalStore();
@@ -58,27 +64,29 @@ const ResumePage = () => {
         setPaymentRetrievable(userResponse.data.paymentRetrievable);
         setPixCode(userResponse.data.pixCode);
 
-        const requestResponse = await axios.get("/api/request/get-requests");
+        if (userId) {
+          const requestResponse = await axios.get("/api/request/get-requests");
 
-        setRequests(
-          requestResponse.data.filter(
-            (request: Request) =>
-              !request.isConcluded && !request.isOfferAccepted,
-          ),
-        );
-        setCurrentLesson(
-          requestResponse.data.filter(
-            (request: Request) =>
-              request.isOfferAccepted &&
-              !request.isConcluded &&
-              request.userIds.includes(userId),
-          ),
-        );
-        setFinishedLessons(
-          requestResponse.data.filter(
-            (request: Request) => request.status === Status.finished,
-          ).length,
-        );
+          setRequests(
+            requestResponse.data.filter(
+              (request: Request) =>
+                !request.isConcluded && !request.isOfferAccepted
+            )
+          );
+          setCurrentLesson(
+            requestResponse.data.filter(
+              (request: Request) =>
+                request.isOfferAccepted &&
+                !request.isConcluded &&
+                request.userIds.includes(userId)
+            )
+          );
+          setFinishedLessons(
+            requestResponse.data.filter(
+              (request: Request) => request.status === Status.finished
+            ).length
+          );
+        }
       } catch (error) {
         console.error(error);
       }
@@ -97,6 +105,7 @@ const ResumePage = () => {
     setPaymentRetrievable,
     setPixCode,
     setFinishedLessons,
+    userId,
   ]);
 
   return (

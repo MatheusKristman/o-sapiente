@@ -19,13 +19,13 @@ export function PaymentButtons({ isSubmitting }: Props) {
   function handleBack() {
     if (pathname?.includes("pagamento-do-plano")) {
       router.push(
-        `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`,
+        `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`
       );
     }
 
     if (pathname?.includes("pagamento-da-aula")) {
       router.push(
-        `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`,
+        `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`
       );
     }
   }

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BsXLg } from "react-icons/bs";
 import axios from "axios";
@@ -13,12 +13,15 @@ import { finishModalInfo } from "@/constants/dashboard/resume-br";
 import useFinishModalStore from "@/stores/useFinishModalStore";
 import { RequestWithUsersAndOffers } from "@/types";
 import useResumeStore from "@/stores/useResumeStore";
+import { Loader2 } from "lucide-react";
 
 interface Props {
   type: "PROFESSOR" | "STUDENT";
 }
 
 export function RequestFinishModal({ type }: Props) {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const { setRequests, setCurrentLesson } = useResumeStore();
   const { isModalOpen, closeModal, requestSelected } = useFinishModalStore();
 
@@ -27,6 +30,8 @@ export function RequestFinishModal({ type }: Props) {
       toast.error("Ocorreu um erro ao finalizar a solicitação");
       return;
     }
+
+    setIsSubmitting(true);
 
     axios
       .put("/api/request/finish", { requestId: requestSelected.id })
@@ -48,6 +53,9 @@ export function RequestFinishModal({ type }: Props) {
       .catch((error) => {
         toast.error("Ocorreu um erro ao finalizar a solicitação");
         console.error(error);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   }
 
@@ -103,6 +111,7 @@ export function RequestFinishModal({ type }: Props) {
 
                 <div className="w-full flex flex-col sm:flex-row gap-4">
                   <Button
+                    disabled={isSubmitting}
                     variant="outline"
                     onClick={closeModal}
                     className="w-full sm:w-1/2"
@@ -111,7 +120,12 @@ export function RequestFinishModal({ type }: Props) {
                   </Button>
 
                   {/* TODO: adicionar loading */}
-                  <Button onClick={handleFinish} className="w-full sm:w-1/2">
+                  <Button
+                    disabled={isSubmitting}
+                    onClick={handleFinish}
+                    className="w-full sm:w-1/2 flex items-center gap-2"
+                  >
+                    {isSubmitting && <Loader2 className="animate-spin" />}
                     {finishModalInfo.confirmBtn}
                   </Button>
                 </div>

@@ -22,7 +22,7 @@ import useResumeStore from "@/stores/useResumeStore";
 // TODO: ajustar loadings das requests para um skeleton
 
 const DashboardPage = () => {
-  const { setProfilePhoto, setName, setCurrentLesson, setRequests } =
+  const { setProfilePhoto, setName, setCurrentLesson, setRequests, requests } =
     useResumeStore();
 
   const session = useSession();
@@ -41,25 +41,27 @@ const DashboardPage = () => {
         const requestResponse = await axios.get("/api/request/get-requests");
 
         // TODO: ajustar requests para o usuário correto
+        // TODO: ajustar requests igual ao do professor com o if do userId
+        // TODO: checar loadings de modals para aluno
 
         console.log(
           "requests: ",
           requestResponse.data.filter(
-            (req: Request) => !req.isConcluded && req.isOfferAccepted,
-          ),
+            (req: Request) => !req.isConcluded && req.isOfferAccepted
+          )
         );
 
         setRequests(
           requestResponse.data.filter(
             (request: Request) =>
-              !request.isConcluded && !request.isOfferAccepted,
-          ),
+              !request.isConcluded && !request.isOfferAccepted
+          )
         );
         setCurrentLesson(
           requestResponse.data.filter(
             (request: Request) =>
-              request.isOfferAccepted && !request.isConcluded,
-          ),
+              request.isOfferAccepted && !request.isConcluded
+          )
         );
       } catch (error) {
         console.error(error);
@@ -82,7 +84,7 @@ const DashboardPage = () => {
           <ResumeProfilePhoto type="Student" />
 
           <div className="w-full shadow-md shadow-[rgba(0,0,0,0.25)] rounded-lg">
-            <Button className="w-full" onClick={openModal}>
+            <Button className="w-full" onClick={openModal} disabled={!requests}>
               {studentResumeInfos.newRequestBtn}
             </Button>
           </div>

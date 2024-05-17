@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/libs/utils";
 import usePaymentStore from "@/stores/usePaymentStore";
 import useOffersModalStore from "@/stores/useOffersModalStore";
+import { Loader2 } from "lucide-react";
 
 interface OfferItemProps {
   offer: OfferWithUser;
@@ -55,7 +56,7 @@ const OfferItem = ({ offer }: OfferItemProps) => {
 
   return (
     <Accordion type="single" collapsible>
-      <AccordionItem value={offer.id}>
+      <AccordionItem value={offer.id} className="px-4">
         <AccordionTrigger>
           <div className="flex items-center gap-x-4">
             <div className="relative w-12 min-w-[48px] max-w-[48px] h-12 min-h-[48px] max-h-[48px] rounded-full overflow-hidden">
@@ -118,7 +119,12 @@ const OfferItem = ({ offer }: OfferItemProps) => {
               </div>
             </div>
 
-            <Button onClick={AcceptOffer} disabled={submitting}>
+            <Button
+              onClick={AcceptOffer}
+              disabled={submitting}
+              className="flex items-center gap-2"
+            >
+              {submitting && <Loader2 className="animate-spin" />}
               {offersModalInfo.btn}
             </Button>
           </div>

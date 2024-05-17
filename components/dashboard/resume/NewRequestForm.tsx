@@ -46,6 +46,7 @@ const NewRequestForm = () => {
 
   useEffect(() => {
     setIsLoading(true);
+
     axios
       .get("/api/subject?lang=br")
       .then((res) => {
@@ -86,14 +87,14 @@ const NewRequestForm = () => {
           setRequests(
             res.data.requests.filter(
               (req: RequestWithUsersAndOffers) =>
-                !req.isConcluded && !req.isOfferAccepted,
-            ),
+                !req.isConcluded && !req.isOfferAccepted
+            )
           );
           setCurrentLesson(
             res.data.requests.filter(
               (req: RequestWithUsersAndOffers) =>
-                !req.isConcluded && req.isOfferAccepted,
-            ),
+                !req.isConcluded && req.isOfferAccepted
+            )
           );
         }
       })
@@ -128,7 +129,7 @@ const NewRequestForm = () => {
             exit="exit"
             className={cn(
               "relative flex items-center mb-4 after:w-6 after:h-6 after:bg-lightGrayArrowDown after:bg-no-repeat after:bg-contain after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 focus-within:after:rotate-180 after:transform-gpu",
-              form.formState.errors.subject && "mb-2",
+              form.formState.errors.subject && "mb-2"
             )}
           >
             <FormField
@@ -142,8 +143,7 @@ const NewRequestForm = () => {
                       defaultValue={studentNewRequestInfo.themePlaceholder}
                       className={cn(
                         "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary/70 appearance-none outline-none focus:ring-2 focus:ring-green-primary lg:cursor-pointer",
-                        form.formState.errors.subject &&
-                          "ring-2 ring-[#FF7373]",
+                        form.formState.errors.subject && "ring-2 ring-[#FF7373]"
                       )}
                       {...field}
                     >
@@ -187,7 +187,7 @@ const NewRequestForm = () => {
                         className={cn(
                           "w-full mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
                           form.formState.errors.description &&
-                            "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
+                            "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2"
                         )}
                         {...field}
                       />
@@ -218,7 +218,7 @@ const NewRequestForm = () => {
                       className={cn(
                         "w-full h-40 mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
                         form.formState.errors.description &&
-                          "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2",
+                          "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2"
                       )}
                       {...field}
                     />

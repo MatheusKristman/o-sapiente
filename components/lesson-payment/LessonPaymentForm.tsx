@@ -109,8 +109,7 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
   function onSubmit(
     values: z.infer<typeof planSchema | typeof planSchemaForCredit>
   ) {
-    console.log(values);
-    //TODO: adicionar um loading enquanto está concluindo o pagamento
+    setIsSubmitting(true);
 
     axios
       .post("/api/payment/lesson", {
@@ -121,10 +120,6 @@ export function LessonPaymentForm({ currentUser, offer }: Props) {
         certificateRequested: certificateIncluded,
       })
       .then((res) => {
-        setIsSubmitting(true);
-
-        console.log(res.data);
-
         if (res.data.charges[0].payment_method === "pix") {
           router.replace(
             `/pagamento-da-aula/${offer.id}/pos-pagamento?user_type=${res.data.userType}&transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&qr_code_url=${res.data.charges[0].last_transaction.qr_code_url}&pix_code=${res.data.charges[0].last_transaction.qr_code}&expires_at=${res.data.charges[0].last_transaction.expires_at}`

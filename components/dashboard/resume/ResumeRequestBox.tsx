@@ -10,9 +10,10 @@ import { RequestWithUsersAndOffers } from "@/types";
 import { Offer } from "@prisma/client";
 import useResumeStore from "@/stores/useResumeStore";
 import useUserStore from "@/stores/useUserStore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ResumeRequestBoxProps {
-  type: string;
+  type: "Professor" | "Student";
 }
 
 //TODO: ajustar requests para o usuário correto
@@ -25,6 +26,10 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
     if (professorOffers) {
       return professorOffers.find((offer) => offer.requestId === requestId);
     }
+  }
+
+  if (!requests) {
+    return <ResumeRequestBoxSkeleton type={type} />;
   }
 
   return (
@@ -81,5 +86,22 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
     </div>
   );
 };
+
+function ResumeRequestBoxSkeleton({ type }: { type: "Professor" | "Student" }) {
+  return (
+    <div className="w-full rounded-lg bg-green-primary p-9 mb-5 shadow-md shadow-[rgba(0,0,0,0.25)]">
+      <h2 className="text-white text-2xl font-semibold mb-5 md:text-3xl lg:whitespace-nowrap whitespace-normal">
+        {type === "Professor" ? professorResumeInfos.requestBoxTitle : null}
+        {type === "Student" ? studentResumeInfos.newOffersTitle : null}
+      </h2>
+
+      <div className="relative w-full max-h-[600px] lg:max-h-[400px] overflow-auto scrollbar scrollbar-thumb-slate-100">
+        <Skeleton className="h-12 w-full  bg-green-primary brightness-90 mb-6" />
+        <Skeleton className="h-12 w-full  bg-green-primary brightness-90 mb-6" />
+        <Skeleton className="h-12 w-full  bg-green-primary brightness-90" />
+      </div>
+    </div>
+  );
+}
 
 export default ResumeRequestBox;
