@@ -24,7 +24,17 @@ const Footer = () => {
         <div className="w-full flex flex-col items-center justify-center gap-5 py-5 px-6 mx-auto sm:flex-row sm:justify-between md:px-16 lg:container">
           <span className="text-white text-base">O Sapiente © 2023</span>
 
-          <Link href="#" className="flex w-fit">
+          <a href="https://www.mkdevsolutions.com/" target="_blank" rel="noreferrer noopener">
+            <Image
+              src="/assets/images/mkdev.svg"
+              alt="MKDev"
+              width={80}
+              height={30}
+              className="object-contain"
+            />
+          </a>
+
+          <a href="#" target="_blank" rel="noreferrer noopener" className="flex w-fit">
             <Image
               src="/assets/images/agencia-dev-logo.png"
               alt="Agencia Dev"
@@ -32,7 +42,7 @@ const Footer = () => {
               height={30}
               className="object-contain"
             />
-          </Link>
+          </a>
         </div>
       </div>
     </footer>
