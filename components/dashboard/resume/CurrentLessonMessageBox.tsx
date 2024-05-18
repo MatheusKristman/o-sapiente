@@ -63,7 +63,7 @@ const CurrentLessonMessageBox = ({
         </div>
 
         <div className="xl:flex xl:justify-end xl:w-5/12">
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button variant="secondary" className="w-full" asChild>
               <Link
                 href={`${pathname
