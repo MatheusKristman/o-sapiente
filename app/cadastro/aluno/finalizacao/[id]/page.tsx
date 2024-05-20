@@ -21,7 +21,7 @@ const CompleteRegisterPage: React.FC<CompleteRegisterProps> = ({ params }) => {
   const { id } = params;
 
   return (
-    <section className="w-full md:h-4/5">
+    <section className="w-full md:h-4/5 md:min-h-[630px]">
       <StepBar actualStep={steps} />
 
       {steps === 1 && (
