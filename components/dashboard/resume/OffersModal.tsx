@@ -31,7 +31,7 @@ const OffersModal = () => {
   return (
     <>
       <AnimatePresence>
-        {isModalOpen && (
+        {isModalOpen && requestSelected && (
           <motion.div
             key="details-modal"
             initial="initial"
