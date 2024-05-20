@@ -36,6 +36,7 @@ async function OfferViaLinkPage({
           professorPhoto={offer.user.profilePhoto}
           lessonDate={offer.lessonDate}
           lessonPrice={offer.lessonPrice}
+          offerId={offer.id}
         />
       )}
       {currentUser.id !== searchParams.studentId && <InvalidUser />}

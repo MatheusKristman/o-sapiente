@@ -1,4 +1,7 @@
-import { RequestWithUsersAndOffers } from "@/types";
+import {
+  RequestWithUsersAndOffers,
+  RequestWithUsersAndOffersAndConversation,
+} from "@/types";
 import { Offer } from "@prisma/client";
 import { create } from "zustand";
 
@@ -17,8 +20,10 @@ interface IUseResumeStore {
   setPaymentRetrievable: (value: number) => void;
   offers: Offer[];
   setOffers: (newOffer: Offer[]) => void;
-  currentLesson: RequestWithUsersAndOffers[] | null;
-  setCurrentLesson: (newCurrentLesson: RequestWithUsersAndOffers[]) => void;
+  currentLesson: RequestWithUsersAndOffersAndConversation[] | null;
+  setCurrentLesson: (
+    newCurrentLesson: RequestWithUsersAndOffersAndConversation[],
+  ) => void;
   finishedLessons: number | null;
   setFinishedLessons: (quant: number) => void;
 }

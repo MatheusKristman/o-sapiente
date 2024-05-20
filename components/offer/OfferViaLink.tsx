@@ -2,17 +2,22 @@
 
 import Image from "next/image";
 import { format } from "date-fns";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useState } from "react";
 
 import { info } from "@/constants/offer/offerViaLink-br";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/libs/utils";
 import usePaymentStore from "@/stores/usePaymentStore";
+import { useRouter } from "next/navigation";
 
 interface Props {
   professorName: string;
   professorPhoto: string | null;
   lessonDate: Date;
   lessonPrice: number;
+  offerId: string;
 }
 
 export function OfferViaLink({
@@ -20,9 +25,33 @@ export function OfferViaLink({
   professorPhoto,
   lessonDate,
   lessonPrice,
+  offerId,
 }: Props) {
+  const [isLoading, setLoading] = useState<boolean>(false);
+
   const { openModal } = usePaymentStore();
-  // TODO: adicionar propriedades que vão ser apresentadas na tela
+  const router = useRouter();
+
+  function DeclineOffer() {
+    setLoading(true);
+
+    axios
+      .put(`/api/offer/decline/${offerId}`)
+      .then((res) => {
+        toast.success(res.data);
+
+        router.replace("/");
+      })
+      .catch((error) => {
+        console.error(error);
+
+        toast.error(error.response.data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
   return (
     <div className="w-full min-h-[calc(100vh-184px)] flex items-start justify-center sm:items-center">
       <div className="w-full flex flex-col items-center gap-9">
@@ -81,7 +110,7 @@ export function OfferViaLink({
             {info.acceptBtn}
           </Button>
 
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full" onClick={DeclineOffer}>
             {info.declineBtn}
           </Button>
         </div>

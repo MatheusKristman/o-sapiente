@@ -1,26 +1,17 @@
-import { useEffect, useState } from "react";
-
-import OfferBox from "./OfferBox";
 import {
   professorResumeInfos,
   studentResumeInfos,
 } from "@/constants/dashboard/resume-br";
-import { request } from "http";
-import { RequestWithUsersAndOffers } from "@/types";
-import { Offer } from "@prisma/client";
 import useResumeStore from "@/stores/useResumeStore";
-import useUserStore from "@/stores/useUserStore";
 import { Skeleton } from "@/components/ui/skeleton";
+import OfferBox from "./OfferBox";
 
 interface ResumeRequestBoxProps {
   type: "Professor" | "Student";
 }
 
-//TODO: ajustar requests para o usuário correto
-
 const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
   const { requests, offers: professorOffers } = useResumeStore();
-  const { userId } = useUserStore();
 
   function offerFiltered(requestId: string) {
     if (professorOffers) {

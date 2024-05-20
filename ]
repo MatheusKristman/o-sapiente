@@ -52,16 +52,15 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
   const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
     "profilePhotoUploader",
     {
-      onClientUploadComplete: () => {
+      onClientUploadComplete: (res) => {
         handleNextButton();
       },
       onUploadError: (error) => {
-        console.error(error);
         console.error(error.data);
 
         if (error.data?.message === "Unable to get presigned urls") {
           toast.error(
-            "Tipo ou tamanho da imagem inválido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)",
+            "Tipo ou tamanho da imagem não é valido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)",
           );
 
           return;

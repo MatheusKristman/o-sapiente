@@ -65,6 +65,15 @@ export type RequestWithUsersAndOffers = Request & {
   offers: OfferWithUser[];
 };
 
+export type RequestWithUsersAndOffersAndConversation = Request & {
+  users: UserFromRequest[];
+  usersVotedToFinish: UserFromRequest[];
+  offers: OfferWithUser[];
+  conversation: Conversation & {
+    messages: Message[];
+  };
+};
+
 export type UserFromRequest = {
   id?: string;
   firstName: string;

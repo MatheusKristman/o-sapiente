@@ -36,7 +36,7 @@ const CurrentLessonMessageBox = ({
     <div
       className={cn(
         "w-full rounded-lg bg-green-primary p-5 mb-4",
-        last && "mb-0"
+        last && "mb-0",
       )}
     >
       <div className="flex flex-col lg:flex-row lg:items-center lg:gap-6 xl:w-full">

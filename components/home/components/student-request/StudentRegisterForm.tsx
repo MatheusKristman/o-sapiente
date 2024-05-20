@@ -157,7 +157,7 @@ const StudentRegisterForm = () => {
                         disabled={isSubmitting}
                         className={cn(
                           "input",
-                          form.formState.errors.firstName && "input-error"
+                          form.formState.errors.firstName && "input-error",
                         )}
                         {...field}
                       />
@@ -184,7 +184,7 @@ const StudentRegisterForm = () => {
                         disabled={isSubmitting}
                         className={cn(
                           "input",
-                          form.formState.errors.lastName && "input-error"
+                          form.formState.errors.lastName && "input-error",
                         )}
                         {...field}
                       />
@@ -211,7 +211,7 @@ const StudentRegisterForm = () => {
                         disabled={isSubmitting}
                         className={cn(
                           "input",
-                          form.formState.errors.email && "input-error"
+                          form.formState.errors.email && "input-error",
                         )}
                         {...field}
                       />
@@ -240,7 +240,7 @@ const StudentRegisterForm = () => {
                         disabled={isSubmitting}
                         className={cn(
                           "input",
-                          form.formState.errors.tel && "input-error"
+                          form.formState.errors.tel && "input-error",
                         )}
                         name={field.name}
                         ref={field.ref}
@@ -270,7 +270,7 @@ const StudentRegisterForm = () => {
                         disabled={isSubmitting}
                         className={cn(
                           "input",
-                          form.formState.errors.password && "input-error"
+                          form.formState.errors.password && "input-error",
                         )}
                         {...field}
                       />
@@ -297,7 +297,8 @@ const StudentRegisterForm = () => {
                         disabled={isSubmitting}
                         className={cn(
                           "input",
-                          form.formState.errors.passwordConfirm && "input-error"
+                          form.formState.errors.passwordConfirm &&
+                            "input-error",
                         )}
                         {...field}
                       />
@@ -307,6 +308,12 @@ const StudentRegisterForm = () => {
                   </FormItem>
                 )}
               />
+            </div>
+
+            <div className="w-full col-span-2 flex items-center justify-start">
+              <span className="text-sm text-left text-gray-primary/60">
+                * Senha precisa ter 6 caracteres
+              </span>
             </div>
           </motion.div>
 

@@ -1,9 +1,11 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Request, Status } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
 import ResumeRequestBox from "@/components/dashboard/resume/ResumeRequestBox";
@@ -18,16 +20,8 @@ import { ResumeCurrentLessonModal } from "@/components/dashboard/resume/ResumeCu
 import useResumeStore from "@/stores/useResumeStore";
 import useRetrievePaymentModalStore from "@/stores/useRetrievePaymentModalStore";
 import useUserStore from "@/stores/useUserStore";
-import { RequestWithUsersAndOffers } from "@/types";
-
-// TODO: se o usuário errado entrar, redirecionar para a home
-// TODO: ajustar loadings das requests para um skeleton
 
 const ResumePage = () => {
-  const [lesson, setLessons] = useState<RequestWithUsersAndOffers[] | null>(
-    null
-  );
-
   const {
     setProfilePhoto,
     setName,
@@ -37,18 +31,23 @@ const ResumePage = () => {
     setOffers,
     setCurrentLesson,
     setRequests,
-    requests,
     setFinishedLessons,
   } = useResumeStore();
   const { setPixCode } = useRetrievePaymentModalStore();
   const { userId } = useUserStore();
 
   const session = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const userResponse = await axios.get("/api/user/get-user");
+
+        if (userResponse.data.isConfirmed === false) {
+          toast.error("Confirme sua conta para poder acessa-la");
+          router.push("/");
+        }
 
         if (userResponse.data.profilePhoto) {
           setProfilePhoto(userResponse.data.profilePhoto);
@@ -70,21 +69,23 @@ const ResumePage = () => {
           setRequests(
             requestResponse.data.filter(
               (request: Request) =>
-                !request.isConcluded && !request.isOfferAccepted
-            )
+                !request.isConcluded && !request.isOfferAccepted,
+            ),
           );
           setCurrentLesson(
             requestResponse.data.filter(
               (request: Request) =>
                 request.isOfferAccepted &&
                 !request.isConcluded &&
-                request.userIds.includes(userId)
-            )
+                request.userIds.includes(userId),
+            ),
           );
           setFinishedLessons(
             requestResponse.data.filter(
-              (request: Request) => request.status === Status.finished
-            ).length
+              (request: Request) =>
+                request.status === Status.finished &&
+                request.userIds.includes(userId),
+            ).length,
           );
         }
       } catch (error) {

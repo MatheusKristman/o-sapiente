@@ -49,15 +49,28 @@ const MessagesImageModal = ({ conversationId }: Props) => {
   const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
     "imageMessage",
     {
-      onClientUploadComplete: (res) => {
+      onClientUploadComplete: () => {
         toast.success("Imagem enviada com sucesso");
         handleDeleteButton();
         closeImageModal();
       },
-      onUploadError: () => {
-        toast.error("Ocorreu um erro no envio da imagem");
+      onUploadError: (error) => {
+        console.error(error);
+        console.error(error.data);
+
+        if (error.data?.message === "Unable to get presigned urls") {
+          toast.error(
+            "Tipo ou tamanho da imagem inválido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)",
+          );
+
+          return;
+        }
+
+        toast.error(
+          "Ocorreu um erro ao enviar a imagem, verifique e tente novamente",
+        );
       },
-    }
+    },
   );
 
   const fileTypes = permittedFileInfo?.config

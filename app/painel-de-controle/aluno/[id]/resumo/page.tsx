@@ -4,6 +4,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Request } from "@prisma/client";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
@@ -19,13 +21,13 @@ import { ResumeCurrentLessonModal } from "@/components/dashboard/resume/ResumeCu
 import useResumeStore from "@/stores/useResumeStore";
 
 // TODO: se o usuário errado entrar, redirecionar para a home
-// TODO: checar loadings de modals para aluno
 
 const DashboardPage = () => {
   const { setProfilePhoto, setName, setCurrentLesson, setRequests, requests } =
     useResumeStore();
 
   const session = useSession();
+  const router = useRouter();
 
   const { openModal } = useNewRequestStore();
 
@@ -33,6 +35,11 @@ const DashboardPage = () => {
     const fetchData = async () => {
       try {
         const userResponse = await axios.get("/api/user/get-user");
+
+        if (userResponse.data.isConfirmed === false) {
+          toast.error("Confirme sua conta para poder acessa-la");
+          router.push("/");
+        }
 
         if (userResponse.data.profilePhoto) {
           setProfilePhoto(userResponse.data.profilePhoto);
@@ -45,14 +52,14 @@ const DashboardPage = () => {
         setRequests(
           requestResponse.data.filter(
             (request: Request) =>
-              !request.isConcluded && !request.isOfferAccepted
-          )
+              !request.isConcluded && !request.isOfferAccepted,
+          ),
         );
         setCurrentLesson(
           requestResponse.data.filter(
             (request: Request) =>
-              request.isOfferAccepted && !request.isConcluded
-          )
+              request.isOfferAccepted && !request.isConcluded,
+          ),
         );
       } catch (error) {
         console.error(error);

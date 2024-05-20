@@ -5,14 +5,21 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { z } from "zod";
 
-const f = createUploadthing();
+const f = createUploadthing({
+  errorFormatter: (err) => {
+    return {
+      message: err.message,
+      zodError: err.cause instanceof z.ZodError ? err.cause.flatten() : null,
+    };
+  },
+});
 
 export const ourFileRouter = {
-  profilePhotoUploader: f({ image: { maxFileSize: "4MB" } })
+  profilePhotoUploader: f({ image: { maxFileSize: "2MB" } })
     .input(
       z.object({
         id: z.string().min(1, "É preciso passar o ID do usuário"),
-      })
+      }),
     )
     .middleware(async ({ req, input }) => {
       return { userId: input.id };
@@ -34,7 +41,7 @@ export const ourFileRouter = {
     .input(
       z.object({
         conversationId: z.string().min(1, "É preciso passar o ID da conversa"),
-      })
+      }),
     )
     .middleware(async ({ req, input }) => {
       const session = await getServerSession();
@@ -108,7 +115,7 @@ export const ourFileRouter = {
       await pusherServer.trigger(
         metadata.conversationId,
         "messages:new",
-        newMessage
+        newMessage,
       );
 
       const lastMessage =

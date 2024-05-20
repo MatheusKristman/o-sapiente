@@ -60,7 +60,7 @@ const RequestDetailsModalOfferForm = ({
   const [offerLink, setOfferLink] = useState<string>("");
   const [linkCopied, setLinkCopied] = useState<boolean>(false);
   const [whatsappLink, setWhatsappLink] = useState<string>(
-    `https://wa.me/55${studentCel?.replace(/\D/g, "")}`
+    `https://wa.me/55${studentCel?.replace(/\D/g, "")}`,
   );
 
   const form = useForm<z.infer<typeof offerSchema>>({
@@ -146,43 +146,6 @@ const RequestDetailsModalOfferForm = ({
         {requestDetailsOfferFormInfo.title}
       </h3>
 
-      <div className="w-full flex flex-col gap-4 items-center mb-6 sm:flex-row sm:justify-between">
-        <div className="flex items-center gap-4">
-          <div className="relative w-12 h-12 overflow-hidden rounded-full">
-            <Image
-              src={
-                studentImage
-                  ? studentImage
-                  : "/assets/images/default-user-photo.svg"
-              }
-              alt="Aluno"
-              fill
-              className="object-cover object-center"
-            />
-          </div>
-
-          <h5 className="text-lg font-semibold text-gray-primary">
-            {studentName}
-          </h5>
-        </div>
-
-        {studentCel ? (
-          <a
-            href={whatsappLink}
-            rel="noreferrer noopener"
-            target="_blank"
-            className="flex text-green-primary font-medium items-center gap-1"
-          >
-            <span className="block bg-whatsappIcon bg-contain w-9 min-w-[36px] h-9 min-h-[36px]" />
-            <span>{studentCel}</span>
-          </a>
-        ) : (
-          <span className="text-sm text-gray-primary/70 text-center">
-            Aluno não tem telefone cadastrado
-          </span>
-        )}
-      </div>
-
       <Tabs defaultValue="inside" className="w-full">
         <TabsList className="w-full h-auto bg-[#EBEFF1] rounded-lg">
           <TabsTrigger
@@ -225,7 +188,7 @@ const RequestDetailsModalOfferForm = ({
                                 variant="datePicker"
                                 className={cn(
                                   "w-full pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground"
+                                  !field.value && "text-muted-foreground",
                                 )}
                               >
                                 {field.value ? (
@@ -285,7 +248,7 @@ const RequestDetailsModalOfferForm = ({
                               onValueChange={(value, name) =>
                                 form.setValue(
                                   name as "lessonPrice",
-                                  Number(value)
+                                  Number(value),
                                 )
                               }
                               className="input !pl-10"
@@ -344,6 +307,43 @@ const RequestDetailsModalOfferForm = ({
         </TabsContent>
 
         <TabsContent value="outside" className="!mt-6">
+          <div className="w-full flex flex-col gap-4 items-center mb-6 sm:flex-row sm:justify-between">
+            <div className="flex items-center gap-4">
+              <div className="relative w-12 h-12 overflow-hidden rounded-full">
+                <Image
+                  src={
+                    studentImage
+                      ? studentImage
+                      : "/assets/images/default-user-photo.svg"
+                  }
+                  alt="Aluno"
+                  fill
+                  className="object-cover object-center"
+                />
+              </div>
+
+              <h5 className="text-lg font-semibold text-gray-primary">
+                {studentName}
+              </h5>
+            </div>
+
+            {studentCel ? (
+              <a
+                href={whatsappLink}
+                rel="noreferrer noopener"
+                target="_blank"
+                className="flex text-green-primary font-medium items-center gap-1"
+              >
+                <span className="block bg-whatsappIcon bg-contain w-9 min-w-[36px] h-9 min-h-[36px]" />
+                <span>{studentCel}</span>
+              </a>
+            ) : (
+              <span className="text-sm text-gray-primary/70 text-center">
+                Aluno não tem telefone cadastrado
+              </span>
+            )}
+          </div>
+
           <div className="w-full flex flex-col gap-4">
             <div className="w-full flex flex-col sm:grid sm:grid-cols-2 sm:grid-rows-1 justify-between gap-5">
               <div className="w-full flex flex-col gap-2">
@@ -361,7 +361,7 @@ const RequestDetailsModalOfferForm = ({
                       variant="datePicker"
                       className={cn(
                         "w-full pl-3 text-left font-normal",
-                        !lessonDate && "text-muted-foreground"
+                        !lessonDate && "text-muted-foreground",
                       )}
                     >
                       {lessonDate ? (

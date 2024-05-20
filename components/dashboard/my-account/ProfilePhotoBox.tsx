@@ -29,7 +29,7 @@ const ProfilePhotoBox = () => {
       setProfilePhoto(acceptedFiles);
       setProfilePhotoUrl(URL.createObjectURL(acceptedFiles[0]));
     },
-    [setProfilePhotoUrl]
+    [setProfilePhotoUrl],
   );
 
   const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
@@ -38,12 +38,23 @@ const ProfilePhotoBox = () => {
       onClientUploadComplete: () => {
         toast.success(MyAccountInfo.changePhotoSuccessMessage);
       },
-      onUploadError: () => {
+      onUploadError: (error) => {
+        console.error(error);
+        console.error(error.data);
+
+        if (error.data?.message === "Unable to get presigned urls") {
+          toast.error(
+            "Tipo ou tamanho da imagem inválido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)",
+          );
+
+          return;
+        }
+
         toast.error(
-          "Ocorreu um erro ao enviar a imagem, tente novamente mais tarde"
+          "Ocorreu um erro ao enviar a imagem, tente novamente mais tarde",
         );
       },
-    }
+    },
   );
 
   const fileTypes = permittedFileInfo?.config
@@ -123,7 +134,7 @@ const ProfilePhotoBox = () => {
             "hidden lg:flex w-full h-full bg-gray-primary/70 absolute top-0 left-0 right-0 bottom-0 opacity-0 group-hover:opacity-100 z-10 items-center justify-center p-6 transition-all duration-500",
             {
               "group-hover:opacity-0": !!profilePhoto,
-            }
+            },
           )}
         >
           <span className="text-lg text-white font-medium text-center">

@@ -11,7 +11,8 @@ export function FinishedLessonsBox() {
   const { userId } = useUserStore();
   const { finishedLessons } = useResumeStore();
 
-  if (!finishedLessons) {
+  if (finishedLessons === null) {
+    console.log(finishedLessons);
     return <FinishedLessonsBoxSkeleton />;
   }
 

@@ -31,10 +31,8 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
     setMessage,
     setStudentCel,
   } = useRequestDetailsModalStore();
-  const {
-    openModal: openOfferModal,
-    setRequestSelectedOffers: setRequestSelected,
-  } = useOffersModalStore();
+  const { openModal: openOfferModal, setRequestSelected: setRequestSelected } =
+    useOffersModalStore();
   const { userId } = useUserStore();
 
   const filteredStudent = request.users.filter((user) => user.id !== userId)[0];
@@ -47,7 +45,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
       setStudentId(filteredStudent.id!);
       setStudentImage(filteredStudent.profilePhoto);
       setStudentName(
-        `${filteredStudent.firstName} ${filteredStudent.lastName}`
+        `${filteredStudent.firstName} ${filteredStudent.lastName}`,
       );
       setStudentCel(filteredStudent.tel!);
       setSubject(request.subject);
@@ -56,7 +54,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
 
     if (type === "Student") {
       openOfferModal();
-      setRequestSelected(request.offers);
+      setRequestSelected(request);
     }
   }
 
@@ -68,7 +66,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
             src={
               filteredStudent?.profilePhoto
                 ? filteredStudent.profilePhoto
-                : "N/A"
+                : "/assets/images/default-user-photo.svg"
             }
             alt="Perfil"
             width={50}
@@ -114,10 +112,10 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
                   ? professorResumeInfos.offerSended
                   : professorResumeInfos.seeOfferBtn
                 : type === "Student"
-                ? request.isOfferAccepted
-                  ? studentResumeInfos.offerAccepted
-                  : studentResumeInfos.seeOfferBtn
-                : ""}
+                  ? request.isOfferAccepted
+                    ? studentResumeInfos.offerAccepted
+                    : studentResumeInfos.seeOfferBtn
+                  : ""}
             </Button>
           </div>
         </div>

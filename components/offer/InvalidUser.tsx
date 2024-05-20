@@ -1,10 +1,17 @@
+"use client";
+
 import Image from "next/image";
 
 import { info } from "@/constants/offer/invalidUser-br";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import useUserStore from "@/stores/useUserStore";
 
 export function InvalidUser() {
+  const { userId, accountType } = useUserStore();
+
+  const dashboardLink = `/painel-de-controle/${accountType === "PROFESSOR" ? "professor" : "aluno"}/${userId}/resumo`;
+
   return (
     <div className="w-full min-h-[calc(100vh-184px)] flex items-center justify-center">
       <div className="w-full flex flex-col items-center gap-6">
@@ -30,7 +37,7 @@ export function InvalidUser() {
 
         <Button variant="outline" asChild className="w-full sm:w-fit">
           {/* TODO: adicionar rota para retornar ao dashboard */}
-          <Link href={``}>{info.backBtn}</Link>
+          <Link href={dashboardLink}>{info.backBtn}</Link>
         </Button>
       </div>
     </div>

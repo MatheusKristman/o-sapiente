@@ -17,7 +17,6 @@ interface RequestDetailModalProps {
   type?: string;
 }
 
-// TODO: ajustar api routes para atualizar a request sem precisar recarregar a pagina
 const RequestDetailModal = ({ type }: RequestDetailModalProps) => {
   const [isResume, setIsResume] = useState(true);
   const [isOfferForm, setIsOfferForm] = useState(false);
@@ -80,7 +79,8 @@ const RequestDetailModal = ({ type }: RequestDetailModalProps) => {
                     key="request-details-resume"
                     AcceptRequest={AcceptRequest}
                     type={type}
-                    handleCloseButton={handleCloseButton}
+                    setIsResume={setIsResume}
+                    setIsOfferForm={setIsOfferForm}
                   />
                 )}
                 {isOfferForm && (

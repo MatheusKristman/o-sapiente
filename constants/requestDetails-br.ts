@@ -3,6 +3,9 @@ export const requestDetailsInfo = {
   subject: "Matéria/Tema:",
   message: "Mensagem:",
   btn: "ENVIAR PROPOSTA",
+  noPlanDesc:
+    "Gostou da solicitação e quer enviar uma proposta? Tenha acesso a este aluno ativando o plano de ",
+  noPlanLink: "30 dias",
 };
 
 export const requestDetailsOfferFormInfo = {

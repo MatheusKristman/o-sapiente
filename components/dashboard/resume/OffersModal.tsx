@@ -1,4 +1,5 @@
 import { BsXLg } from "react-icons/bs";
+import Image from "next/image";
 
 import useOffersModalStore from "@/stores/useOffersModalStore";
 import { offersModalInfo } from "@/constants/offersModal-br";
@@ -14,10 +15,14 @@ import usePaymentStore from "@/stores/usePaymentStore";
 import { PaymentMethodModal } from "@/components/offer/PaymentMethodModal";
 
 const OffersModal = () => {
-  const { isModalOpen, closeModal, requestSelectedOffers } =
-    useOffersModalStore();
+  const { isModalOpen, closeModal, requestSelected } = useOffersModalStore();
   const { userId } = useUserStore();
   const { offer } = usePaymentStore();
+
+  const studentImage = requestSelected?.users[0].profilePhoto;
+  const studentName = `${requestSelected?.users[0].firstName} ${requestSelected?.users[0].lastName}`;
+  const subject = requestSelected?.subject;
+  const message = requestSelected?.description;
 
   function handleCloseButton() {
     closeModal();
@@ -55,13 +60,52 @@ const OffersModal = () => {
               </div>
 
               <div className="w-full flex flex-col">
+                <div className="w-full flex items-center gap-x-4 mb-4">
+                  <div className="relative w-12 h-12 overflow-hidden rounded-full">
+                    <Image
+                      src={
+                        studentImage
+                          ? studentImage
+                          : "/assets/images/default-user-photo.svg"
+                      }
+                      alt="Aluno"
+                      fill
+                      className="object-cover object-center"
+                    />
+                  </div>
+
+                  <h5 className="text-lg font-semibold text-gray-primary">
+                    {studentName}
+                  </h5>
+                </div>
+
+                <div className="w-full flex gap-x-2 mb-4">
+                  <span className="text-lg font-semibold text-green-primary">
+                    {offersModalInfo.subject}
+                  </span>
+
+                  <span className="text-base text-gray-primary mt-1">
+                    {subject}
+                  </span>
+                </div>
+
+                <div className="w-full flex gap-x-2 mb-6">
+                  <span className="text-lg font-semibold text-green-primary">
+                    {offersModalInfo.message}
+                  </span>
+
+                  <span className="text-base text-gray-primary text-left mt-1">
+                    {message}
+                  </span>
+                </div>
+
                 <h3 className="text-3xl font-semibold text-gray-primary text-left mb-6">
                   {offersModalInfo.title}
                 </h3>
 
                 <div className="w-full h-[400px] overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20 flex flex-col gap-y-6 overflow-x-hidden">
-                  {requestSelectedOffers.length > 0 ? (
-                    requestSelectedOffers.map((offer) => (
+                  {requestSelected.offers.length > 0 ? (
+                    requestSelected.offers.map((offer) => (
                       <OfferItem
                         offer={offer}
                         key={offer.id}
@@ -70,7 +114,7 @@ const OffersModal = () => {
                     ))
                   ) : (
                     <span className="text-lg text-center text-gray-primary/40">
-                      Nenhuma proposta no momento
+                      {offersModalInfo.noOfferText}
                     </span>
                   )}
                 </div>

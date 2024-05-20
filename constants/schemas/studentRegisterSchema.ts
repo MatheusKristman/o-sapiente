@@ -14,10 +14,16 @@ const studentRegisterSchema = z
       .refine((val) => val.match(/^\(\d{2}\)\s\d{4,5}-\d{4}$/), {
         message: "Telefone inválido",
       }),
-    password: z.string().min(6, { message: "Senha é obrigatória" }),
+    password: z
+      .string()
+      .min(1, { message: "Senha é obrigatória" })
+      .min(6, { message: "Senha precisa ter no mínimo 6 caracteres" }),
     passwordConfirm: z
       .string()
-      .min(6, { message: "Confirmação da senha é obrigatória" }),
+      .min(1, { message: "Confirmação da senha é obrigatória" })
+      .min(6, {
+        message: "Confirmação da senha precisa ter no mínimo 6 caracteres",
+      }),
   })
   .superRefine(({ password, passwordConfirm }, ctx) => {
     if (passwordConfirm !== password) {

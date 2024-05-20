@@ -9,21 +9,34 @@ import { Button } from "@/components/ui/button";
 import { requestDetailsFormAnimation } from "@/constants/framer-animations/request-details-modal";
 import Link from "next/link";
 import useResumeStore from "@/stores/useResumeStore";
+import { Dispatch, SetStateAction } from "react";
 
 interface RequestDetailsModalResumeProps {
   AcceptRequest: () => void;
   type?: string;
-  handleCloseButton: () => void;
+  setIsResume: Dispatch<SetStateAction<boolean>>;
+  setIsOfferForm: Dispatch<SetStateAction<boolean>>;
 }
 
 const RequestDetailsModalResume = ({
   AcceptRequest,
   type,
-  handleCloseButton,
+  setIsResume,
+  setIsOfferForm,
 }: RequestDetailsModalResumeProps) => {
   const { plan } = useResumeStore();
-  const { studentImage, studentName, subject, message } =
+  const { studentImage, studentName, subject, message, closeModal, reset } =
     useRequestDetailsModalStore();
+
+  function handleCloseButton() {
+    closeModal();
+
+    setTimeout(() => {
+      reset();
+      setIsResume(true);
+      setIsOfferForm(false);
+    }, 350);
+  }
 
   return (
     <motion.div
@@ -84,14 +97,13 @@ const RequestDetailsModalResume = ({
 
       {type === "Professor" && !plan && (
         <span className="mt-4 text-base text-gray-primary text-center max-w-md mx-auto">
-          Para acessar todas as funcionalidades, por favor, atualize para o
-          plano de{" "}
+          {requestDetailsInfo.noPlanDesc}
           <Link
             onClick={handleCloseButton}
             href="/pagamento-do-plano"
             className="font-semibold text-green-primary"
           >
-            30 dias
+            {requestDetailsInfo.noPlanLink}
           </Link>
           .
         </span>
