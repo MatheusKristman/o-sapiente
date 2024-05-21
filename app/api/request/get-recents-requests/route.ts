@@ -55,11 +55,15 @@ export async function GET() {
 
     let newRequests: RequestWithUsersAndOffers[] = [];
 
+    console.log(requests.length);
+
     if (requests.length !== 0 && requests.length < lengthNeeded) {
       while (newRequests.length < lengthNeeded) {
         console.log("teste recents requests");
         newRequests = newRequests.concat(requests);
       }
+    } else {
+      newRequests = requests;
     }
 
     newRequests = newRequests.slice(0, lengthNeeded);

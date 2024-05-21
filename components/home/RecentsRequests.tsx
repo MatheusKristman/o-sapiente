@@ -16,6 +16,7 @@ const RecentsRequests = () => {
     axios
       .get("/api/request/get-recents-requests")
       .then((res) => {
+        console.log(res.data);
         setRecentsRequests(res.data);
       })
       .catch((error) => {
