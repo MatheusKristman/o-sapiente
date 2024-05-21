@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
 import MoonLoader from "react-spinners/MoonLoader";
-import { Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import axios from "axios";
 
 import { Button } from "@/components/ui/button";
@@ -259,8 +259,10 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
                 <Button
                   onClick={() => startUpload(profilePhoto!, { id })}
                   disabled={isSkipAvailable || isSubmitting || isUploading}
-                  className="w-full"
+                  className="w-full flex items-center gap-2"
                 >
+                  {isSubmitting ||
+                    (isUploading && <Loader2 className="animate-spin" />)}
                   {profilePhotoStepsInfo.nextButton}
                 </Button>
               </div>
