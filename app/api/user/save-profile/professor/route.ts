@@ -15,7 +15,7 @@ export async function PATCH(req: NextRequest) {
     const emailPort: number = Number(process.env.EMAIL_PORT!);
     const body = await req.formData();
     const themes: string[] = JSON.parse(
-      body.get("themes") as unknown as string
+      body.get("themes") as unknown as string,
     );
     const aboutMe: string = body.get("aboutMe") as string;
     const id: string = body.get("id") as string;
@@ -27,7 +27,6 @@ export async function PATCH(req: NextRequest) {
       });
     }
 
-    //TODO: não prioridade - verificar se precisa do isCompleted
     updatedProfessor = await prisma.user.update({
       where: {
         id,
@@ -36,7 +35,6 @@ export async function PATCH(req: NextRequest) {
       data: {
         themes,
         aboutMe,
-        isCompleted: true,
       },
     });
 
@@ -388,7 +386,7 @@ export async function PATCH(req: NextRequest) {
           "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
           {
             status: 400,
-          }
+          },
         );
       }
     });

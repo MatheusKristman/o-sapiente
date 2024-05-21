@@ -45,7 +45,6 @@ model User {
   themes                   String[]
   aboutMe                  String      @default("")
   accountType              AccountRole
-  isCompleted              Boolean     @default(false)
   isConfirmed              Boolean     @default(false)
   profilePhoto             String?
   paymentRetrievable       Float       @default(0)
