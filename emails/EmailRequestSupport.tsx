@@ -1,19 +1,9 @@
 import { format } from "date-fns";
+import { Html, Head, Preview, Body, Container, Img, Text, Row, Section, Hr, Tailwind } from "@react-email/components";
 
-import {
-  Html,
-  Head,
-  Preview,
-  Body,
-  Container,
-  Img,
-  Text,
-  Row,
-  Section,
-  Hr,
-  Tailwind,
-} from "@react-email/components";
 import { formatPrice } from "@/libs/utils";
+
+const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
 
 interface Props {
   message: string;
@@ -45,19 +35,11 @@ export default function EmailRequestSupport({
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img
-              src={`/static/email-logo.png`}
-              width="145"
-              height="30"
-              alt="O Sapiente"
-              style={image}
-            />
+            <Img src={`${baseURL}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">Ola Administrador,</Text>
 
-            <Text className="text-base">
-              Foi recebido uma nova solicitação de suporte.
-            </Text>
+            <Text className="text-base">Foi recebido uma nova solicitação de suporte.</Text>
 
             <Text className="text-base">Segue a mensagem que foi enviado:</Text>
 
@@ -109,10 +91,8 @@ export default function EmailRequestSupport({
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
             <Text className="text-[#666666] text-[12px] leading-[24px]">
-              Se você não estava esperando por este mensagem, você pode ignorar
-              este e-mail. Se você estiver preocupado com a segurança de sua
-              conta, por favor responda a este e-mail para entrar em contato
-              conosco.
+              Se você não estava esperando por este mensagem, você pode ignorar este e-mail. Se você estiver preocupado
+              com a segurança de sua conta, por favor responda a este e-mail para entrar em contato conosco.
             </Text>
           </Container>
         </Body>

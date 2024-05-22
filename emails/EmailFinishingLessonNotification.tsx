@@ -1,25 +1,13 @@
-import {
-  Html,
-  Button,
-  Head,
-  Preview,
-  Body,
-  Container,
-  Img,
-  Text,
-  Hr,
-  Tailwind,
-} from "@react-email/components";
+import { Html, Button, Head, Preview, Body, Container, Img, Text, Hr, Tailwind } from "@react-email/components";
+
+const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
 
 interface Props {
   name: string;
   otherUserName: string;
 }
 
-export default function EmailFinishingLessonNotification({
-  name,
-  otherUserName,
-}: Props) {
+export default function EmailFinishingLessonNotification({ name, otherUserName }: Props) {
   return (
     <Html>
       <Head />
@@ -29,28 +17,20 @@ export default function EmailFinishingLessonNotification({
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img
-              src={`/static/email-logo.png`}
-              width="145"
-              height="30"
-              alt="O Sapiente"
-              style={image}
-            />
+            <Img src={`${baseURL}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">Ola {name},</Text>
 
             <Text className="text-base">Espero que esteja bem!</Text>
 
             <Text className="text-base">
-              Gostaríamos de informar que o(a) <strong>{otherUserName}</strong>{" "}
-              indicou que deseja <strong>finalizar </strong>a aula que vocês têm
-              juntos em nossa plataforma, <strong>O Sapiente</strong>.
+              Gostaríamos de informar que o(a) <strong>{otherUserName}</strong> indicou que deseja{" "}
+              <strong>finalizar </strong>a aula que vocês têm juntos em nossa plataforma, <strong>O Sapiente</strong>.
             </Text>
 
             <Text className="text-base">
-              Se você também concorda em finalizá-la, por favor, clique no botão
-              abaixo para confirmar. Se preferir continuar a aula, entre me
-              contato com o suporte.
+              Se você também concorda em finalizá-la, por favor, clique no botão abaixo para confirmar. Se preferir
+              continuar a aula, entre me contato com o suporte.
             </Text>
 
             <Button href="http://localhost:3000" style={buttonStyle}>
@@ -60,10 +40,8 @@ export default function EmailFinishingLessonNotification({
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
             <Text className="text-[#666666] text-[12px] leading-[24px]">
-              Se você não estava esperando por este mensagem, você pode ignorar
-              este e-mail. Se você estiver preocupado com a segurança de sua
-              conta, por favor responda a este e-mail para entrar em contato
-              conosco.
+              Se você não estava esperando por este mensagem, você pode ignorar este e-mail. Se você estiver preocupado
+              com a segurança de sua conta, por favor responda a este e-mail para entrar em contato conosco.
             </Text>
           </Container>
         </Body>

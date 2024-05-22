@@ -1,4 +1,3 @@
-import { formatPrice } from "@/libs/utils";
 import {
   Html,
   Head,
@@ -10,6 +9,10 @@ import {
   Hr,
   Tailwind,
 } from "@react-email/components";
+
+import { formatPrice } from "@/libs/utils";
+
+const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
 
 interface Props {
   pixCode: string;
@@ -36,7 +39,7 @@ export default function EmailRetrievablePaymentRequest({
         <Body style={main}>
           <Container style={container}>
             <Img
-              src={`/static/email-logo.png`}
+              src={`${baseURL}/static/email-logo.png`}
               width="145"
               height="30"
               alt="O Sapiente"

@@ -1,18 +1,7 @@
-import {
-  Html,
-  Button,
-  Head,
-  Preview,
-  Body,
-  Container,
-  Img,
-  Text,
-  Row,
-  Section,
-  Hr,
-  Tailwind,
-} from "@react-email/components";
+import { Html, Head, Preview, Body, Container, Img, Text, Row, Section, Hr, Tailwind } from "@react-email/components";
 import { format } from "date-fns";
+
+const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
 
 interface EmailProps {
   userName: string;
@@ -20,11 +9,7 @@ interface EmailProps {
   planValidationDate: Date;
 }
 
-export default function EmailProfessorPlanPayed({
-  userName,
-  planActivationDate,
-  planValidationDate,
-}: EmailProps) {
+export default function EmailProfessorPlanPayed({ userName, planActivationDate, planValidationDate }: EmailProps) {
   return (
     <Html>
       <Head />
@@ -34,21 +19,15 @@ export default function EmailProfessorPlanPayed({
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img
-              src={`/static/email-logo.png`}
-              width="145"
-              height="30"
-              alt="O Sapiente"
-              style={image}
-            />
+            <Img src={`${baseURL}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">Ola {userName},</Text>
 
             <Text className="text-base">
-              Temos o prazer de informar que o pagamento do seu plano em{" "}
-              <strong>O Sapiente</strong> foi aprovado e sua conta agora está
-              <strong>ativa</strong>. Você pode começar a enviar propostas para
-              os alunos e compartilhar seu conhecimento.
+              Temos o prazer de informar que o pagamento do seu plano em <strong>O Sapiente</strong> foi aprovado e sua
+              conta agora está
+              <strong>ativa</strong>. Você pode começar a enviar propostas para os alunos e compartilhar seu
+              conhecimento.
             </Text>
 
             <Text className="text-base">Detalhes do Plano:</Text>
@@ -65,28 +44,23 @@ export default function EmailProfessorPlanPayed({
             </Section>
 
             <Text className="text-base">
-              Estamos entusiasmados em tê-lo como parte da nossa comunidade de
-              educadores e esperamos que você aproveite ao máximo todas as
-              funcionalidades que o seu plano oferece.
+              Estamos entusiasmados em tê-lo como parte da nossa comunidade de educadores e esperamos que você aproveite
+              ao máximo todas as funcionalidades que o seu plano oferece.
             </Text>
 
             <Text className="text-base">
-              Se tiver alguma dúvida ou precisar de assistência, não hesite em
-              entrar em contato conosco.
+              Se tiver alguma dúvida ou precisar de assistência, não hesite em entrar em contato conosco.
             </Text>
 
             <Text className="text-base">
-              Obrigado por escolher O Sapiente e por contribuir para o sucesso
-              dos nossos alunos!
+              Obrigado por escolher O Sapiente e por contribuir para o sucesso dos nossos alunos!
             </Text>
 
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
             <Text className="text-[#666666] text-[12px] leading-[24px]">
-              Se você não estava esperando por esta mensagem, você pode ignorar
-              este e-mail. Se você estiver preocupado com a segurança de sua
-              conta, por favor responda a este e-mail para entrar em contato
-              conosco.
+              Se você não estava esperando por esta mensagem, você pode ignorar este e-mail. Se você estiver preocupado
+              com a segurança de sua conta, por favor responda a este e-mail para entrar em contato conosco.
             </Text>
           </Container>
         </Body>

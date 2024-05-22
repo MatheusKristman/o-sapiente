@@ -1,17 +1,6 @@
-import {
-  Html,
-  Button,
-  Head,
-  Preview,
-  Body,
-  Container,
-  Img,
-  Text,
-  Row,
-  Section,
-  Hr,
-  Tailwind,
-} from "@react-email/components";
+import { Html, Head, Preview, Body, Container, Img, Text, Row, Section, Hr, Tailwind } from "@react-email/components";
+
+const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
 
 interface Props {
   userName: string;
@@ -20,12 +9,7 @@ interface Props {
   message: string;
 }
 
-export default function EmailOfferDeclined({
-  userName,
-  studentName,
-  subject,
-  message,
-}: Props) {
+export default function EmailOfferDeclined({ userName, studentName, subject, message }: Props) {
   return (
     <Html>
       <Head />
@@ -35,24 +19,17 @@ export default function EmailOfferDeclined({
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img
-              src={`/static/email-logo.png`}
-              width="145"
-              height="30"
-              alt="O Sapiente"
-              style={image}
-            />
+            <Img src={`${baseURL}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">Ola {userName},</Text>
 
             <Text className="text-base">Espero que esteja bem!</Text>
 
             <Text className="text-base">
-              Gostaríamos de informar que a sua proposta para a solicitação de
-              aula de <strong>{studentName}</strong> foi recusada. Apesar dessa
-              recusa, você ainda tem a oportunidade de enviar uma{" "}
-              <strong>nova proposta</strong> para outras solicitações de aula
-              que estejam de acordo com seu perfil e especialização.
+              Gostaríamos de informar que a sua proposta para a solicitação de aula de <strong>{studentName}</strong>{" "}
+              foi recusada. Apesar dessa recusa, você ainda tem a oportunidade de enviar uma{" "}
+              <strong>nova proposta</strong> para outras solicitações de aula que estejam de acordo com seu perfil e
+              especialização.
             </Text>
 
             <Section style={{ marginBottom: "35px" }}>
@@ -75,10 +52,8 @@ export default function EmailOfferDeclined({
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
             <Text className="text-[#666666] text-[12px] leading-[24px]">
-              Se você não estava esperando por este mensagem, você pode ignorar
-              este e-mail. Se você estiver preocupado com a segurança de sua
-              conta, por favor responda a este e-mail para entrar em contato
-              conosco.
+              Se você não estava esperando por este mensagem, você pode ignorar este e-mail. Se você estiver preocupado
+              com a segurança de sua conta, por favor responda a este e-mail para entrar em contato conosco.
             </Text>
           </Container>
         </Body>

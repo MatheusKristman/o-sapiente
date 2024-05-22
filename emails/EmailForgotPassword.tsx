@@ -1,17 +1,8 @@
-import {
-  Html,
-  Button,
-  Head,
-  Preview,
-  Body,
-  Container,
-  Img,
-  Text,
-  Hr,
-  Tailwind,
-} from "@react-email/components";
+import { Html, Button, Head, Preview, Body, Container, Img, Text, Hr, Tailwind } from "@react-email/components";
 import { formatDistance } from "date-fns";
 import { ptBR } from "date-fns/locale";
+
+const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
 
 interface Props {
   url: string;
@@ -29,21 +20,13 @@ export default function EmailForgotPassword({ url, userName, hoursLeft }: Props)
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img
-              src={`/static/email-logo.png`}
-              width="145"
-              height="30"
-              alt="O Sapiente"
-              style={image}
-            />
+            <Img src={`${baseURL}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">Ola {userName},</Text>
 
             <Text className="text-base">
-              Você está recebendo este e-mail porque solicitou a
-              <strong>recuperação da sua senha</strong> em{" "}
-              <strong>O Sapiente</strong>. Por favor, siga as instruções abaixo
-              para redefinir sua senha:
+              Você está recebendo este e-mail porque solicitou a<strong>recuperação da sua senha</strong> em{" "}
+              <strong>O Sapiente</strong>. Por favor, siga as instruções abaixo para redefinir sua senha:
             </Text>
 
             <Text className="text-base">
@@ -59,8 +42,7 @@ export default function EmailForgotPassword({ url, userName, hoursLeft }: Props)
             <Text className="text-base">
               <strong>Passo 2:</strong>
               <br />
-              Após clicar no link, você será redirecionado para uma página onde
-              poderá inserir uma nova senha.
+              Após clicar no link, você será redirecionado para uma página onde poderá inserir uma nova senha.
             </Text>
 
             {/* TODO: adicionar numero de horas e adicionar a função no envio da mensagem */}
@@ -74,19 +56,17 @@ export default function EmailForgotPassword({ url, userName, hoursLeft }: Props)
                   locale: ptBR,
                 })}
               </strong>
-              . Se você não redefinir sua senha dentro desse período, será
-              necessário solicitar novamente a recuperação de senha.
+              . Se você não redefinir sua senha dentro desse período, será necessário solicitar novamente a recuperação
+              de senha.
             </Text>
 
             <Text className="text-base">
-              Se você não solicitou esta recuperação ou acredita que isso possa
-              ser uma atividade suspeita, por favor, entre em contato conosco
-              imediatamente para que possamos ajudar a proteger sua conta.
+              Se você não solicitou esta recuperação ou acredita que isso possa ser uma atividade suspeita, por favor,
+              entre em contato conosco imediatamente para que possamos ajudar a proteger sua conta.
             </Text>
 
             <Text className="text-base">
-              Se precisar de assistência adicional ou tiver alguma dúvida, não
-              hesite em nos contatar.
+              Se precisar de assistência adicional ou tiver alguma dúvida, não hesite em nos contatar.
             </Text>
 
             <Text className="text-base">
@@ -97,10 +77,8 @@ export default function EmailForgotPassword({ url, userName, hoursLeft }: Props)
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
             <Text className="text-[#666666] text-[12px] leading-[24px]">
-              Se você não estava esperando por este mensagem, você pode ignorar
-              este e-mail. Se você estiver preocupado com a segurança de sua
-              conta, por favor responda a este e-mail para entrar em contato
-              conosco.
+              Se você não estava esperando por este mensagem, você pode ignorar este e-mail. Se você estiver preocupado
+              com a segurança de sua conta, por favor responda a este e-mail para entrar em contato conosco.
             </Text>
           </Container>
         </Body>

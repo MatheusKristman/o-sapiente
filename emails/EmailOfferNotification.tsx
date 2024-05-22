@@ -13,6 +13,8 @@ import {
   Tailwind,
 } from "@react-email/components";
 
+const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
+
 interface Props {
   userName: string;
   message: string;
@@ -21,13 +23,7 @@ interface Props {
   linkUrl: string;
 }
 
-export default function EmailOfferNotification({
-  userName,
-  message,
-  professorName,
-  subject,
-  linkUrl,
-}: Props) {
+export default function EmailOfferNotification({ userName, message, professorName, subject, linkUrl }: Props) {
   return (
     <Html>
       <Head />
@@ -37,13 +33,7 @@ export default function EmailOfferNotification({
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img
-              src={`/static/email-logo.png`}
-              width="145"
-              height="30"
-              alt="O Sapiente"
-              style={image}
-            />
+            <Img src={`${baseURL}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">Ola {userName},</Text>
 
@@ -51,9 +41,8 @@ export default function EmailOfferNotification({
 
             <Text className="text-base">
               Queremos informar que você recebeu uma <strong>proposta </strong>
-              para a solicitação de aula que você criou em nossa plataforma,{" "}
-              <strong>O Sapiente</strong>. Estamos felizes em ver o interesse
-              dos professores em contribuir para o seu aprendizado.
+              para a solicitação de aula que você criou em nossa plataforma, <strong>O Sapiente</strong>. Estamos
+              felizes em ver o interesse dos professores em contribuir para o seu aprendizado.
             </Text>
 
             <Section style={{ marginBottom: "35px" }}>
@@ -80,10 +69,8 @@ export default function EmailOfferNotification({
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
             <Text className="text-[#666666] text-[12px] leading-[24px]">
-              Se você não estava esperando por este mensagem, você pode ignorar
-              este e-mail. Se você estiver preocupado com a segurança de sua
-              conta, por favor responda a este e-mail para entrar em contato
-              conosco.
+              Se você não estava esperando por este mensagem, você pode ignorar este e-mail. Se você estiver preocupado
+              com a segurança de sua conta, por favor responda a este e-mail para entrar em contato conosco.
             </Text>
           </Container>
         </Body>

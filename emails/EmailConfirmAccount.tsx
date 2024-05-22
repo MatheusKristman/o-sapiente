@@ -1,5 +1,7 @@
 import { Html, Button, Head, Preview, Body, Container, Img, Text, Hr, Tailwind } from "@react-email/components";
 
+const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
+
 interface Props {
   userName: string;
   url: string;
@@ -15,7 +17,7 @@ export default function EmailConfirmAccount({ userName = "Nome do Usuário", url
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img src={`/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
+            <Img src={`${baseURL}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">
               Ola <strong>{userName}</strong>,

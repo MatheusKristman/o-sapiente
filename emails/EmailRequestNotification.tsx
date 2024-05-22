@@ -13,6 +13,8 @@ import {
   Tailwind,
 } from "@react-email/components";
 
+const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
+
 interface Props {
   userName: string;
   message: string;
@@ -21,13 +23,7 @@ interface Props {
   linkUrl: string;
 }
 
-export default function EmailRequestNotification({
-  userName,
-  message,
-  studentName,
-  subject,
-  linkUrl,
-}: Props) {
+export default function EmailRequestNotification({ userName, message, studentName, subject, linkUrl }: Props) {
   return (
     <Html>
       <Head />
@@ -36,21 +32,13 @@ export default function EmailRequestNotification({
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img
-              src={`/static/email-logo.png`}
-              width="145"
-              height="30"
-              alt="O Sapiente"
-              style={image}
-            />
+            <Img src={`${baseURL}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">Ola {userName},</Text>
 
             <Text className="text-base">
-              Gostaríamos de informar que um novo <strong>pedido</strong> de
-              aula foi criado por um aluno em nossa plataforma,{" "}
-              <strong>O Sapiente</strong>, e estamos encaminhando-o diretamente
-              para você.
+              Gostaríamos de informar que um novo <strong>pedido</strong> de aula foi criado por um aluno em nossa
+              plataforma, <strong>O Sapiente</strong>, e estamos encaminhando-o diretamente para você.
             </Text>
 
             <Section style={{ marginBottom: "35px" }}>
@@ -75,10 +63,8 @@ export default function EmailRequestNotification({
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
             <Text className="text-[#666666] text-[12px] leading-[24px]">
-              Se você não estava esperando por esta mensagem, você pode ignorar
-              este e-mail. Se você estiver preocupado com a segurança de sua
-              conta, por favor responda a este e-mail para entrar em contato
-              conosco.
+              Se você não estava esperando por esta mensagem, você pode ignorar este e-mail. Se você estiver preocupado
+              com a segurança de sua conta, por favor responda a este e-mail para entrar em contato conosco.
             </Text>
           </Container>
         </Body>
