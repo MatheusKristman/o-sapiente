@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import useUserStore from "@/stores/useUserStore";
 
 interface Props {
-  userType: string | null;
+  userType: string | null | undefined;
 }
 
 export function ProcessingPayment({ userType }: Props) {
@@ -30,15 +30,10 @@ export function ProcessingPayment({ userType }: Props) {
 
         <div className="w-full flex flex-col gap-4 items-center justify-center lg:max-w-3xl">
           <h1 className="text-2xl font-semibold text-gray-primary text-center sm:text-3xl">
-            <strong className="font-semibold text-green-primary">
-              {info.titleGreen}
-            </strong>{" "}
-            {info.titleGray}
+            <strong className="font-semibold text-green-primary">{info.titleGreen}</strong> {info.titleGray}
           </h1>
 
-          <p className="text-base text-gray-primary text-center sm:text-lg">
-            {info.desc}
-          </p>
+          <p className="text-base text-gray-primary text-center sm:text-lg">{info.desc}</p>
         </div>
 
         <Button asChild>

@@ -9,11 +9,13 @@ import { Button } from "@/components/ui/button";
 import useUserStore from "@/stores/useUserStore";
 
 interface Props {
-  userType: string | null;
+  userType: string | null | undefined;
 }
 
 export function PaymentDenied({ userType }: Props) {
   const { userId } = useUserStore();
+
+  console.log("teste negado");
 
   return (
     <div className="w-full px-6 h-full mt-12 mb-24 sm:px-16 lg:container lg:mx-auto">
@@ -29,22 +31,15 @@ export function PaymentDenied({ userType }: Props) {
 
           <h1 className="text-2xl font-semibold text-gray-primary text-center max-w-md sm:text-3xl sm:max-w-lg">
             {info.titleGray + " "}
-            <strong className="font-semibold text-green-primary">
-              {info.titleGreen}
-            </strong>
+            <strong className="font-semibold text-green-primary">{info.titleGreen}</strong>
           </h1>
 
-          <p className="text-base text-gray-primary text-center sm:text-lg">
-            {info.desc}
-          </p>
+          <p className="text-base text-gray-primary text-center sm:text-lg">{info.desc}</p>
         </div>
 
         <div className="w-full flex flex-col gap-4 sm:flex-row max-w-xl">
           <Button asChild>
-            <Link
-              href="/pagamento-do-plano"
-              className="text-center w-full sm:w-1/2"
-            >
+            <Link href="/pagamento-do-plano" className="text-center w-full sm:w-1/2">
               {info.againBtn}
             </Link>
           </Button>

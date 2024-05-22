@@ -51,17 +51,13 @@ function AfterPaymentPage() {
   return (
     <div className="w-full flex items-center justify-center sm:min-h-[700px]">
       {transactionType === "credit_card" &&
-        (status === "authorized_pending_capture" ||
-          status === "waiting_capture" ||
-          status === "partial_capture") && (
+        (status === "authorized_pending_capture" || status === "waiting_capture" || status === "partial_capture") && (
           <ProcessingPayment userType={userType} />
         )}
 
-      {transactionType === "credit_card" && status === "captured" && (
-        <PaymentConfirmed userType={userType} />
-      )}
+      {transactionType === "credit_card" && status === "captured" && <PaymentConfirmed userType={userType} />}
 
-      {transactionType === "credit_card" &&
+      {(transactionType === "credit_card" || transactionType === "pix" || transactionType === "boleto") &&
         (status === "not_authorized" ||
           status === "voided" ||
           status === "error_on_voiding" ||
@@ -69,16 +65,11 @@ function AfterPaymentPage() {
           status === "with_error" ||
           status === "failed") && <PaymentDenied userType={userType} />}
 
-      {transactionType === "boleto" && (
+      {transactionType === "boleto" && status === "captured" && (
         <PaymentBoleto pdf={pdf} boletoCode={boletoCode} userType={userType} />
       )}
-      {transactionType === "pix" && (
-        <PaymentPix
-          qrCodeUrl={qrCodeUrl}
-          pixCode={qrCode}
-          expiresAt={expiresAt}
-          userType={userType}
-        />
+      {transactionType === "pix" && status === "captured" && (
+        <PaymentPix qrCodeUrl={qrCodeUrl} pixCode={qrCode} expiresAt={expiresAt} userType={userType} />
       )}
     </div>
   );

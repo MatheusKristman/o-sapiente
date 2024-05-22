@@ -11,14 +11,14 @@ import { PaymentPix } from "@/components/after-payment/PaymentPix";
 import { LoadingComponent } from "@/components/LoadingComponent";
 
 function LessonAfterPaymentPage() {
-  const [transactionType, setTransactionType] = useState<string | null>(null);
-  const [status, setStatus] = useState<string | null>(null);
-  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-  const [qrCode, setQrCode] = useState<string | null>(null);
-  const [expiresAt, setExpiresAt] = useState<Date | null>(null);
-  const [pdf, setPdf] = useState<string | null>(null);
-  const [boletoCode, setBoletoCode] = useState<string | null>(null);
-  const [userType, setUserType] = useState<string | null>(null);
+  const [transactionType, setTransactionType] = useState<string | null | undefined>(null);
+  const [status, setStatus] = useState<string | null | undefined>(null);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null | undefined>(null);
+  const [qrCode, setQrCode] = useState<string | null | undefined>(null);
+  const [expiresAt, setExpiresAt] = useState<Date | null | undefined>(null);
+  const [pdf, setPdf] = useState<string | null | undefined>(null);
+  const [boletoCode, setBoletoCode] = useState<string | null | undefined>(null);
+  const [userType, setUserType] = useState<string | null | undefined>(null);
 
   const searchParams = useSearchParams();
 
@@ -51,18 +51,13 @@ function LessonAfterPaymentPage() {
   return (
     <div className="w-full flex items-center justify-center sm:min-h-[700px]">
       {transactionType === "credit_card" &&
-        (status === "authorized_pending_capture" ||
-          status === "waiting_capture" ||
-          status === "partial_capture") && (
+        (status === "authorized_pending_capture" || status === "waiting_capture" || status === "partial_capture") && (
           <ProcessingPayment userType={userType} />
         )}
 
-      {/* TODO: criar um próprio da rota de pagamento da aula */}
-      {transactionType === "credit_card" && status === "captured" && (
-        <PaymentConfirmed userType={userType} />
-      )}
+      {transactionType === "credit_card" && status === "captured" && <PaymentConfirmed userType={userType} />}
 
-      {transactionType === "credit_card" &&
+      {(transactionType === "credit_card" || transactionType === "pix" || transactionType === "boleto") &&
         (status === "not_authorized" ||
           status === "voided" ||
           status === "error_on_voiding" ||
@@ -70,16 +65,11 @@ function LessonAfterPaymentPage() {
           status === "with_error" ||
           status === "failed") && <PaymentDenied userType={userType} />}
 
-      {transactionType === "boleto" && (
+      {transactionType === "boleto" && status === "captured" && (
         <PaymentBoleto pdf={pdf} boletoCode={boletoCode} userType={userType} />
       )}
-      {transactionType === "pix" && (
-        <PaymentPix
-          qrCodeUrl={qrCodeUrl}
-          pixCode={qrCode}
-          expiresAt={expiresAt}
-          userType={userType}
-        />
+      {transactionType === "pix" && status === "captured" && (
+        <PaymentPix qrCodeUrl={qrCodeUrl} pixCode={qrCode} expiresAt={expiresAt} userType={userType} />
       )}
     </div>
   );

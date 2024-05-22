@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import useUserStore from "@/stores/useUserStore";
 
 interface Props {
-  userType: string | null;
+  userType: string | null | undefined;
 }
 
 export function PaymentConfirmed({ userType }: Props) {
@@ -33,10 +33,7 @@ export function PaymentConfirmed({ userType }: Props) {
         <div className="w-full flex flex-col gap-4 items-center justify-center lg:max-w-3xl">
           <h1 className="text-2xl font-semibold text-gray-primary text-center max-w-md sm:text-3xl sm:max-w-lg">
             {info.titleGray[0] + " "}
-            <strong className="font-semibold text-green-primary">
-              {info.titleGreen[0]}
-            </strong>{" "}
-            {info.titleGray[1] + " "}
+            <strong className="font-semibold text-green-primary">{info.titleGreen[0]}</strong> {info.titleGray[1] + " "}
             <strong className="font-semibold text-green-primary relative after:content-[''] after:w-4 after:h-4 after:block after:bg-highlight after:bg-contain after:bg-no-repeat after:absolute after:top-1 after:-right-3 sm:after:top-2">
               {info.titleGreen[1]}
             </strong>
@@ -46,8 +43,8 @@ export function PaymentConfirmed({ userType }: Props) {
             {pathname?.includes("/pagamento-do-plano")
               ? info.planDesc
               : pathname?.includes("/pagamento-da-aula")
-                ? info.lessonDesc
-                : null}
+              ? info.lessonDesc
+              : null}
           </p>
         </div>
 
