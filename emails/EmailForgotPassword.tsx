@@ -2,7 +2,10 @@ import { Html, Button, Head, Preview, Body, Container, Img, Text, Hr, Tailwind }
 import { formatDistance } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-const baseURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
+const imageURL =
+  process.env.NODE_ENV === "production"
+    ? `${process.env.NEXT_PUBLIC_BASEURL}/assets/images/image-logo.png`
+    : "/static/email-logo.png";
 
 interface Props {
   url: string;
@@ -20,7 +23,7 @@ export default function EmailForgotPassword({ url, userName, hoursLeft }: Props)
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img src={`${baseURL}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
+            <Img src={imageURL} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">Ola {userName},</Text>
 

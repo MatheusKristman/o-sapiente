@@ -3,7 +3,10 @@ import { Html, Head, Preview, Body, Container, Img, Text, Section, Row, Hr, Tail
 
 import { formatPrice } from "@/libs/utils";
 
-const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
+const imageURL =
+  process.env.NODE_ENV === "production"
+    ? `${process.env.NEXT_PUBLIC_BASEURL}/assets/images/image-logo.png`
+    : "/static/email-logo.png";
 
 interface Props {
   lessonDate: Date;
@@ -33,7 +36,7 @@ export default function EmailAdminNewLesson({
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img src={`${baseUrl}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
+            <Img src={imageURL} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">Ola administrador,</Text>
 

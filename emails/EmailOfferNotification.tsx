@@ -13,7 +13,10 @@ import {
   Tailwind,
 } from "@react-email/components";
 
-const baseURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
+const imageURL =
+  process.env.NODE_ENV === "production"
+    ? `${process.env.NEXT_PUBLIC_BASEURL}/assets/images/image-logo.png`
+    : "/static/email-logo.png";
 
 interface Props {
   userName: string;
@@ -33,7 +36,7 @@ export default function EmailOfferNotification({ userName, message, professorNam
       <Tailwind>
         <Body style={main}>
           <Container style={container}>
-            <Img src={`${baseURL}/static/email-logo.png`} width="145" height="30" alt="O Sapiente" style={image} />
+            <Img src={imageURL} width="145" height="30" alt="O Sapiente" style={image} />
 
             <Text className="text-base">Ola {userName},</Text>
 
