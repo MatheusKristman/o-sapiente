@@ -15,7 +15,7 @@ import {
 
 const imageURL =
   process.env.NODE_ENV === "production"
-    ? `${process.env.NEXT_PUBLIC_BASEURL}/assets/images/email-logo.png.png`
+    ? `${process.env.NEXT_PUBLIC_BASEURL}/assets/images/email-logo.png`
     : "/static/email-logo.png";
 
 interface Props {
