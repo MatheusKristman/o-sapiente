@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 import { PaymentConfirmed } from "@/components/after-payment/PaymentConfirmed";
 import { ProcessingPayment } from "@/components/after-payment/ProcessingPayment";
@@ -9,6 +10,22 @@ import { PaymentDenied } from "@/components/after-payment/paymentDenied";
 import { PaymentBoleto } from "@/components/after-payment/PaymentBoleto";
 import { PaymentPix } from "@/components/after-payment/PaymentPix";
 import { LoadingComponent } from "@/components/LoadingComponent";
+import { useRouter } from "next/navigation";
+
+const validStatuses = [
+  "authorized_pending_capture",
+  "waiting_capture",
+  "partial_capture",
+  "captured",
+  "not_authorized",
+  "voided",
+  "error_on_voiding",
+  "waiting_cancellation",
+  "with_error",
+  "failed",
+  "generated",
+  "waiting_payment",
+];
 
 function LessonAfterPaymentPage() {
   const [transactionType, setTransactionType] = useState<string | null | undefined>(null);
@@ -21,6 +38,7 @@ function LessonAfterPaymentPage() {
   const [userType, setUserType] = useState<string | null | undefined>(null);
 
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     if (searchParams) {
@@ -41,8 +59,12 @@ function LessonAfterPaymentPage() {
   }, [searchParams]);
 
   useEffect(() => {
-    console.log(expiresAt);
-  }, [expiresAt]);
+    if (status && !validStatuses.includes(status)) {
+      console.log("erro");
+      toast.error("Pagamento apresentou status fora do esperado! Verifique com o suporte.");
+      router.push("/");
+    }
+  }, [status]);
 
   if (!status || !transactionType) {
     return <LoadingComponent />;
@@ -65,10 +87,10 @@ function LessonAfterPaymentPage() {
           status === "with_error" ||
           status === "failed") && <PaymentDenied userType={userType} />}
 
-      {transactionType === "boleto" && status === "captured" && (
+      {transactionType === "boleto" && status === "generated" && (
         <PaymentBoleto pdf={pdf} boletoCode={boletoCode} userType={userType} />
       )}
-      {transactionType === "pix" && status === "captured" && (
+      {transactionType === "pix" && status === "waiting_payment" && (
         <PaymentPix qrCodeUrl={qrCodeUrl} pixCode={qrCode} expiresAt={expiresAt} userType={userType} />
       )}
     </div>

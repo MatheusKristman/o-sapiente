@@ -1,7 +1,8 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 import { PaymentConfirmed } from "@/components/after-payment/PaymentConfirmed";
 import { ProcessingPayment } from "@/components/after-payment/ProcessingPayment";
@@ -10,17 +11,33 @@ import { PaymentBoleto } from "@/components/after-payment/PaymentBoleto";
 import { PaymentPix } from "@/components/after-payment/PaymentPix";
 import { LoadingComponent } from "@/components/LoadingComponent";
 
+const validStatuses = [
+  "authorized_pending_capture",
+  "waiting_capture",
+  "partial_capture",
+  "captured",
+  "not_authorized",
+  "voided",
+  "error_on_voiding",
+  "waiting_cancellation",
+  "with_error",
+  "failed",
+  "generated",
+  "waiting_payment",
+];
+
 function AfterPaymentPage() {
-  const [transactionType, setTransactionType] = useState<string | null>(null);
-  const [status, setStatus] = useState<string | null>(null);
-  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-  const [qrCode, setQrCode] = useState<string | null>(null);
-  const [expiresAt, setExpiresAt] = useState<Date | null>(null);
-  const [pdf, setPdf] = useState<string | null>(null);
-  const [boletoCode, setBoletoCode] = useState<string | null>(null);
-  const [userType, setUserType] = useState<string | null>(null);
+  const [transactionType, setTransactionType] = useState<string | null | undefined>(null);
+  const [status, setStatus] = useState<string | null | undefined>(null);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null | undefined>(null);
+  const [qrCode, setQrCode] = useState<string | null | undefined>(null);
+  const [expiresAt, setExpiresAt] = useState<Date | null | undefined>(null);
+  const [pdf, setPdf] = useState<string | null | undefined>(null);
+  const [boletoCode, setBoletoCode] = useState<string | null | undefined>(null);
+  const [userType, setUserType] = useState<string | null | undefined>(null);
 
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     if (searchParams) {
@@ -41,8 +58,12 @@ function AfterPaymentPage() {
   }, [searchParams]);
 
   useEffect(() => {
-    console.log(expiresAt);
-  }, [expiresAt]);
+    if (status && !validStatuses.includes(status)) {
+      console.log("erro");
+      toast.error("Ocorreu um erro, pagamento apresentou status fora do esperado! Verifique com o suporte.");
+      router.push("/");
+    }
+  }, [status]);
 
   if (!status || !transactionType) {
     return <LoadingComponent />;
@@ -65,10 +86,10 @@ function AfterPaymentPage() {
           status === "with_error" ||
           status === "failed") && <PaymentDenied userType={userType} />}
 
-      {transactionType === "boleto" && status === "captured" && (
+      {transactionType === "boleto" && status === "generated" && (
         <PaymentBoleto pdf={pdf} boletoCode={boletoCode} userType={userType} />
       )}
-      {transactionType === "pix" && status === "captured" && (
+      {transactionType === "pix" && status === "waiting_payment" && (
         <PaymentPix qrCodeUrl={qrCodeUrl} pixCode={qrCode} expiresAt={expiresAt} userType={userType} />
       )}
     </div>
