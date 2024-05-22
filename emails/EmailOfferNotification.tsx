@@ -13,7 +13,7 @@ import {
   Tailwind,
 } from "@react-email/components";
 
-const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
+const baseURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
 
 interface Props {
   userName: string;

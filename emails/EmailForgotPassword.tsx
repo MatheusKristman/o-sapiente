@@ -2,7 +2,7 @@ import { Html, Button, Head, Preview, Body, Container, Img, Text, Hr, Tailwind }
 import { formatDistance } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
+const baseURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
 
 interface Props {
   url: string;

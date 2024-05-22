@@ -3,7 +3,7 @@ import { Html, Head, Preview, Body, Container, Img, Text, Row, Section, Hr, Tail
 
 import { formatPrice } from "@/libs/utils";
 
-const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASEURL : "";
+const baseURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
 
 interface Props {
   message: string;
