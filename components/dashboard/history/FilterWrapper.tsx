@@ -1,10 +1,9 @@
 "use client";
 
 import { Search, ChevronDown } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import useHistoryStore from "@/stores/useHistoryStore";
 import { ChangeEvent } from "react";
+
+import useHistoryStore from "@/stores/useHistoryStore";
 import { Input } from "@/components/ui/input";
 
 interface FilterWrapperProps {
@@ -12,8 +11,7 @@ interface FilterWrapperProps {
 }
 
 const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
-  const { filterDateNumber, setFilterDateNumber, searchValue, setSearchValue } =
-    useHistoryStore();
+  const { filterDateNumber, setFilterDateNumber, searchValue, setSearchValue } = useHistoryStore();
 
   return (
     <div className="flex flex-col pt-9 md:flex-row md:justify-between">
@@ -22,9 +20,7 @@ const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
           type="text"
           name="search"
           value={searchValue}
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            setSearchValue(event.target.value)
-          }
+          onChange={(event: ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
           placeholder="Faça sua pesquisa aqui..."
           className="bg-transparent outline-none w-full"
         />
@@ -50,19 +46,11 @@ const FilterWrapper: React.FC<FilterWrapperProps> = ({ isTeacher }) => {
         {/*     </Button> */}
         {/* </div> */}
 
-        <div
-          className={
-            isTeacher
-              ? "relative w-full md:w-4/12 lg:w-40"
-              : "relative w-full md:w-3/12 lg:w-40"
-          }
-        >
+        <div className={isTeacher ? "relative w-full md:w-4/12 lg:w-40" : "relative w-full md:w-3/12 lg:w-40"}>
           <select
             id="periodo"
             value={filterDateNumber}
-            onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-              setFilterDateNumber(Number(event.target.value))
-            }
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => setFilterDateNumber(Number(event.target.value))}
             className="bg-[#2C383F] border border-[#2C383F] text-white text-lg rounded-lg w-full pl-0 sm:pl-5 h-[46px] appearance-none text-center md:text-start outline-green-primary lg:cursor-pointer"
           >
             <option value={30} defaultChecked>

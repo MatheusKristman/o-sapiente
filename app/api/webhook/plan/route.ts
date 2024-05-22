@@ -3,7 +3,7 @@ import { render } from "@react-email/render";
 import { addDays } from "date-fns";
 
 import { prisma } from "@/libs/prismadb";
-import { EmailProfessorPlanPayed } from "@/emails/EmailProfessorPlanPayed";
+import EmailProfessorPlanPayed from "@/emails/EmailProfessorPlanPayed";
 
 interface IGenerateEmailOptions {
   emailUser: string;

@@ -1,5 +1,6 @@
-import { prisma } from "@/libs/prismadb";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@/libs/prismadb";
 
 function checkIfArrayIsUnique(arr: string[]) {
   return arr.length !== new Set(arr).size;

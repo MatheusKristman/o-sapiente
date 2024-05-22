@@ -11,34 +11,18 @@ import { z } from "zod";
 import { format, getYear } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useRouter } from "next/navigation";
+import { Subject } from "@prisma/client";
 
 import { cn } from "@/libs/utils";
 import { MyAccountInfo } from "@/constants/dashboard/my-account-br";
 import { professorUpdateFormSchema } from "@/constants/schemas/professorUpdateFormSchema";
 import { cityOptionsType, stateOptionsType } from "@/types";
-import { Subject } from "@prisma/client";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 
 const ProfessorFormBox = () => {
@@ -138,9 +122,7 @@ const ProfessorFormBox = () => {
 
       if (ufSelected.length > 0) {
         axios
-          .get(
-            `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufSelected[0].id}/municipios`
-          )
+          .get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufSelected[0].id}/municipios`)
           .then((res) => setCityOptions(res.data))
           .catch((error) => console.error(error))
           .finally(() => {
@@ -220,9 +202,7 @@ const ProfessorFormBox = () => {
       );
 
       if (filteredSubjects.length > 0) {
-        const filteredOpt = filteredSubjects[0].subs.filter(
-          (sub) => !themes.includes(sub)
-        );
+        const filteredOpt = filteredSubjects[0].subs.filter((sub) => !themes.includes(sub));
 
         setFilteredOptions(filteredOpt);
 
@@ -259,9 +239,7 @@ const ProfessorFormBox = () => {
   // }
 
   function handleDDD(event: ChangeEvent<HTMLInputElement>) {
-    const DDDFormatted = event.target.value
-      .replace(/[^0-9]/g, "")
-      .substring(0, 2);
+    const DDDFormatted = event.target.value.replace(/[^0-9]/g, "").substring(0, 2);
 
     form.setValue("ddd", DDDFormatted);
   }
@@ -347,9 +325,7 @@ const ProfessorFormBox = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="bg-white w-full max-w-3xl p-9 rounded-2xl shadow-md shadow-[rgba(0,0,0,0.25)]"
       >
-        <h2 className="text-2xl text-gray-primary font-semibold mb-6">
-          {MyAccountInfo.personalDataTitle}
-        </h2>
+        <h2 className="text-2xl text-gray-primary font-semibold mb-6">{MyAccountInfo.personalDataTitle}</h2>
 
         <div className="w-full flex flex-col gap-y-4 mb-9">
           <div className="w-full flex flex-col sm:flex-row gap-4">
@@ -361,13 +337,8 @@ const ProfessorFormBox = () => {
                   <FormControl>
                     <Input
                       disabled={isSubmitting || isLoading}
-                      className={cn(
-                        "input",
-                        form.formState.errors.firstName && "input-error"
-                      )}
-                      placeholder={
-                        MyAccountInfo.personalDataPlaceholders.firstName
-                      }
+                      className={cn("input", form.formState.errors.firstName && "input-error")}
+                      placeholder={MyAccountInfo.personalDataPlaceholders.firstName}
                       {...field}
                     />
                   </FormControl>
@@ -385,13 +356,8 @@ const ProfessorFormBox = () => {
                   <FormControl>
                     <Input
                       disabled={isSubmitting || isLoading}
-                      className={cn(
-                        "input",
-                        form.formState.errors.lastName && "input-error"
-                      )}
-                      placeholder={
-                        MyAccountInfo.personalDataPlaceholders.lastName
-                      }
+                      className={cn("input", form.formState.errors.lastName && "input-error")}
+                      placeholder={MyAccountInfo.personalDataPlaceholders.lastName}
                       {...field}
                     />
                   </FormControl>
@@ -411,19 +377,14 @@ const ProfessorFormBox = () => {
                       <FormControl>
                         <Button
                           variant="datePicker"
-                          className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
+                          className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
                         >
                           {field.value ? (
                             format(field.value, "PPP", {
                               locale: ptBR,
                             })
                           ) : (
-                            <span className="text-gray-primary/50">
-                              Data de nascimento
-                            </span>
+                            <span className="text-gray-primary/50">Data de nascimento</span>
                           )}
 
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -437,9 +398,7 @@ const ProfessorFormBox = () => {
                         locale={ptBR}
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
+                        disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
                         captionLayout="dropdown"
                         fromYear={1900}
                         toYear={currentYear}
@@ -463,12 +422,7 @@ const ProfessorFormBox = () => {
           </div>
 
           <div className="flex flex-col gap-4 sm:flex-row lg:flex-row">
-            <div
-              className={cn(
-                "flex flex-col gap-y-1 sm:w-1/2",
-                "sm:grow lg:grow-0 xl:grow"
-              )}
-            >
+            <div className={cn("flex flex-col gap-y-1 sm:w-1/2", "sm:grow lg:grow-0 xl:grow")}>
               <FormField
                 control={form.control}
                 name="state"
@@ -483,11 +437,7 @@ const ProfessorFormBox = () => {
                         name={field.name}
                       >
                         <SelectTrigger className="input placeholder:text-white">
-                          <SelectValue
-                            placeholder={
-                              MyAccountInfo.personalDataPlaceholders.state
-                            }
-                          />
+                          <SelectValue placeholder={MyAccountInfo.personalDataPlaceholders.state} />
                         </SelectTrigger>
 
                         <SelectContent>
@@ -506,12 +456,7 @@ const ProfessorFormBox = () => {
               />
             </div>
 
-            <div
-              className={cn(
-                "flex flex-col gap-y-1 sm:w-1/2",
-                "sm:grow lg:grow-0 xl:grow"
-              )}
-            >
+            <div className={cn("flex flex-col gap-y-1 sm:w-1/2", "sm:grow lg:grow-0 xl:grow")}>
               <FormField
                 control={form.control}
                 name="city"
@@ -526,11 +471,7 @@ const ProfessorFormBox = () => {
                         name={field.name}
                       >
                         <SelectTrigger className="input">
-                          <SelectValue
-                            placeholder={
-                              MyAccountInfo.personalDataPlaceholders.city
-                            }
-                          />
+                          <SelectValue placeholder={MyAccountInfo.personalDataPlaceholders.city} />
                         </SelectTrigger>
 
                         <SelectContent>
@@ -555,23 +496,13 @@ const ProfessorFormBox = () => {
               control={form.control}
               name="address"
               render={({ field }) => (
-                <FormItem
-                  className={cn(
-                    "flex flex-col gap-y-1",
-                    "sm:grow lg:grow-0 xl:grow"
-                  )}
-                >
+                <FormItem className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}>
                   <FormControl>
                     <Input
                       type="text"
                       disabled={isSubmitting || isLoading}
-                      className={cn(
-                        "input",
-                        form.formState.errors.address && "input-error"
-                      )}
-                      placeholder={
-                        MyAccountInfo.personalDataPlaceholders.address
-                      }
+                      className={cn("input", form.formState.errors.address && "input-error")}
+                      placeholder={MyAccountInfo.personalDataPlaceholders.address}
                       {...field}
                     />
                   </FormControl>
@@ -585,23 +516,13 @@ const ProfessorFormBox = () => {
               control={form.control}
               name="addressNumber"
               render={({ field }) => (
-                <FormItem
-                  className={cn(
-                    "flex flex-col gap-y-1",
-                    "sm:w-2/5 lg:w-full xl:w-2/5"
-                  )}
-                >
+                <FormItem className={cn("flex flex-col gap-y-1", "sm:w-2/5 lg:w-full xl:w-2/5")}>
                   <FormControl>
                     <Input
                       type="text"
                       disabled={isSubmitting || isLoading}
-                      className={cn(
-                        "input",
-                        form.formState.errors.addressNumber && "input-error"
-                      )}
-                      placeholder={
-                        MyAccountInfo.personalDataPlaceholders.addressNumber
-                      }
+                      className={cn("input", form.formState.errors.addressNumber && "input-error")}
+                      placeholder={MyAccountInfo.personalDataPlaceholders.addressNumber}
                       {...field}
                     />
                   </FormControl>
@@ -617,12 +538,7 @@ const ProfessorFormBox = () => {
               control={form.control}
               name="ddd"
               render={({ field }) => (
-                <FormItem
-                  className={cn(
-                    "flex flex-col gap-y-1",
-                    "sm:w-2/5 lg:w-full xl:w-2/5"
-                  )}
-                >
+                <FormItem className={cn("flex flex-col gap-y-1", "sm:w-2/5 lg:w-full xl:w-2/5")}>
                   <FormControl>
                     <Input
                       disabled={isSubmitting || isLoading}
@@ -631,10 +547,7 @@ const ProfessorFormBox = () => {
                       ref={field.ref}
                       value={field.value}
                       onBlur={field.onBlur}
-                      className={cn(
-                        "input",
-                        form.formState.errors.ddd && "input-error"
-                      )}
+                      className={cn("input", form.formState.errors.ddd && "input-error")}
                       placeholder={MyAccountInfo.personalDataPlaceholders.ddd}
                     />
                   </FormControl>
@@ -648,12 +561,7 @@ const ProfessorFormBox = () => {
               control={form.control}
               name="cel"
               render={({ field }) => (
-                <FormItem
-                  className={cn(
-                    "flex flex-col gap-y-1",
-                    "sm:grow lg:grow-0 xl:grow"
-                  )}
-                >
+                <FormItem className={cn("flex flex-col gap-y-1", "sm:grow lg:grow-0 xl:grow")}>
                   <FormControl>
                     <Input
                       disabled={isSubmitting || isLoading}
@@ -662,10 +570,7 @@ const ProfessorFormBox = () => {
                       value={field.value}
                       ref={field.ref}
                       onBlur={field.onBlur}
-                      className={cn(
-                        "input",
-                        form.formState.errors.cel && "input-error"
-                      )}
+                      className={cn("input", form.formState.errors.cel && "input-error")}
                       placeholder={MyAccountInfo.personalDataPlaceholders.cel}
                     />
                   </FormControl>
@@ -686,13 +591,8 @@ const ProfessorFormBox = () => {
                     <FormControl>
                       <Input
                         disabled={isSubmitting || isLoading}
-                        className={cn(
-                          "input",
-                          form.formState.errors.district && "input-error"
-                        )}
-                        placeholder={
-                          MyAccountInfo.personalDataPlaceholders.district
-                        }
+                        className={cn("input", form.formState.errors.district && "input-error")}
+                        placeholder={MyAccountInfo.personalDataPlaceholders.district}
                         {...field}
                       />
                     </FormControl>
@@ -712,13 +612,8 @@ const ProfessorFormBox = () => {
                     <FormControl>
                       <Input
                         disabled={isSubmitting || isLoading}
-                        className={cn(
-                          "input",
-                          form.formState.errors.complement && "input-error"
-                        )}
-                        placeholder={
-                          MyAccountInfo.personalDataPlaceholders.complement
-                        }
+                        className={cn("input", form.formState.errors.complement && "input-error")}
+                        placeholder={MyAccountInfo.personalDataPlaceholders.complement}
                         {...field}
                       />
                     </FormControl>
@@ -731,9 +626,7 @@ const ProfessorFormBox = () => {
           </div>
         </div>
 
-        <h2 className="text-2xl text-gray-primary font-semibold mb-6">
-          {MyAccountInfo.themeTitle}
-        </h2>
+        <h2 className="text-2xl text-gray-primary font-semibold mb-6">{MyAccountInfo.themeTitle}</h2>
 
         <input
           type="text"
@@ -745,9 +638,7 @@ const ProfessorFormBox = () => {
         />
 
         <div className="w-full flex flex-col gap-y-1 mb-9">
-          <h3 className="text-lg font-medium text-gray-primary">
-            {MyAccountInfo.themeSelectedTitle}
-          </h3>
+          <h3 className="text-lg font-medium text-gray-primary">{MyAccountInfo.themeSelectedTitle}</h3>
 
           <ul className="w-full flex flex-col gap-y-4">
             {themes?.map((option, index) => (
@@ -764,9 +655,7 @@ const ProfessorFormBox = () => {
         </div>
 
         <div className="w-full flex flex-col gap-y-1 mb-9">
-          <h3 className="text-lg font-medium text-gray-primary">
-            {MyAccountInfo.themesAvailableTitle}
-          </h3>
+          <h3 className="text-lg font-medium text-gray-primary">{MyAccountInfo.themesAvailableTitle}</h3>
 
           {isLoading ? (
             <div className="w-full flex items-center justify-center">
@@ -787,9 +676,7 @@ const ProfessorFormBox = () => {
                 ))
               ) : searchValue.length > 3 && filteredOptions.length == 0 ? (
                 <div className="w-full h-12 px-4 py-3 rounded-lg bg-[#E5ECF0] flex items-center justify-center">
-                  <span className="text-base text-center text-[#96A3AB]">
-                    Resultado não encontrado
-                  </span>
+                  <span className="text-base text-center text-[#96A3AB]">Resultado não encontrado</span>
                 </div>
               ) : (
                 availableThemes
@@ -809,9 +696,7 @@ const ProfessorFormBox = () => {
           )}
         </div>
 
-        <h2 className="text-2xl text-gray-primary font-semibold mb-6">
-          {MyAccountInfo.aboutTitle}
-        </h2>
+        <h2 className="text-2xl text-gray-primary font-semibold mb-6">{MyAccountInfo.aboutTitle}</h2>
 
         <FormField
           control={form.control}
@@ -821,10 +706,7 @@ const ProfessorFormBox = () => {
               <FormControl>
                 <Textarea
                   disabled={isSubmitting || isLoading}
-                  className={cn(
-                    "textarea !h-[150px] mb-9",
-                    form.formState.errors.aboutMe && "input-error"
-                  )}
+                  className={cn("textarea !h-[150px] mb-9", form.formState.errors.aboutMe && "input-error")}
                   placeholder={MyAccountInfo.aboutPlaceholder}
                   {...field}
                 />
@@ -835,11 +717,7 @@ const ProfessorFormBox = () => {
           )}
         />
 
-        <Button
-          className="w-full"
-          type="submit"
-          disabled={isSubmitting || isLoading}
-        >
+        <Button className="w-full" type="submit" disabled={isSubmitting || isLoading}>
           {MyAccountInfo.submitButton}
         </Button>
       </form>

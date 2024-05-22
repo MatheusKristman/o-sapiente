@@ -2,12 +2,12 @@
 
 import React, { useEffect } from "react";
 import { compareAsc, subDays } from "date-fns";
+import { AccountRole } from "@prisma/client";
 
 import ResultCard from "@/components/dashboard/history/ResultCard";
 import TableRow from "@/components/dashboard/history/TableRow";
 import { RequestWithUsersAndOffers } from "@/types";
 import useHistoryStore from "@/stores/useHistoryStore";
-import { AccountRole } from "@prisma/client";
 
 interface ResponsiveTableProps {
   requests: RequestWithUsersAndOffers[];

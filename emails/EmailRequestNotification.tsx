@@ -21,7 +21,7 @@ interface Props {
   linkUrl: string;
 }
 
-export function EmailRequestNotification({
+export default function EmailRequestNotification({
   userName,
   message,
   studentName,

@@ -1,5 +1,6 @@
-import { prisma } from "@/libs/prismadb";
 import { isAfter } from "date-fns";
+
+import { prisma } from "@/libs/prismadb";
 
 export async function POST(req: Request) {
   try {

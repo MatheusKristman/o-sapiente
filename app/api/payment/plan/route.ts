@@ -1,7 +1,8 @@
-import getCurrentUser from "@/app/action/getCurrentUser";
-import { AccountRole } from "@prisma/client";
 import axios from "axios";
+import { AccountRole } from "@prisma/client";
 import { addDays } from "date-fns";
+
+import getCurrentUser from "@/app/action/getCurrentUser";
 
 export async function POST(req: Request) {
   try {

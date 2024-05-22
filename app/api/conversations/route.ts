@@ -1,11 +1,11 @@
-import getCurrentUser from "@/app/action/getCurrentUser";
 import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
+import { Status } from "@prisma/client";
 
+import getCurrentUser from "@/app/action/getCurrentUser";
 import { prisma } from "@/libs/prismadb";
 import { pusherServer } from "@/libs/pusher";
-import { Status } from "@prisma/client";
-import { EmailAdminNewLesson } from "@/emails/EmailAdminNewLesson";
+import EmailAdminNewLesson from "@/emails/EmailAdminNewLesson";
 
 interface IGenerateEmailOptions {
   emailUser: string;

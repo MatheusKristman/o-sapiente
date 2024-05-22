@@ -16,7 +16,7 @@ interface Props {
   otherUserName: string;
 }
 
-export function EmailFinishingLessonNotification({
+export default function EmailFinishingLessonNotification({
   name,
   otherUserName,
 }: Props) {

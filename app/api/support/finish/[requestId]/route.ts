@@ -1,6 +1,7 @@
+import { AccountRole } from "@prisma/client";
+
 import getCurrentUser from "@/app/action/getCurrentUser";
 import { prisma } from "@/libs/prismadb";
-import { AccountRole, Status } from "@prisma/client";
 
 export async function PUT(
   req: Request,

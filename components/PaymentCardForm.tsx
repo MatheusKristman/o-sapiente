@@ -3,18 +3,13 @@
 import { ChangeEvent, useState } from "react";
 import Cards from "react-credit-cards-2";
 import { Control, SetValueConfig, UseFormSetValue } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { info } from "@/constants/paymentCardForm-br";
 import { cn } from "@/libs/utils";
-import { PaymentButtons } from "./PaymentButtons";
+import { PaymentButtons } from "@/components/PaymentButtons";
 import usePaymentStore from "@/stores/usePaymentStore";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import toast from "react-hot-toast";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 type stateType = {
   creditNumber: string;
@@ -160,19 +155,11 @@ export function PaymentCardForm({
     <>
       {paymentMethod === "credit_card" ? (
         <div className="w-full px-6 mb-12 flex flex-col gap-12 sm:px-16 lg:container lg:mx-auto lg:flex-row lg:justify-between">
-          <Cards
-            number={creditNumber}
-            expiry={creditExpiry}
-            cvc={creditCvc}
-            name={creditOwner}
-            focused={state.focus}
-          />
+          <Cards number={creditNumber} expiry={creditExpiry} cvc={creditCvc} name={creditOwner} focused={state.focus} />
 
           <div className="w-full flex flex-col gap-12 lg:max-w-xl">
             <div className="w-full bg-white px-6 py-9 rounded-2xl shadow-md shadow-black/25 flex flex-col gap-2 ">
-              <h3 className="text-xl text-gray-primary font-semibold">
-                {info.title}
-              </h3>
+              <h3 className="text-xl text-gray-primary font-semibold">{info.title}</h3>
 
               <div className="w-full flex flex-col gap-4">
                 <FormField

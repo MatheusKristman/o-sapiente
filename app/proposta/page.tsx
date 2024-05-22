@@ -4,15 +4,11 @@ import { OfferViaLink } from "@/components/offer/OfferViaLink";
 import { PaymentMethodModal } from "@/components/offer/PaymentMethodModal";
 import { InvalidUser } from "@/components/offer/InvalidUser";
 import { InvalidLink } from "@/components/offer/InvalidLink";
-import getCurrentUser from "../action/getCurrentUser";
-import Loading from "../loading";
-import getOfferById from "../action/getOfferById";
+import getCurrentUser from "@/app/action/getCurrentUser";
+import Loading from "@/app/loading";
+import getOfferById from "@/app/action/getOfferById";
 
-async function OfferViaLinkPage({
-  searchParams,
-}: {
-  searchParams?: { offerId: string; studentId: string };
-}) {
+async function OfferViaLinkPage({ searchParams }: { searchParams?: { offerId: string; studentId: string } }) {
   if (!searchParams) {
     return <Loading />;
   }

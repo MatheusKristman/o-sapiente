@@ -8,6 +8,7 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { Loader2 } from "lucide-react";
 
 import { studentRegisterInfo } from "@/constants/studentModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
@@ -15,15 +16,8 @@ import useStudentModalStore from "@/stores/useStudentModalStore";
 import studentRegisterSchema from "@/constants/schemas/studentRegisterSchema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import { cn } from "@/libs/utils";
-import { Loader2 } from "lucide-react";
 
 const StudentRegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -155,10 +149,7 @@ const StudentRegisterForm = () => {
                         autoComplete="off"
                         autoCorrect="off"
                         disabled={isSubmitting}
-                        className={cn(
-                          "input",
-                          form.formState.errors.firstName && "input-error",
-                        )}
+                        className={cn("input", form.formState.errors.firstName && "input-error")}
                         {...field}
                       />
                     </FormControl>
@@ -182,10 +173,7 @@ const StudentRegisterForm = () => {
                         autoComplete="off"
                         autoCorrect="off"
                         disabled={isSubmitting}
-                        className={cn(
-                          "input",
-                          form.formState.errors.lastName && "input-error",
-                        )}
+                        className={cn("input", form.formState.errors.lastName && "input-error")}
                         {...field}
                       />
                     </FormControl>
@@ -209,10 +197,7 @@ const StudentRegisterForm = () => {
                         autoComplete="off"
                         autoCorrect="off"
                         disabled={isSubmitting}
-                        className={cn(
-                          "input",
-                          form.formState.errors.email && "input-error",
-                        )}
+                        className={cn("input", form.formState.errors.email && "input-error")}
                         {...field}
                       />
                     </FormControl>
@@ -238,10 +223,7 @@ const StudentRegisterForm = () => {
                         autoCorrect="off"
                         maxLength={15}
                         disabled={isSubmitting}
-                        className={cn(
-                          "input",
-                          form.formState.errors.tel && "input-error",
-                        )}
+                        className={cn("input", form.formState.errors.tel && "input-error")}
                         name={field.name}
                         ref={field.ref}
                         onBlur={field.onBlur}
@@ -268,10 +250,7 @@ const StudentRegisterForm = () => {
                         autoComplete="off"
                         autoCorrect="off"
                         disabled={isSubmitting}
-                        className={cn(
-                          "input",
-                          form.formState.errors.password && "input-error",
-                        )}
+                        className={cn("input", form.formState.errors.password && "input-error")}
                         {...field}
                       />
                     </FormControl>
@@ -295,11 +274,7 @@ const StudentRegisterForm = () => {
                         autoComplete="off"
                         autoCorrect="off"
                         disabled={isSubmitting}
-                        className={cn(
-                          "input",
-                          form.formState.errors.passwordConfirm &&
-                            "input-error",
-                        )}
+                        className={cn("input", form.formState.errors.passwordConfirm && "input-error")}
                         {...field}
                       />
                     </FormControl>
@@ -311,23 +286,12 @@ const StudentRegisterForm = () => {
             </div>
 
             <div className="w-full col-span-2 flex items-center justify-start">
-              <span className="text-sm text-left text-gray-primary/60">
-                * Senha precisa ter 6 caracteres
-              </span>
+              <span className="text-sm text-left text-gray-primary/60">* Senha precisa ter 6 caracteres</span>
             </div>
           </motion.div>
 
-          <motion.div
-            variants={studentFormAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full flex items-center gap-2"
-            >
+          <motion.div variants={studentFormAnimation} initial="initial" animate="animate" exit="exit">
+            <Button type="submit" disabled={isSubmitting} className="w-full flex items-center gap-2">
               {isSubmitting && <Loader2 className="animate-spin" />}
               {studentRegisterInfo.nextButton}
             </Button>
@@ -340,10 +304,7 @@ const StudentRegisterForm = () => {
       <div className="w-full flex flex-col items-center justify-center gap-4">
         <p className="text-base font-semibold text-[#2C383F]">
           {studentRegisterInfo.hasAccountText}{" "}
-          <span
-            onClick={handleLoginLink}
-            className="text-green-primary cursor-pointer"
-          >
+          <span onClick={handleLoginLink} className="text-green-primary cursor-pointer">
             {studentRegisterInfo.hasAccountLink}
           </span>
         </p>

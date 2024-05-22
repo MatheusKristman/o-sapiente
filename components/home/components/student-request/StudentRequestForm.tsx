@@ -4,6 +4,7 @@ import axios from "axios";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Subject } from "@prisma/client";
 
 import studentNewRequestSchema from "@/constants/schemas/newRequestSchema";
 import { studentRequestInfo } from "@/constants/studentModal-br";
@@ -12,27 +13,14 @@ import useStudentModalStore from "@/stores/useStudentModalStore";
 import { Button } from "@/components/ui/button";
 import { studentNewRequestInfo } from "@/constants/dashboard/resume-br";
 import { cn } from "@/libs/utils";
-import { Subject } from "@prisma/client";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 
 const StudentRequestForm = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isNextEnabled, setIsNextEnabled] = useState(true);
 
-  const {
-    setToNotRequest,
-    setToRegister,
-    setSubject,
-    setDescription,
-    activateBackBtn,
-  } = useStudentModalStore();
+  const { setToNotRequest, setToRegister, setSubject, setDescription, activateBackBtn } = useStudentModalStore();
   const form = useForm<z.infer<typeof studentNewRequestSchema>>({
     // @ts-ignore
     resolver: zodResolver(studentNewRequestSchema),
@@ -116,10 +104,7 @@ const StudentRequestForm = () => {
                     )}
                     {...field}
                   >
-                    <option
-                      value={studentNewRequestInfo.themePlaceholder}
-                      disabled
-                    >
+                    <option value={studentNewRequestInfo.themePlaceholder} disabled>
                       {studentNewRequestInfo.themePlaceholder}
                     </option>
 
@@ -140,12 +125,7 @@ const StudentRequestForm = () => {
         </motion.div>
 
         {subjectValue === "Outro" && (
-          <motion.div
-            variants={studentFormAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
+          <motion.div variants={studentFormAnimation} initial="initial" animate="animate" exit="exit">
             <FormField
               control={form.control}
               name="subjectSpecific"
@@ -157,8 +137,7 @@ const StudentRequestForm = () => {
                       placeholder={studentNewRequestInfo.otherPlaceholder}
                       className={cn(
                         "w-full mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
-                        form.formState.errors.description &&
-                          "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2"
+                        form.formState.errors.description && "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2"
                       )}
                       {...field}
                     />
@@ -171,12 +150,7 @@ const StudentRequestForm = () => {
           </motion.div>
         )}
 
-        <motion.div
-          variants={studentFormAnimation}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
+        <motion.div variants={studentFormAnimation} initial="initial" animate="animate" exit="exit">
           <FormField
             control={form.control}
             name="description"
@@ -198,12 +172,7 @@ const StudentRequestForm = () => {
           />
         </motion.div>
 
-        <motion.div
-          variants={studentFormAnimation}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
+        <motion.div variants={studentFormAnimation} initial="initial" animate="animate" exit="exit">
           <Button disabled={isNextEnabled} type="submit" className="w-full">
             {studentRequestInfo.nextButton}
           </Button>

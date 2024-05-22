@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import useNewRequestStore from "@/stores/useNewRequestStore";
@@ -13,15 +15,7 @@ import { studentNewRequestInfo } from "@/constants/dashboard/resume-br";
 import { newRequestFormAnimation } from "@/constants/framer-animations/new-request-modal";
 import newRequestSchema from "@/constants/schemas/newRequestSchema";
 import { cn } from "@/libs/utils";
-import { Loader2 } from "lucide-react";
-import { useSession } from "next-auth/react";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import useResumeStore from "@/stores/useResumeStore";
 import { RequestWithUsersAndOffers } from "@/types";
 
@@ -68,9 +62,7 @@ const NewRequestForm = () => {
     setIsSubmitting(true);
 
     const subjectSelected =
-      data.subject === "Outro" &&
-      data.subjectSpecific &&
-      data.subjectSpecific.length > 0
+      data.subject === "Outro" && data.subjectSpecific && data.subjectSpecific.length > 0
         ? data.subjectSpecific
         : data.subject;
 
@@ -85,16 +77,10 @@ const NewRequestForm = () => {
           handleMessage();
 
           setRequests(
-            res.data.requests.filter(
-              (req: RequestWithUsersAndOffers) =>
-                !req.isConcluded && !req.isOfferAccepted
-            )
+            res.data.requests.filter((req: RequestWithUsersAndOffers) => !req.isConcluded && !req.isOfferAccepted)
           );
           setCurrentLesson(
-            res.data.requests.filter(
-              (req: RequestWithUsersAndOffers) =>
-                !req.isConcluded && req.isOfferAccepted
-            )
+            res.data.requests.filter((req: RequestWithUsersAndOffers) => !req.isConcluded && req.isOfferAccepted)
           );
         }
       })
@@ -118,10 +104,7 @@ const NewRequestForm = () => {
       </motion.h4>
 
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full flex flex-col"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col">
           <motion.div
             variants={newRequestFormAnimation}
             initial="initial"
@@ -147,10 +130,7 @@ const NewRequestForm = () => {
                       )}
                       {...field}
                     >
-                      <option
-                        value={studentNewRequestInfo.themePlaceholder}
-                        disabled
-                      >
+                      <option value={studentNewRequestInfo.themePlaceholder} disabled>
                         {studentNewRequestInfo.themePlaceholder}
                       </option>
                       {subjects.map((subject) => (
@@ -169,12 +149,7 @@ const NewRequestForm = () => {
           </motion.div>
 
           {subjectValue === "Outro" && (
-            <motion.div
-              variants={newRequestFormAnimation}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
+            <motion.div variants={newRequestFormAnimation} initial="initial" animate="animate" exit="exit">
               <FormField
                 control={form.control}
                 name="subjectSpecific"
@@ -186,8 +161,7 @@ const NewRequestForm = () => {
                         placeholder={studentNewRequestInfo.otherPlaceholder}
                         className={cn(
                           "w-full mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
-                          form.formState.errors.description &&
-                            "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2"
+                          form.formState.errors.description && "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2"
                         )}
                         {...field}
                       />
@@ -200,12 +174,7 @@ const NewRequestForm = () => {
             </motion.div>
           )}
 
-          <motion.div
-            variants={newRequestFormAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
+          <motion.div variants={newRequestFormAnimation} initial="initial" animate="animate" exit="exit">
             <FormField
               control={form.control}
               name="description"
@@ -217,8 +186,7 @@ const NewRequestForm = () => {
                       placeholder={studentNewRequestInfo.descPlaceholder}
                       className={cn(
                         "w-full h-40 mb-6 bg-[#EBEFF1] rounded-lg p-4 text-gray-primary/70 resize-none outline-none focus:ring-2 focus:ring-green-primary",
-                        form.formState.errors.description &&
-                          "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2"
+                        form.formState.errors.description && "ring-2 ring-[#FF7373] focus:ring-[#FF7373] mb-2"
                       )}
                       {...field}
                     />
@@ -230,23 +198,10 @@ const NewRequestForm = () => {
             />
           </motion.div>
 
-          <motion.div
-            variants={newRequestFormAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Button
-              type="submit"
-              disabled={isLoading || isSubmitting}
-              className="w-full flex items-center gap-2"
-            >
-              {isSubmitting ? (
-                <Loader2 className="h-5 w-5 ml-2 animate-spin" />
-              ) : null}
-              {isSubmitting
-                ? studentNewRequestInfo.submittingBtn
-                : studentNewRequestInfo.submitBtn}
+          <motion.div variants={newRequestFormAnimation} initial="initial" animate="animate" exit="exit">
+            <Button type="submit" disabled={isLoading || isSubmitting} className="w-full flex items-center gap-2">
+              {isSubmitting ? <Loader2 className="h-5 w-5 ml-2 animate-spin" /> : null}
+              {isSubmitting ? studentNewRequestInfo.submittingBtn : studentNewRequestInfo.submitBtn}
             </Button>
           </motion.div>
         </form>

@@ -8,8 +8,6 @@ async function LessonPaymentPage({ params }: { params: { offerId: string } }) {
   const currentUser = await getCurrentUser();
   const offer = await getOfferById(params.offerId);
 
-  console.log("offer: ", offer);
-
   if (!currentUser || !offer) {
     // TODO: adicionar componente de erro avisando que o usuário não está logado
     return <LoadingComponent />;

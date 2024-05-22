@@ -1,14 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-
-import {
-  ModalAnimation,
-  OverlayAnimation,
-} from "@/constants/framer-animations/modal";
-import { Button } from "@/components/ui/button";
-import { BsXLg } from "react-icons/bs";
-import { currentLessonModalInfo } from "@/constants/dashboard/resume-br";
 import { Dot } from "lucide-react";
+import { BsXLg } from "react-icons/bs";
+
+import { ModalAnimation, OverlayAnimation } from "@/constants/framer-animations/modal";
+import { Button } from "@/components/ui/button";
+import { currentLessonModalInfo } from "@/constants/dashboard/resume-br";
 import useCurrentLessonModalStore from "@/stores/useCurrentLessonModalStore";
 import { ResumeCurrentLessonBtns } from "./ResumeCurrentLessonBtns";
 import { ResumeCurrentLessonSupportForm } from "./ResumeCurrentLessonSupportForm";
@@ -19,8 +16,7 @@ interface Props {
 }
 
 export function ResumeCurrentLessonModal({ type }: Props) {
-  const { isModalOpen, closeModal, lesson, isBtns, isSupport, setBtns } =
-    useCurrentLessonModalStore();
+  const { isModalOpen, closeModal, lesson, isBtns, isSupport, setBtns } = useCurrentLessonModalStore();
   const { userId } = useUserStore();
 
   if (!lesson) {
@@ -56,13 +52,7 @@ export function ResumeCurrentLessonModal({ type }: Props) {
             className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
           >
             <div className="flex justify-end mb-6">
-              <Button
-                variant="link"
-                size="icon"
-                type="button"
-                className="text-green-primary"
-                onClick={handleClose}
-              >
+              <Button variant="link" size="icon" type="button" className="text-green-primary" onClick={handleClose}>
                 <BsXLg size={26} />
               </Button>
             </div>
@@ -74,41 +64,27 @@ export function ResumeCurrentLessonModal({ type }: Props) {
             <div className="w-fit mx-auto bg-[#F0F5F8] px-6 py-4 rounded-xl flex items-center mb-9">
               <div className="relative w-10 h-10 rounded-full overflow-hidden">
                 <Image
-                  src={
-                    filteredUser.profilePhoto
-                      ? filteredUser.profilePhoto
-                      : "/assets/images/default-user-photo.svg"
-                  }
+                  src={filteredUser.profilePhoto ? filteredUser.profilePhoto : "/assets/images/default-user-photo.svg"}
                   alt={type === "Professor" ? "Aluno" : "Professor"}
                   fill
                   className="object-cover object-center"
                 />
               </div>
 
-              <Dot
-                className="text-gray-primary"
-                style={{ width: "35px", height: "35px" }}
-              />
+              <Dot className="text-gray-primary" style={{ width: "35px", height: "35px" }} />
 
               <span className="text-gray-primary text-lg font-semibold">
                 {`${filteredUser.firstName} ${filteredUser.lastName}`}
               </span>
 
-              <Dot
-                className="text-gray-primary"
-                style={{ width: "35px", height: "35px" }}
-              />
+              <Dot className="text-gray-primary" style={{ width: "35px", height: "35px" }} />
 
-              <span className="text-gray-primary text-base font-semibold">
-                {lesson.subject}
-              </span>
+              <span className="text-gray-primary text-base font-semibold">{lesson.subject}</span>
             </div>
 
             <AnimatePresence mode="wait">
               {isBtns && <ResumeCurrentLessonBtns key="current-lesson-btns" />}
-              {isSupport && (
-                <ResumeCurrentLessonSupportForm key="current-lesson-support-form" />
-              )}
+              {isSupport && <ResumeCurrentLessonSupportForm key="current-lesson-support-form" />}
             </AnimatePresence>
           </motion.div>
         </motion.div>

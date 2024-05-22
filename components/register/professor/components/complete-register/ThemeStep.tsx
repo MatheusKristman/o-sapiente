@@ -5,10 +5,10 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Loader2, Plus, X } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Subject } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
 import { ThemeStepInfos } from "@/constants/register/theme-step-br";
-import { Subject } from "@prisma/client";
 import { Input } from "@/components/ui/input";
 
 interface ThemeStepProps {
@@ -17,11 +17,7 @@ interface ThemeStepProps {
   setSteps: Dispatch<SetStateAction<number>>;
 }
 
-const ThemeStep = ({
-  selectedOptions,
-  setSelectedOptions,
-  setSteps,
-}: ThemeStepProps) => {
+const ThemeStep = ({ selectedOptions, setSelectedOptions, setSteps }: ThemeStepProps) => {
   const [themes, setThemes] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
@@ -92,9 +88,7 @@ const ThemeStep = ({
       );
 
       if (filteredSubjects.length > 0) {
-        const filteredOpt = filteredSubjects[0].subs.filter(
-          (sub) => !selectedOptions.includes(sub)
-        );
+        const filteredOpt = filteredSubjects[0].subs.filter((sub) => !selectedOptions.includes(sub));
 
         setFilteredOptions(filteredOpt);
 
@@ -161,20 +155,13 @@ const ThemeStep = ({
     <div className="w-full h-full py-12 lg:py-24">
       <div className="w-full mx-auto px-6 flex flex-col justify-center items-center gap-9 md:px-16 lg:flex-row lg:justify-between lg:items-start lg:gap-24 lg:container">
         <div className="w-full px-6 py-9 rounded-2xl bg-green-primary h-fit lg:w-2/5">
-          <p className="w-full text-white text-lg">
-            {ThemeStepInfos.boxMessage}
-          </p>
+          <p className="w-full text-white text-lg">{ThemeStepInfos.boxMessage}</p>
         </div>
 
         <div className="w-full md:max-w-[550px] lg:w-3/5">
           <h2 className="text-2xl text-gray-primary font-semibold mb-6 md:text-3xl text-center">
-            <span className="text-green-primary">
-              {ThemeStepInfos.firstTitleColored}
-            </span>{" "}
-            {ThemeStepInfos.title}{" "}
-            <span className="text-green-primary">
-              {ThemeStepInfos.secondTitleColored}
-            </span>
+            <span className="text-green-primary">{ThemeStepInfos.firstTitleColored}</span> {ThemeStepInfos.title}{" "}
+            <span className="text-green-primary">{ThemeStepInfos.secondTitleColored}</span>
           </h2>
 
           <Input
@@ -187,9 +174,7 @@ const ThemeStep = ({
           />
 
           <div className="w-full flex flex-col gap-y-1 mb-9">
-            <h3 className="text-lg font-medium text-gray-primary">
-              {ThemeStepInfos.selectedText}
-            </h3>
+            <h3 className="text-lg font-medium text-gray-primary">{ThemeStepInfos.selectedText}</h3>
 
             <ul className="w-full flex flex-col gap-y-4">
               {selectedOptions.map((option, index) => (
@@ -206,9 +191,7 @@ const ThemeStep = ({
           </div>
 
           <div className="w-full flex flex-col gap-y-1 mb-9">
-            <h3 className="text-lg font-medium text-gray-primary">
-              {ThemeStepInfos.themesText}
-            </h3>
+            <h3 className="text-lg font-medium text-gray-primary">{ThemeStepInfos.themesText}</h3>
 
             {isLoading ? (
               <div className="w-full flex items-center justify-center">
@@ -229,9 +212,7 @@ const ThemeStep = ({
                   ))
                 ) : searchValue.length > 3 && filteredOptions.length == 0 ? (
                   <div className="w-full h-12 px-4 py-3 rounded-lg bg-[#E5ECF0] flex items-center justify-center">
-                    <span className="text-base text-center text-[#96A3AB]">
-                      Resultado não encontrado
-                    </span>
+                    <span className="text-base text-center text-[#96A3AB]">Resultado não encontrado</span>
                   </div>
                 ) : (
                   themes
@@ -252,20 +233,11 @@ const ThemeStep = ({
           </div>
 
           <div className="w-full flex flex-col gap-6 md:flex-row">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => {}}
-              disabled={true}
-            >
+            <Button variant="outline" className="w-full" onClick={() => {}} disabled={true}>
               {ThemeStepInfos.backButton}
             </Button>
 
-            <Button
-              className="w-full"
-              onClick={handleNextBtn}
-              disabled={!isNextAvailable || isLoading}
-            >
+            <Button className="w-full" onClick={handleNextBtn} disabled={!isNextAvailable || isLoading}>
               {ThemeStepInfos.nextButton}
             </Button>
           </div>

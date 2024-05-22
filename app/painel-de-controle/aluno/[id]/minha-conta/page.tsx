@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 import axios from "axios";
 
 import StudentFormBox from "@/components/dashboard/my-account/StudentFormBox";

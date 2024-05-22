@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import { AccountRole, Status } from "@prisma/client";
 import { render } from "@react-email/render";
 
-import { EmailAdminNewLesson } from "@/emails/EmailAdminNewLesson";
+import EmailAdminNewLesson from "@/emails/EmailAdminNewLesson";
 import { prisma } from "@/libs/prismadb";
 import { pusherServer } from "@/libs/pusher";
 

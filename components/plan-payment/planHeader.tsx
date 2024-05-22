@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Plan } from "@prisma/client";
 
 import { info } from "@/constants/plan-payment/plan-header-br";
-import { PlanOption } from "./planOption";
-import { cn } from "@/libs/utils";
+import { PlanOption } from "@/components/plan-payment/planOption";
 import { Button } from "@/components/ui/button";
 import usePaymentStore from "@/stores/usePaymentStore";
 
@@ -14,8 +13,7 @@ interface Props {
 }
 
 export function PlanHeader({ plans }: Props) {
-  const { paymentMethod, setPaymentMethod, planSelected, setPlanSelected } =
-    usePaymentStore();
+  const { paymentMethod, setPaymentMethod, planSelected, setPlanSelected } = usePaymentStore();
 
   useEffect(() => {
     setPlanSelected(plans[0]);
@@ -48,26 +46,17 @@ export function PlanHeader({ plans }: Props) {
   return (
     <div className="w-full px-6 my-12 sm:px-16 lg:container lg:mx-auto xl:flex xl:justify-between xl:items-center xl:gap-12">
       <div className="w-full bg-green-primary px-6 py-9 rounded-xl mb-9 xl:mb-0 xl:max-w-md">
-        <p className="text-white font-normal text-base sm:text-lg">
-          {info.greenBox}
-        </p>
+        <p className="text-white font-normal text-base sm:text-lg">{info.greenBox}</p>
       </div>
 
       <div className="w-full">
         <h2 className="text-2xl text-gray-primary font-semibold mb-6 sm:text-3xl">
-          {info.title}{" "}
-          <strong className="font-semibold text-green-primary">
-            {info.titleGreen}
-          </strong>
+          {info.title} <strong className="font-semibold text-green-primary">{info.titleGreen}</strong>
         </h2>
 
         <div className="w-full flex flex-col gap-y-4 mb-6 sm:flex-row">
           {plans.map((plan) => (
-            <PlanOption
-              key={plan.id}
-              plan={plan}
-              selected={planSelected?.id === plan.id}
-            />
+            <PlanOption key={plan.id} plan={plan} selected={planSelected?.id === plan.id} />
           ))}
         </div>
 

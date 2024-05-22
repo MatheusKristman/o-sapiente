@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { studentNewRequestInfo } from "@/constants/dashboard/resume-br";
@@ -13,12 +13,7 @@ const NewRequestSuccess = ({ handleCloseButton }: NewRequestSuccessProps) => {
   return (
     <div className="w-full flex flex-col items-center">
       <div className="relative w-36 h-36 mb-9">
-        <Image
-          src="/assets/icons/confirm.gif"
-          alt="Confirmado"
-          fill
-          className="object-cover"
-        />
+        <Image src="/assets/icons/confirm.gif" alt="Confirmado" fill className="object-cover" />
       </div>
 
       <motion.h4

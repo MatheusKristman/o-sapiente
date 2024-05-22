@@ -19,7 +19,7 @@ interface Props {
   hoursLeft: Date;
 }
 
-export function EmailForgotPassword({ url, userName, hoursLeft }: Props) {
+export default function EmailForgotPassword({ url, userName, hoursLeft }: Props) {
   return (
     <Html>
       <Head />

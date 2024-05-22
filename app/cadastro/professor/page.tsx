@@ -6,16 +6,16 @@ import RegisterLogin from "@/components/register/professor/components/register-l
 import StudentModal from "@/components/home/StudentModal";
 
 const RegisterPage = () => {
-    return (
-        <>
-            <StudentModal />
-            <RegisterLogin />
-            <RegisterForm />
-            <RegisterAbout />
-            <RegisterBenefits />
-            <RegisterFaq />
-        </>
-    );
+  return (
+    <>
+      <StudentModal />
+      <RegisterLogin />
+      <RegisterForm />
+      <RegisterAbout />
+      <RegisterBenefits />
+      <RegisterFaq />
+    </>
+  );
 };
 
 export default RegisterPage;

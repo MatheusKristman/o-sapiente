@@ -7,27 +7,18 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
+import { BsXLg } from "react-icons/bs";
 
 import useSupportModalStore from "@/stores/useSupportModalStore";
-import {
-  ModalAnimation,
-  OverlayAnimation,
-} from "@/constants/framer-animations/modal";
+import { ModalAnimation, OverlayAnimation } from "@/constants/framer-animations/modal";
 import { Button } from "@/components/ui/button";
-import { BsXLg } from "react-icons/bs";
 import { supportModalInfo } from "@/constants/dashboard/message-br";
 import { supportModalSchema } from "@/constants/schemas/supportModalSchema";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/libs/utils";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
 
 export function SupportModal() {
   const [isSending, setIsSending] = useState<boolean>(false);
@@ -81,13 +72,7 @@ export function SupportModal() {
               className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle"
             >
               <div className="w-full flex items-center justify-end mb-4">
-                <Button
-                  variant="link"
-                  size="icon"
-                  type="button"
-                  className="text-green-primary"
-                  onClick={closeModal}
-                >
+                <Button variant="link" size="icon" type="button" className="text-green-primary" onClick={closeModal}>
                   <BsXLg size={26} />
                 </Button>
               </div>
@@ -98,10 +83,7 @@ export function SupportModal() {
                 </h4>
 
                 <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="w-full flex flex-col gap-6"
-                  >
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-6">
                     <div className="w-full flex flex-col gap-4">
                       <FormField
                         control={form.control}
@@ -111,14 +93,8 @@ export function SupportModal() {
                             <FormControl>
                               <Input
                                 disabled={isSending}
-                                className={cn(
-                                  "input",
-                                  form.formState.errors.subject &&
-                                    "input-error",
-                                )}
-                                placeholder={
-                                  supportModalInfo.subjectPlaceholder
-                                }
+                                className={cn("input", form.formState.errors.subject && "input-error")}
+                                placeholder={supportModalInfo.subjectPlaceholder}
                                 {...field}
                               />
                             </FormControl>
@@ -138,12 +114,9 @@ export function SupportModal() {
                                 disabled={isSending}
                                 className={cn(
                                   "textarea !h-[150px] mb-9",
-                                  form.formState.errors.message &&
-                                    "input-error",
+                                  form.formState.errors.message && "input-error"
                                 )}
-                                placeholder={
-                                  supportModalInfo.messagePlaceholder
-                                }
+                                placeholder={supportModalInfo.messagePlaceholder}
                                 {...field}
                               />
                             </FormControl>
@@ -154,11 +127,7 @@ export function SupportModal() {
                       />
                     </div>
 
-                    <Button
-                      disabled={isSending}
-                      type="submit"
-                      className="flex items-center gap-2"
-                    >
+                    <Button disabled={isSending} type="submit" className="flex items-center gap-2">
                       {isSending && <Loader2 className="animate-spin" />}
                       {supportModalInfo.sendBtn}
                     </Button>

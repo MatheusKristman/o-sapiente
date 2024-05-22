@@ -1,6 +1,7 @@
-import { prisma } from "@/libs/prismadb";
-import { AccountRole } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { AccountRole } from "@prisma/client";
+
+import { prisma } from "@/libs/prismadb";
 
 export async function PATCH(req: NextRequest) {
   try {

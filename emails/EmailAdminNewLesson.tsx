@@ -25,7 +25,7 @@ interface Props {
   professorContact: string;
 }
 
-export function EmailAdminNewLesson({
+export default function EmailAdminNewLesson({
   lessonDate,
   lessonPrice,
   certificateRequested,

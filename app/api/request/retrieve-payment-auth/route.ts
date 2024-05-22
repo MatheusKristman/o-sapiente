@@ -1,5 +1,6 @@
-import getCurrentUser from "@/app/action/getCurrentUser";
 import bcrypt from "bcrypt";
+
+import getCurrentUser from "@/app/action/getCurrentUser";
 
 export async function POST(req: Request) {
   try {

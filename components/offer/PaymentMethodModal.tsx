@@ -5,19 +5,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 
-import {
-  ModalAnimation,
-  OverlayAnimation,
-} from "@/constants/framer-animations/modal";
+import { ModalAnimation, OverlayAnimation } from "@/constants/framer-animations/modal";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import { info } from "@/constants/offer/paymentMethodModal-br";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
-import toast from "react-hot-toast";
 import usePaymentStore from "@/stores/usePaymentStore";
 import { OfferWithUserAndRequest } from "@/types";
-import { Loader2 } from "lucide-react";
 
 interface Props {
   offer: OfferWithUserAndRequest | undefined;
@@ -74,16 +71,12 @@ export function PaymentMethodModal({ offer, currentUserId }: Props) {
           closeModal();
 
           setTimeout(() => {
-            router.replace(
-              `${menuItems[1].studentHref}${currentUserId}${menuItems[1].pageHref}/${res.data.id}`
-            );
+            router.replace(`${menuItems[1].studentHref}${currentUserId}${menuItems[1].pageHref}/${res.data.id}`);
           }, 350);
         })
         .catch((error) => {
           console.error(error);
-          toast.error(
-            "Ocorreu um erro ao aceitar a proposta, tente novamente mais tarde!"
-          );
+          toast.error("Ocorreu um erro ao aceitar a proposta, tente novamente mais tarde!");
         })
         .finally(() => {
           setIsSubmitting(false);
@@ -127,48 +120,26 @@ export function PaymentMethodModal({ offer, currentUserId }: Props) {
                 </div>
 
                 <div className="w-full flex flex-col gap-4 mb-9">
-                  <h1 className="text-2xl sm:text-3xl text-gray-primary font-semibold text-left">
-                    {info.title}
-                  </h1>
+                  <h1 className="text-2xl sm:text-3xl text-gray-primary font-semibold text-left">{info.title}</h1>
 
-                  <p className="text-base text-left text-gray-primary">
-                    {info.desc}
-                  </p>
+                  <p className="text-base text-left text-gray-primary">{info.desc}</p>
                 </div>
 
                 <div className="w-full grid grid-cols-1 grid-rows-2 gap-6 mb-12 sm:grid-cols-2 sm:grid-rows-1">
-                  <Toggle
-                    pressed={isPlatformSelected}
-                    onPressedChange={selectPlatform}
-                  >
-                    <h6 className="text-xl font-semibold mb-4">
-                      {info.platformTitle}
-                    </h6>
+                  <Toggle pressed={isPlatformSelected} onPressedChange={selectPlatform}>
+                    <h6 className="text-xl font-semibold mb-4">{info.platformTitle}</h6>
 
-                    <span className="text-sm font-medium">
-                      {info.platformDesc}
-                    </span>
+                    <span className="text-sm font-medium">{info.platformDesc}</span>
                   </Toggle>
 
-                  <Toggle
-                    pressed={isAgreedSelected}
-                    onPressedChange={selectAgreed}
-                  >
-                    <h6 className="text-xl font-semibold mb-4">
-                      {info.agreedTitle}
-                    </h6>
+                  <Toggle pressed={isAgreedSelected} onPressedChange={selectAgreed}>
+                    <h6 className="text-xl font-semibold mb-4">{info.agreedTitle}</h6>
 
-                    <span className="text-sm font-medium">
-                      {info.agreedDesc}
-                    </span>
+                    <span className="text-sm font-medium">{info.agreedDesc}</span>
                   </Toggle>
                 </div>
 
-                <Button
-                  disabled={isSubmitting}
-                  onClick={handlePayment}
-                  className="w-full flex items-center gap-2"
-                >
+                <Button disabled={isSubmitting} onClick={handlePayment} className="w-full flex items-center gap-2">
                   {isSubmitting && <Loader2 className="animate-spin" />}
                   {info.nextButton}
                 </Button>

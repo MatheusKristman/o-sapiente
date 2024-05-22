@@ -5,28 +5,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 
 import { studentForgotPasswordInfo } from "@/constants/studentModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
 import useStudentModalStore from "@/stores/useStudentModalStore";
 import studentForgotPasswordSchema from "@/constants/schemas/studentForgotPasswordSchema";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/libs/utils";
-import { Loader2 } from "lucide-react";
 
 function StudentForgotPasswordForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const { setToNotRecoverPassword, setToLogin, setToRecoverPasswordMessage } =
-    useStudentModalStore();
+  const { setToNotRecoverPassword, setToLogin, setToRecoverPasswordMessage } = useStudentModalStore();
 
   const form = useForm<z.infer<typeof studentForgotPasswordSchema>>({
     defaultValues: {
@@ -93,10 +86,7 @@ function StudentForgotPasswordForm() {
                       autoComplete="off"
                       autoCorrect="off"
                       disabled={isSubmitting}
-                      className={cn(
-                        "input",
-                        form.formState.errors.email && "input-error"
-                      )}
+                      className={cn("input", form.formState.errors.email && "input-error")}
                       {...field}
                     />
                   </FormControl>
@@ -107,17 +97,8 @@ function StudentForgotPasswordForm() {
             />
           </motion.div>
 
-          <motion.div
-            variants={studentFormAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full flex items-center gap-2"
-            >
+          <motion.div variants={studentFormAnimation} initial="initial" animate="animate" exit="exit">
+            <Button type="submit" disabled={isSubmitting} className="w-full flex items-center gap-2">
               {isSubmitting && <Loader2 className="animate-spin" />}
               {studentForgotPasswordInfo.nextButton}
             </Button>
@@ -130,10 +111,7 @@ function StudentForgotPasswordForm() {
       <div className="w-full flex flex-col items-center justify-center gap-4">
         <p className="text-base font-semibold text-[#2C383F]">
           {studentForgotPasswordInfo.rememberedPasswordText}{" "}
-          <span
-            onClick={handleLoginLink}
-            className="text-green-primary cursor-pointer"
-          >
+          <span onClick={handleLoginLink} className="text-green-primary cursor-pointer">
             {studentForgotPasswordInfo.rememberedPasswordLink}
           </span>
         </p>

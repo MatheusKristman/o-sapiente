@@ -20,7 +20,7 @@ interface EmailProps {
   planValidationDate: Date;
 }
 
-export function EmailProfessorPlanPayed({
+export default function EmailProfessorPlanPayed({
   userName,
   planActivationDate,
   planValidationDate,

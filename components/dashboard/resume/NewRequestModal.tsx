@@ -1,20 +1,15 @@
 import { BsXLg } from "react-icons/bs";
-
-import { studentNewRequestInfo } from "@/constants/dashboard/resume-br";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+
 import useNewRequestStore from "@/stores/useNewRequestStore";
-import {
-  newRequestModalAnimation,
-  newRequestOverlayAnimation,
-} from "@/constants/framer-animations/new-request-modal";
+import { newRequestModalAnimation, newRequestOverlayAnimation } from "@/constants/framer-animations/new-request-modal";
 import NewRequestForm from "./NewRequestForm";
 import NewRequestSuccess from "./NewRequestSuccess";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 
 const NewRequestModal = () => {
-  const { isModalOpen, closeModal, isForm, isMessage, resetModalContent } =
-    useNewRequestStore();
+  const { isModalOpen, closeModal, isForm, isMessage, resetModalContent } = useNewRequestStore();
   const router = useRouter();
 
   function handleCloseButton() {
@@ -47,13 +42,7 @@ const NewRequestModal = () => {
               className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
             >
               <div className="w-full flex justify-end items-center">
-                <Button
-                  variant="link"
-                  size="icon"
-                  type="button"
-                  onClick={handleCloseButton}
-                  className="mb-6"
-                >
+                <Button variant="link" size="icon" type="button" onClick={handleCloseButton} className="mb-6">
                   <BsXLg size={26} className="text-green-primary" />
                 </Button>
               </div>
@@ -61,10 +50,7 @@ const NewRequestModal = () => {
               <AnimatePresence>
                 {isForm ? <NewRequestForm key="new-request-form" /> : null}
                 {isMessage ? (
-                  <NewRequestSuccess
-                    key="new-request-message"
-                    handleCloseButton={handleCloseButton}
-                  />
+                  <NewRequestSuccess key="new-request-message" handleCloseButton={handleCloseButton} />
                 ) : null}
               </AnimatePresence>
             </motion.div>

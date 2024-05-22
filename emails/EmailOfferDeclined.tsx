@@ -20,7 +20,7 @@ interface Props {
   message: string;
 }
 
-export function EmailOfferDeclined({
+export default function EmailOfferDeclined({
   userName,
   studentName,
   subject,

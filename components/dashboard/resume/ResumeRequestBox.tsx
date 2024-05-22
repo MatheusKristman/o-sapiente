@@ -1,7 +1,6 @@
-import {
-  professorResumeInfos,
-  studentResumeInfos,
-} from "@/constants/dashboard/resume-br";
+"use client";
+
+import { professorResumeInfos, studentResumeInfos } from "@/constants/dashboard/resume-br";
 import useResumeStore from "@/stores/useResumeStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import OfferBox from "./OfferBox";
@@ -49,9 +48,7 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
             </>
           ) : (
             <div className="w-full flex items-center justify-center">
-              <span className="text-gray-primary/50 text-lg font-medium">
-                {studentResumeInfos.noOfferMessage}
-              </span>
+              <span className="text-gray-primary/50 text-lg font-medium">{studentResumeInfos.noOfferMessage}</span>
             </div>
           ))}
 
@@ -68,9 +65,7 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
             </>
           ) : (
             <div className="w-full flex items-center justify-center">
-              <span className="text-gray-primary/50 text-lg font-medium">
-                {studentResumeInfos.noOfferMessage}
-              </span>
+              <span className="text-gray-primary/50 text-lg font-medium">{studentResumeInfos.noOfferMessage}</span>
             </div>
           ))}
       </div>

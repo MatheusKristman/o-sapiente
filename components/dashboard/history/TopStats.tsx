@@ -1,5 +1,6 @@
-import { RequestWithUsersAndOffers } from "@/types";
 import { Status } from "@prisma/client";
+
+import { RequestWithUsersAndOffers } from "@/types";
 
 interface TopStatsProps {
   requests: RequestWithUsersAndOffers[];
@@ -11,24 +12,14 @@ const TopStats = ({ requests }: TopStatsProps) => {
       <div className="flex flex-col items-center md:items-start">
         <h2 className="font-normal text-[#879298] text-xl">Finalizadas</h2>
         <p className="font-medium text-4xl">
-          {
-            requests.filter(
-              (request: RequestWithUsersAndOffers) =>
-                request.status === Status.finished,
-            ).length
-          }
+          {requests.filter((request: RequestWithUsersAndOffers) => request.status === Status.finished).length}
         </p>
       </div>
 
       <div className="flex flex-col items-center md:items-start">
         <h2 className="font-normal text-[#879298] text-xl">Em Andamento</h2>
         <p className="font-medium text-4xl">
-          {
-            requests.filter(
-              (request: RequestWithUsersAndOffers) =>
-                request.status !== Status.finished,
-            ).length
-          }
+          {requests.filter((request: RequestWithUsersAndOffers) => request.status !== Status.finished).length}
         </p>
       </div>
 

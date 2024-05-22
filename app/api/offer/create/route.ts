@@ -1,10 +1,10 @@
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
+import { AccountRole } from "@prisma/client";
 
 import getSession from "@/app/action/getSession";
 import { prisma } from "@/libs/prismadb";
-import { AccountRole } from "@prisma/client";
-import { EmailOfferNotification } from "@/emails/EmailOfferNotification";
+import EmailOfferNotification from "@/emails/EmailOfferNotification";
 
 interface IGenerateOptions {
   emailUser: string;

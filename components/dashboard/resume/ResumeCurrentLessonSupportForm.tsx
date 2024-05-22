@@ -10,13 +10,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Request } from "@prisma/client";
 
-import {
-  Form,
-  FormItem,
-  FormField,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormItem, FormField, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FormAnimation } from "@/constants/framer-animations/modal";
 import { Button } from "@/components/ui/button";
@@ -58,14 +52,9 @@ export function ResumeCurrentLessonSupportForm() {
         .post(`/api/support/${lesson.id}`, values)
         .then((res) => {
           toast.success(res.data.message);
-          setRequests(
-            res.data.requests.filter((request: Request) => !request.isConcluded)
-          );
+          setRequests(res.data.requests.filter((request: Request) => !request.isConcluded));
           setCurrentLesson(
-            res.data.requests.filter(
-              (request: Request) =>
-                request.isOfferAccepted && !request.isConcluded
-            )
+            res.data.requests.filter((request: Request) => request.isOfferAccepted && !request.isConcluded)
           );
           handleClose();
         })
@@ -81,22 +70,13 @@ export function ResumeCurrentLessonSupportForm() {
   }
 
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={FormAnimation}
-      className="w-full"
-    >
+    <motion.div initial="initial" animate="animate" exit="exit" variants={FormAnimation} className="w-full">
       <h5 className="w-full text-left text-lg sm:text-xl font-semibold text-gray-primary mb-4">
         {currentLessonModalInfo.supportTitle}
       </h5>
 
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full flex flex-col gap-6"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-6">
           <div className="w-full flex flex-col gap-4">
             <FormField
               control={form.control}
@@ -106,10 +86,7 @@ export function ResumeCurrentLessonSupportForm() {
                   <FormControl>
                     <Input
                       disabled={isSending}
-                      className={cn(
-                        "input",
-                        form.formState.errors.subject && "input-error"
-                      )}
+                      className={cn("input", form.formState.errors.subject && "input-error")}
                       placeholder={currentLessonModalInfo.subjectPlaceholder}
                       {...field}
                     />
@@ -128,10 +105,7 @@ export function ResumeCurrentLessonSupportForm() {
                   <FormControl>
                     <Textarea
                       disabled={isSending}
-                      className={cn(
-                        "textarea !h-[150px] mb-9",
-                        form.formState.errors.message && "input-error"
-                      )}
+                      className={cn("textarea !h-[150px] mb-9", form.formState.errors.message && "input-error")}
                       placeholder={currentLessonModalInfo.messagePlaceholder}
                       {...field}
                     />
@@ -144,11 +118,7 @@ export function ResumeCurrentLessonSupportForm() {
           </div>
 
           <div className="w-full flex flex-col gap-4">
-            <Button
-              disabled={isSending}
-              type="submit"
-              className="flex items-center gap-2"
-            >
+            <Button disabled={isSending} type="submit" className="flex items-center gap-2">
               {isSending && <Loader2 className="animate-spin" />}
               {currentLessonModalInfo.sendBtn}
             </Button>

@@ -14,7 +14,7 @@ interface Props {
   message: string;
 }
 
-export function EmailSupport({ message }: Props) {
+export default function EmailSupport({ message }: Props) {
   return (
     <Html>
       <Head />

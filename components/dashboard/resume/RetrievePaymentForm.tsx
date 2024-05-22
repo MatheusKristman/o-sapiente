@@ -13,32 +13,16 @@ import { newRequestFormAnimation } from "@/constants/framer-animations/new-reque
 import useRetrievePaymentModalStore from "@/stores/useRetrievePaymentModalStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 
 const retrievePaymentSchema = z.object({
-  pixValue: z
-    .string()
-    .min(11, "Código do Pix inválido, verifique e tente novamente"),
+  pixValue: z.string().min(11, "Código do Pix inválido, verifique e tente novamente"),
   password: z.string().min(1, "Senha é obrigatória").optional(),
 });
 
 export function RetrievePaymentForm() {
-  const {
-    setIsForm,
-    setIsMessage,
-    pixCode,
-    setPixCode,
-    isEditing,
-    setIsEditing,
-    isSubmitting,
-    setIsSubmitting,
-  } = useRetrievePaymentModalStore();
+  const { setIsForm, setIsMessage, pixCode, setPixCode, isEditing, setIsEditing, isSubmitting, setIsSubmitting } =
+    useRetrievePaymentModalStore();
 
   const form = useForm<z.infer<typeof retrievePaymentSchema>>({
     //@ts-ignore
@@ -143,9 +127,7 @@ export function RetrievePaymentForm() {
           {retrievePaymentModalInfo.title}
         </h1>
 
-        <p className="text-base text-gray-primary font-normal text-left">
-          {retrievePaymentModalInfo.desc}
-        </p>
+        <p className="text-base text-gray-primary font-normal text-left">{retrievePaymentModalInfo.desc}</p>
       </motion.div>
 
       <motion.div
@@ -162,12 +144,7 @@ export function RetrievePaymentForm() {
                 *****{pixCode.substring(5, pixCode.length - 1)}
               </span>
 
-              <Button
-                disabled={isSubmitting}
-                onClick={() => setIsEditing(true)}
-                variant="link"
-                size="icon"
-              >
+              <Button disabled={isSubmitting} onClick={() => setIsEditing(true)} variant="link" size="icon">
                 <Pencil className="text-green-primary" />
               </Button>
             </div>
@@ -180,10 +157,7 @@ export function RetrievePaymentForm() {
 
         {isEditing ? (
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full flex flex-col gap-4"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
               <FormField
                 control={form.control}
                 name="pixValue"
@@ -213,9 +187,7 @@ export function RetrievePaymentForm() {
                         type="password"
                         disabled={isSubmitting}
                         className="input"
-                        placeholder={
-                          retrievePaymentModalInfo.passwordPlaceholder
-                        }
+                        placeholder={retrievePaymentModalInfo.passwordPlaceholder}
                         {...field}
                       />
                     </FormControl>
@@ -236,10 +208,7 @@ export function RetrievePaymentForm() {
           </Button>
         ) : (
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full flex flex-col gap-4"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
               <FormField
                 control={form.control}
                 name="pixValue"

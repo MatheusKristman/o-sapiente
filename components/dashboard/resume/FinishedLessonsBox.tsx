@@ -20,20 +20,13 @@ export function FinishedLessonsBox() {
     <div className="w-full bg-white rounded-2xl p-9 shadow-md shadow-black/25">
       <div className="w-full flex flex-col justify-between gap-4">
         <div className="w-full flex flex-col gap-2">
-          <h3 className="text-lg text-green-primary font-semibold">
-            {professorResumeInfos.finishedLessonsTitle}
-          </h3>
+          <h3 className="text-lg text-green-primary font-semibold">{professorResumeInfos.finishedLessonsTitle}</h3>
 
-          {/* TODO: passar valor atraves de requisição */}
-          <span className="text-2xl text-green-primary font-semibold">
-            {finishedLessons}
-          </span>
+          <span className="text-2xl text-green-primary font-semibold">{finishedLessons}</span>
         </div>
 
         <Button asChild className="w-full">
-          <Link
-            href={`${menuItems[2].professorHref}${userId}${menuItems[2].pageHref}`}
-          >
+          <Link href={`${menuItems[2].professorHref}${userId}${menuItems[2].pageHref}`}>
             {professorResumeInfos.seeHistory}
           </Link>
         </Button>
@@ -47,9 +40,7 @@ function FinishedLessonsBoxSkeleton() {
     <div className="w-full bg-white rounded-2xl p-9 shadow-md shadow-black/25">
       <div className="w-full flex flex-col justify-between gap-4">
         <div className="w-full flex flex-col gap-2">
-          <h3 className="text-lg text-green-primary font-semibold">
-            {professorResumeInfos.finishedLessonsTitle}
-          </h3>
+          <h3 className="text-lg text-green-primary font-semibold">{professorResumeInfos.finishedLessonsTitle}</h3>
 
           <Skeleton className="h-10 w-14" />
         </div>

@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     if (newPasswordConfirm !== newPassword) {
       return new Response(
-        "As senhas não coecidem, verifique e tente novamente",
+        "As senhas não coincidem, verifique e tente novamente",
         { status: 401 },
       );
     }

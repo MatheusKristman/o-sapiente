@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-import Link from "next/link";
 import FooterLinks from "./FooterLinks";
 
 const Footer = () => {
@@ -25,13 +24,7 @@ const Footer = () => {
           <span className="text-white text-base">O Sapiente © 2023</span>
 
           <a href="https://www.mkdevsolutions.com/" target="_blank" rel="noreferrer noopener">
-            <Image
-              src="/assets/images/mkdev.svg"
-              alt="MKDev"
-              width={80}
-              height={30}
-              className="object-contain"
-            />
+            <Image src="/assets/images/mkdev.svg" alt="MKDev" width={80} height={30} className="object-contain" />
           </a>
 
           <a href="#" target="_blank" rel="noreferrer noopener" className="flex w-fit">

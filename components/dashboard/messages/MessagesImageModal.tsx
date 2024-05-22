@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { Loader2, Trash2 } from "lucide-react";
 import { BsXLg } from "react-icons/bs";
 import { AnimatePresence, motion } from "framer-motion";
-import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "@uploadthing/react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 
@@ -17,7 +17,6 @@ import {
 } from "@/constants/framer-animations/message-image-modal";
 import useConversationStore from "@/stores/useConversationStore";
 import { useUploadThing } from "@/libs/uploadthing";
-import axios from "axios";
 
 interface Props {
   conversationId: string;
@@ -26,7 +25,6 @@ interface Props {
 const MessagesImageModal = ({ conversationId }: Props) => {
   const [image, setImage] = useState<File[] | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
-  const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
 
   const { isImageModalOpen, closeImageModal } = useConversationStore();
 
@@ -46,36 +44,27 @@ const MessagesImageModal = ({ conversationId }: Props) => {
     setImageUrl(URL.createObjectURL(acceptedFiles[0]));
   }, []);
 
-  const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
-    "imageMessage",
-    {
-      onClientUploadComplete: () => {
-        toast.success("Imagem enviada com sucesso");
-        handleDeleteButton();
-        closeImageModal();
-      },
-      onUploadError: (error) => {
-        console.error(error);
-        console.error(error.data);
-
-        if (error.data?.message === "Unable to get presigned urls") {
-          toast.error(
-            "Tipo ou tamanho da imagem inválido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)",
-          );
-
-          return;
-        }
-
-        toast.error(
-          "Ocorreu um erro ao enviar a imagem, verifique e tente novamente",
-        );
-      },
+  const { startUpload, isUploading, permittedFileInfo } = useUploadThing("imageMessage", {
+    onClientUploadComplete: () => {
+      toast.success("Imagem enviada com sucesso");
+      handleDeleteButton();
+      closeImageModal();
     },
-  );
+    onUploadError: (error) => {
+      console.error(error);
+      console.error(error.data);
 
-  const fileTypes = permittedFileInfo?.config
-    ? Object.keys(permittedFileInfo?.config)
-    : [];
+      if (error.data?.message === "Unable to get presigned urls") {
+        toast.error("Tipo ou tamanho da imagem inválido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)");
+
+        return;
+      }
+
+      toast.error("Ocorreu um erro ao enviar a imagem, verifique e tente novamente");
+    },
+  });
+
+  const fileTypes = permittedFileInfo?.config ? Object.keys(permittedFileInfo?.config) : [];
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -115,18 +104,11 @@ const MessagesImageModal = ({ conversationId }: Props) => {
               </div>
 
               <div className="w-full flex flex-col items-start">
-                <h4 className="text-2xl text-gray-primary font-semibold mb-6 lg:text-3xl">
-                  {imageModalInfo.title}
-                </h4>
+                <h4 className="text-2xl text-gray-primary font-semibold mb-6 lg:text-3xl">{imageModalInfo.title}</h4>
 
                 {imageUrl && image ? (
                   <div className="w-full h-[250px] max-w-[250px] rounded-lg relative overflow-hidden shadow-md shadow-[rgba(0,0,0,0.25)] mx-auto mb-4">
-                    <Image
-                      src={imageUrl}
-                      alt="Imagem"
-                      fill
-                      className="object-cover object-center"
-                    />
+                    <Image src={imageUrl} alt="Imagem" fill className="object-cover object-center" />
                   </div>
                 ) : (
                   <div
@@ -139,18 +121,14 @@ const MessagesImageModal = ({ conversationId }: Props) => {
                     <span className="text-base text-gray-primary font-medium max-w-[250px] opacity-60">
                       {imageModalInfo.inputPlaceholder}
                     </span>
-                    <span className="text-sm text-gray-primary/60 font-medium">
-                      {imageModalInfo.inputAdviser}
-                    </span>
+                    <span className="text-sm text-gray-primary/60 font-medium">{imageModalInfo.inputAdviser}</span>
                   </div>
                 )}
 
                 {imageUrl && image && (
                   <div className="w-full flex items-center justify-center mb-6">
                     <Button
-                      disabled={
-                        !image || !imageUrl || isImageLoading || isUploading
-                      }
+                      disabled={!image || !imageUrl || isUploading}
                       onClick={handleDeleteButton}
                       className="flex items-center justify-center gap-2"
                     >
@@ -162,12 +140,10 @@ const MessagesImageModal = ({ conversationId }: Props) => {
 
                 <Button
                   className="w-full flex items-center gap-2"
-                  disabled={
-                    !image || !imageUrl || isImageLoading || isUploading
-                  }
+                  disabled={!image || !imageUrl || isUploading}
                   onClick={() => startUpload(image!, { conversationId })}
                 >
-                  {isImageLoading || isUploading ? (
+                  {isUploading ? (
                     <>
                       {imageModalInfo.sendingBtn}
                       <Loader2 color="#fff" className="w-6 h-6 animate-spin" />

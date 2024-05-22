@@ -1,7 +1,8 @@
+import { ArrowRight } from "lucide-react";
+import { Plan } from "@prisma/client";
+
 import { cn, formatPrice } from "@/libs/utils";
 import usePaymentStore from "@/stores/usePaymentStore";
-import { Plan } from "@prisma/client";
-import { ArrowRight } from "lucide-react";
 
 interface Props {
   plan: Plan;
@@ -23,12 +24,8 @@ export function PlanOption({ plan, selected }: Props) {
       )}
     >
       <div className="flex flex-col">
-        <span className="text-base text-gray-primary font-medium">
-          {plan.planName}
-        </span>
-        <span className="text-xl font-semibold text-green-primary">
-          {formatPrice(plan.cost / 100)}
-        </span>
+        <span className="text-base text-gray-primary font-medium">{plan.planName}</span>
+        <span className="text-xl font-semibold text-green-primary">{formatPrice(plan.cost / 100)}</span>
       </div>
 
       <ul className="flex flex-col space-y-1">

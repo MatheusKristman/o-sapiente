@@ -1,10 +1,10 @@
+import { NextRequest, NextResponse } from "next/server";
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
-
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/libs/prismadb";
 import { AccountRole } from "@prisma/client";
-import { EmailRequestNotification } from "@/emails/EmailRequestNotification";
+
+import { prisma } from "@/libs/prismadb";
+import EmailRequestNotification from "@/emails/EmailRequestNotification";
 
 interface IGenerateOptions {
   emailUser: string;

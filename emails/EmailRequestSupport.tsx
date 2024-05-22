@@ -26,7 +26,7 @@ interface Props {
   professorContact: string;
 }
 
-export function EmailRequestSupport({
+export default function EmailRequestSupport({
   message,
   lessonDate,
   lessonPrice,

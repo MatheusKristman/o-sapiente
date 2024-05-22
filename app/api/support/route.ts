@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
 
-import { EmailSupport } from "@/emails/EmailSupport";
+import EmailSupport from "@/emails/EmailSupport";
 
 export async function POST(req: Request) {
   try {

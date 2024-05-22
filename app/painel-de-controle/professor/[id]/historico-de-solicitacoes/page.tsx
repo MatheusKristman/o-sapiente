@@ -18,6 +18,7 @@ const HistoryPage = async () => {
   console.log("Requests: ", requests);
 
   if (!requests) {
+    //TODO: inserir componente de loading
     return (
       <div>
         <div>Carregando...</div>

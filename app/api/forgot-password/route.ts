@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import { addHours } from "date-fns";
 
 import { prisma } from "@/libs/prismadb";
-import { EmailForgotPassword } from "@/emails/EmailForgotPassword";
+import EmailForgotPassword from "@/emails/EmailForgotPassword";
 
 export async function POST(req: Request) {
   try {
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
         console.log("[ERROR_ON_FORGOT_PASSWORD]", error);
 
         return new Response(
-          "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
+          "Ocorreu um erro no envio do e-mail de solicitação de troca da senha",
           {
             status: 400,
           }

@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
+import { render } from "@react-email/render";
 
 import { prisma } from "@/libs/prismadb";
-import { render } from "@react-email/render";
-import { EmailOfferDeclined } from "@/emails/EmailOfferDeclined";
+import EmailOfferDeclined from "@/emails/EmailOfferDeclined";
 import getCurrentUser from "@/app/action/getCurrentUser";
 
 interface IGenerateOptions {

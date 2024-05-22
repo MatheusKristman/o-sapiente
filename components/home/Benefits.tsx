@@ -3,10 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import {
-  studentsBenefitsInfos,
-  professorBenefitsInfos,
-} from "@/constants/benefits-br";
+import { studentsBenefitsInfos, professorBenefitsInfos } from "@/constants/benefits-br";
 import {
   benefitsContainerAnimation,
   benefitsEvenCardAnimation,
@@ -14,7 +11,7 @@ import {
   benefitsOddCardAnimation,
   benefitsOddCardMobileAnimation,
 } from "@/constants/framer-animations/benefits";
-import BenefitsCards from "./components/benefits/BenefitsCards";
+import BenefitsCards from "@/components/home/components/benefits/BenefitsCards";
 
 const Benefits = () => {
   const [isStudent, setIsStudent] = useState(true);
@@ -56,9 +53,7 @@ const Benefits = () => {
           onClick={handleProfessorButton}
           disabled={isChangingInfo}
           className={`${buttonStyle} ${
-            isProfessor
-              ? "bg-green-primary hover:bg-[#01AA72]"
-              : "bg-[#37474F] hover:bg-[#29363D]"
+            isProfessor ? "bg-green-primary hover:bg-[#01AA72]" : "bg-[#37474F] hover:bg-[#29363D]"
           }`}
         >
           <div
@@ -68,11 +63,7 @@ const Benefits = () => {
           >
             <span className="bg-briefcase bg-contain bg-no-repeat w-1/2 h-1/2" />
           </div>
-          <span
-            className={`${
-              isProfessor ? "text-[#393F42]" : "text-white"
-            } text-lg sm:text-xl font-medium`}
-          >
+          <span className={`${isProfessor ? "text-[#393F42]" : "text-white"} text-lg sm:text-xl font-medium`}>
             Professores
           </span>
         </button>
@@ -81,9 +72,7 @@ const Benefits = () => {
           onClick={handleStudentButton}
           disabled={isChangingInfo}
           className={`${buttonStyle} ${
-            isStudent
-              ? "bg-green-primary hover:bg-[#01AA72]"
-              : "bg-[#37474F] hover:bg-[#29363D]"
+            isStudent ? "bg-green-primary hover:bg-[#01AA72]" : "bg-[#37474F] hover:bg-[#29363D]"
           }`}
         >
           <div
@@ -93,11 +82,7 @@ const Benefits = () => {
           >
             <span className="bg-hat bg-contain bg-no-repeat w-1/2 h-1/2" />
           </div>
-          <span
-            className={`${
-              isStudent ? "text-[#393F42]" : "text-white"
-            } text-lg sm:text-xl font-medium`}
-          >
+          <span className={`${isStudent ? "text-[#393F42]" : "text-white"} text-lg sm:text-xl font-medium`}>
             Alunos
           </span>
         </button>
@@ -116,14 +101,8 @@ const Benefits = () => {
             {studentsBenefitsInfos.map((benefit, index) => (
               <BenefitsCards
                 key={benefit.title}
-                position={
-                  index % 2 !== 0
-                    ? "justify-start xl:justify-end"
-                    : "justify-end xl:justify-start"
-                }
-                marginBottom={`${index === 0 && "mb-12"} ${
-                  index === 1 && "mb-10"
-                }`}
+                position={index % 2 !== 0 ? "justify-start xl:justify-end" : "justify-end xl:justify-start"}
+                marginBottom={`${index === 0 && "mb-12"} ${index === 1 && "mb-10"}`}
                 title={benefit.title}
                 desc={benefit.desc}
                 animationVariant={
@@ -154,14 +133,8 @@ const Benefits = () => {
             {professorBenefitsInfos.map((benefit, index) => (
               <BenefitsCards
                 key={benefit.title}
-                position={
-                  index % 2 === 0
-                    ? "justify-start xl:justify-end"
-                    : "justify-end xl:justify-start"
-                }
-                marginBottom={`${index === 0 && "mb-12"} ${
-                  index === 1 && "mb-10"
-                }`}
+                position={index % 2 === 0 ? "justify-start xl:justify-end" : "justify-end xl:justify-start"}
+                marginBottom={`${index === 0 && "mb-12"} ${index === 1 && "mb-10"}`}
                 title={benefit.title}
                 desc={benefit.desc}
                 animationVariant={

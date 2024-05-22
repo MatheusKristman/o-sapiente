@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { Dot, Plus } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { studentResumeInfos } from "@/constants/dashboard/resume-br";
 import { cn } from "@/libs/utils";
 import { RequestWithUsersAndOffers } from "@/types";
-import { usePathname } from "next/navigation";
 import useUserStore from "@/stores/useUserStore";
 import useCurrentLessonModalStore from "@/stores/useCurrentLessonModalStore";
 
@@ -17,10 +17,7 @@ interface CurrentLessonMessageBoxProps {
   last?: boolean;
 }
 
-const CurrentLessonMessageBox = ({
-  lesson,
-  last,
-}: CurrentLessonMessageBoxProps) => {
+const CurrentLessonMessageBox = ({ lesson, last }: CurrentLessonMessageBoxProps) => {
   const { userId } = useUserStore();
   const { openModal, setLesson } = useCurrentLessonModalStore();
 
@@ -33,20 +30,11 @@ const CurrentLessonMessageBox = ({
   }
 
   return (
-    <div
-      className={cn(
-        "w-full rounded-lg bg-green-primary p-5 mb-4",
-        last && "mb-0",
-      )}
-    >
+    <div className={cn("w-full rounded-lg bg-green-primary p-5 mb-4", last && "mb-0")}>
       <div className="flex flex-col lg:flex-row lg:items-center lg:gap-6 xl:w-full">
         <div className="flex justify-center xl:w-1/12">
           <Image
-            src={
-              filteredUser.profilePhoto
-                ? filteredUser.profilePhoto
-                : "/assets/images/default-user-photo.svg"
-            }
+            src={filteredUser.profilePhoto ? filteredUser.profilePhoto : "/assets/images/default-user-photo.svg"}
             alt="Perfil"
             width={50}
             height={40}
@@ -65,21 +53,12 @@ const CurrentLessonMessageBox = ({
         <div className="xl:flex xl:justify-end xl:w-5/12">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button variant="secondary" className="w-full" asChild>
-              <Link
-                href={`${pathname
-                  ?.split("/")
-                  .slice(0, -1)
-                  .join("/")}/mensagens/${lesson.conversationId}`}
-              >
+              <Link href={`${pathname?.split("/").slice(0, -1).join("/")}/mensagens/${lesson.conversationId}`}>
                 {studentResumeInfos.seeMessageBtn}
               </Link>
             </Button>
 
-            <Button
-              onClick={handleOpenCurrentLessonModal}
-              variant="secondary"
-              className="px-3"
-            >
+            <Button onClick={handleOpenCurrentLessonModal} variant="secondary" className="px-3">
               <Plus />
             </Button>
           </div>

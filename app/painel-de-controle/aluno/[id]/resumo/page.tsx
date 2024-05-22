@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Request } from "@prisma/client";
 import { toast } from "react-hot-toast";
@@ -23,8 +23,7 @@ import useResumeStore from "@/stores/useResumeStore";
 // TODO: se o usuário errado entrar, redirecionar para a home
 
 const DashboardPage = () => {
-  const { setProfilePhoto, setName, setCurrentLesson, setRequests, requests } =
-    useResumeStore();
+  const { setProfilePhoto, setName, setCurrentLesson, setRequests, requests } = useResumeStore();
 
   const session = useSession();
   const router = useRouter();
@@ -50,16 +49,10 @@ const DashboardPage = () => {
         const requestResponse = await axios.get("/api/request/get-requests");
 
         setRequests(
-          requestResponse.data.filter(
-            (request: Request) =>
-              !request.isConcluded && !request.isOfferAccepted,
-          ),
+          requestResponse.data.filter((request: Request) => !request.isConcluded && !request.isOfferAccepted)
         );
         setCurrentLesson(
-          requestResponse.data.filter(
-            (request: Request) =>
-              request.isOfferAccepted && !request.isConcluded,
-          ),
+          requestResponse.data.filter((request: Request) => request.isOfferAccepted && !request.isConcluded)
         );
       } catch (error) {
         console.error(error);
@@ -67,13 +60,7 @@ const DashboardPage = () => {
     };
 
     fetchData();
-  }, [
-    session?.data?.user?.email,
-    setCurrentLesson,
-    setName,
-    setProfilePhoto,
-    setRequests,
-  ]);
+  }, [session?.data?.user?.email, setCurrentLesson, setName, setProfilePhoto, setRequests]);
 
   return (
     <>

@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Conversation as ConversationType, User } from "@prisma/client";
 
 import { cn } from "@/libs/utils";
 import MessagesChatBody from "./MessagesChatBody";
-import { Conversation as ConversationType, User } from "@prisma/client";
 import { FullMessageType } from "@/types";
 import MessagesChatHeader from "./MessagesChatHeader";
 import MessagesChatForm from "./MessagesChatForm";
@@ -20,12 +20,7 @@ interface Props {
   userType: "aluno" | "professor";
 }
 
-const MessagesChatBox = ({
-  conversation,
-  initialMessages,
-  conversationParams,
-  userType,
-}: Props) => {
+const MessagesChatBox = ({ conversation, initialMessages, conversationParams, userType }: Props) => {
   const { isOpen } = useConversation(conversationParams);
   const { openImageModal, openVideoModal } = useConversationStore();
 
@@ -63,15 +58,12 @@ const MessagesChatBox = ({
       <div
         className={cn(
           "relative flex-1 flex flex-col h-full lg:w-full lg:h-full lg:flex",
-          isOpen ? "flex" : "hidden lg:flex",
+          isOpen ? "flex" : "hidden lg:flex"
         )}
       >
         <MessagesChatHeader conversation={conversation} userType={userType} />
 
-        <MessagesChatBody
-          initialMessages={initialMessages}
-          conversationParams={conversationParams}
-        />
+        <MessagesChatBody initialMessages={initialMessages} conversationParams={conversationParams} />
 
         <MessagesChatForm
           conversationParams={conversationParams}

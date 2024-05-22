@@ -1,9 +1,10 @@
+import { revalidatePath } from "next/cache";
+
 import MessagesChatBox from "@/components/dashboard/messages/MessagesChatBox";
 import MessagesContacts from "@/components/dashboard/messages/MessagesContacts";
 import getConversations from "@/app/action/getConversations";
 import getConversationById from "@/app/action/getConversationById";
 import getMessages from "@/app/action/getMessages";
-import { revalidatePath } from "next/cache";
 
 export const revalidate = 0;
 
@@ -14,9 +15,7 @@ interface Props {
 }
 
 const ConversationMessagesPage = async ({ params }: Props) => {
-  revalidatePath(
-    "/painel-de-controle/professor/[id]/mensagens/[conversationId]",
-  );
+  revalidatePath("/painel-de-controle/professor/[id]/mensagens/[conversationId]");
 
   const conversations = await getConversations();
   const conversation = await getConversationById(params.conversationId);
@@ -33,11 +32,7 @@ const ConversationMessagesPage = async ({ params }: Props) => {
 
   return (
     <div className="w-full h-[calc(100vh-144px)] mx-auto flex flex-col lg:h-[calc(100vh-147px)] lg:flex-row ">
-      <MessagesContacts
-        initialConversations={conversations}
-        conversationParams={params}
-        userType="professor"
-      />
+      <MessagesContacts initialConversations={conversations} conversationParams={params} userType="professor" />
 
       <MessagesChatBox
         conversation={conversation}

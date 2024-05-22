@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Status, Request } from "@prisma/client";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { currentLessonModalInfo } from "@/constants/dashboard/resume-br";
@@ -13,22 +14,15 @@ import useFinishModalStore from "@/stores/useFinishModalStore";
 import useUserStore from "@/stores/useUserStore";
 import { FormAnimation } from "@/constants/framer-animations/modal";
 import useResumeStore from "@/stores/useResumeStore";
-import { Loader2 } from "lucide-react";
 
 export function ResumeCurrentLessonBtns() {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const { lesson, closeModal, setSupport, setBtns } =
-    useCurrentLessonModalStore();
+  const { lesson, closeModal, setSupport, setBtns } = useCurrentLessonModalStore();
   const { userId } = useUserStore();
-  const {
-    openModal: openFinishModal,
-    setRequestSelected: setFinishRequestSelected,
-  } = useFinishModalStore();
-  const {
-    openModal: openConfirmFinishModal,
-    setRequestSelected: setConfirmFinishRequestSelected,
-  } = useConfirmFinishModalStore();
+  const { openModal: openFinishModal, setRequestSelected: setFinishRequestSelected } = useFinishModalStore();
+  const { openModal: openConfirmFinishModal, setRequestSelected: setConfirmFinishRequestSelected } =
+    useConfirmFinishModalStore();
   const { setCurrentLesson, setRequests } = useResumeStore();
 
   if (!lesson) {
@@ -74,15 +68,8 @@ export function ResumeCurrentLessonBtns() {
           previousStatus: lesson.previousStatus,
         })
         .then((res) => {
-          setRequests(
-            res.data.filter((request: Request) => !request.isConcluded),
-          );
-          setCurrentLesson(
-            res.data.filter(
-              (request: Request) =>
-                request.isOfferAccepted && !request.isConcluded,
-            ),
-          );
+          setRequests(res.data.filter((request: Request) => !request.isConcluded));
+          setCurrentLesson(res.data.filter((request: Request) => request.isOfferAccepted && !request.isConcluded));
           handleClose();
         })
         .catch((error) => {
@@ -95,28 +82,19 @@ export function ResumeCurrentLessonBtns() {
   }
 
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={FormAnimation}
-      className="w-full"
-    >
+    <motion.div initial="initial" animate="animate" exit="exit" variants={FormAnimation} className="w-full">
       <div className="w-full flex flex-col gap-6">
         {!lesson.isConcluded && lesson.usersIdsVotedToFinish.length === 0 && (
           <Button
             onClick={handleOpenFinishModal}
             className="w-full"
-            disabled={
-              lesson.usersIdsVotedToFinish.includes(userId) ||
-              lesson.status === Status.support
-            }
+            disabled={lesson.usersIdsVotedToFinish.includes(userId) || lesson.status === Status.support}
           >
             {lesson.status === Status.support
               ? currentLessonModalInfo.supportDisabledBtn
               : lesson.usersIdsVotedToFinish.includes(userId)
-                ? currentLessonModalInfo.finishLessonDisabledBtn
-                : currentLessonModalInfo.finishLessonBtn}
+              ? currentLessonModalInfo.finishLessonDisabledBtn
+              : currentLessonModalInfo.finishLessonBtn}
           </Button>
         )}
 
@@ -124,16 +102,13 @@ export function ResumeCurrentLessonBtns() {
           <Button
             onClick={handleOpenConfirmFinishModal}
             className="w-full"
-            disabled={
-              lesson.usersIdsVotedToFinish.includes(userId) ||
-              lesson.status === Status.support
-            }
+            disabled={lesson.usersIdsVotedToFinish.includes(userId) || lesson.status === Status.support}
           >
             {lesson.status === Status.support
               ? currentLessonModalInfo.supportDisabledBtn
               : lesson.usersIdsVotedToFinish.includes(userId)
-                ? currentLessonModalInfo.finishLessonDisabledBtn
-                : currentLessonModalInfo.confirmFinishLessonBtn}
+              ? currentLessonModalInfo.finishLessonDisabledBtn
+              : currentLessonModalInfo.confirmFinishLessonBtn}
           </Button>
         )}
 

@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import { info } from "@/constants/offer/invalidUser-br";
-import { Button } from "../ui/button";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import useUserStore from "@/stores/useUserStore";
 
 export function InvalidUser() {
@@ -25,13 +25,9 @@ export function InvalidUser() {
           />
 
           <div className="w-full flex flex-col items-center gap-6">
-            <h1 className="text-2xl sm:text-3xl text-gray-primary font-semibold text-center">
-              {info.title}
-            </h1>
+            <h1 className="text-2xl sm:text-3xl text-gray-primary font-semibold text-center">{info.title}</h1>
 
-            <p className="text-base sm:text-lg text-gray-primary text-center">
-              {info.desc}
-            </p>
+            <p className="text-base sm:text-lg text-gray-primary text-center">{info.desc}</p>
           </div>
         </div>
 

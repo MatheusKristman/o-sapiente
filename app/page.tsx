@@ -8,7 +8,7 @@ import axios from "axios";
 
 import Banner from "@/components/home/Banner";
 import StudentModal from "@/components/home/StudentModal";
-import Hero from "../components/home/Hero";
+import Hero from "@/components/home/Hero";
 import Steps from "@/components/home/Steps";
 import Benefits from "@/components/home/Benefits";
 import RecentsRequests from "@/components/home/RecentsRequests";
@@ -24,8 +24,7 @@ export default function Home() {
 
   const { openModal: openStudentModal, setToLogin } = useStudentModalStore();
   const { openModal: openProfessorModal } = useProfessorModalStore();
-  const { openModal: openRecoverPasswordModal, setIdUser } =
-    useRecoverPasswordModalStore();
+  const { openModal: openRecoverPasswordModal, setIdUser } = useRecoverPasswordModalStore();
 
   const searchParams = useSearchParams();
   const id = searchParams?.get("id");

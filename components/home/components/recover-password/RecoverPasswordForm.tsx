@@ -5,22 +5,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 import { FormAnimation } from "@/constants/framer-animations/modal";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/libs/utils";
 import { recoverPasswordSchema } from "@/constants/schemas/recoverPasswordSchema";
 import { recoverPasswordModalInfo } from "@/constants/recoverPasswordModal-br";
 import useRecoverPasswordModalStore from "@/stores/useRecoverPasswordModalStore";
-import { Loader2 } from "lucide-react";
 
 function RecoverPasswordForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -59,18 +53,9 @@ function RecoverPasswordForm() {
   }
 
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={FormAnimation}
-      className="w-full"
-    >
+    <motion.div initial="initial" animate="animate" exit="exit" variants={FormAnimation} className="w-full">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full flex flex-col gap-6"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-6">
           <div className="w-full flex flex-col gap-4">
             <FormField
               control={form.control}
@@ -84,10 +69,7 @@ function RecoverPasswordForm() {
                       autoComplete="off"
                       autoCorrect="off"
                       disabled={isSubmitting}
-                      className={cn(
-                        "input",
-                        form.formState.errors.newPassword && "input-error",
-                      )}
+                      className={cn("input", form.formState.errors.newPassword && "input-error")}
                       {...field}
                     />
                   </FormControl>
@@ -109,10 +91,7 @@ function RecoverPasswordForm() {
                       autoComplete="off"
                       autoCorrect="off"
                       disabled={isSubmitting}
-                      className={cn(
-                        "input",
-                        form.formState.errors.newPassword && "input-error",
-                      )}
+                      className={cn("input", form.formState.errors.newPassword && "input-error")}
                       {...field}
                     />
                   </FormControl>
@@ -123,11 +102,7 @@ function RecoverPasswordForm() {
             />
           </div>
 
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="flex items-center gap-2"
-          >
+          <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2">
             {isSubmitting && <Loader2 className="animate-spin" />}
             {recoverPasswordModalInfo.sendBtn}
           </Button>

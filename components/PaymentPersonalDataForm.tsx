@@ -4,26 +4,17 @@ import { format, getYear } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 import PhoneInput from "react-phone-number-input";
+import { toast } from "react-hot-toast";
+import { User } from "@prisma/client";
 
 import { info } from "@/constants/paymentPersonalDataForm-br";
 import { cn } from "@/libs/utils";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { toast } from "react-hot-toast";
 
 import "react-phone-number-input/style.css";
-import { User } from "@prisma/client";
 
 interface Props {
   control: Control<
@@ -66,9 +57,7 @@ export function PaymentPersonalDataForm({
   return (
     <div className="w-full px-6 mb-12 sm:px-16 lg:container lg:mx-auto">
       <div className="w-full bg-white px-6 py-9 rounded-2xl shadow-md shadow-black/25 flex flex-col gap-2">
-        <h3 className="text-xl text-gray-primary font-semibold">
-          {info.title}
-        </h3>
+        <h3 className="text-xl text-gray-primary font-semibold">{info.title}</h3>
 
         <div className="w-full flex flex-col gap-4 lg:flex-row">
           <div className="w-full flex flex-col gap-4">
@@ -84,11 +73,7 @@ export function PaymentPersonalDataForm({
                         "input-error": false,
                       })}
                       disabled={!!currentUser || isSubmitting}
-                      value={
-                        !!currentUser
-                          ? `${currentUser.firstName} ${currentUser.lastName}`
-                          : field.value
-                      }
+                      value={!!currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : field.value}
                       name={field.name}
                       ref={field.ref}
                       onBlur={field.onBlur}
@@ -163,19 +148,14 @@ export function PaymentPersonalDataForm({
                           <Button
                             disabled={isSubmitting}
                             variant="datePicker"
-                            className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
+                            className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
                           >
                             {field.value ? (
                               format(field.value, "PPP", {
                                 locale: ptBR,
                               })
                             ) : (
-                              <span className="text-gray-primary/50">
-                                {info.birthPlaceholder}
-                              </span>
+                              <span className="text-gray-primary/50">{info.birthPlaceholder}</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
@@ -188,9 +168,7 @@ export function PaymentPersonalDataForm({
                           locale={ptBR}
                           selected={field.value}
                           onSelect={field.onChange}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
+                          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
                           captionLayout="dropdown"
                           fromYear={1900}
                           toYear={currentYear}

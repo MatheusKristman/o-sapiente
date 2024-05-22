@@ -67,25 +67,17 @@ const ResumePage = () => {
           const requestResponse = await axios.get("/api/request/get-requests");
 
           setRequests(
-            requestResponse.data.filter(
-              (request: Request) =>
-                !request.isConcluded && !request.isOfferAccepted,
-            ),
+            requestResponse.data.filter((request: Request) => !request.isConcluded && !request.isOfferAccepted)
           );
           setCurrentLesson(
             requestResponse.data.filter(
-              (request: Request) =>
-                request.isOfferAccepted &&
-                !request.isConcluded &&
-                request.userIds.includes(userId),
-            ),
+              (request: Request) => request.isOfferAccepted && !request.isConcluded && request.userIds.includes(userId)
+            )
           );
           setFinishedLessons(
             requestResponse.data.filter(
-              (request: Request) =>
-                request.status === Status.finished &&
-                request.userIds.includes(userId),
-            ).length,
+              (request: Request) => request.status === Status.finished && request.userIds.includes(userId)
+            ).length
           );
         }
       } catch (error) {

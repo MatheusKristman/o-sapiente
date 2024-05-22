@@ -4,13 +4,13 @@ import Image from "next/image";
 import MoonLoader from "react-spinners/MoonLoader";
 import { Loader2, Trash2 } from "lucide-react";
 import axios from "axios";
+import { useDropzone } from "@uploadthing/react";
+import { generateClientDropzoneAccept } from "uploadthing/client";
 
 import { Button } from "@/components/ui/button";
 import { profilePhotoStepsInfo } from "@/constants/profilePhotoSteps-br";
 import { IProfileData } from "@/app/cadastro/professor/finalizacao/[id]/page";
 import { useUploadThing } from "@/libs/uploadthing";
-import { useDropzone } from "@uploadthing/react";
-import { generateClientDropzoneAccept } from "uploadthing/client";
 
 interface ProfilePhotoStepProps {
   setSteps: React.Dispatch<React.SetStateAction<number>>;
@@ -49,34 +49,25 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
     setProfilePhotoUrl(URL.createObjectURL(acceptedFiles[0]));
   }, []);
 
-  const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
-    "profilePhotoUploader",
-    {
-      onClientUploadComplete: () => {
-        handleNextButton();
-      },
-      onUploadError: (error) => {
-        console.error(error);
-        console.error(error.data);
-
-        if (error.data?.message === "Unable to get presigned urls") {
-          toast.error(
-            "Tipo ou tamanho da imagem inválido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)",
-          );
-
-          return;
-        }
-
-        toast.error(
-          "Ocorreu um erro ao enviar a imagem, tente novamente mais tarde",
-        );
-      },
+  const { startUpload, isUploading, permittedFileInfo } = useUploadThing("profilePhotoUploader", {
+    onClientUploadComplete: () => {
+      handleNextButton();
     },
-  );
+    onUploadError: (error) => {
+      console.error(error);
+      console.error(error.data);
 
-  const fileTypes = permittedFileInfo?.config
-    ? Object.keys(permittedFileInfo?.config)
-    : [];
+      if (error.data?.message === "Unable to get presigned urls") {
+        toast.error("Tipo ou tamanho da imagem inválido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)");
+
+        return;
+      }
+
+      toast.error("Ocorreu um erro ao enviar a imagem, tente novamente mais tarde");
+    },
+  });
+
+  const fileTypes = permittedFileInfo?.config ? Object.keys(permittedFileInfo?.config) : [];
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -186,16 +177,12 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
     <div className="w-full h-full pb-12 pt-12 flex flex-col justify-center">
       <div className="w-full mx-auto px-6 flex flex-col justify-center gap-9 md:px-16 lg:flex-row lg:justify-between md:gap-24 lg:container">
         <div className="w-full px-6 py-9 rounded-2xl bg-green-primary h-fit lg:w-2/5">
-          <p className="w-full text-white text-lg">
-            {profilePhotoStepsInfo.boxMessage}
-          </p>
+          <p className="w-full text-white text-lg">{profilePhotoStepsInfo.boxMessage}</p>
         </div>
 
         <div className="w-full mx-auto md:max-w-[550px] lg:w-3/5 lg:mx-0">
           <h2 className="text-2xl text-gray-primary font-semibold mb-6 md:text-3xl">
-            <span className="text-green-primary">
-              {profilePhotoStepsInfo.titleColored}
-            </span>{" "}
+            <span className="text-green-primary">{profilePhotoStepsInfo.titleColored}</span>{" "}
             {profilePhotoStepsInfo.title}
           </h2>
 
@@ -205,12 +192,7 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
               className="w-[200px] h-[200px] rounded-lg bg-[#C8D6DF] block cursor-pointer relative overflow-hidden shadow-md shadow-[rgba(0,0,0,0.25)]"
             >
               {profilePhotoUrl ? (
-                <Image
-                  src={profilePhotoUrl}
-                  alt="Foto de perfil"
-                  fill
-                  className="object-cover object-center"
-                />
+                <Image src={profilePhotoUrl} alt="Foto de perfil" fill className="object-cover object-center" />
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center gap-1">
                   {isUploading ? (
@@ -227,10 +209,7 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
               )}
             </div>
 
-            <input
-              disabled={isUploading || isSubmitting}
-              {...getInputProps()}
-            />
+            <input disabled={isUploading || isSubmitting} {...getInputProps()} />
 
             {profilePhotoUrl && profilePhoto && (
               <Button
@@ -261,8 +240,7 @@ const ProfilePhotoStep: React.FC<ProfilePhotoStepProps> = ({
                   disabled={isSkipAvailable || isSubmitting || isUploading}
                   className="w-full flex items-center gap-2"
                 >
-                  {isSubmitting ||
-                    (isUploading && <Loader2 className="animate-spin" />)}
+                  {isSubmitting || (isUploading && <Loader2 className="animate-spin" />)}
                   {profilePhotoStepsInfo.nextButton}
                 </Button>
               </div>

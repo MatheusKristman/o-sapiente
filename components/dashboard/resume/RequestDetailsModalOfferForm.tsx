@@ -20,48 +20,27 @@ import { offerSchema } from "@/constants/schemas/requestDetailsOfferFormSchema";
 import { cn } from "@/libs/utils";
 import useRequestDetailsModalStore from "@/stores/useRequestDetailModalStore";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import useResumeStore from "@/stores/useResumeStore";
 
 interface RequestDetailsModalOfferFormProps {
   handleCloseButton: () => void;
 }
 
-const RequestDetailsModalOfferForm = ({
-  handleCloseButton,
-}: RequestDetailsModalOfferFormProps) => {
+const RequestDetailsModalOfferForm = ({ handleCloseButton }: RequestDetailsModalOfferFormProps) => {
   const { setOffers, offers } = useResumeStore();
-  const { requestId, studentImage, studentName, studentCel } =
-    useRequestDetailsModalStore();
+  const { requestId, studentImage, studentName, studentCel } = useRequestDetailsModalStore();
 
   const [isSending, setIsSending] = useState<boolean>(false);
   const [lessonDate, setLessonDate] = useState<Date | undefined>(undefined);
   const [lessonPrice, setLessonPrice] = useState<number>(10);
   const [offerLink, setOfferLink] = useState<string>("");
   const [linkCopied, setLinkCopied] = useState<boolean>(false);
-  const [whatsappLink, setWhatsappLink] = useState<string>(
-    `https://wa.me/55${studentCel?.replace(/\D/g, "")}`,
-  );
+  const [whatsappLink] = useState<string>(`https://wa.me/55${studentCel?.replace(/\D/g, "")}`);
 
   const form = useForm<z.infer<typeof offerSchema>>({
     // @ts-ignore
@@ -142,9 +121,7 @@ const RequestDetailsModalOfferForm = ({
       variants={requestDetailsFormAnimation}
       className="w-full flex flex-col"
     >
-      <h3 className="text-3xl font-semibold text-gray-primary text-left mb-6">
-        {requestDetailsOfferFormInfo.title}
-      </h3>
+      <h3 className="text-3xl font-semibold text-gray-primary text-left mb-6">{requestDetailsOfferFormInfo.title}</h3>
 
       <Tabs defaultValue="inside" className="w-full">
         <TabsList className="w-full h-auto bg-[#EBEFF1] rounded-lg">
@@ -165,10 +142,7 @@ const RequestDetailsModalOfferForm = ({
 
         <TabsContent value="inside" className="!mt-6">
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full flex flex-col gap-y-9"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-y-9">
               <div className="w-full flex flex-col gap-y-4">
                 <div className="w-full flex flex-col sm:grid sm:grid-cols-2 sm:grid-rows-1 justify-between gap-5">
                   <FormField
@@ -188,7 +162,7 @@ const RequestDetailsModalOfferForm = ({
                                 variant="datePicker"
                                 className={cn(
                                   "w-full pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground",
+                                  !field.value && "text-muted-foreground"
                                 )}
                               >
                                 {field.value ? (
@@ -196,11 +170,7 @@ const RequestDetailsModalOfferForm = ({
                                     locale: ptBR,
                                   })
                                 ) : (
-                                  <span>
-                                    {
-                                      requestDetailsOfferFormInfo.lessonDatePlaceholder
-                                    }
-                                  </span>
+                                  <span>{requestDetailsOfferFormInfo.lessonDatePlaceholder}</span>
                                 )}
                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                               </Button>
@@ -240,17 +210,10 @@ const RequestDetailsModalOfferForm = ({
                               disabled={isSending}
                               id="lesson-price"
                               name={field.name}
-                              placeholder={
-                                requestDetailsOfferFormInfo.lessonPricePlaceholder
-                              }
+                              placeholder={requestDetailsOfferFormInfo.lessonPricePlaceholder}
                               defaultValue={10}
                               decimalsLimit={2}
-                              onValueChange={(value, name) =>
-                                form.setValue(
-                                  name as "lessonPrice",
-                                  Number(value),
-                                )
-                              }
+                              onValueChange={(value, name) => form.setValue(name as "lessonPrice", Number(value))}
                               className="input !pl-10"
                             />
 
@@ -278,9 +241,7 @@ const RequestDetailsModalOfferForm = ({
                       <FormControl>
                         <textarea
                           disabled={isSending}
-                          placeholder={
-                            requestDetailsOfferFormInfo.detailsPlaceholder
-                          }
+                          placeholder={requestDetailsOfferFormInfo.detailsPlaceholder}
                           className={cn("input", "!h-64 resize-none", {
                             "mb-2": form.formState.errors?.details,
                           })}
@@ -294,11 +255,7 @@ const RequestDetailsModalOfferForm = ({
                 />
               </div>
 
-              <Button
-                className="w-full flex items-center gap-2"
-                disabled={isSending}
-                type="submit"
-              >
+              <Button className="w-full flex items-center gap-2" disabled={isSending} type="submit">
                 {isSending && <Loader2 className="animate-spin" />}
                 {requestDetailsOfferFormInfo.btn}
               </Button>
@@ -311,20 +268,14 @@ const RequestDetailsModalOfferForm = ({
             <div className="flex items-center gap-4">
               <div className="relative w-12 h-12 overflow-hidden rounded-full">
                 <Image
-                  src={
-                    studentImage
-                      ? studentImage
-                      : "/assets/images/default-user-photo.svg"
-                  }
+                  src={studentImage ? studentImage : "/assets/images/default-user-photo.svg"}
                   alt="Aluno"
                   fill
                   className="object-cover object-center"
                 />
               </div>
 
-              <h5 className="text-lg font-semibold text-gray-primary">
-                {studentName}
-              </h5>
+              <h5 className="text-lg font-semibold text-gray-primary">{studentName}</h5>
             </div>
 
             {studentCel ? (
@@ -338,19 +289,14 @@ const RequestDetailsModalOfferForm = ({
                 <span>{studentCel}</span>
               </a>
             ) : (
-              <span className="text-sm text-gray-primary/70 text-center">
-                Aluno não tem telefone cadastrado
-              </span>
+              <span className="text-sm text-gray-primary/70 text-center">Aluno não tem telefone cadastrado</span>
             )}
           </div>
 
           <div className="w-full flex flex-col gap-4">
             <div className="w-full flex flex-col sm:grid sm:grid-cols-2 sm:grid-rows-1 justify-between gap-5">
               <div className="w-full flex flex-col gap-2">
-                <label
-                  htmlFor="lessonDate"
-                  className="text-left text-base text-gray-primary font-medium"
-                >
+                <label htmlFor="lessonDate" className="text-left text-base text-gray-primary font-medium">
                   {requestDetailsOfferFormInfo.lessonDateLabel}
                 </label>
 
@@ -359,19 +305,14 @@ const RequestDetailsModalOfferForm = ({
                     <Button
                       disabled={isSending}
                       variant="datePicker"
-                      className={cn(
-                        "w-full pl-3 text-left font-normal",
-                        !lessonDate && "text-muted-foreground",
-                      )}
+                      className={cn("w-full pl-3 text-left font-normal", !lessonDate && "text-muted-foreground")}
                     >
                       {lessonDate ? (
                         format(lessonDate, "PPP", {
                           locale: ptBR,
                         })
                       ) : (
-                        <span>
-                          {requestDetailsOfferFormInfo.lessonDatePlaceholder}
-                        </span>
+                        <span>{requestDetailsOfferFormInfo.lessonDatePlaceholder}</span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>
@@ -392,10 +333,7 @@ const RequestDetailsModalOfferForm = ({
               </div>
 
               <div className="w-full flex flex-col gap-2">
-                <label
-                  htmlFor="lessonPrice"
-                  className="text-left text-gray-primary text-base font-medium"
-                >
+                <label htmlFor="lessonPrice" className="text-left text-gray-primary text-base font-medium">
                   {requestDetailsOfferFormInfo.lessonPriceLabel}
                 </label>
 
@@ -404,14 +342,10 @@ const RequestDetailsModalOfferForm = ({
                     disabled={isSending}
                     id="lesson-price"
                     name="lessonPrice"
-                    placeholder={
-                      requestDetailsOfferFormInfo.lessonPricePlaceholder
-                    }
+                    placeholder={requestDetailsOfferFormInfo.lessonPricePlaceholder}
                     defaultValue={10}
                     decimalsLimit={2}
-                    onValueChange={(value, name) =>
-                      setLessonPrice(Number(value))
-                    }
+                    onValueChange={(value, name) => setLessonPrice(Number(value))}
                     className="input !pl-10"
                   />
 
@@ -423,10 +357,7 @@ const RequestDetailsModalOfferForm = ({
             </div>
 
             <div className="w-full flex flex-col gap-2">
-              <label
-                htmlFor="generateLink"
-                className="text-left text-gray-primary text-base font-medium"
-              >
+              <label htmlFor="generateLink" className="text-left text-gray-primary text-base font-medium">
                 {requestDetailsOfferFormInfo.detailsLabel}
               </label>
 
@@ -437,9 +368,7 @@ const RequestDetailsModalOfferForm = ({
                     disabled
                     name="generateLink"
                     className="input !pr-16 disabled:!text-gray-primary disabled:!opacity-100 disabled:!cursor-default"
-                    placeholder={
-                      requestDetailsOfferFormInfo.generateLinkPlaceholder
-                    }
+                    placeholder={requestDetailsOfferFormInfo.generateLinkPlaceholder}
                   />
 
                   <TooltipProvider>
@@ -478,11 +407,7 @@ const RequestDetailsModalOfferForm = ({
             </div>
           </div>
 
-          <Button
-            type="button"
-            onClick={handleCloseButton}
-            className="w-full mt-6"
-          >
+          <Button type="button" onClick={handleCloseButton} className="w-full mt-6">
             {requestDetailsOfferFormInfo.closeBtn}
           </Button>
         </TabsContent>

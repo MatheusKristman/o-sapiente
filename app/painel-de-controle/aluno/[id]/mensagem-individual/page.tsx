@@ -1,19 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import {
-  ImageIcon,
-  Mic,
-  ChevronLeft,
-  MoreHorizontal,
-  Plus,
-  Video,
-  XCircleIcon,
-} from "lucide-react";
+import { ImageIcon, Mic, ChevronLeft, MoreHorizontal, Plus, Video, XCircleIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 const DashboardPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,11 +65,7 @@ const DashboardPage = () => {
               <span className="text-xs">Online</span>
             </div>
 
-            <Button
-              variant="link"
-              size="icon"
-              className="text-green-primary px-4 flex items-center ml-auto md:hidden"
-            >
+            <Button variant="link" size="icon" className="text-green-primary px-4 flex items-center ml-auto md:hidden">
               {isModalOpen ? (
                 <XCircleIcon onClick={toggleModalNav} size={35} />
               ) : (

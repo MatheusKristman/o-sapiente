@@ -19,7 +19,7 @@ interface Props {
   professorCel: string;
 }
 
-export function EmailRetrievablePaymentRequest({
+export default function EmailRetrievablePaymentRequest({
   pixCode,
   paymentRequest,
   professorName,

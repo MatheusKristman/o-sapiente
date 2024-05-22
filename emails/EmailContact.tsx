@@ -16,7 +16,7 @@ interface Props {
     email: string;
 }
 
-export function EmailContact({ message, name, email }: Props) {
+export default function EmailContact({ message, name, email }: Props) {
     return (
         <Html>
             <Head />

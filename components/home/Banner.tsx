@@ -4,12 +4,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { bannerInfo } from "../../constants/banner-br";
+import { bannerInfo } from "@/constants/banner-br";
 import { Button } from "@/components/ui/button";
-import {
-  arrowAnimation,
-  bannerAnimation,
-} from "@/constants/framer-animations/banner";
+import { arrowAnimation, bannerAnimation } from "@/constants/framer-animations/banner";
 
 const Banner = () => {
   const router = useRouter();
@@ -27,10 +24,7 @@ const Banner = () => {
         viewport={{ once: true, amount: 0.2 }}
         className="mx-auto -mt-24 w-full px-6 md:px-16 lg:container lg:mt-14"
       >
-        <motion.div
-          variants={arrowAnimation}
-          className="mx-auto w-full max-w-4xl relative"
-        >
+        <motion.div variants={arrowAnimation} className="mx-auto w-full max-w-4xl relative">
           <Image
             src="/assets/images/arrow.png"
             alt="Seta"
@@ -53,9 +47,7 @@ const Banner = () => {
             </p>
 
             <div className="w-full flex justify-center sm:w-1/2 sm:justify-start">
-              <Button onClick={handleProfessorRegisterBtn}>
-                {bannerInfo.btn}
-              </Button>
+              <Button onClick={handleProfessorRegisterBtn}>{bannerInfo.btn}</Button>
             </div>
           </div>
         </motion.div>

@@ -1,9 +1,9 @@
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
-
-import { EmailRequestSupport } from "@/emails/EmailRequestSupport";
-import { prisma } from "@/libs/prismadb";
 import { AccountRole, Status } from "@prisma/client";
+
+import EmailRequestSupport from "@/emails/EmailRequestSupport";
+import { prisma } from "@/libs/prismadb";
 import getCurrentUser from "@/app/action/getCurrentUser";
 
 export async function POST(

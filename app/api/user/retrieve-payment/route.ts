@@ -1,9 +1,10 @@
-import getCurrentUser from "@/app/action/getCurrentUser";
-import { EmailRetrievablePaymentRequest } from "@/emails/EmailRetrievablePaymentRequest";
-import { prisma } from "@/libs/prismadb";
 import { User } from "@prisma/client";
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
+
+import getCurrentUser from "@/app/action/getCurrentUser";
+import EmailRetrievablePaymentRequest from "@/emails/EmailRetrievablePaymentRequest";
+import { prisma } from "@/libs/prismadb";
 
 //TODO: (NÃO PRIORIDADE) - criar um histórico de resgate caso ocorra algum erro
 

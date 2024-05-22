@@ -7,43 +7,39 @@ import getConversationById from "@/app/action/getConversationById";
 import getMessages from "@/app/action/getMessages";
 
 interface Props {
-    params: {
-        conversationId: string;
-    };
+  params: {
+    conversationId: string;
+  };
 }
 
 const ConversationMessagesPage = async ({ params }: Props) => {
-    revalidatePath("/painel-de-controle/aluno/[id]/mensagens/[conversationId]");
+  revalidatePath("/painel-de-controle/aluno/[id]/mensagens/[conversationId]");
 
-    const conversations = await getConversations();
-    const conversation = await getConversationById(params.conversationId);
-    const messages = await getMessages(params.conversationId);
+  const conversations = await getConversations();
+  const conversation = await getConversationById(params.conversationId);
+  const messages = await getMessages(params.conversationId);
 
-    const initialMessages = messages || [];
+  const initialMessages = messages || [];
 
-    if (!conversation) {
-        // TODO depois inserir um loading
-        return (
-            <div className="w-full h-[calc(100vh-131px)] min-h-[500px] mx-auto flex flex-col lg:h-[calc(100vh-147px)] lg:flex-row"></div>
-        );
-    }
-
+  if (!conversation) {
+    // TODO depois inserir um loading
     return (
-        <div className="w-full h-[calc(100vh-144px)] mx-auto flex flex-col lg:h-[calc(100vh-147px)] lg:flex-row ">
-            <MessagesContacts
-                initialConversations={conversations}
-                conversationParams={params}
-                userType="aluno"
-            />
-
-            <MessagesChatBox
-                conversation={conversation}
-                initialMessages={initialMessages}
-                conversationParams={params}
-                userType="aluno"
-            />
-        </div>
+      <div className="w-full h-[calc(100vh-131px)] min-h-[500px] mx-auto flex flex-col lg:h-[calc(100vh-147px)] lg:flex-row"></div>
     );
+  }
+
+  return (
+    <div className="w-full h-[calc(100vh-144px)] mx-auto flex flex-col lg:h-[calc(100vh-147px)] lg:flex-row ">
+      <MessagesContacts initialConversations={conversations} conversationParams={params} userType="aluno" />
+
+      <MessagesChatBox
+        conversation={conversation}
+        initialMessages={initialMessages}
+        conversationParams={params}
+        userType="aluno"
+      />
+    </div>
+  );
 };
 
 export default ConversationMessagesPage;

@@ -1,19 +1,16 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BsXLg } from "react-icons/bs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
-import {
-  OverlayAnimation,
-  ModalAnimation,
-} from "@/constants/framer-animations/modal";
+import { OverlayAnimation, ModalAnimation } from "@/constants/framer-animations/modal";
 import { Button } from "@/components/ui/button";
 import { finishModalInfo } from "@/constants/dashboard/resume-br";
 import useFinishModalStore from "@/stores/useFinishModalStore";
 import { RequestWithUsersAndOffers } from "@/types";
 import useResumeStore from "@/stores/useResumeStore";
-import { Loader2 } from "lucide-react";
 
 interface Props {
   type: "PROFESSOR" | "STUDENT";
@@ -37,16 +34,10 @@ export function RequestFinishModal({ type }: Props) {
       .put("/api/request/finish", { requestId: requestSelected.id })
       .then((res) => {
         setRequests(
-          res.data.filter(
-            (request: RequestWithUsersAndOffers) =>
-              !request.isConcluded && !request.isOfferAccepted
-          )
+          res.data.filter((request: RequestWithUsersAndOffers) => !request.isConcluded && !request.isOfferAccepted)
         );
         setCurrentLesson(
-          res.data.filter(
-            (request: RequestWithUsersAndOffers) =>
-              !request.isConcluded && request.isOfferAccepted
-          )
+          res.data.filter((request: RequestWithUsersAndOffers) => !request.isConcluded && request.isOfferAccepted)
         );
         closeModal();
       })
@@ -81,12 +72,7 @@ export function RequestFinishModal({ type }: Props) {
             >
               <div className="w-full flex flex-col">
                 <div className="w-full flex items-center justify-end">
-                  <Button
-                    variant="link"
-                    size="icon"
-                    className="text-green-primary"
-                    onClick={closeModal}
-                  >
+                  <Button variant="link" size="icon" className="text-green-primary" onClick={closeModal}>
                     <BsXLg size={26} />
                   </Button>
                 </div>
@@ -97,25 +83,16 @@ export function RequestFinishModal({ type }: Props) {
                   </h1>
 
                   {type === "PROFESSOR" && (
-                    <p className="text-base text-gray-primary text-left">
-                      {finishModalInfo.descProfessor}
-                    </p>
+                    <p className="text-base text-gray-primary text-left">{finishModalInfo.descProfessor}</p>
                   )}
 
                   {type === "STUDENT" && (
-                    <p className="text-base text-gray-primary text-left">
-                      {finishModalInfo.descStudent}
-                    </p>
+                    <p className="text-base text-gray-primary text-left">{finishModalInfo.descStudent}</p>
                   )}
                 </div>
 
                 <div className="w-full flex flex-col sm:flex-row gap-4">
-                  <Button
-                    disabled={isSubmitting}
-                    variant="outline"
-                    onClick={closeModal}
-                    className="w-full sm:w-1/2"
-                  >
+                  <Button disabled={isSubmitting} variant="outline" onClick={closeModal} className="w-full sm:w-1/2">
                     {finishModalInfo.cancelBtn}
                   </Button>
 

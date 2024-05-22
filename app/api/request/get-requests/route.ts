@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { AccountRole, Status } from "@prisma/client";
+import { NextResponse } from "next/server";
+import { AccountRole } from "@prisma/client";
 
 import getCurrentUser from "@/app/action/getCurrentUser";
 import { prisma } from "@/libs/prismadb";
