@@ -2,7 +2,7 @@ import { Html, Head, Preview, Body, Container, Img, Text, Hr, Tailwind } from "@
 
 const imageURL =
   process.env.NODE_ENV === "production"
-    ? `${process.env.NEXT_PUBLIC_BASEURL}/assets/images/image-logo.png`
+    ? `${process.env.NEXT_PUBLIC_BASEURL}/assets/images/email-logo.png.png`
     : "/static/email-logo.png";
 
 interface Props {
