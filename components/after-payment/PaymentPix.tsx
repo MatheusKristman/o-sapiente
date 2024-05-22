@@ -24,8 +24,6 @@ export function PaymentPix({ qrCodeUrl, pixCode, expiresAt, userType }: Props) {
 
   const { userId } = useUserStore();
 
-  console.log(qrCodeUrl);
-
   function copyCode() {
     if (pixCode) {
       if ("clipboard" in navigator) {

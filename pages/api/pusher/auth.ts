@@ -11,7 +11,6 @@ export default async function handler(
   const session = await getServerSession(request, response, authOptions);
 
   if (!session || !session.user?.email) {
-    console.log("pusher auth: ", session);
     return response.status(401).send("Usuário não logado");
   }
 

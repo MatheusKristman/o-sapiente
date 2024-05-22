@@ -80,8 +80,6 @@ export async function POST(req: Request, { params }: { params: IParams }) {
       return Response.json(conversation);
     }
 
-    console.log(updatedMessage);
-
     await pusherServer.trigger(
       conversationId!,
       "messages:update",

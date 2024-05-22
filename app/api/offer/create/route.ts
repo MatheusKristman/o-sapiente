@@ -220,8 +220,6 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log(offer.request.users);
-
     const options = generateOptions({
       emailUser,
       studentEmail: offer.request.users[0].email,

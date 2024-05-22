@@ -59,7 +59,6 @@ function AfterPaymentPage() {
 
   useEffect(() => {
     if (status && !validStatuses.includes(status)) {
-      console.log("erro");
       toast.error("Ocorreu um erro, pagamento apresentou status fora do esperado! Verifique com o suporte.");
       router.push("/");
     }

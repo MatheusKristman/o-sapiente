@@ -111,8 +111,6 @@ export const PlanForm = ({ currentUser }: Props) => {
         paymentMethod,
       })
       .then((res) => {
-        console.log(res.data);
-
         if (res.data.charges[0].payment_method === "pix") {
           router.replace(
             `/pagamento-do-plano/pos-pagamento?user_type=${res.data.userType}&transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&qr_code_url=${res.data.charges[0].last_transaction.qr_code_url}&pix_code=${res.data.charges[0].last_transaction.qr_code}&expires_at=${res.data.charges[0].last_transaction.expires_at}`

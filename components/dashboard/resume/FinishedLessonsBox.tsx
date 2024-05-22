@@ -12,7 +12,6 @@ export function FinishedLessonsBox() {
   const { finishedLessons } = useResumeStore();
 
   if (finishedLessons === null) {
-    console.log(finishedLessons);
     return <FinishedLessonsBoxSkeleton />;
   }
 

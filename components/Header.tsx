@@ -9,11 +9,7 @@ import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
 import { LogOut } from "lucide-react";
 
-import {
-  navLinks,
-  professorHeaderButton,
-  studentHeaderButton,
-} from "@/constants/header-br";
+import { navLinks, professorHeaderButton, studentHeaderButton } from "@/constants/header-br";
 import { Button } from "@/components/ui/button";
 import useHeaderStore from "@/stores/useHeaderStore";
 import useStudentModalStore from "@/stores/useStudentModalStore";
@@ -28,14 +24,11 @@ const Header = () => {
   const { isMobileMenuOpen, openMobileMenu } = useHeaderStore();
   const { accountType, setAccountType, userId, setUserId } = useUserStore();
   const { openModal: openStudentModal, setToRegister } = useStudentModalStore();
-  const { openModal: openProfessorModal, setToLogin } =
-    useProfessorModalStore();
+  const { openModal: openProfessorModal, setToLogin } = useProfessorModalStore();
 
   const session = useSession();
   const router = useRouter();
   const pathname = usePathname();
-
-  console.log("pathname: ", pathname);
 
   useEffect(() => {
     if (session) {
@@ -80,17 +73,13 @@ const Header = () => {
 
   function handleDashboardStudentBtn() {
     if (session.status === "authenticated" && userId) {
-      router.push(
-        `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`
-      );
+      router.push(`${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`);
     }
   }
 
   function handleDashboardProfessorBtn() {
     if (session.status === "authenticated" && userId) {
-      router.push(
-        `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`
-      );
+      router.push(`${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`);
     }
   }
 
@@ -119,12 +108,9 @@ const Header = () => {
         type="button"
         disabled={isLoading}
         onClick={openMobileMenu}
-        className={cn(
-          "flex lg:hidden items-center justify-center cursor-pointer",
-          {
-            "opacity-0 pointer-events-none": isMobileMenuOpen,
-          }
-        )}
+        className={cn("flex lg:hidden items-center justify-center cursor-pointer", {
+          "opacity-0 pointer-events-none": isMobileMenuOpen,
+        })}
       >
         <IoIosMenu size={35} className="text-green-primary" />
       </Button>
@@ -165,13 +151,7 @@ const Header = () => {
                 onClick={handleDashboardStudentBtn}
                 className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
               >
-                <Image
-                  src="/assets/icons/user.svg"
-                  alt="Usuário"
-                  width={24}
-                  height={24}
-                  className="object-contain"
-                />
+                <Image src="/assets/icons/user.svg" alt="Usuário" width={24} height={24} className="object-contain" />
                 Área do Aluno
               </Button>
             </>
@@ -195,24 +175,14 @@ const Header = () => {
                 onClick={handleDashboardProfessorBtn}
                 className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
               >
-                <Image
-                  src="/assets/icons/user.svg"
-                  alt="Usuário"
-                  width={24}
-                  height={24}
-                  className="object-contain"
-                />
+                <Image src="/assets/icons/user.svg" alt="Usuário" width={24} height={24} className="object-contain" />
                 Área do Professor
               </Button>
             </>
           ) : null
         ) : (
           <>
-            <Button
-              variant="outline"
-              disabled={isLoading}
-              onClick={openProfessorLoginModal}
-            >
+            <Button variant="outline" disabled={isLoading} onClick={openProfessorLoginModal}>
               {professorHeaderButton.label}
             </Button>
 

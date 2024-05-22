@@ -278,8 +278,6 @@ const ProfessorFormBox = () => {
   }
 
   function onSubmit(data: z.infer<typeof professorUpdateFormSchema>) {
-    console.log(data);
-
     if (themes.length === 0) {
       toast.error(MyAccountInfo.themeErrorMessage);
 

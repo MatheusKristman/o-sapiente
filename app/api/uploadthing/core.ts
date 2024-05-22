@@ -26,7 +26,6 @@ export const ourFileRouter = {
       return { userId: input.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log(file.url);
       await prisma.user.update({
         where: {
           id: metadata.userId,

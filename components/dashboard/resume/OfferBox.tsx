@@ -35,7 +35,6 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
 
   function handleBtn() {
     if (type === "Professor") {
-      console.log("Request Info: ", request);
       openModal();
       setRequestId(request.id);
       setStudentId(filteredStudent.id!);

@@ -198,8 +198,6 @@ export async function POST(req: Request) {
 
     const response = await axios.request(options);
 
-    console.log(JSON.stringify(response.data));
-
     return Response.json({ ...response.data, userType }, { status: 200 });
   } catch (error: any) {
     console.log("[ERROR_PLAN_PAYMENT]", {

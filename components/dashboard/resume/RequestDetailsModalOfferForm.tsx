@@ -91,8 +91,6 @@ const RequestDetailsModalOfferForm = ({ handleCloseButton }: RequestDetailsModal
     if (setOffers) {
       setIsSending(true);
 
-      console.log(values);
-
       axios
         .post("/api/offer/create", {
           ...values,

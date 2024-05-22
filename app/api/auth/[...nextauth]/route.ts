@@ -61,7 +61,6 @@ export const authOptions: AuthOptions = {
         }
 
         if (!user || !user?.password) {
-          console.log("erro no usuário não encontrado");
           throw new Error(
             "Credenciais inválidas! Verifique e tente novamente!",
           );

@@ -15,8 +15,6 @@ interface Props {
 export function PaymentDenied({ userType }: Props) {
   const { userId } = useUserStore();
 
-  console.log("teste negado");
-
   return (
     <div className="w-full px-6 h-full mt-12 mb-24 sm:px-16 lg:container lg:mx-auto">
       <div className="w-full my-auto flex flex-col items-center gap-6">
