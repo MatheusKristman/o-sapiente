@@ -15,6 +15,15 @@ export const videoModalInfo = {
   uploadVideoBtn: "Carregar Video",
 };
 
+export const fileModalInfo = {
+  title: "Envie seu documento",
+  inputPlaceholder: "Clique aqui para carregar um documento",
+  inputAdviser: "Tamanho permitido: 2MB",
+  removeBtn: "Remover Documento",
+  sendBtn: "Enviar",
+  sendingBtn: "Enviando",
+}
+
 export const noConversationInfo = {
   desc: "Clique na conversa ao lado para abrir",
 };

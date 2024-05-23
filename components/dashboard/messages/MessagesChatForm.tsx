@@ -12,6 +12,7 @@ import useConversation from "@/hooks/useConversation";
 import useConversationStore from "@/stores/useConversationStore";
 import MessagesImageModal from "./MessagesImageModal";
 import MessagesVideoModal from "./MessagesVideoModal";
+import MessagesFileModal from "./MessagesFileModal";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
@@ -19,6 +20,7 @@ interface Props {
   handleFooterModal: () => void;
   mobileOpenImageModal: () => void;
   mobileOpenVideoModal: () => void;
+  mobileOpenFileModal: () => void;
   isModalFooterOpen: boolean;
 }
 
@@ -31,11 +33,12 @@ const MessagesChatForm = ({
   handleFooterModal,
   mobileOpenImageModal,
   mobileOpenVideoModal,
+  mobileOpenFileModal,
   isModalFooterOpen,
 }: Props) => {
   const { conversationId } = useConversation(conversationParams);
   const { status } = useSession();
-  const { openImageModal, openVideoModal } = useConversationStore();
+  const { openImageModal, openVideoModal, openFileModal } = useConversationStore();
 
   const [isSending, setIsSending] = useState<boolean>(false);
 
@@ -79,6 +82,11 @@ const MessagesChatForm = ({
               <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />
               Enviar Video
             </Button>
+
+            <Button onClick={mobileOpenFileModal} className="gap-2.5 w-full flex justify-start items-center">
+              <div className="bg-archiveIcon bg-no-repeat bg-contain w-7 h-7" />
+              Enviar Arquivo
+            </Button>
           </div>
         </div>
       )}
@@ -109,13 +117,20 @@ const MessagesChatForm = ({
             >
               <div className="bg-videoIcon bg-no-repeat bg-contain w-7 h-7" />
             </Button>
+
+            <Button
+              type="button"
+              onClick={openFileModal}
+              className="hidden w-12 px-0 md:flex justify-center items-center"
+            >
+              <div className="bg-archiveIcon bg-no-repeat bg-contain w-7 h-7" />
+            </Button>
           </div>
 
           <div className="w-full flex items-center">
             <Input
               {...register("message")}
               disabled={isSending}
-              // ref={messageInputRef}
               type="text"
               name="message"
               placeholder="Digite a sua mensagem"
@@ -132,6 +147,7 @@ const MessagesChatForm = ({
 
       <MessagesImageModal conversationId={conversationId} />
       <MessagesVideoModal conversationId={conversationId} />
+      <MessagesFileModal conversationId={conversationId} />
     </>
   );
 };

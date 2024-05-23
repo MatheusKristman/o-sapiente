@@ -7,6 +7,9 @@ interface IUseConversationStore {
   isVideoModalOpen: boolean;
   openVideoModal: () => void;
   closeVideoModal: () => void;
+  isFileModalOpen: boolean;
+  openFileModal: () => void;
+  closeFileModal: () => void;
   isMessageImageModalOpen: boolean;
   openMessageImageModal: () => void;
   closeMessageImageModal: () => void;
@@ -21,6 +24,9 @@ const useConversationStore = create<IUseConversationStore>((set) => ({
   isVideoModalOpen: false,
   openVideoModal: () => set(() => ({ isVideoModalOpen: true })),
   closeVideoModal: () => set(() => ({ isVideoModalOpen: false })),
+  isFileModalOpen: false,
+  openFileModal: () => set({ isFileModalOpen: true }),
+  closeFileModal: () => set({ isFileModalOpen: false }),
   isMessageImageModalOpen: false,
   openMessageImageModal: () => set(() => ({ isMessageImageModalOpen: true })),
   closeMessageImageModal: () =>

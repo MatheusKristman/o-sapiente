@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { format } from "date-fns";
-import { Check, MoreHorizontal, X } from "lucide-react";
+import { ArrowUpLeft, ArrowUpRight, Check, FileText, MoreHorizontal, X } from "lucide-react";
 import ReactPlayer from "react-player";
 
 import { cn } from "@/libs/utils";
@@ -113,6 +113,37 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
 
           <span className="text-gray-primary font-medium text-[10px]">{format(new Date(message.createdAt), "p")}</span>
         </div>
+      ) : message.fileUrl && message.fileName && !message.isDeleted ? (
+        <a
+          href={message.fileUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+          className={cn(
+            "w-2/3 px-6 relative pt-6 pb-2 rounded-tl-lg rounded-br-lg rounded-bl-lg bg-green-primary xl:w-2/5",
+            {
+              "bg-[#C8D6DF] rounded-tl-none rounded-tr-lg": otherMessage,
+              "pointer-events-none select-none": message.isDeleted,
+            }
+          )}
+        >
+          <p
+            className={cn("text-white text-base flex items-center gap-2", {
+              "text-gray-primary": otherMessage,
+              "text-opacity-80": message.isDeleted,
+            })}
+          >
+            <FileText />
+            {message.fileName}
+          </p>
+
+          <span
+            className={cn("text-white font-medium text-[10px]", {
+              "text-gray-primary/90": otherMessage,
+            })}
+          >
+            {format(new Date(message.createdAt), "p")}
+          </span>
+        </a>
       ) : message.imageUrl && !message.isDeleted ? (
         <div className="w-2/3 relative pb-2 xl:w-2/5 cursor-pointer">
           <div
@@ -210,9 +241,14 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
               </Button>
             ) : (
               <>
-                <Button disabled={isLoading} onClick={handleEditing} className="w-full text-base font-semibold">
-                  Editar mensagem
-                </Button>
+                {!message.fileUrl ||
+                  !message.fileName ||
+                  !message.imageUrl ||
+                  (!message.videoUrl && (
+                    <Button disabled={isLoading} onClick={handleEditing} className="w-full text-base font-semibold">
+                      Editar mensagem
+                    </Button>
+                  ))}
 
                 <Button
                   disabled={isLoading}

@@ -156,6 +156,8 @@ model Message {
   content   String
   imageUrl  String?
   videoUrl  String?
+  fileUrl   String?
+  fileName  String?
   isDeleted Boolean @default(false)
 
   createdAt DateTime @default(now())

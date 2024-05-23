@@ -22,7 +22,7 @@ interface Props {
 
 const MessagesChatBox = ({ conversation, initialMessages, conversationParams, userType }: Props) => {
   const { isOpen } = useConversation(conversationParams);
-  const { openImageModal, openVideoModal } = useConversationStore();
+  const { openImageModal, openVideoModal, openFileModal } = useConversationStore();
 
   const [isModalFooterOpen, setIsModalFooterOpen] = useState<boolean>(false);
 
@@ -38,6 +38,11 @@ const MessagesChatBox = ({ conversation, initialMessages, conversationParams, us
   function mobileOpenVideoModal() {
     setIsModalFooterOpen(false);
     openVideoModal();
+  }
+
+  function mobileOpenFileModal() {
+    setIsModalFooterOpen(false);
+    openFileModal();
   }
 
   useEffect(() => {
@@ -70,6 +75,7 @@ const MessagesChatBox = ({ conversation, initialMessages, conversationParams, us
           handleFooterModal={handleFooterModal}
           mobileOpenImageModal={mobileOpenImageModal}
           mobileOpenVideoModal={mobileOpenVideoModal}
+          mobileOpenFileModal={mobileOpenFileModal}
           isModalFooterOpen={isModalFooterOpen}
         />
       </div>
