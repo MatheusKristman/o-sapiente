@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Request, Status } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
@@ -38,6 +38,7 @@ const ResumePage = () => {
 
   const session = useSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +47,11 @@ const ResumePage = () => {
 
         if (userResponse.data.isConfirmed === false) {
           toast.error("Confirme sua conta para poder acessa-la");
+          router.push("/");
+        }
+
+        if (userResponse.data.id !== pathname?.split("/")[3]) {
+          toast.error("Usuário não autorizado");
           router.push("/");
         }
 

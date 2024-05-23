@@ -3,6 +3,7 @@ import ResponsiveTable from "@/components/dashboard/history/ResponsiveTable";
 import FilterWrapper from "@/components/dashboard/history/FilterWrapper";
 import { RequestWithUsersAndOffers } from "@/types";
 import getRequests from "@/app/action/getRequests";
+import { LoadingComponent } from "@/components/LoadingComponent";
 
 export type StatsType = {
   finished: number;
@@ -10,18 +11,11 @@ export type StatsType = {
   total: number;
 };
 
-//TODO: ajustar para receber as requests corretas
-
 const HistoryPage = async () => {
   const requests: RequestWithUsersAndOffers[] = await getRequests();
 
   if (!requests) {
-    //TODO: inserir componente de loading
-    return (
-      <div>
-        <div>Carregando...</div>
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   return (

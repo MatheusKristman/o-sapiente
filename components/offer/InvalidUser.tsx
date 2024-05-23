@@ -32,7 +32,6 @@ export function InvalidUser() {
         </div>
 
         <Button variant="outline" asChild className="w-full sm:w-fit">
-          {/* TODO: adicionar rota para retornar ao dashboard */}
           <Link href={dashboardLink}>{info.backBtn}</Link>
         </Button>
       </div>

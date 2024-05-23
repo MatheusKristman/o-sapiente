@@ -25,18 +25,13 @@ export function InvalidLink() {
           />
 
           <div className="w-full flex flex-col items-center gap-6">
-            <h1 className="text-2xl sm:text-3xl text-gray-primary font-semibold text-center">
-              {info.title}
-            </h1>
+            <h1 className="text-2xl sm:text-3xl text-gray-primary font-semibold text-center">{info.title}</h1>
 
-            <p className="text-base sm:text-lg text-gray-primary text-center">
-              {info.desc}
-            </p>
+            <p className="text-base sm:text-lg text-gray-primary text-center">{info.desc}</p>
           </div>
         </div>
 
         <Button variant="outline" asChild className="w-full sm:w-fit">
-          {/* TODO: adicionar rota para retornar ao dashboard */}
           <Link href={dashboardLink}>{info.backBtn}</Link>
         </Button>
       </div>

@@ -8,7 +8,6 @@ import EmailFinishingLessonNotification from "@/emails/EmailFinishingLessonNotif
 import { RequestWithUsersAndOffers } from "@/types";
 
 export async function PUT(req: Request) {
-  //TODO: ajustar para o retorno das solicitações ser igual ao do get-requests, pois é tanto o professor quanto o aluno que usa a request
   try {
     const { requestId } = await req.json();
     const emailHost: string = process.env.EMAIL_SMTP!;

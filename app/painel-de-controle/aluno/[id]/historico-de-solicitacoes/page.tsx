@@ -13,8 +13,6 @@ export type StatsType = {
   total: number;
 };
 
-//TODO: ajustar para receber as requests corretas
-
 const HistoryPage = async () => {
   const requests: RequestWithUsersAndOffers[] = await getRequests();
 

@@ -25,6 +25,7 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
   const [editedMessage, setEditedMessage] = useState<string>(message.content);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const isOwn = session?.user?.email === message.sender.email;
   const seenList = (message.seen || [])
@@ -47,8 +48,9 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
     setEditedMessage(e.target.value);
   }
 
-  // TODO: adicionar loading no delete
   function handleDelete() {
+    setIsLoading(true);
+
     axios
       .put("/api/messages/delete", {
         messageId: message.id,
@@ -62,6 +64,9 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
         toast.error(error.response.data);
 
         console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
@@ -189,22 +194,32 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
 
       {!otherMessage && !message.isDeleted ? (
         <Popover open={isPopoverOpen} onOpenChange={handlePopover}>
-          <PopoverTrigger className="mr-6 transition-opacity opacity-0 group-hover:opacity-100">
+          <PopoverTrigger disabled={isLoading} className="mr-6 transition-opacity opacity-0 group-hover:opacity-100">
             <MoreHorizontal color="#03C988" />
           </PopoverTrigger>
 
           <PopoverContent align="end" className="bg-white border-none rounded-xl rounded-tr-none space-y-6">
             {isEditing ? (
-              <Button variant="destructive" onClick={handleCancelEditing} className="w-full text-sm font-semibold">
+              <Button
+                disabled={isLoading}
+                variant="destructive"
+                onClick={handleCancelEditing}
+                className="w-full text-sm font-semibold"
+              >
                 Cancelar Edição de mensagem
               </Button>
             ) : (
               <>
-                <Button onClick={handleEditing} className="w-full text-base font-semibold">
+                <Button disabled={isLoading} onClick={handleEditing} className="w-full text-base font-semibold">
                   Editar mensagem
                 </Button>
 
-                <Button onClick={handleDelete} variant="destructive" className="w-full text-base font-semibold">
+                <Button
+                  disabled={isLoading}
+                  onClick={handleDelete}
+                  variant="destructive"
+                  className="w-full text-base font-semibold"
+                >
                   Apagar mensagem
                 </Button>
               </>

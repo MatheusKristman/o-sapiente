@@ -13,7 +13,6 @@ export function PlanOption({ plan, selected }: Props) {
   const { setPlanSelected } = usePaymentStore();
 
   return (
-    // TODO: adicionar dinamicamente depois quando for feito a request
     <div
       onClick={() => setPlanSelected(plan)}
       className={cn(

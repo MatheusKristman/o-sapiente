@@ -30,8 +30,6 @@ const TableRow = ({ request }: Props) => {
   const startDate: Date | null = request.beginLessonDate;
   const endDate: Date | null = request.finishLessonDate;
   const status: Status = request.status;
-
-  // TODO: ajustar para apresentar somente as solicitações que o professor está vinculado e retirar os opcionais
   const price: number = request.offers[0]?.lessonPrice || 0;
 
   return (

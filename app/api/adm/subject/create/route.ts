@@ -15,8 +15,6 @@ export async function POST(req: Request) {
       return new NextResponse("Opções tem itens duplicados, verifique e tente novamente");
     }
 
-    // TODO verificar erro de subs duplicadas tanto quando é enviado quanto para ver se ja tem cadastrado
-
     if (!main || !lang || subs.length === 0) {
       return new NextResponse("Dados inválidos, verifique e tente novamente");
     }

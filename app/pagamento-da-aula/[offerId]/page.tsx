@@ -1,3 +1,6 @@
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+
 import getCurrentUser from "@/app/action/getCurrentUser";
 import getOfferById from "@/app/action/getOfferById";
 import { LoadingComponent } from "@/components/LoadingComponent";
@@ -7,9 +10,13 @@ import { LessonPaymentHeader } from "@/components/lesson-payment/LessonPaymentHe
 async function LessonPaymentPage({ params }: { params: { offerId: string } }) {
   const currentUser = await getCurrentUser();
   const offer = await getOfferById(params.offerId);
+  const session = await getServerSession();
+
+  if (!session && !currentUser && !offer) {
+    redirect("/");
+  }
 
   if (!currentUser || !offer) {
-    // TODO: adicionar componente de erro avisando que o usuário não está logado
     return <LoadingComponent />;
   }
 

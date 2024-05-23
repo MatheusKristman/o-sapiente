@@ -5,6 +5,7 @@ import MessagesContacts from "@/components/dashboard/messages/MessagesContacts";
 import getConversations from "@/app/action/getConversations";
 import getConversationById from "@/app/action/getConversationById";
 import getMessages from "@/app/action/getMessages";
+import { LoadingComponent } from "@/components/LoadingComponent";
 
 interface Props {
   params: {
@@ -22,10 +23,7 @@ const ConversationMessagesPage = async ({ params }: Props) => {
   const initialMessages = messages || [];
 
   if (!conversation) {
-    // TODO depois inserir um loading
-    return (
-      <div className="w-full h-[calc(100vh-131px)] min-h-[500px] mx-auto flex flex-col lg:h-[calc(100vh-147px)] lg:flex-row"></div>
-    );
+    return <LoadingComponent />;
   }
 
   return (

@@ -96,7 +96,6 @@ export function RequestFinishModal({ type }: Props) {
                     {finishModalInfo.cancelBtn}
                   </Button>
 
-                  {/* TODO: adicionar loading */}
                   <Button
                     disabled={isSubmitting}
                     onClick={handleFinish}

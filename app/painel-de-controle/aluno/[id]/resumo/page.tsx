@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Request } from "@prisma/client";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
@@ -20,14 +20,14 @@ import { RequestConfirmFinishModal } from "@/components/dashboard/resume/Request
 import { ResumeCurrentLessonModal } from "@/components/dashboard/resume/ResumeCurrentLessonModal";
 import useResumeStore from "@/stores/useResumeStore";
 
-// TODO: se o usuário errado entrar, redirecionar para a home
+// TODO: ajustar pagina de login quando o usuário tenta entrar no painel sem estar logado
 
 const DashboardPage = () => {
   const { setProfilePhoto, setName, setCurrentLesson, setRequests, requests } = useResumeStore();
 
   const session = useSession();
   const router = useRouter();
-
+  const pathname = usePathname();
   const { openModal } = useNewRequestStore();
 
   useEffect(() => {
@@ -37,6 +37,11 @@ const DashboardPage = () => {
 
         if (userResponse.data.isConfirmed === false) {
           toast.error("Confirme sua conta para poder acessa-la");
+          router.push("/");
+        }
+
+        if (userResponse.data.id !== pathname?.split("/")[3]) {
+          toast.error("Usuário não autorizado");
           router.push("/");
         }
 

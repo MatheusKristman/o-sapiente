@@ -36,7 +36,7 @@ function generateEmailOptions({
 
 export async function POST(req: Request) {
   try {
-    //TODO: confirmar se o Rogério deseja criar um plano pelo pagarme para esses pagamentos dos planos ou manter com a criação de order
+    //TODO: (NÃO PRIORIDADE) confirmar se o Rogério deseja criar um plano pelo pagarme para esses pagamentos dos planos ou manter com a criação de order
     const body = await req.json();
 
     if (body.type === "order.paid") {

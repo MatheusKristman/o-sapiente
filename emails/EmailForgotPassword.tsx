@@ -48,7 +48,6 @@ export default function EmailForgotPassword({ url, userName, hoursLeft }: Props)
               Após clicar no link, você será redirecionado para uma página onde poderá inserir uma nova senha.
             </Text>
 
-            {/* TODO: adicionar numero de horas e adicionar a função no envio da mensagem */}
             <Text className="text-base">
               <strong>Importante</strong>
               <br />

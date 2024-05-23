@@ -1,19 +1,23 @@
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+
 import { PlanHeader } from "@/components/plan-payment/planHeader";
 import getPlans from "@/app/action/getPlans";
 import { PlanForm } from "@/components/plan-payment/planForm";
 import getCurrentUser from "@/app/action/getCurrentUser";
+import { LoadingComponent } from "@/components/LoadingComponent";
 
 async function PlanPaymentPage() {
   const plans = await getPlans();
   const currentUser = await getCurrentUser();
+  const session = await getServerSession();
+
+  if (!session && !currentUser) {
+    redirect("/");
+  }
 
   if (!currentUser) {
-    //TODO: checar pagina de loading
-    return (
-      <div>
-        <div>loading</div>
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   return (

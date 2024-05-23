@@ -38,7 +38,6 @@ export const studentNewRequestInfo = {
   closeBtn: "FECHAR",
 };
 
-// TODO checar como será o processo de solicitar certificado
 export const finishModalInfo = {
   title: "Deseja finalizar a aula?",
   descProfessor:

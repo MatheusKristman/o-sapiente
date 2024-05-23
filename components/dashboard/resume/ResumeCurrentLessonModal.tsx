@@ -10,6 +10,8 @@ import useCurrentLessonModalStore from "@/stores/useCurrentLessonModalStore";
 import { ResumeCurrentLessonBtns } from "./ResumeCurrentLessonBtns";
 import { ResumeCurrentLessonSupportForm } from "./ResumeCurrentLessonSupportForm";
 import useUserStore from "@/stores/useUserStore";
+import { Skeleton } from "@/components/ui/skeleton";
+import toast from "react-hot-toast";
 
 interface Props {
   type?: "Professor" | null;
@@ -20,11 +22,16 @@ export function ResumeCurrentLessonModal({ type }: Props) {
   const { userId } = useUserStore();
 
   if (!lesson) {
-    // TODO: colocar skeleton para carregar modal
-    return null;
+    toast.error("Aula não encontrada");
+    closeModal();
   }
 
-  const filteredUser = lesson.users.filter((user) => user.id !== userId)[0];
+  const filteredUser = lesson?.users.filter((user) => user.id !== userId)[0];
+
+  if (!filteredUser) {
+    toast.error("Usuário não encontrado");
+    closeModal();
+  }
 
   function handleClose() {
     closeModal();
@@ -61,34 +68,74 @@ export function ResumeCurrentLessonModal({ type }: Props) {
               {currentLessonModalInfo.title}
             </h4>
 
-            <div className="w-fit mx-auto bg-[#F0F5F8] px-6 py-4 rounded-xl flex items-center mb-9">
-              <div className="relative w-10 h-10 rounded-full overflow-hidden">
-                <Image
-                  src={filteredUser.profilePhoto ? filteredUser.profilePhoto : "/assets/images/default-user-photo.svg"}
-                  alt={type === "Professor" ? "Aluno" : "Professor"}
-                  fill
-                  className="object-cover object-center"
-                />
-              </div>
+            {!lesson ? (
+              <ResumeCurrentLessonSkeleton />
+            ) : (
+              <>
+                <div className="w-fit mx-auto bg-[#F0F5F8] px-6 py-4 rounded-xl flex items-center mb-9">
+                  <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                    <Image
+                      src={
+                        filteredUser && filteredUser.profilePhoto
+                          ? filteredUser.profilePhoto
+                          : "/assets/images/default-user-photo.svg"
+                      }
+                      alt={type === "Professor" ? "Aluno" : "Professor"}
+                      fill
+                      className="object-cover object-center"
+                    />
+                  </div>
 
-              <Dot className="text-gray-primary" style={{ width: "35px", height: "35px" }} />
+                  <Dot className="text-gray-primary" style={{ width: "35px", height: "35px" }} />
 
-              <span className="text-gray-primary text-lg font-semibold">
-                {`${filteredUser.firstName} ${filteredUser.lastName}`}
-              </span>
+                  <span className="text-gray-primary text-lg font-semibold">
+                    {`${filteredUser?.firstName} ${filteredUser?.lastName}`}
+                  </span>
 
-              <Dot className="text-gray-primary" style={{ width: "35px", height: "35px" }} />
+                  <Dot className="text-gray-primary" style={{ width: "35px", height: "35px" }} />
 
-              <span className="text-gray-primary text-base font-semibold">{lesson.subject}</span>
-            </div>
+                  <span className="text-gray-primary text-base font-semibold">{lesson.subject}</span>
+                </div>
 
-            <AnimatePresence mode="wait">
-              {isBtns && <ResumeCurrentLessonBtns key="current-lesson-btns" />}
-              {isSupport && <ResumeCurrentLessonSupportForm key="current-lesson-support-form" />}
-            </AnimatePresence>
+                <AnimatePresence mode="wait">
+                  {isBtns && <ResumeCurrentLessonBtns key="current-lesson-btns" />}
+                  {isSupport && <ResumeCurrentLessonSupportForm key="current-lesson-support-form" />}
+                </AnimatePresence>
+              </>
+            )}
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+function ResumeCurrentLessonSkeleton() {
+  return (
+    <>
+      <div className="w-fit mx-auto bg-[#F0F5F8] px-6 py-4 rounded-xl flex items-center mb-9">
+        <div className="relative w-10 h-10 rounded-full overflow-hidden">
+          <Skeleton className="w-full h-full" />
+        </div>
+
+        <Dot className="text-gray-primary" style={{ width: "35px", height: "35px" }} />
+
+        <Skeleton className="h-8 w-40" />
+
+        <Dot className="text-gray-primary" style={{ width: "35px", height: "35px" }} />
+
+        <Skeleton className="h-6 w-24" />
+      </div>
+
+      <div className="w-full flex flex-col gap-6">
+        <Skeleton className="w-full h-12" />
+
+        <div className="w-full flex flex-col gap-2 items-center">
+          <Skeleton className="h-4 w-20" />
+
+          <Skeleton className="w-full h-12" />
+        </div>
+      </div>
+    </>
   );
 }

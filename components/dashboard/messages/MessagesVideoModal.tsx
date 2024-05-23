@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import ReactPlayer from "react-player/youtube";
 import axios from "axios";
-import { XCircle } from "lucide-react";
+import { Loader2, XCircle } from "lucide-react";
 
 import { videoModalInfo } from "@/constants/dashboard/message-br";
 import {
@@ -37,8 +37,10 @@ interface Props {
   conversationId: string;
 }
 
-// TODO: Efeito de loading quando estiver enviando
 const MessagesVideoModal = ({ conversationId }: Props) => {
+  const [validVideoUrl, setValidVideoUrl] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const { isVideoModalOpen, closeVideoModal } = useConversationStore();
   const form = useForm<z.infer<typeof formSchema>>({
     //@ts-ignore ocorrendo erro que não é pra acontecer
@@ -49,10 +51,10 @@ const MessagesVideoModal = ({ conversationId }: Props) => {
   });
   const videoUrl = form.watch("videoUrl");
 
-  const [validVideoUrl, setValidVideoUrl] = useState<string>("");
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (validVideoUrl) {
+      setIsSubmitting(true);
+
       axios
         .post("/api/messages", {
           message: validVideoUrl,
@@ -65,6 +67,9 @@ const MessagesVideoModal = ({ conversationId }: Props) => {
         })
         .catch((error) => {
           console.error(error);
+        })
+        .finally(() => {
+          setIsSubmitting(false);
         });
 
       return;
@@ -100,6 +105,7 @@ const MessagesVideoModal = ({ conversationId }: Props) => {
             >
               <div className="w-full flex items-center justify-end mb-4">
                 <Button
+                  disabled={isSubmitting}
                   variant="link"
                   size="icon"
                   type="button"
@@ -123,7 +129,7 @@ const MessagesVideoModal = ({ conversationId }: Props) => {
                           <FormControl>
                             <Input
                               {...field}
-                              disabled={!!validVideoUrl}
+                              disabled={!!validVideoUrl || isSubmitting}
                               className={cn("w-full input", {
                                 "!pr-10": !!validVideoUrl,
                               })}
@@ -133,6 +139,7 @@ const MessagesVideoModal = ({ conversationId }: Props) => {
 
                           {!!validVideoUrl ? (
                             <Button
+                              disabled={isSubmitting}
                               variant="link"
                               size="icon"
                               onClick={clearUrl}
@@ -155,7 +162,12 @@ const MessagesVideoModal = ({ conversationId }: Props) => {
                       </div>
                     )}
 
-                    <Button type="submit" disabled={!videoUrl} className="w-full">
+                    <Button
+                      type="submit"
+                      disabled={!videoUrl || isSubmitting}
+                      className="w-full flex items-center gap-2"
+                    >
+                      {isSubmitting && <Loader2 className="animate-spin" />}
                       {validVideoUrl ? videoModalInfo.sendBtn : videoModalInfo.uploadVideoBtn}
                     </Button>
                   </form>
