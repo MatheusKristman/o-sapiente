@@ -57,6 +57,7 @@ export async function POST(
       include: {
         users: {
           select: {
+            id: true,
             firstName: true,
             lastName: true,
             tel: true,
@@ -172,6 +173,7 @@ export async function POST(
         include: {
           users: {
             select: {
+              id: true,
               firstName: true,
               lastName: true,
               email: true,

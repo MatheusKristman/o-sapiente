@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { Dot } from "lucide-react";
 import { BsXLg } from "react-icons/bs";
+import { toast } from "react-hot-toast";
 
 import { ModalAnimation, OverlayAnimation } from "@/constants/framer-animations/modal";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,6 @@ import { ResumeCurrentLessonBtns } from "./ResumeCurrentLessonBtns";
 import { ResumeCurrentLessonSupportForm } from "./ResumeCurrentLessonSupportForm";
 import useUserStore from "@/stores/useUserStore";
 import { Skeleton } from "@/components/ui/skeleton";
-import toast from "react-hot-toast";
 
 interface Props {
   type?: "Professor" | null;
@@ -21,17 +21,7 @@ export function ResumeCurrentLessonModal({ type }: Props) {
   const { isModalOpen, closeModal, lesson, isBtns, isSupport, setBtns } = useCurrentLessonModalStore();
   const { userId } = useUserStore();
 
-  if (!lesson) {
-    toast.error("Aula não encontrada");
-    closeModal();
-  }
-
   const filteredUser = lesson?.users.filter((user) => user.id !== userId)[0];
-
-  if (!filteredUser) {
-    toast.error("Usuário não encontrado");
-    closeModal();
-  }
 
   function handleClose() {
     closeModal();

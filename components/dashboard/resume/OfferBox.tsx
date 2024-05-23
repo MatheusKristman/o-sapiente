@@ -31,7 +31,9 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
   const { openModal: openOfferModal, setRequestSelected: setRequestSelected } = useOffersModalStore();
   const { userId } = useUserStore();
 
-  const filteredStudent = request.users.filter((user) => user.id !== userId)[0];
+  const filteredStudent = request.users.filter((user) =>
+    type === "Professor" ? user.id !== userId : user.id === userId
+  )[0];
 
   function handleBtn() {
     if (type === "Professor") {
@@ -52,7 +54,7 @@ const OfferBox = ({ last, request, type, offer }: OfferBoxProps) => {
   }
 
   return (
-    <div className={cn("w-full rounded-lg bg-white p-5 mb-4", last && "mb-0")}>
+    <div className={cn("w-full rounded-lg bg-white p-3 mb-4", last && "mb-0")}>
       <div className="flex flex-col lg:flex-row lg:gap-6 lg:w-full">
         <div className="flex justify-center xl:w-1/12">
           <Image

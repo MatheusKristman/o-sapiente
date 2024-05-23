@@ -95,6 +95,7 @@ const getRequests = async () => {
         include: {
           users: {
             select: {
+              id: true,
               firstName: true,
               lastName: true,
               email: true,

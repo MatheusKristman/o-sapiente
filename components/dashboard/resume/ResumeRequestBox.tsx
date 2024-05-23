@@ -24,7 +24,7 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
 
   return (
     <div className="w-full rounded-lg bg-green-primary p-9 mb-5 shadow-md shadow-[rgba(0,0,0,0.25)]">
-      <h2 className="text-white text-2xl font-semibold mb-5 md:text-3xl lg:whitespace-nowrap whitespace-normal">
+      <h2 className="text-white text-2xl font-semibold mb-2 lg:whitespace-nowrap whitespace-normal">
         {type === "Professor" ? professorResumeInfos.requestBoxTitle : null}
         {type === "Student" ? studentResumeInfos.newOffersTitle : null}
       </h2>
@@ -76,7 +76,7 @@ const ResumeRequestBox = ({ type }: ResumeRequestBoxProps) => {
 function ResumeRequestBoxSkeleton({ type }: { type: "Professor" | "Student" }) {
   return (
     <div className="w-full rounded-lg bg-green-primary p-9 mb-5 shadow-md shadow-[rgba(0,0,0,0.25)]">
-      <h2 className="text-white text-2xl font-semibold mb-5 md:text-3xl lg:whitespace-nowrap whitespace-normal">
+      <h2 className="text-white text-2xl font-semibold mb-5 lg:whitespace-nowrap whitespace-normal">
         {type === "Professor" ? professorResumeInfos.requestBoxTitle : null}
         {type === "Student" ? studentResumeInfos.newOffersTitle : null}
       </h2>

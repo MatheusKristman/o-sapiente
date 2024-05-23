@@ -14,7 +14,7 @@ const ResumeCurrentLessonBox = () => {
 
   return (
     <div className="w-full rounded-lg bg-white p-9 mb-12 shadow-md shadow-[rgba(0,0,0,0.25)]">
-      <h2 className=" text-2xl text-green-primary font-semibold mb-5 md:text-3xl lg:whitespace-nowrap whitespace-normal">
+      <h2 className=" text-2xl text-green-primary font-semibold mb-2 lg:whitespace-nowrap whitespace-normal">
         {studentResumeInfos.currentLessonTitle}
       </h2>
 
@@ -44,7 +44,7 @@ const ResumeCurrentLessonBox = () => {
 function ResumeCurrentLessonBoxSkeleton() {
   return (
     <div className="w-full rounded-lg bg-white p-9 mb-12 shadow-md shadow-[rgba(0,0,0,0.25)]">
-      <h2 className=" text-2xl text-green-primary font-semibold mb-5 md:text-3xl lg:whitespace-nowrap whitespace-normal">
+      <h2 className=" text-2xl text-green-primary font-semibold mb-2 lg:whitespace-nowrap whitespace-normal">
         {studentResumeInfos.currentLessonTitle}
       </h2>
 

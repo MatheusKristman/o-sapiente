@@ -19,6 +19,7 @@ export async function GET(req: Request, { params }: { params: IParams }) {
       include: {
         users: {
           select: {
+            id: true,
             firstName: true,
             lastName: true,
             email: true,

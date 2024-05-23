@@ -130,6 +130,7 @@ export async function POST(req: Request) {
           include: {
             users: {
               select: {
+                id: true,
                 firstName: true,
                 lastName: true,
                 tel: true,
@@ -243,6 +244,7 @@ export async function POST(req: Request) {
         include: {
           users: {
             select: {
+              id: true,
               firstName: true,
               lastName: true,
               tel: true,

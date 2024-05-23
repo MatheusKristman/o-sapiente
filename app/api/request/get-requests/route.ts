@@ -92,6 +92,7 @@ export async function GET() {
         include: {
           users: {
             select: {
+              id: true,
               firstName: true,
               lastName: true,
               email: true,
