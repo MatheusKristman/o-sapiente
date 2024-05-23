@@ -17,6 +17,7 @@ enum Lang {
 enum AccountRole {
   PROFESSOR
   STUDENT
+  ADMIN
 }
 
 enum Status {

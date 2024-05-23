@@ -73,6 +73,20 @@ export async function POST(req: Request) {
       },
     });
 
+    if (accountType === "Admin") {
+      user = await prisma.user.create({
+        data: {
+          firstName,
+          lastName,
+          email,
+          tel,
+          password: hashedPassword,
+          accountType: AccountRole.ADMIN,
+          isConfirmed: true,
+        }
+      })
+    }
+
     if (accountType === "Student") {
       user = await prisma.user.create({
         data: {
