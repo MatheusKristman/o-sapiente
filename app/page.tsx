@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 
 import Banner from "@/components/home/Banner";
-import StudentModal from "@/components/home/StudentModal";
+import LoginModal from "@/components/home/LoginModal";
 import Hero from "@/components/home/Hero";
 import Steps from "@/components/home/Steps";
 import Benefits from "@/components/home/Benefits";
@@ -16,14 +16,13 @@ import Contact from "@/components/home/Contact";
 import ProfessorModal from "@/components/home/components/professor-login/ProfessorModal";
 import RecoverPasswordModal from "@/components/home/RecoverPasswordModal";
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
-import useStudentModalStore from "@/stores/useStudentModalStore";
+import useLoginModalStore from "@/stores/useLoginModalStore";
 import useRecoverPasswordModalStore from "@/stores/useRecoverPasswordModalStore";
 
 export default function Home() {
   const [successMessage, setSuccessMessage] = useState<string>("");
 
-  const { openModal: openStudentModal, setToLogin } = useStudentModalStore();
-  const { openModal: openProfessorModal } = useProfessorModalStore();
+  const { openModal, setToLogin } = useLoginModalStore();
   const { openModal: openRecoverPasswordModal, setIdUser } = useRecoverPasswordModalStore();
 
   const searchParams = useSearchParams();
@@ -78,18 +77,10 @@ export default function Home() {
 
   useEffect(() => {
     if (redirected) {
-      if (type === "professor") {
-        toast.dismiss();
-        toast.success(successMessage);
-        openProfessorModal();
-      }
-
-      if (type === "student") {
-        toast.dismiss();
-        toast.success(successMessage);
-        openStudentModal();
-        setToLogin();
-      }
+      toast.dismiss();
+      toast.success(successMessage);
+      openModal();
+      setToLogin();
 
       redirected = "";
     }
@@ -98,7 +89,7 @@ export default function Home() {
   return (
     <>
       <ProfessorModal />
-      <StudentModal />
+      <LoginModal />
       <RecoverPasswordModal />
       <Hero />
       <Banner />

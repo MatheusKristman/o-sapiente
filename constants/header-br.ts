@@ -9,4 +9,11 @@ export const professorHeaderButton = {
   href: "/cadastro-professor",
 };
 
+export const headerTexts = {
+  logoutBtn: "SAIR",
+  loginBtn: "ENTRAR NA CONTA",
+  dashboardBtn: "ACESSAR DASHBOARD",
+  professorRegister: "DAR AULAS",
+}
+
 export const studentHeaderButton = { label: "ALUNO", href: "/cadastro-aluno" };

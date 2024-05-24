@@ -4,20 +4,17 @@ import { BsXLg } from "react-icons/bs";
 import { HiChevronLeft } from "react-icons/hi2";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { studentRequestInfo } from "@/constants/studentModal-br";
-import {
-  studentOverlayAnimation,
-  studentModalAnimation,
-} from "@/constants/framer-animations/student-modal";
+import { studentRequestInfo } from "@/constants/loginModal-br";
+import { studentOverlayAnimation, studentModalAnimation } from "@/constants/framer-animations/student-modal";
 import StudentRequestForm from "./components/student-request/StudentRequestForm";
 import StudentRegisterForm from "./components/student-request/StudentRegisterForm";
 import StudentLoginForm from "./components/student-request/StudentLoginForm";
 import StudentForgotPasswordForm from "./components/student-request/StudentForgotPasswordForm";
-import useStudentModalStore from "@/stores/useStudentModalStore";
+import useLoginModalStore from "@/stores/useLoginModalStore";
 import { Button } from "@/components/ui/button";
 import StudentRecoverPasswordMessage from "./components/student-request/StudentRecoverPasswordMessage";
 
-const StudentModal = () => {
+const LoginModal = () => {
   const {
     isModalOpen,
     isRegister,
@@ -36,7 +33,7 @@ const StudentModal = () => {
     isRecoverPasswordMessage,
     setToNotRecoverPasswordMessage,
     setToNotRecoverPassword,
-  } = useStudentModalStore();
+  } = useLoginModalStore();
 
   function handleCloseButton() {
     closeModal();
@@ -90,11 +87,7 @@ const StudentModal = () => {
               variants={studentModalAnimation}
               className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
             >
-              <div
-                className={`flex ${
-                  isBackBtnActive ? "justify-between" : "justify-end"
-                } mb-6`}
-              >
+              <div className={`flex ${isBackBtnActive ? "justify-between" : "justify-end"} mb-6`}>
                 {isBackBtnActive && (
                   <Button
                     type="button"
@@ -118,17 +111,11 @@ const StudentModal = () => {
                 </Button>
               </div>
 
-              <h4 className="text-2xl text-[#2C383F] font-semibold mb-9 sm:text-3xl text-left">
-                {studentRequestInfo.title}
-              </h4>
-
               <AnimatePresence>
                 {isRequest && <StudentRequestForm key="request" />}
                 {isRegister && <StudentRegisterForm key="register" />}
                 {isLogin && <StudentLoginForm key="login" />}
-                {forgotPassword && (
-                  <StudentForgotPasswordForm key="forgot-password" />
-                )}
+                {forgotPassword && <StudentForgotPasswordForm key="forgot-password" />}
                 {isRecoverPasswordMessage && <StudentRecoverPasswordMessage />}
               </AnimatePresence>
             </motion.div>
@@ -139,4 +126,4 @@ const StudentModal = () => {
   );
 };
 
-export default StudentModal;
+export default LoginModal;

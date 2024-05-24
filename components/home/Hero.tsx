@@ -5,17 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { heroInfos } from "@/constants/hero-br";
-import {
-  heroInfoAnimation,
-  heroImageAnimation,
-  heroImageMobileAnimation,
-} from "@/constants/framer-animations/hero";
-import useStudentModalStore from "@/stores/useStudentModalStore";
+import { heroInfoAnimation, heroImageAnimation, heroImageMobileAnimation } from "@/constants/framer-animations/hero";
+import useLoginModalStore from "@/stores/useLoginModalStore";
 
 const Hero = () => {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
 
-  const { openModal, setToRequest } = useStudentModalStore();
+  const { openModal, setToRequest } = useLoginModalStore();
 
   function openRequestModal() {
     openModal();
@@ -38,9 +34,7 @@ const Hero = () => {
               className="max-w-md text-4xl lg:text-5xl text-gray-primary font-semibold text-center lg:text-left leading-[65px] lg:leading-[70px]"
             >
               {heroInfos.title1}
-              <span className="text-green-primary font-semibold">
-                {heroInfos.title2}
-              </span>
+              <span className="text-green-primary font-semibold">{heroInfos.title2}</span>
             </motion.h1>
 
             <motion.p

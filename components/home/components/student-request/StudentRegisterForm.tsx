@@ -10,9 +10,9 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { Loader2 } from "lucide-react";
 
-import { studentRegisterInfo } from "@/constants/studentModal-br";
+import { studentRegisterInfo } from "@/constants/loginModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
-import useStudentModalStore from "@/stores/useStudentModalStore";
+import useLoginModalStore from "@/stores/useLoginModalStore";
 import studentRegisterSchema from "@/constants/schemas/studentRegisterSchema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,7 @@ const StudentRegisterForm = () => {
     setSubject,
     setDescription,
     deactivateBackBtn,
-  } = useStudentModalStore();
+  } = useLoginModalStore();
 
   const form = useForm<z.infer<typeof studentRegisterSchema>>({
     defaultValues: {
@@ -82,6 +82,16 @@ const StudentRegisterForm = () => {
     deactivateBackBtn();
   }
 
+  function handleProfessorRegisterLink() {
+    if (!isSubmitting) {
+      handleClose();
+
+      setTimeout(() => {
+        router.push("/cadastro/professor");
+      });
+    }
+  }
+
   function onSubmit(values: z.infer<typeof studentRegisterSchema>) {
     setIsSubmitting(true);
 
@@ -126,197 +136,216 @@ const StudentRegisterForm = () => {
   }
 
   return (
-    <div className="w-full flex flex-col gap-9">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-          <motion.div
-            variants={studentFormAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="grid grid-cols-2 grid-rows-6 gap-4 mb-6 sm:grid-rows-4"
-          >
-            <div className="w-full col-start-1 col-end-3 flex flex-col gap-1 sm:col-end-2">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder={studentRegisterInfo.name}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        disabled={isSubmitting}
-                        className={cn("input", form.formState.errors.firstName && "input-error")}
-                        {...field}
-                      />
-                    </FormControl>
+    <>
+      <motion.h4
+        variants={studentFormAnimation}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="text-2xl text-[#2C383F] font-semibold mb-9 sm:text-3xl text-left"
+      >
+        {studentRegisterInfo.title}
+      </motion.h4>
 
-                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
-                  </FormItem>
-                )}
-              />
-            </div>
+      <div className="w-full flex flex-col gap-9">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+            <motion.div
+              variants={studentFormAnimation}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="grid grid-cols-2 grid-rows-6 gap-4 mb-6 sm:grid-rows-4"
+            >
+              <div className="w-full col-start-1 col-end-3 flex flex-col gap-1 sm:col-end-2">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder={studentRegisterInfo.name}
+                          autoComplete="off"
+                          autoCorrect="off"
+                          disabled={isSubmitting}
+                          className={cn("input", form.formState.errors.firstName && "input-error")}
+                          {...field}
+                        />
+                      </FormControl>
 
-            <div className="w-full col-start-1 col-end-3 flex flex-col gap-1 sm:col-start-2">
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder={studentRegisterInfo.lastName}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        disabled={isSubmitting}
-                        className={cn("input", form.formState.errors.lastName && "input-error")}
-                        {...field}
-                      />
-                    </FormControl>
+                      <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
-                  </FormItem>
-                )}
-              />
-            </div>
+              <div className="w-full col-start-1 col-end-3 flex flex-col gap-1 sm:col-start-2">
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder={studentRegisterInfo.lastName}
+                          autoComplete="off"
+                          autoCorrect="off"
+                          disabled={isSubmitting}
+                          className={cn("input", form.formState.errors.lastName && "input-error")}
+                          {...field}
+                        />
+                      </FormControl>
 
-            <div className="col-start-1 col-end-3 w-full flex flex-col gap-1">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder={studentRegisterInfo.email}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        disabled={isSubmitting}
-                        className={cn("input", form.formState.errors.email && "input-error")}
-                        {...field}
-                      />
-                    </FormControl>
+                      <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
-                  </FormItem>
-                )}
-              />
-            </div>
+              <div className="col-start-1 col-end-3 w-full flex flex-col gap-1">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder={studentRegisterInfo.email}
+                          autoComplete="off"
+                          autoCorrect="off"
+                          disabled={isSubmitting}
+                          className={cn("input", form.formState.errors.email && "input-error")}
+                          {...field}
+                        />
+                      </FormControl>
 
-            <div className="col-start-1 col-end-3 w-full flex flex-col gap-1">
-              <FormField
-                control={form.control}
-                name="tel"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder={studentRegisterInfo.tel}
-                        onChange={handleTelFormat}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        maxLength={15}
-                        disabled={isSubmitting}
-                        className={cn("input", form.formState.errors.tel && "input-error")}
-                        name={field.name}
-                        ref={field.ref}
-                        onBlur={field.onBlur}
-                        value={field.value}
-                      />
-                    </FormControl>
+                      <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
-                  </FormItem>
-                )}
-              />
-            </div>
+              <div className="col-start-1 col-end-3 w-full flex flex-col gap-1">
+                <FormField
+                  control={form.control}
+                  name="tel"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder={studentRegisterInfo.tel}
+                          onChange={handleTelFormat}
+                          autoComplete="off"
+                          autoCorrect="off"
+                          maxLength={15}
+                          disabled={isSubmitting}
+                          className={cn("input", form.formState.errors.tel && "input-error")}
+                          name={field.name}
+                          ref={field.ref}
+                          onBlur={field.onBlur}
+                          value={field.value}
+                        />
+                      </FormControl>
 
-            <div className="col-start-1 col-end-3 w-full flex flex-col gap-1 sm:col-end-2">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={studentRegisterInfo.password}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        disabled={isSubmitting}
-                        className={cn("input", form.formState.errors.password && "input-error")}
-                        {...field}
-                      />
-                    </FormControl>
+                      <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
-                  </FormItem>
-                )}
-              />
-            </div>
+              <div className="col-start-1 col-end-3 w-full flex flex-col gap-1 sm:col-end-2">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder={studentRegisterInfo.password}
+                          autoComplete="off"
+                          autoCorrect="off"
+                          disabled={isSubmitting}
+                          className={cn("input", form.formState.errors.password && "input-error")}
+                          {...field}
+                        />
+                      </FormControl>
 
-            <div className="col-start-1 col-end-3 w-full flex flex-col gap-1 sm:col-start-2">
-              <FormField
-                control={form.control}
-                name="passwordConfirm"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={studentRegisterInfo.passwordConfirm}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        disabled={isSubmitting}
-                        className={cn("input", form.formState.errors.passwordConfirm && "input-error")}
-                        {...field}
-                      />
-                    </FormControl>
+                      <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
-                  </FormItem>
-                )}
-              />
-            </div>
+              <div className="col-start-1 col-end-3 w-full flex flex-col gap-1 sm:col-start-2">
+                <FormField
+                  control={form.control}
+                  name="passwordConfirm"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder={studentRegisterInfo.passwordConfirm}
+                          autoComplete="off"
+                          autoCorrect="off"
+                          disabled={isSubmitting}
+                          className={cn("input", form.formState.errors.passwordConfirm && "input-error")}
+                          {...field}
+                        />
+                      </FormControl>
 
-            <div className="w-full col-span-2 flex items-center justify-start">
-              <span className="text-sm text-left text-gray-primary/60">* Senha precisa ter 6 caracteres</span>
-            </div>
-          </motion.div>
+                      <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-          <motion.div variants={studentFormAnimation} initial="initial" animate="animate" exit="exit">
-            <Button type="submit" disabled={isSubmitting} className="w-full flex items-center gap-2">
-              {isSubmitting && <Loader2 className="animate-spin" />}
-              {studentRegisterInfo.nextButton}
-            </Button>
-          </motion.div>
-        </form>
-      </Form>
+              <div className="w-full col-span-2 flex items-center justify-start">
+                <span className="text-sm text-left text-gray-primary/60">* Senha precisa ter 6 caracteres</span>
+              </div>
+            </motion.div>
 
-      <div className="w-full h-[1px] bg-[#EBEFF1]" />
+            <motion.div variants={studentFormAnimation} initial="initial" animate="animate" exit="exit">
+              <Button type="submit" disabled={isSubmitting} className="w-full flex items-center gap-2">
+                {isSubmitting && <Loader2 className="animate-spin" />}
+                {studentRegisterInfo.nextButton}
+              </Button>
+            </motion.div>
+          </form>
+        </Form>
 
-      <div className="w-full flex flex-col items-center justify-center gap-4">
-        <p className="text-base font-semibold text-[#2C383F]">
-          {studentRegisterInfo.hasAccountText}{" "}
-          <span onClick={handleLoginLink} className="text-green-primary cursor-pointer">
-            {studentRegisterInfo.hasAccountLink}
+        <div className="w-full h-[1px] bg-[#EBEFF1]" />
+
+        <div className="w-full flex flex-col items-center justify-center gap-4">
+          <p className="text-base !leading-tight font-semibold text-[#2C383F]">
+            {studentRegisterInfo.hasAccountText}{" "}
+            <span onClick={handleLoginLink} className="text-green-primary cursor-pointer">
+              {studentRegisterInfo.hasAccountLink}
+            </span>
+          </p>
+
+          <p className="text-base !leading-tight font-semibold text-[#2C383F]">
+            {studentRegisterInfo.professorRegisterText}{" "}
+            <span onClick={handleProfessorRegisterLink} className="text-green-primary cursor-pointer">
+              {studentRegisterInfo.professorRegisterLink}
+            </span>
+          </p>
+
+          <span className="text-sm text-[#9DA5AA] font-medium">
+            {studentRegisterInfo.termsText}
+            <Link href="#" className="underline text-[#5A727D]">
+              {studentRegisterInfo.termsLink}
+            </Link>
           </span>
-        </p>
-
-        <span className="text-sm text-[#9DA5AA] font-medium">
-          {studentRegisterInfo.termsText}
-          <Link href="#" className="underline text-[#5A727D]">
-            {studentRegisterInfo.termsLink}
-          </Link>
-        </span>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

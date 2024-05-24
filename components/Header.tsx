@@ -9,10 +9,10 @@ import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
 import { LogOut } from "lucide-react";
 
-import { navLinks, professorHeaderButton, studentHeaderButton } from "@/constants/header-br";
+import { navLinks, headerTexts } from "@/constants/header-br";
 import { Button } from "@/components/ui/button";
 import useHeaderStore from "@/stores/useHeaderStore";
-import useStudentModalStore from "@/stores/useStudentModalStore";
+import useLoginModalStore from "@/stores/useLoginModalStore";
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import { cn } from "@/libs/utils";
@@ -23,8 +23,7 @@ const Header = () => {
 
   const { isMobileMenuOpen, openMobileMenu } = useHeaderStore();
   const { accountType, setAccountType, userId, setUserId } = useUserStore();
-  const { openModal: openStudentModal, setToRegister } = useStudentModalStore();
-  const { openModal: openProfessorModal, setToLogin } = useProfessorModalStore();
+  const { openModal, setToLogin } = useLoginModalStore();
 
   const session = useSession();
   const router = useRouter();
@@ -61,13 +60,8 @@ const Header = () => {
     }, 100);
   }
 
-  function openStudentRegisterModal() {
-    openStudentModal();
-    setToRegister();
-  }
-
-  function openProfessorLoginModal() {
-    openProfessorModal();
+  function openLoginModal() {
+    openModal();
     setToLogin();
   }
 
@@ -131,63 +125,37 @@ const Header = () => {
 
       <div className="hidden lg:flex items-center justify-center gap-x-6">
         {session.status === "authenticated" ? (
-          accountType === "STUDENT" ? (
-            <>
-              <Button
-                variant="link"
-                size="sm"
-                type="button"
-                disabled={isLoading}
-                onClick={handleLogOut}
-                className="flex gap-2 items-center justify-center text-green-primary text-lg"
-              >
-                <LogOut className="h-6 w-6" />
-                Sair
-              </Button>
-
-              <Button
-                type="button"
-                disabled={isLoading}
-                onClick={handleDashboardStudentBtn}
-                className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
-              >
-                <Image src="/assets/icons/user.svg" alt="Usuário" width={24} height={24} className="object-contain" />
-                Área do Aluno
-              </Button>
-            </>
-          ) : accountType === "PROFESSOR" ? (
-            <>
-              <Button
-                variant="link"
-                disabled={isLoading}
-                size="sm"
-                type="button"
-                onClick={handleLogOut}
-                className="flex gap-2 items-center justify-center text-green-primary text-lg"
-              >
-                <LogOut className="h-6 w-6" />
-                Sair
-              </Button>
-
-              <Button
-                type="button"
-                disabled={isLoading}
-                onClick={handleDashboardProfessorBtn}
-                className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
-              >
-                <Image src="/assets/icons/user.svg" alt="Usuário" width={24} height={24} className="object-contain" />
-                Área do Professor
-              </Button>
-            </>
-          ) : null
-        ) : (
           <>
-            <Button variant="outline" disabled={isLoading} onClick={openProfessorLoginModal}>
-              {professorHeaderButton.label}
+            <Button
+              variant="link"
+              size="sm"
+              type="button"
+              disabled={isLoading}
+              onClick={handleLogOut}
+              className="flex gap-2 items-center justify-center text-green-primary text-lg"
+            >
+              <LogOut className="h-6 w-6" />
+              {headerTexts.logoutBtn}
             </Button>
 
-            <Button disabled={isLoading} onClick={openStudentRegisterModal}>
-              {studentHeaderButton.label}
+            <Button
+              type="button"
+              disabled={isLoading}
+              onClick={() => {}}
+              className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
+            >
+              <Image src="/assets/icons/user.svg" alt="Usuário" width={24} height={24} className="object-contain" />
+              {headerTexts.dashboardBtn}
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button variant="outline" disabled={isLoading} onClick={() => {}} asChild>
+              <Link href="/cadastro/professor">{headerTexts.professorRegister}</Link>
+            </Button>
+
+            <Button disabled={isLoading} onClick={openLoginModal}>
+              {headerTexts.loginBtn}
             </Button>
           </>
         )}

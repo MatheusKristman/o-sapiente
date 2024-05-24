@@ -7,9 +7,9 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 
-import { studentForgotPasswordInfo } from "@/constants/studentModal-br";
+import { studentForgotPasswordInfo } from "@/constants/loginModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
-import useStudentModalStore from "@/stores/useStudentModalStore";
+import useLoginModalStore from "@/stores/useLoginModalStore";
 import studentForgotPasswordSchema from "@/constants/schemas/studentForgotPasswordSchema";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
@@ -19,7 +19,7 @@ import { cn } from "@/libs/utils";
 function StudentForgotPasswordForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const { setToNotRecoverPassword, setToLogin, setToRecoverPasswordMessage } = useStudentModalStore();
+  const { setToNotRecoverPassword, setToLogin, setToRecoverPasswordMessage } = useLoginModalStore();
 
   const form = useForm<z.infer<typeof studentForgotPasswordSchema>>({
     defaultValues: {

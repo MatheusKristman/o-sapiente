@@ -9,14 +9,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  navLinks,
-  professorHeaderButton,
-  studentHeaderButton,
-} from "@/constants/header-br";
+import { navLinks, professorHeaderButton, studentHeaderButton, headerTexts } from "@/constants/header-br";
 import { mobileMenuAnimation } from "@/constants/framer-animations/header";
 import useHeaderStore from "@/stores/useHeaderStore";
-import useStudentModalStore from "@/stores/useStudentModalStore";
+import useLoginModalStore from "@/stores/useLoginModalStore";
 import useProfessorModalStore from "@/stores/useProfessorModalStore";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import useUserStore from "@/stores/useUserStore";
@@ -24,9 +20,7 @@ import useUserStore from "@/stores/useUserStore";
 const HeaderMobile = () => {
   const { isMobileMenuOpen, closeMobileMenu } = useHeaderStore();
   const { accountType, userId } = useUserStore();
-  const { openModal: openStudentModal, setToRegister } = useStudentModalStore();
-  const { openModal: openProfessorModal, setToLogin } =
-    useProfessorModalStore();
+  const { openModal, setToLogin } = useLoginModalStore();
 
   const session = useSession();
   const router = useRouter();
@@ -63,41 +57,37 @@ const HeaderMobile = () => {
     }
   }
 
-  function openStudentRegisterModal() {
+  function openLoginModal() {
     closeMobileMenu();
 
     setTimeout(() => {
-      openStudentModal();
-      setToRegister();
-    }, 500);
-  }
-
-  function handleDashboardStudentBtn() {
-    closeMobileMenu();
-
-    setTimeout(() => {
-      router.push(
-        `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`
-      );
-    }, 500);
-  }
-
-  function openProfessorLoginModal() {
-    closeMobileMenu();
-
-    setTimeout(() => {
-      openProfessorModal();
+      openModal();
       setToLogin();
     }, 500);
   }
 
-  function handleDashboardProfessorBtn() {
+  // function handleDashboardStudentBtn() {
+  //   closeMobileMenu();
+
+  //   setTimeout(() => {
+  //     router.push(`${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`);
+  //   }, 500);
+  // }
+
+  // function handleDashboardProfessorBtn() {
+  //   //TODO: alterar todas as rotas para texto literal
+  //   closeMobileMenu();
+
+  //   setTimeout(() => {
+  //     router.push(`${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`);
+  //   }, 500);
+  // }
+
+  function handleProfessorRegister() {
     closeMobileMenu();
 
     setTimeout(() => {
-      router.push(
-        `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`
-      );
+      router.push("/cadastro/professor");
     }, 500);
   }
 
@@ -146,81 +136,42 @@ const HeaderMobile = () => {
 
             <div className="lg:hidden flex flex-col items-end justify-center gap-y-4 w-full">
               {session.status === "authenticated" ? (
-                accountType === "STUDENT" ? (
-                  <>
-                    <Button
-                      variant="link"
-                      size="sm"
-                      type="button"
-                      onClick={handleLogOut}
-                      className="px-0 flex gap-2 items-center justify-center text-white text-lg"
-                    >
-                      <LogOut className="h-6 w-6" />
-                      Sair
-                    </Button>
-
-                    <Button
-                      variant="secondary"
-                      type="button"
-                      onClick={handleDashboardStudentBtn}
-                      className="flex gap-2 items-center justify-center"
-                    >
-                      <Image
-                        src="/assets/icons/user-green.svg"
-                        alt="Usuário"
-                        width={24}
-                        height={24}
-                        className="object-contain"
-                      />
-                      Área do Aluno
-                    </Button>
-                  </>
-                ) : accountType === "PROFESSOR" ? (
-                  <>
-                    <Button
-                      variant="link"
-                      size="sm"
-                      type="button"
-                      onClick={handleLogOut}
-                      className="px-0 flex gap-2 items-center justify-center text-white text-lg"
-                    >
-                      <LogOut className="h-6 w-6" />
-                      Sair
-                    </Button>
-
-                    <Button
-                      variant="secondary"
-                      type="button"
-                      onClick={handleDashboardProfessorBtn}
-                      className="flex gap-2 items-center justify-center"
-                    >
-                      <Image
-                        src="/assets/icons/user-green.svg"
-                        alt="Usuário"
-                        width={24}
-                        height={24}
-                        className="object-contain"
-                      />
-                      Área do Professor
-                    </Button>
-                  </>
-                ) : null
-              ) : (
                 <>
                   <Button
-                    variant="secondary"
-                    className="w-full"
-                    onClick={openProfessorLoginModal}
+                    variant="link"
+                    size="sm"
+                    type="button"
+                    onClick={handleLogOut}
+                    className="px-0 flex gap-2 items-center justify-center text-white text-lg"
                   >
-                    {professorHeaderButton.label}
+                    <LogOut className="h-6 w-6" />
+                    {headerTexts.logoutBtn}
                   </Button>
 
                   <Button
                     variant="secondary"
-                    className="w-full"
-                    onClick={openStudentRegisterModal}
+                    type="button"
+                    onClick={() => {}}
+                    className="flex gap-2 items-center justify-center"
                   >
-                    {studentHeaderButton.label}
+                    <Image
+                      src="/assets/icons/user-green.svg"
+                      alt="Usuário"
+                      width={24}
+                      height={24}
+                      className="object-contain"
+                    />
+                    {headerTexts.dashboardBtn}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="secondary" className="w-full" onClick={handleProfessorRegister}>
+                    {headerTexts.professorRegister}
+                  </Button>
+
+                  <Button variant="secondary" className="w-full" onClick={openLoginModal}>
+                    {headerTexts.loginBtn}
                   </Button>
                 </>
               )}

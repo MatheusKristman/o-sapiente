@@ -8,21 +8,17 @@ import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 
-import { studentLoginInfo } from "@/constants/studentModal-br";
+import { studentLoginInfo } from "@/constants/loginModal-br";
 import { studentFormAnimation } from "@/constants/framer-animations/student-modal";
-import useStudentModalStore from "@/stores/useStudentModalStore";
+import useLoginModalStore from "@/stores/useLoginModalStore";
 import studentLoginSchema from "@/constants/schemas/studentLoginSchema";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/libs/utils";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
+
+//TODO: ajustar para login de todos os tipos
 
 const StudentLoginForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -39,7 +35,7 @@ const StudentLoginForm = () => {
     setDescription,
     deactivateBackBtn,
     setToRecoverPassword,
-  } = useStudentModalStore();
+  } = useLoginModalStore();
 
   const form = useForm<z.infer<typeof studentLoginSchema>>({
     defaultValues: {
@@ -90,9 +86,7 @@ const StudentLoginForm = () => {
             .then((res) => {
               handleClose();
 
-              router.push(
-                `${menuItems[0].studentHref}${res.data.id}${menuItems[0].pageHref}`,
-              );
+              router.push(`${menuItems[0].studentHref}${res.data.id}${menuItems[0].pageHref}`);
             })
             .catch((error) => console.error(error));
         }
@@ -128,104 +122,99 @@ const StudentLoginForm = () => {
   }
 
   return (
-    <div className="w-full flex flex-col gap-9">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-          <motion.div
-            variants={studentFormAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="grid grid-cols-1 grid-rows-2 gap-4 mb-6"
-          >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder={studentLoginInfo.email}
-                      autoComplete="off"
-                      autoCorrect="off"
-                      disabled={isSubmitting}
-                      className={cn(
-                        "input",
-                        form.formState.errors.email && "input-error",
-                      )}
-                      {...field}
-                    />
-                  </FormControl>
+    <>
+      <motion.h4
+        variants={studentFormAnimation}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="text-2xl text-[#2C383F] font-semibold mb-9 sm:text-3xl text-left"
+      >
+        {studentLoginInfo.title}
+      </motion.h4>
 
-                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
-                </FormItem>
-              )}
-            />
+      <div className="w-full flex flex-col gap-9">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+            <motion.div
+              variants={studentFormAnimation}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="grid grid-cols-1 grid-rows-2 gap-4 mb-6"
+            >
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder={studentLoginInfo.email}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        disabled={isSubmitting}
+                        className={cn("input", form.formState.errors.email && "input-error")}
+                        {...field}
+                      />
+                    </FormControl>
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder={studentLoginInfo.password}
-                      autoComplete="off"
-                      autoCorrect="off"
-                      disabled={isSubmitting}
-                      className={cn(
-                        "input",
-                        form.formState.errors.password && "input-error",
-                      )}
-                      {...field}
-                    />
-                  </FormControl>
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
+                )}
+              />
 
-                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
-                </FormItem>
-              )}
-            />
-          </motion.div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder={studentLoginInfo.password}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        disabled={isSubmitting}
+                        className={cn("input", form.formState.errors.password && "input-error")}
+                        {...field}
+                      />
+                    </FormControl>
 
-          <motion.div
-            variants={studentFormAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Button type="submit" disabled={isSubmitting} className="w-full">
-              {studentLoginInfo.loginButton}
-            </Button>
-          </motion.div>
-        </form>
-      </Form>
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
+                )}
+              />
+            </motion.div>
 
-      <div className="w-full h-[1px] bg-[#EBEFF1]" />
+            <motion.div variants={studentFormAnimation} initial="initial" animate="animate" exit="exit">
+              <Button type="submit" disabled={isSubmitting} className="w-full">
+                {studentLoginInfo.loginButton}
+              </Button>
+            </motion.div>
+          </form>
+        </Form>
 
-      <div className="w-full flex flex-col items-center justify-center gap-4">
-        <p className="text-base font-semibold text-[#2C383F]">
-          {studentLoginInfo.noAccountText}{" "}
-          <span
-            onClick={handleRegisterLink}
-            className="text-green-primary cursor-pointer"
-          >
-            {studentLoginInfo.noAccountLink}
-          </span>
-        </p>
+        <div className="w-full h-[1px] bg-[#EBEFF1]" />
 
-        <p className="text-base font-semibold text-[#2C383F]">
-          {studentLoginInfo.forgotPasswordText}{" "}
-          <span
-            onClick={handleForgotPassword}
-            className="text-green-primary cursor-pointer"
-          >
-            {studentLoginInfo.forgotPasswordLink}
-          </span>
-        </p>
+        <div className="w-full flex flex-col items-center justify-center gap-4">
+          <p className="text-base !leading-tight font-semibold text-[#2C383F]">
+            {studentLoginInfo.noAccountText}{" "}
+            <span onClick={handleRegisterLink} className="text-green-primary cursor-pointer">
+              {studentLoginInfo.noAccountLink}
+            </span>
+          </p>
+
+          <p className="text-base !leading-tight font-semibold text-[#2C383F]">
+            {studentLoginInfo.forgotPasswordText}{" "}
+            <span onClick={handleForgotPassword} className="text-green-primary cursor-pointer">
+              {studentLoginInfo.forgotPasswordLink}
+            </span>
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

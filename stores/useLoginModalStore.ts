@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface useStudentModalInter {
+interface useLoginModalInter {
   isModalOpen: boolean;
   openModal: () => void;
   closeModal: () => void;
@@ -28,7 +28,7 @@ interface useStudentModalInter {
   deactivateBackBtn: () => void;
 }
 
-const useStudentModalStore = create<useStudentModalInter>((set) => ({
+const useLoginModalStore = create<useLoginModalInter>((set) => ({
   isModalOpen: false,
   openModal: () => set(() => ({ isModalOpen: true })),
   closeModal: () => set(() => ({ isModalOpen: false })),
@@ -58,4 +58,4 @@ const useStudentModalStore = create<useStudentModalInter>((set) => ({
   deactivateBackBtn: () => set(() => ({ isBackBtnActive: false })),
 }));
 
-export default useStudentModalStore;
+export default useLoginModalStore;

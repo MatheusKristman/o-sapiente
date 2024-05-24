@@ -1,11 +1,13 @@
 export const studentRequestInfo = {
   title: "Solicite aulas para os professores",
-  themePlaceholder: "Escolha a matéria ou tema",
+  themePlaceholder: "Escolha a matéria",
+  otherPlaceholder: "Digite qual é a matéria que deseja adicionar",
   messagePlaceholder: "Digite sua mensagem",
   nextButton: "PROSSEGUIR",
 };
 
 export const studentRegisterInfo = {
+  title: "Cadastre-se como aluno para receber aulas",
   name: "Nome",
   lastName: "Sobrenome",
   email: "E-mail",
@@ -15,11 +17,14 @@ export const studentRegisterInfo = {
   nextButton: "PROSSEGUIR",
   hasAccountText: "Você já possui uma conta?",
   hasAccountLink: "Entre aqui",
+  professorRegisterText: "Gostaria de dar aulas como professor?",
+  professorRegisterLink: "Inscreva-se por aqui",
   termsText: "Ao se inscrever, você estará de acordo com as ",
   termsLink: "políticas de privacidade",
 };
 
 export const studentLoginInfo = {
+  title: "Entre na sua conta",
   email: "E-mail",
   password: "Senha",
   loginButton: "Entrar",

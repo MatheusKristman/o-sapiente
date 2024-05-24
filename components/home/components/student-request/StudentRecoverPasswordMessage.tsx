@@ -3,13 +3,12 @@ import { motion } from "framer-motion";
 
 import { newRequestMessageAnimation } from "@/constants/framer-animations/new-request-modal";
 import { retrievePaymentModalInfo } from "@/constants/dashboard/resume-br";
-import useStudentModalStore from "@/stores/useStudentModalStore";
+import useLoginModalStore from "@/stores/useLoginModalStore";
 import { Button } from "@/components/ui/button";
-import { studentRecoverMessageInfo } from "@/constants/studentModal-br";
+import { studentRecoverMessageInfo } from "@/constants/loginModal-br";
 
 function StudentRecoverPasswordMessage() {
-  const { closeModal, setToNotRecoverPasswordMessage, setToRegister } =
-    useStudentModalStore();
+  const { closeModal, setToNotRecoverPasswordMessage, setToRegister } = useLoginModalStore();
 
   function handleClose() {
     closeModal();
@@ -23,12 +22,7 @@ function StudentRecoverPasswordMessage() {
   return (
     <div className="w-full flex flex-col items-center">
       <div className="relative w-36 h-36 mb-9">
-        <Image
-          src="/assets/icons/confirm.gif"
-          alt="Confirmado"
-          fill
-          className="object-cover"
-        />
+        <Image src="/assets/icons/confirm.gif" alt="Confirmado" fill className="object-cover" />
       </div>
 
       <motion.h4
