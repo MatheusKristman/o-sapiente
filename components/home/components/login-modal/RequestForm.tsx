@@ -15,7 +15,7 @@ import { studentNewRequestInfo } from "@/constants/dashboard/resume-br";
 import { cn } from "@/libs/utils";
 import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 
-const StudentRequestForm = () => {
+const RequestForm = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isNextEnabled, setIsNextEnabled] = useState(true);
@@ -194,4 +194,4 @@ const StudentRequestForm = () => {
   );
 };
 
-export default StudentRequestForm;
+export default RequestForm;

@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import { cn } from "@/libs/utils";
 
-const StudentRegisterForm = () => {
+const RegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const {
@@ -349,4 +349,4 @@ const StudentRegisterForm = () => {
   );
 };
 
-export default StudentRegisterForm;
+export default RegisterForm;

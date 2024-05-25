@@ -17,6 +17,7 @@ import useProfessorModalStore from "@/stores/useProfessorModalStore";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import { cn } from "@/libs/utils";
 import useUserStore from "@/stores/useUserStore";
+import { roundToNearestMinutes } from "date-fns";
 
 const Header = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -65,15 +66,19 @@ const Header = () => {
     setToLogin();
   }
 
-  function handleDashboardStudentBtn() {
+  function handleDashboardBtn() {
     if (session.status === "authenticated" && userId) {
-      router.push(`${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`);
-    }
-  }
+      if (accountType === "ADMIN") {
+        router.push("/painel-de-controle/admin/geral");
+      }
 
-  function handleDashboardProfessorBtn() {
-    if (session.status === "authenticated" && userId) {
-      router.push(`${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`);
+      if (accountType === "PROFESSOR") {
+        router.push(`/painel-de-controle/professor/${userId}/resumo`);
+      }
+
+      if (accountType === "STUDENT") {
+        router.push(`/painel-de-controle/aluno/${userId}/resumo`);
+      }
     }
   }
 
@@ -141,7 +146,7 @@ const Header = () => {
             <Button
               type="button"
               disabled={isLoading}
-              onClick={() => {}}
+              onClick={handleDashboardBtn}
               className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
             >
               <Image src="/assets/icons/user.svg" alt="Usuário" width={24} height={24} className="object-contain" />
@@ -150,7 +155,7 @@ const Header = () => {
           </>
         ) : (
           <>
-            <Button variant="outline" disabled={isLoading} onClick={() => {}} asChild>
+            <Button variant="outline" disabled={isLoading} asChild>
               <Link href="/cadastro/professor">{headerTexts.professorRegister}</Link>
             </Button>
 

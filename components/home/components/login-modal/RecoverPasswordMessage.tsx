@@ -7,7 +7,7 @@ import useLoginModalStore from "@/stores/useLoginModalStore";
 import { Button } from "@/components/ui/button";
 import { studentRecoverMessageInfo } from "@/constants/loginModal-br";
 
-function StudentRecoverPasswordMessage() {
+function RecoverPasswordMessage() {
   const { closeModal, setToNotRecoverPasswordMessage, setToRegister } = useLoginModalStore();
 
   function handleClose() {
@@ -50,4 +50,4 @@ function StudentRecoverPasswordMessage() {
   );
 }
 
-export default StudentRecoverPasswordMessage;
+export default RecoverPasswordMessage;

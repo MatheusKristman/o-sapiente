@@ -4,7 +4,6 @@ import { Toaster } from "react-hot-toast";
 
 import Header from "@/components/Header";
 import HeaderMobile from "@/components/HeaderMobile";
-import Footer from "@/components/Footer";
 import AuthContext from "@/context/AuthContext";
 import ActiveStatus from "@/components/ActiveStatus";
 
@@ -26,7 +25,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ActiveStatus />
           <Toaster position="top-center" reverseOrder containerStyle={{ zIndex: "99999" }} />
           {children}
-          <Footer />
         </AuthContext>
       </body>
     </html>

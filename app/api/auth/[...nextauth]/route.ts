@@ -22,7 +22,6 @@ export const authOptions: AuthOptions = {
       credentials: {
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
-        type: { label: "type", type: "text" },
       },
       async authorize(credentials) {
         const emailHost: string = process.env.EMAIL_SMTP!;
@@ -40,25 +39,11 @@ export const authOptions: AuthOptions = {
           );
         }
 
-        let user;
-
-        if (credentials.type === "student") {
-          user = await prisma.user.findUnique({
-            where: {
-              email: credentials.email,
-              accountType: AccountRole.STUDENT,
-            },
-          });
-        }
-
-        if (credentials.type === "professor") {
-          user = await prisma.user.findUnique({
-            where: {
-              email: credentials.email,
-              accountType: AccountRole.PROFESSOR,
-            },
-          });
-        }
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email,
+          },
+        });
 
         if (!user || !user?.password) {
           throw new Error(
@@ -76,10 +61,12 @@ export const authOptions: AuthOptions = {
             },
           });
 
+          const userType = user.accountType === AccountRole.PROFESSOR ? "professor" : "student";
+
           const emailHtml = render(
             EmailConfirmAccount({
               userName: `${user.firstName} ${user.lastName}`,
-              url: `${baseUrl}/?id=${user.id}&confirmed=true&type=${credentials.type}`
+              url: `${baseUrl}/?id=${user.id}&confirmed=true&type=${userType}`
             })
           );
 

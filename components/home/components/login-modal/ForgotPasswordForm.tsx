@@ -16,7 +16,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import { cn } from "@/libs/utils";
 
-function StudentForgotPasswordForm() {
+function ForgotPasswordForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const { setToNotRecoverPassword, setToLogin, setToRecoverPasswordMessage } = useLoginModalStore();
@@ -120,4 +120,4 @@ function StudentForgotPasswordForm() {
   );
 }
 
-export default StudentForgotPasswordForm;
+export default ForgotPasswordForm;

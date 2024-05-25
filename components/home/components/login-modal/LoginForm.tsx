@@ -20,7 +20,7 @@ import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 
 //TODO: ajustar para login de todos os tipos
 
-const StudentLoginForm = () => {
+const LoginForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const router = useRouter();
@@ -86,7 +86,17 @@ const StudentLoginForm = () => {
             .then((res) => {
               handleClose();
 
-              router.push(`${menuItems[0].studentHref}${res.data.id}${menuItems[0].pageHref}`);
+              if (res.data.type === "PROFESSOR") {
+                router.push(`/painel-de-controle/professor/${res.data.id}/resumo`);
+              }
+
+              if (res.data.type === "STUDENT") {
+                router.push(`/painel-de-controle/aluno/${res.data.id}/resumo`);
+              }
+
+              if (res.data.type === "ADMIN") {
+                router.push(`/painel-de-controle/admin/geral`);
+              }
             })
             .catch((error) => console.error(error));
         }
@@ -218,4 +228,4 @@ const StudentLoginForm = () => {
   );
 };
 
-export default StudentLoginForm;
+export default LoginForm;

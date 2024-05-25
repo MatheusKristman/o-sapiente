@@ -6,13 +6,13 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import { studentRequestInfo } from "@/constants/loginModal-br";
 import { studentOverlayAnimation, studentModalAnimation } from "@/constants/framer-animations/student-modal";
-import StudentRequestForm from "./components/student-request/StudentRequestForm";
-import StudentRegisterForm from "./components/student-request/StudentRegisterForm";
-import StudentLoginForm from "./components/student-request/StudentLoginForm";
-import StudentForgotPasswordForm from "./components/student-request/StudentForgotPasswordForm";
+import RequestForm from "./components/login-modal/RequestForm";
+import RegisterForm from "./components/login-modal/RegisterForm";
+import LoginForm from "./components/login-modal/LoginForm";
+import ForgotPasswordForm from "./components/login-modal/ForgotPasswordForm";
 import useLoginModalStore from "@/stores/useLoginModalStore";
 import { Button } from "@/components/ui/button";
-import StudentRecoverPasswordMessage from "./components/student-request/StudentRecoverPasswordMessage";
+import RecoverPasswordMessage from "./components/login-modal/RecoverPasswordMessage";
 
 const LoginModal = () => {
   const {
@@ -112,11 +112,11 @@ const LoginModal = () => {
               </div>
 
               <AnimatePresence>
-                {isRequest && <StudentRequestForm key="request" />}
-                {isRegister && <StudentRegisterForm key="register" />}
-                {isLogin && <StudentLoginForm key="login" />}
-                {forgotPassword && <StudentForgotPasswordForm key="forgot-password" />}
-                {isRecoverPasswordMessage && <StudentRecoverPasswordMessage />}
+                {isRequest && <RequestForm key="request" />}
+                {isRegister && <RegisterForm key="register" />}
+                {isLogin && <LoginForm key="login" />}
+                {forgotPassword && <ForgotPasswordForm key="forgot-password" />}
+                {isRecoverPasswordMessage && <RecoverPasswordMessage />}
               </AnimatePresence>
             </motion.div>
           </motion.div>
