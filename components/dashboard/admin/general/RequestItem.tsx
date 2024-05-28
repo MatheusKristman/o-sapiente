@@ -1,15 +1,29 @@
+"use client";
+
 import { Dot } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { AdminGeneralText } from "@/constants/dashboard/admin-general-br";
 import { cn } from "@/libs/utils";
+import useAdminRequestsModalStore from "@/stores/useAdminRequestsModalStore";
+import { Request } from "@prisma/client";
 
 interface Props {
   last?: boolean;
+  request: Request;
 }
 
-export function RequestItem({ last }: Props) {
+//TODO: adicionar dados da request
+export function RequestItem({ last, request }: Props) {
+  const { openModal, setDeleteConfirmation } = useAdminRequestsModalStore();
+
+  function handleModal() {
+    //TODO: adicionar o que precisar para ter as informações no modal
+    setDeleteConfirmation(false);
+    openModal();
+  }
+
   return (
     <div
       className={cn(
@@ -40,7 +54,9 @@ export function RequestItem({ last }: Props) {
         </div>
       </div>
 
-      <Button className="w-full sm:w-fit">{AdminGeneralText.requestBtn}</Button>
+      <Button onClick={handleModal} className="w-full sm:w-fit">
+        {AdminGeneralText.requestBtn}
+      </Button>
     </div>
   );
 }

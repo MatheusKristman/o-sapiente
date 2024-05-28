@@ -1,17 +1,57 @@
 "use client";
 
 import { motion } from "framer-motion";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import { UsersModalText } from "@/constants/dashboard/admin-general-br";
 import { FormAnimation } from "@/constants/framer-animations/modal";
 import useAdminUsersModalStore from "@/stores/useAdminUsersModalStore";
+import useUserStore from "@/stores/useUserStore";
+import useAdminStore from "@/stores/useAdminStore";
+import { Loader2 } from "lucide-react";
 
-export function UsersModalBanConfirmation() {
-  const { setUserBanConfirmation } = useAdminUsersModalStore();
+interface Props {
+  handleClose: () => void;
+}
+
+export function UsersModalBanConfirmation({ handleClose }: Props) {
+  const { setUserBanConfirmation, isLoading, setLoading, userSelected } =
+    useAdminUsersModalStore();
+  const { setUsers } = useAdminStore();
+  const { userId } = useUserStore();
 
   function handleCancel() {
     setUserBanConfirmation(false);
+  }
+
+  function handleConfirm() {
+    if (userSelected) {
+      setLoading(true);
+
+      axios
+        .post("/api/adm/users/ban-user", {
+          adminId: userId,
+          userId: userSelected.id,
+        })
+        .then((res) => {
+          toast.success("Usuário banido com sucesso");
+
+          setUsers(res.data);
+          handleClose();
+        })
+        .catch((error) => {
+          console.error(error);
+
+          toast.error(error.response.data);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      return;
+    }
   }
 
   return (
@@ -34,6 +74,7 @@ export function UsersModalBanConfirmation() {
 
       <div className="w-full flex flex-col sm:flex-row sm:items-center gap-4">
         <Button
+          disabled={isLoading}
           onClick={handleCancel}
           variant="outline"
           className="w-full sm:w-1/2"
@@ -41,7 +82,12 @@ export function UsersModalBanConfirmation() {
           {UsersModalText.banConfirmationCancelBtn}
         </Button>
 
-        <Button className="w-full sm:w-1/2">
+        <Button
+          disabled={isLoading}
+          onClick={handleConfirm}
+          className="w-full sm:w-1/2 flex items-center gap-2"
+        >
+          {isLoading && <Loader2 className="animate-spin" />}
           {UsersModalText.banConfirmationConfirmBtn}
         </Button>
       </div>

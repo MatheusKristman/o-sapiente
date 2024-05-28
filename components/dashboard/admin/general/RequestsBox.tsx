@@ -1,4 +1,9 @@
+"use client";
+
 import { ChevronDown, Search } from "lucide-react";
+import axios from "axios";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 import { Input } from "@/components/ui/input";
 import { AdminGeneralText } from "@/constants/dashboard/admin-general-br";
@@ -11,8 +16,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RequestItem } from "@/components/dashboard/admin/general/RequestItem";
+import useAdminStore from "@/stores/useAdminStore";
+import useUserStore from "@/stores/useUserStore";
 
 export function RequestsBox() {
+  const { requests, setRequests } = useAdminStore();
+  const { userId } = useUserStore();
+  const session = useSession();
+
+  useEffect(() => {
+    if (userId && session.status === "authenticated") {
+      axios
+        .get(`/api/adm/requests/get-requests/${userId}`)
+        .then((res) => {
+          setRequests(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [userId, session]);
+
   return (
     <div className="w-full rounded-lg bg-green-primary p-9 shadow-md shadow-[rgba(0,0,0,0.25)]">
       <div className="w-full flex flex-col sm:flex-row lg:flex-col xl:flex-row sm:justify-between lg:justify-start xl:justify-between sm:gap-6 lg:gap-2 xl:gap-6 gap-2">
@@ -67,23 +91,25 @@ export function RequestsBox() {
       </div>
 
       <div className="relative w-full max-h-[600px] lg:max-h-[450px] overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
-        <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
+        {requests && requests.length > 0 ? (
+          <>
+            <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-        <RequestItem />
-        <RequestItem />
-        <RequestItem />
-        <RequestItem />
-        <RequestItem />
-        <RequestItem />
-        <RequestItem />
-        <RequestItem />
-        <RequestItem />
-        <RequestItem />
-        <RequestItem />
-        <RequestItem />
-        <RequestItem last />
+            {requests.map((request, index) => (
+              <RequestItem
+                key={request.id}
+                last={index === requests.length - 1}
+                request={request}
+              />
+            ))}
 
-        <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
+            <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
+          </>
+        ) : (
+          <div>
+            <span>Nenhuma solicitação no momento</span>
+          </div>
+        )}
       </div>
     </div>
   );

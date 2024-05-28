@@ -1,17 +1,25 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/libs/utils";
-import useAdminUsersModalStore from "@/stores/useAdminUsersModalStore";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 
+import { Button } from "@/components/ui/button";
+import { cn } from "@/libs/utils";
+import useAdminUsersModalStore from "@/stores/useAdminUsersModalStore";
+import { UsersWithRequests } from "@/types";
+
 interface Props {
   last?: boolean;
+  user: UsersWithRequests;
 }
 
-export function UserItem({ last }: Props) {
-  const { openModal } = useAdminUsersModalStore();
+export function UserItem({ last, user }: Props) {
+  const { openModal, setUserSelected } = useAdminUsersModalStore();
+
+  function handleModal() {
+    setUserSelected(user);
+    openModal();
+  }
 
   return (
     <div
@@ -22,26 +30,36 @@ export function UserItem({ last }: Props) {
     >
       <div className="w-full sm:w-fit lg:w-full flex flex-col sm:flex-row lg:flex-col items-center sm:gap-6 lg:gap-2 gap-2">
         <div className="w-12 min-w-[48px] h-12 min-h-[48px] rounded-full relative overflow-hidden">
-          <Image
-            src="/assets/images/default-user-photo.svg"
-            alt="Usuário"
-            fill
-            className="object-cover object-center"
-          />
+          {user.profilePhoto ? (
+            <Image
+              src={user.profilePhoto}
+              alt="Usuário"
+              fill
+              className="object-cover object-center"
+            />
+          ) : (
+            <Image
+              src="/assets/images/default-user-photo.svg"
+              alt="Usuário"
+              fill
+              className="object-cover object-center"
+            />
+          )}
         </div>
 
         <div className="flex flex-col sm:items-start lg:items-center items-center">
           <span className="text-white text-lg font-semibold text-center !leading-tight sm:text-left lg:text-center">
-            John Doe
+            {`${user.firstName} ${user.lastName}`}
           </span>
+
           <span className="text-white text-base font-semibold text-center !leading-tight sm:text-left lg:text-center">
-            Professor
+            {user.accountType === "PROFESSOR" ? "Professor" : "Aluno"}
           </span>
         </div>
       </div>
 
       <Button
-        onClick={openModal}
+        onClick={handleModal}
         variant="secondary"
         className="w-full sm:w-fit lg:w-full flex items-center gap-2"
       >

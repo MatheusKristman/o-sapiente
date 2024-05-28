@@ -14,6 +14,8 @@ const buttonVariants = cva(
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
           "border-2 border-green-primary bg-transparent text-green-primary hover:bg-green-primary/10",
+        outlineDestructive:
+          "border-2 border-destructive bg-transparent text-destructive hover:bg-destructive/10",
         secondary: "bg-white text-green-primary hover:bg-white/80",
         gray: "bg-[#C8D6DF] text-gray-primary hover:bg-[#C8D6DF]/90",
         ghost: "hover:bg-accent hover:text-accent-foreground",
@@ -31,7 +33,7 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 export interface ButtonProps
@@ -50,7 +52,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       />
     );
-  }
+  },
 );
 Button.displayName = "Button";
 

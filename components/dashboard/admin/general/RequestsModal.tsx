@@ -3,44 +3,36 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { BsXLg } from "react-icons/bs";
 
+import { Button } from "@/components/ui/button";
 import {
   ModalAnimation,
   OverlayAnimation,
 } from "@/constants/framer-animations/modal";
-import { Button } from "@/components/ui/button";
-import useAdminUsersModalStore from "@/stores/useAdminUsersModalStore";
-import { UsersModalDetails } from "./UsersModalDetails";
-import { UsersModalBanConfirmation } from "./UsersModalBanConfirmation";
-import { UsersModalDeleteRequestConfirmation } from "./UsersModalDeleteRequestConfirmation";
+import { RequestsModalDetails } from "./RequestsModalDetails";
+import { RequestsModalDeletionConfirmation } from "./RequestsModalDeletionConfirmation";
+import useAdminRequestsModalStore from "@/stores/useAdminRequestsModalStore";
 
-export function UsersModal() {
+export function RequestsModal() {
   const {
     isModalOpen,
+    isDeleteConfirmation,
+    setDeleteConfirmation,
     closeModal,
-    isUserBanConfirmation,
-    isRequestDeletionConfirmation,
-    setRequestDeletionConfirmation,
-    setUserBanConfirmation,
-    setRequestId,
-    setUserSelected,
-  } = useAdminUsersModalStore();
+  } = useAdminRequestsModalStore();
 
   function handleClose() {
     closeModal();
 
     setTimeout(() => {
-      setRequestDeletionConfirmation(false);
-      setUserBanConfirmation(false);
-      setRequestId(null);
-      setUserSelected(null);
-    }, 350);
+      setDeleteConfirmation(false);
+    });
   }
 
   return (
     <AnimatePresence>
       {isModalOpen && (
         <motion.div
-          key="users-modal"
+          key="admin-request-modal"
           initial="initial"
           animate="animate"
           exit="exit"
@@ -48,7 +40,6 @@ export function UsersModal() {
           className="w-screen h-screen bg-[#2C383F]/75 fixed top-0 left-0 right-0 bottom-0 z-[9999] text-center overflow-auto p-6 after:h-full after:content-[''] after:inline-block after:align-middle"
         >
           <motion.div
-            key="modal"
             initial="initial"
             animate="animate"
             exit="exit"
@@ -68,20 +59,11 @@ export function UsersModal() {
             </div>
 
             <AnimatePresence mode="wait">
-              {!isUserBanConfirmation && !isRequestDeletionConfirmation && (
-                <UsersModalDetails key="users-modal-details" />
+              {!isDeleteConfirmation && (
+                <RequestsModalDetails key="requests-modal-details" />
               )}
-              {isUserBanConfirmation && !isRequestDeletionConfirmation && (
-                <UsersModalBanConfirmation
-                  key="users-modal-ban-confirmation"
-                  handleClose={handleClose}
-                />
-              )}
-              {!isUserBanConfirmation && isRequestDeletionConfirmation && (
-                <UsersModalDeleteRequestConfirmation
-                  key="users-modal-delete-request-confirmation"
-                  handleClose={handleClose}
-                />
+              {isDeleteConfirmation && (
+                <RequestsModalDeletionConfirmation key="requests-modal-deletion-confirmation" />
               )}
             </AnimatePresence>
           </motion.div>

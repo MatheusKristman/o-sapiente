@@ -59,6 +59,10 @@ export type MessagesWithUser = Message & {
   sender: User;
 };
 
+export type RequestWithUsers = Request & {
+  users: User[];
+};
+
 export type RequestWithUsersAndOffers = Request & {
   users: UserFromRequest[];
   usersVotedToFinish: UserFromRequest[];
@@ -91,6 +95,10 @@ export type UserFromOffer = {
   firstName: string;
   lastName: string;
   profilePhoto: string | null;
+};
+
+export type UsersWithRequests = User & {
+  requests: RequestWithUsers[];
 };
 
 export type OfferWithUser = Offer & {
