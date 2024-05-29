@@ -19,16 +19,17 @@ interface Props {
 export function UsersModalDeleteRequestConfirmation({ handleClose }: Props) {
   const { setRequestDeletionConfirmation, requestId, isLoading, setLoading } =
     useAdminUsersModalStore();
-  const { setUsers } = useAdminStore();
+  const { setUsers, setRequests } = useAdminStore();
   const { userId } = useUserStore();
 
   function handleConfirm() {
     setLoading(true);
 
     axios
-      .post("/api/adm/users/delete-user-request", { userId, requestId })
+      .post("/api/adm/requests/delete-request", { userId, requestId })
       .then((res) => {
-        setUsers(res.data);
+        setUsers(res.data.users);
+        setRequests(res.data.requests);
         toast.success("Solicitação deletada com sucesso");
         handleClose();
       })

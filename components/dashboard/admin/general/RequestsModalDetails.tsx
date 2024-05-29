@@ -1,16 +1,56 @@
 "use client";
 
+import { AccountRole, Status } from "@prisma/client";
+import { format } from "date-fns";
+import { motion } from "framer-motion";
+
 import { Button } from "@/components/ui/button";
 import { FormAnimation } from "@/constants/framer-animations/modal";
 import useAdminRequestsModalStore from "@/stores/useAdminRequestsModalStore";
-
-import { motion } from "framer-motion";
+import { formatPrice } from "@/libs/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function RequestsModalDetails() {
-  const { setDeleteConfirmation } = useAdminRequestsModalStore();
+  const { setDeleteConfirmation, requestSelected, isModalOpen, setRequestId } =
+    useAdminRequestsModalStore();
 
   function handleDelete() {
-    setDeleteConfirmation(true);
+    if (requestSelected) {
+      setDeleteConfirmation(true);
+      setRequestId(requestSelected.id);
+    }
+  }
+
+  if (!requestSelected && isModalOpen) {
+    return <RequestsModalSkeleton />;
+  }
+
+  const student = requestSelected?.users.filter(
+    (user) => user.accountType === AccountRole.STUDENT,
+  )[0];
+  const professor = requestSelected?.users.filter(
+    (user) => user.accountType === AccountRole.PROFESSOR,
+  )[0];
+  let status;
+
+  switch (requestSelected?.status) {
+    case Status.searchingProfessor:
+      status = "Em busca de professor";
+      break;
+    case Status.support:
+      status = "Em suporte";
+      break;
+    case Status.finished:
+      status = "Finalizado";
+      break;
+    case Status.finishing:
+      status = "Finalizando";
+      break;
+    case Status.inProgress:
+      status = "Em andamento";
+      break;
+    default:
+      status = "Invalido";
   }
 
   return (
@@ -32,7 +72,7 @@ export function RequestsModalDetails() {
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
-            John Doe
+            {`${student?.firstName} ${student?.lastName}`}
           </span>
         </div>
 
@@ -42,7 +82,7 @@ export function RequestsModalDetails() {
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
-            Matemática
+            {requestSelected?.subject}
           </span>
         </div>
 
@@ -52,17 +92,7 @@ export function RequestsModalDetails() {
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
-            Lorem ipsum dolor sit amet, officia excepteur ex fugiat
-            reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit
-            ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
-            Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate
-            voluptate dolor minim nulla est proident. Nostrud officia pariatur
-            ut officia. Sit irure elit esse ea nulla sunt ex occaecat
-            reprehenderit commodo officia dolor Lorem duis laboris cupidatat
-            officia voluptate. Culpa proident adipisicing id nulla nisi laboris
-            ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo
-            ex non excepteur duis sunt velit enim. Voluptate laboris sint
-            cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+            {requestSelected?.description}
           </span>
         </div>
 
@@ -72,7 +102,9 @@ export function RequestsModalDetails() {
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
-            28/05/2024
+            {requestSelected
+              ? format(new Date(requestSelected.createdAt), "dd/MM/yyyy")
+              : "--/--/----"}
           </span>
         </div>
 
@@ -82,7 +114,7 @@ export function RequestsModalDetails() {
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
-            Em andamento
+            {status}
           </span>
         </div>
 
@@ -92,64 +124,82 @@ export function RequestsModalDetails() {
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
-            Solicitado
+            {requestSelected?.certificateRequested
+              ? "Solicitado"
+              : "Não solicitado"}
           </span>
         </div>
 
-        <div className="w-full flex gap-2">
-          <span className="text-green-primary font-semibold text-left text-lg">
-            Professor:
-          </span>
+        {professor !== undefined && (
+          <div className="w-full flex gap-2">
+            <span className="text-green-primary font-semibold text-left text-lg">
+              Professor:
+            </span>
 
-          <span className="text-gray-primary font-medium text-left text-base mt-1">
-            Mary Doe
-          </span>
-        </div>
+            <span className="text-gray-primary font-medium text-left text-base mt-1">
+              {`${professor.firstName} ${professor.lastName}`}
+            </span>
+          </div>
+        )}
 
-        <div className="w-full flex gap-2">
-          <span className="text-green-primary font-semibold text-left text-lg">
-            Professor:
-          </span>
+        {requestSelected && requestSelected.lessonPrice && (
+          <div className="w-full flex gap-2">
+            <span className="text-green-primary font-semibold text-left text-lg">
+              Valor da aula:
+            </span>
 
-          <span className="text-gray-primary font-medium text-left text-base mt-1">
-            Mary Doe
-          </span>
-        </div>
+            <span className="text-gray-primary font-medium text-left text-base mt-1">
+              {formatPrice(requestSelected.lessonPrice)}
+            </span>
+          </div>
+        )}
 
-        <div className="w-full flex gap-2">
-          <span className="text-green-primary font-semibold text-left text-lg">
-            Valor da aula:
-          </span>
+        {requestSelected && requestSelected.lessonDate && (
+          <div className="w-full flex gap-2">
+            <span className="text-green-primary font-semibold text-left text-lg">
+              Data da aula:
+            </span>
 
-          <span className="text-gray-primary font-medium text-left text-base mt-1">
-            R$ 15,00
-          </span>
-        </div>
+            <span className="text-gray-primary font-medium text-left text-base mt-1">
+              {format(new Date(requestSelected.lessonDate), "dd/MM/yyyy")}
+            </span>
+          </div>
+        )}
 
-        <div className="w-full flex gap-2">
-          <span className="text-green-primary font-semibold text-left text-lg">
-            Data da aula:
-          </span>
+        {requestSelected && requestSelected.beginLessonDate && (
+          <div className="w-full flex gap-2">
+            <span className="text-green-primary font-semibold text-left text-lg">
+              Data de finalização:
+            </span>
 
-          <span className="text-gray-primary font-medium text-left text-base mt-1">
-            12/10/2024
-          </span>
-        </div>
-
-        <div className="w-full flex gap-2">
-          <span className="text-green-primary font-semibold text-left text-lg">
-            Data de finalização:
-          </span>
-
-          <span className="text-gray-primary font-medium text-left text-base mt-1">
-            --/--/----
-          </span>
-        </div>
+            <span className="text-gray-primary font-medium text-left text-base mt-1">
+              {requestSelected.finishLessonDate
+                ? format(
+                    new Date(requestSelected.finishLessonDate),
+                    "dd/MM/yyyy",
+                  )
+                : "--/--/----"}
+            </span>
+          </div>
+        )}
       </div>
 
       <Button onClick={handleDelete} variant="destructive" className="w-full">
         DELETAR
       </Button>
     </motion.div>
+  );
+}
+
+function RequestsModalSkeleton() {
+  return (
+    <div className="w-full flex flex-col gap-4">
+      <Skeleton className="w-[80%] h-10" />
+      <Skeleton className="w-[60%] h-10" />
+      <Skeleton className="w-[50%] h-10" />
+      <Skeleton className="w-[90%] h-10" />
+      <Skeleton className="w-[70%] h-10" />
+      <Skeleton className="w-[100%] h-10" />
+    </div>
   );
 }

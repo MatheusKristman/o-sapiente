@@ -54,6 +54,7 @@ model User {
   passwordRecoverRequested Boolean     @default(false)
   planActivationDate       DateTime?
   planValidationDate       DateTime?
+  createdAt                DateTime    @default(now())
 
   subjectIds String[]  @db.ObjectId
   subjects   Subject[] @relation(fields: [subjectIds], references: [id])

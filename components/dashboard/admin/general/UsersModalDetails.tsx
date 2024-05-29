@@ -193,144 +193,227 @@ export function UsersModalDetails() {
                 status = "Invalido";
             }
 
-            return (
-              <AccordionItem value={request.id} className="px-4">
-                <AccordionTrigger>
-                  <div className="flex items-center gap-x-4">
-                    <div className="relative w-12 min-w-[48px] max-w-[48px] h-12 min-h-[48px] max-h-[48px] rounded-full overflow-hidden">
-                      {otherUser.profilePhoto ? (
-                        <Image
-                          src={otherUser.profilePhoto}
-                          alt="Professor"
-                          fill
-                          className="object-cover object-center"
-                        />
-                      ) : (
-                        <Image
-                          src="/assets/images/default-user-photo.svg"
-                          alt="Professor"
-                          fill
-                          className="object-cover object-center"
-                        />
-                      )}
+            if (otherUser) {
+              return (
+                <AccordionItem value={request.id} className="px-4">
+                  <AccordionTrigger>
+                    <div className="flex items-center gap-x-4">
+                      <div className="relative w-12 min-w-[48px] max-w-[48px] h-12 min-h-[48px] max-h-[48px] rounded-full overflow-hidden">
+                        {otherUser.profilePhoto ? (
+                          <Image
+                            src={otherUser.profilePhoto}
+                            alt="Professor"
+                            fill
+                            className="object-cover object-center"
+                          />
+                        ) : (
+                          <Image
+                            src="/assets/images/default-user-photo.svg"
+                            alt="Professor"
+                            fill
+                            className="object-cover object-center"
+                          />
+                        )}
+                      </div>
+
+                      <span className="text-lg font-semibold text-left text-gray-primary">
+                        {`${otherUser.firstName} ${otherUser.lastName}`}
+                      </span>
                     </div>
+                  </AccordionTrigger>
 
-                    <span className="text-lg font-semibold text-left text-gray-primary">
-                      {`${otherUser.firstName} ${otherUser.lastName}`}
-                    </span>
-                  </div>
-                </AccordionTrigger>
-
-                <AccordionContent>
-                  <div className="w-full flex flex-col gap-6">
-                    <div className="w-full flex flex-col gap-4">
-                      <div className="w-full flex gap-2">
-                        <span className="text-left text-base font-medium text-gray-primary">
-                          Matéria:
-                        </span>
-
-                        <span className="text-base text-left text-gray-primary">
-                          {request.subject}
-                        </span>
-                      </div>
-
-                      <div className="w-full flex gap-2">
-                        <span className="text-left text-base font-medium text-gray-primary">
-                          Descrição:
-                        </span>
-
-                        <span className="text-base text-left text-gray-primary">
-                          {request.description}
-                        </span>
-                      </div>
-
-                      <div className="w-full flex gap-2">
-                        <span className="text-left text-base font-medium text-gray-primary">
-                          Data de criação:
-                        </span>
-
-                        <span className="text-base text-left text-gray-primary">
-                          {format(new Date(request.createdAt), "dd/MM/yyyy")}
-                        </span>
-                      </div>
-
-                      <div className="w-full flex gap-2">
-                        <span className="text-left text-base font-medium text-gray-primary">
-                          Status:
-                        </span>
-
-                        <span className="text-base text-left text-gray-primary">
-                          {status}
-                        </span>
-                      </div>
-
-                      {request.beginLessonDate && (
+                  <AccordionContent>
+                    <div className="w-full flex flex-col gap-6">
+                      <div className="w-full flex flex-col gap-4">
                         <div className="w-full flex gap-2">
                           <span className="text-left text-base font-medium text-gray-primary">
-                            Data que a proposta foi aceita:
+                            Matéria:
                           </span>
 
                           <span className="text-base text-left text-gray-primary">
-                            {format(
-                              new Date(request.beginLessonDate),
-                              "dd/MM/yyyy",
-                            )}
+                            {request.subject}
                           </span>
                         </div>
-                      )}
 
-                      {request.lessonDate && (
                         <div className="w-full flex gap-2">
                           <span className="text-left text-base font-medium text-gray-primary">
-                            Data da aula:
+                            Descrição:
                           </span>
 
                           <span className="text-base text-left text-gray-primary">
-                            {format(new Date(request.lessonDate), "dd/MM/yyyy")}
+                            {request.description}
                           </span>
                         </div>
-                      )}
 
-                      {request.lessonPrice && (
                         <div className="w-full flex gap-2">
                           <span className="text-left text-base font-medium text-gray-primary">
-                            Valor da proposta:
+                            Data de criação:
                           </span>
 
                           <span className="text-base text-left text-gray-primary">
-                            {formatPrice(request.lessonPrice)}
+                            {format(new Date(request.createdAt), "dd/MM/yyyy")}
                           </span>
                         </div>
-                      )}
 
-                      {request.beginLessonDate && (
                         <div className="w-full flex gap-2">
                           <span className="text-left text-base font-medium text-gray-primary">
-                            Certificado:
+                            Status:
                           </span>
 
                           <span className="text-base text-left text-gray-primary">
-                            {request.certificateRequested
-                              ? "Solicitado"
-                              : "Não solicitado"}
+                            {status}
                           </span>
                         </div>
-                      )}
+
+                        {request.beginLessonDate && (
+                          <div className="w-full flex gap-2">
+                            <span className="text-left text-base font-medium text-gray-primary">
+                              Data que a proposta foi aceita:
+                            </span>
+
+                            <span className="text-base text-left text-gray-primary">
+                              {format(
+                                new Date(request.beginLessonDate),
+                                "dd/MM/yyyy",
+                              )}
+                            </span>
+                          </div>
+                        )}
+
+                        {request.lessonDate && (
+                          <div className="w-full flex gap-2">
+                            <span className="text-left text-base font-medium text-gray-primary">
+                              Data da aula:
+                            </span>
+
+                            <span className="text-base text-left text-gray-primary">
+                              {format(
+                                new Date(request.lessonDate),
+                                "dd/MM/yyyy",
+                              )}
+                            </span>
+                          </div>
+                        )}
+
+                        {request.lessonPrice && (
+                          <div className="w-full flex gap-2">
+                            <span className="text-left text-base font-medium text-gray-primary">
+                              Valor da proposta:
+                            </span>
+
+                            <span className="text-base text-left text-gray-primary">
+                              {formatPrice(request.lessonPrice)}
+                            </span>
+                          </div>
+                        )}
+
+                        {request.beginLessonDate && (
+                          <div className="w-full flex gap-2">
+                            <span className="text-left text-base font-medium text-gray-primary">
+                              Certificado:
+                            </span>
+
+                            <span className="text-base text-left text-gray-primary">
+                              {request.certificateRequested
+                                ? "Solicitado"
+                                : "Não solicitado"}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <Button
+                        variant="outlineDestructive"
+                        onClick={() =>
+                          handleRequestDeletionConfirmation(request.id)
+                        }
+                        className="flex items-center gap-2"
+                      >
+                        {UsersModalText.delBtn}
+                      </Button>
                     </div>
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            } else {
+              const student = request.users[0];
 
-                    <Button
-                      variant="outlineDestructive"
-                      onClick={() =>
-                        handleRequestDeletionConfirmation(request.id)
-                      }
-                      className="flex items-center gap-2"
-                    >
-                      {UsersModalText.delBtn}
-                    </Button>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            );
+              return (
+                <AccordionItem value={request.id} className="px-4">
+                  <AccordionTrigger>
+                    <div className="flex items-center gap-x-4">
+                      <div className="relative w-12 min-w-[48px] max-w-[48px] h-12 min-h-[48px] max-h-[48px] rounded-full overflow-hidden">
+                        {student.profilePhoto ? (
+                          <Image
+                            src={student.profilePhoto}
+                            alt="Aluno"
+                            fill
+                            className="object-cover object-center"
+                          />
+                        ) : (
+                          <Image
+                            src="/assets/images/default-user-photo.svg"
+                            alt="Aluno"
+                            fill
+                            className="object-cover object-center"
+                          />
+                        )}
+                      </div>
+
+                      <span className="text-lg font-semibold text-left text-gray-primary">
+                        {`${student.firstName} ${student.lastName}`}
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+
+                  <AccordionContent>
+                    <div className="w-full flex flex-col gap-6">
+                      <div className="w-full flex flex-col gap-4">
+                        <div className="w-full flex gap-2">
+                          <span className="text-left text-base font-medium text-gray-primary">
+                            Matéria:
+                          </span>
+
+                          <span className="text-base text-left text-gray-primary">
+                            {request.subject}
+                          </span>
+                        </div>
+
+                        <div className="w-full flex gap-2">
+                          <span className="text-left text-base font-medium text-gray-primary">
+                            Descrição:
+                          </span>
+
+                          <span className="text-base text-left text-gray-primary">
+                            {request.description}
+                          </span>
+                        </div>
+
+                        <div className="w-full flex gap-2">
+                          <span className="text-left text-base font-medium text-gray-primary">
+                            Data de criação:
+                          </span>
+
+                          <span className="text-base text-left text-gray-primary">
+                            {format(new Date(request.createdAt), "dd/MM/yyyy")}
+                          </span>
+                        </div>
+
+                        <div className="w-full flex gap-2">
+                          <span className="text-left text-base font-medium text-gray-primary">
+                            Status:
+                          </span>
+
+                          <span className="text-base text-left text-gray-primary">
+                            {status}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            }
           })}
         </Accordion>
       ) : (

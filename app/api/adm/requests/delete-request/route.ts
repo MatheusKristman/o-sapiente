@@ -54,6 +54,10 @@ export async function POST(req: Request) {
       },
     });
 
+    const newRequests = await prisma.request.findMany({
+      include: { users: true },
+    });
+
     const users = await prisma.user.findMany({
       where: {
         NOT: {
@@ -78,7 +82,7 @@ export async function POST(req: Request) {
       },
     });
 
-    return Response.json(users, { status: 200 });
+    return Response.json({ users, requests: newRequests }, { status: 200 });
   } catch (error) {
     console.log("[ERROR_ON_ADMIN_DELETE_USER_REQUEST]", error);
 

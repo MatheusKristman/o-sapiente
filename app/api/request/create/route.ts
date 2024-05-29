@@ -32,7 +32,7 @@ function generateOptions({
       studentName,
       subject,
       linkUrl,
-    })
+    }),
   );
 
   return {
@@ -84,7 +84,11 @@ export async function POST(req: NextRequest) {
       data: {
         subject,
         description,
-        userIds: [user.id],
+        users: {
+          connect: {
+            id: user.id,
+          },
+        },
       },
       include: {
         users: {

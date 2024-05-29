@@ -1,17 +1,49 @@
 "use client";
 
+import axios from "axios";
+import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
+
 import { Button } from "@/components/ui/button";
 import { FormAnimation } from "@/constants/framer-animations/modal";
 import useAdminRequestsModalStore from "@/stores/useAdminRequestsModalStore";
+import useAdminStore from "@/stores/useAdminStore";
+import useUserStore from "@/stores/useUserStore";
+import { Loader2 } from "lucide-react";
 
-import { motion } from "framer-motion";
+interface Props {
+  handleClose: () => void;
+}
 
-//TODO: adicionar função para deletar solicitação
-export function RequestsModalDeletionConfirmation() {
-  const { setDeleteConfirmation } = useAdminRequestsModalStore();
+export function RequestsModalDeletionConfirmation({ handleClose }: Props) {
+  const { setDeleteConfirmation, isLoading, setLoading, requestId } =
+    useAdminRequestsModalStore();
+  const { setUsers, setRequests } = useAdminStore();
+  const { userId } = useUserStore();
 
   function handleCancel() {
     setDeleteConfirmation(false);
+  }
+
+  function handleConfirm() {
+    setLoading(true);
+
+    axios
+      .post("/api/adm/requests/delete-request", { userId, requestId })
+      .then((res) => {
+        setUsers(res.data.users);
+        setRequests(res.data.requests);
+        toast.success("Solicitação deletada com sucesso");
+        handleClose();
+      })
+      .catch((error) => {
+        console.error(error);
+
+        toast.error(error.response.data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
@@ -34,6 +66,7 @@ export function RequestsModalDeletionConfirmation() {
 
       <div className="w-full flex flex-col sm:flex-row items-center gap-4">
         <Button
+          disabled={isLoading}
           onClick={handleCancel}
           variant="outline"
           className="w-full sm:w-1/2"
@@ -41,7 +74,14 @@ export function RequestsModalDeletionConfirmation() {
           CANCELAR
         </Button>
 
-        <Button className="w-full sm:w-1/2">DELETAR</Button>
+        <Button
+          onClick={handleConfirm}
+          disabled={isLoading}
+          className="w-full sm:w-1/2 flex items-center gap-2"
+        >
+          {isLoading && <Loader2 className="animate-spin" />}
+          DELETAR
+        </Button>
       </div>
     </motion.div>
   );

@@ -22,7 +22,11 @@ export async function GET(
       return new Response("Usuário não autorizado", { status: 401 });
     }
 
-    const requests = await prisma.request.findMany({});
+    const requests = await prisma.request.findMany({
+      include: {
+        users: true,
+      },
+    });
 
     return Response.json(requests, { status: 200 });
   } catch (error) {

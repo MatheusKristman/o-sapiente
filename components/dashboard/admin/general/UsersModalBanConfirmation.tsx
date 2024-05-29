@@ -19,7 +19,7 @@ interface Props {
 export function UsersModalBanConfirmation({ handleClose }: Props) {
   const { setUserBanConfirmation, isLoading, setLoading, userSelected } =
     useAdminUsersModalStore();
-  const { setUsers } = useAdminStore();
+  const { setUsers, setRequests } = useAdminStore();
   const { userId } = useUserStore();
 
   function handleCancel() {
@@ -38,7 +38,8 @@ export function UsersModalBanConfirmation({ handleClose }: Props) {
         .then((res) => {
           toast.success("Usuário banido com sucesso");
 
-          setUsers(res.data);
+          setUsers(res.data.users);
+          setRequests(res.data.requests);
           handleClose();
         })
         .catch((error) => {

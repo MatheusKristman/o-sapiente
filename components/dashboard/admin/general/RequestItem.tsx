@@ -7,19 +7,24 @@ import { Button } from "@/components/ui/button";
 import { AdminGeneralText } from "@/constants/dashboard/admin-general-br";
 import { cn } from "@/libs/utils";
 import useAdminRequestsModalStore from "@/stores/useAdminRequestsModalStore";
-import { Request } from "@prisma/client";
+import { RequestWithUsers } from "@/types";
+import { AccountRole } from "@prisma/client";
 
 interface Props {
   last?: boolean;
-  request: Request;
+  request: RequestWithUsers;
 }
 
-//TODO: adicionar dados da request
 export function RequestItem({ last, request }: Props) {
-  const { openModal, setDeleteConfirmation } = useAdminRequestsModalStore();
+  const { openModal, setDeleteConfirmation, setRequestSelected } =
+    useAdminRequestsModalStore();
+
+  const otherUser = request.users.filter(
+    (user) => user.accountType === AccountRole.STUDENT,
+  )[0];
 
   function handleModal() {
-    //TODO: adicionar o que precisar para ter as informações no modal
+    setRequestSelected(request);
     setDeleteConfirmation(false);
     openModal();
   }
@@ -33,23 +38,32 @@ export function RequestItem({ last, request }: Props) {
     >
       <div className="w-full sm:w-fit flex flex-col sm:flex-row items-center gap-2 sm:gap-6">
         <div className="w-10 min-w-[40px] h-10 min-h-[40px] relative rounded-full overflow-hidden">
-          <Image
-            src="/assets/images/default-user-photo.svg"
-            alt="Usuário"
-            fill
-            className="object-center object-cover"
-          />
+          {otherUser.profilePhoto ? (
+            <Image
+              src={otherUser.profilePhoto}
+              alt="Usuário"
+              fill
+              className="object-center object-cover"
+            />
+          ) : (
+            <Image
+              src="/assets/images/default-user-photo.svg"
+              alt="Usuário"
+              fill
+              className="object-center object-cover"
+            />
+          )}
         </div>
 
         <div className="w-fit flex items-center">
           <span className="text-lg font-semibold !leading-tight text-green-primary">
-            John Doe
+            {`${otherUser.firstName} ${otherUser.lastName}`}
           </span>
 
           <Dot style={{ width: "35px", height: "35px" }} color="#03C988" />
 
           <span className="text-base font-semibold !leading-tight text-green-primary">
-            Matemática
+            {request.subject}
           </span>
         </div>
       </div>

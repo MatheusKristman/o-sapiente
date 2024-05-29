@@ -1,5 +1,5 @@
 import { prisma } from "@/libs/prismadb";
-import { AccountRole } from "@prisma/client";
+import { AccountRole, Status } from "@prisma/client";
 
 export async function POST(req: Request) {
   try {
@@ -17,6 +17,66 @@ export async function POST(req: Request) {
 
     if (!admin || admin.accountType !== AccountRole.ADMIN) {
       return new Response("Usuário não autorizado", { status: 401 });
+    }
+
+    const userSelected = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        requests: true,
+      },
+    });
+
+    if (!userSelected) {
+      return new Response("Usuário não encontrado", { status: 404 });
+    }
+
+    if (userSelected.accountType === AccountRole.STUDENT) {
+      const requestIds = userSelected.requests.map((request) => request.id);
+
+      await prisma.request.deleteMany({
+        where: {
+          id: {
+            in: requestIds,
+          },
+        },
+      });
+    }
+
+    if (userSelected.accountType === AccountRole.PROFESSOR) {
+      await prisma.request.updateMany({
+        where: {
+          users: {
+            some: {
+              id: userSelected.id,
+            },
+          },
+        },
+        data: {
+          status: Status.searchingProfessor,
+          isConcluded: false,
+          isOfferAccepted: false,
+          beginLessonDate: null,
+          finishLessonDate: null,
+          lessonDate: null,
+          lessonPrice: null,
+          certificateRequested: false,
+          conversationId: null,
+          usersIdsVotedToFinish: [],
+        },
+      });
+
+      await prisma.user.update({
+        where: {
+          id: userSelected.id,
+        },
+        data: {
+          requests: {
+            set: [],
+          },
+        },
+      });
     }
 
     await prisma.user.delete({
@@ -49,7 +109,13 @@ export async function POST(req: Request) {
       },
     });
 
-    return Response.json(users, { status: 200 });
+    const newRequests = await prisma.request.findMany({
+      include: {
+        users: true,
+      },
+    });
+
+    return Response.json({ users, requests: newRequests }, { status: 200 });
   } catch (error) {
     console.log("[ERROR_ON_ADMIN_BAN_USER]", error);
 

@@ -18,6 +18,7 @@ export function RequestsModal() {
     isDeleteConfirmation,
     setDeleteConfirmation,
     closeModal,
+    setRequestSelected,
   } = useAdminRequestsModalStore();
 
   function handleClose() {
@@ -25,7 +26,8 @@ export function RequestsModal() {
 
     setTimeout(() => {
       setDeleteConfirmation(false);
-    });
+      setRequestSelected(null);
+    }, 350);
   }
 
   return (
@@ -63,7 +65,10 @@ export function RequestsModal() {
                 <RequestsModalDetails key="requests-modal-details" />
               )}
               {isDeleteConfirmation && (
-                <RequestsModalDeletionConfirmation key="requests-modal-deletion-confirmation" />
+                <RequestsModalDeletionConfirmation
+                  key="requests-modal-deletion-confirmation"
+                  handleClose={handleClose}
+                />
               )}
             </AnimatePresence>
           </motion.div>
