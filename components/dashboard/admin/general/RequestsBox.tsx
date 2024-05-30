@@ -5,6 +5,7 @@ import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { compareAsc, format, getYear } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 import { Input } from "@/components/ui/input";
 import { AdminGeneralText } from "@/constants/dashboard/admin-general-br";
@@ -28,7 +29,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { RequestItem } from "@/components/dashboard/admin/general/RequestItem";
 import useAdminStore from "@/stores/useAdminStore";
 import useUserStore from "@/stores/useUserStore";
-import { ptBR } from "date-fns/locale";
 
 export function RequestsBox() {
   const [filterType, setFilterType] = useState<string>("subject");
@@ -105,7 +105,7 @@ export function RequestsBox() {
                     </span>
                   ) : (
                     <span className="text-green-primary/70">
-                      Data de nascimento
+                      {AdminGeneralText.requestsDatePlaceholder}
                     </span>
                   )}
 
@@ -162,14 +162,14 @@ export function RequestsBox() {
                   value="subject"
                   className="text-gray-primary"
                 >
-                  Matéria
+                  {AdminGeneralText.requestsDropdownSubject}
                 </DropdownMenuRadioItem>
 
                 <DropdownMenuRadioItem
                   value="date"
                   className="text-gray-primary"
                 >
-                  Data de criação
+                  {AdminGeneralText.requestsDropdownDate}
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
@@ -241,7 +241,7 @@ export function RequestsBox() {
         ) : (
           <div className="mt-6 flex items-center justify-center">
             <span className="text-gray-primary/70 text-center font-medium text-lg">
-              Nenhuma solicitação no momento
+              {AdminGeneralText.requestsNotFound}
             </span>
           </div>
         )}

@@ -12,7 +12,9 @@ export async function POST(req: Request) {
     const { main, lang, subs } = body;
 
     if (checkIfArrayIsUnique(subs)) {
-      return new NextResponse("Opções tem itens duplicados, verifique e tente novamente");
+      return new NextResponse(
+        "Opções tem itens duplicados, verifique e tente novamente",
+      );
     }
 
     if (!main || !lang || subs.length === 0) {
@@ -41,7 +43,7 @@ export async function POST(req: Request) {
       return new NextResponse("Opções já estão cadastradas");
     }
 
-    const newSubject = await prisma.subject.create({
+    await prisma.subject.create({
       data: {
         main,
         lang,
@@ -49,7 +51,9 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(newSubject);
+    const subjects = await prisma.subject.findMany({});
+
+    return NextResponse.json(subjects);
   } catch (error: any) {
     console.log("[ERROR_CREATE_SUBJECT]", error);
     return new NextResponse("Ocorreu um erro na criação das matérias", error);

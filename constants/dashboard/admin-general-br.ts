@@ -6,7 +6,12 @@ export const AdminGeneralText = {
   usersDropdownLabel: "Selecione seu filtro",
   requestsBoxTitle: "Solicitações pendentes",
   requestsPlaceholder: "Pesquise...",
+  requestsDatePlaceholder: "Data de nascimento",
+  requestsDropdownSubject: "Matéria",
+  requestsDropdownDate: "Data de criação",
+  requestsNotFound: "Nenhuma solicitação no momento",
   requestBtn: "VER SOLICITAÇÃO",
+  subjectsBoxTitle: "Matérias e temas",
 };
 
 export const UsersModalText = {
@@ -30,4 +35,31 @@ export const UsersModalText = {
   deleteRequestConfirmationCancelBtn: "CANCELAR",
   deleteRequestConfirmationConfirmBtn: "DELETAR",
   requestsTitle: "Solicitações vinculadas",
+};
+
+export const RequestsModalText = {
+  title: "Solicitação",
+  studentLabel: "Aluno:",
+  subjectLabel: "Matéria:",
+  descriptionLabel: "Descrição:",
+  createdAtLabel: "Data de criação:",
+  statusLabel: "Status:",
+  certificateLabel: "Certificado:",
+  professorLabel: "Professor:",
+  lessonPriceLabel: "Valor da aula:",
+  lessonDateLabel: "Data da aula:",
+  finishLessonDateLabel: "Data de finalização:",
+  delBtn: "DELETAR",
+  status: {
+    searchingProfessor: "Em busca de professor",
+    support: "Em suporte",
+    finished: "Finalizado",
+    finishing: "Finalizando",
+    inProgress: "Em andamento",
+    invalid: "Inválido",
+  },
+  delTitle: "Deseja deletar essa solicitação?",
+  delDescription: "Essa ação não pode ser desfeita.",
+  cancelBtn: "CANCELAR",
+  successMessage: "Solicitação deletada com sucesso",
 };

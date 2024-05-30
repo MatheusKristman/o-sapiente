@@ -10,6 +10,7 @@ import useAdminRequestsModalStore from "@/stores/useAdminRequestsModalStore";
 import useAdminStore from "@/stores/useAdminStore";
 import useUserStore from "@/stores/useUserStore";
 import { Loader2 } from "lucide-react";
+import { RequestsModalText } from "@/constants/dashboard/admin-general-br";
 
 interface Props {
   handleClose: () => void;
@@ -33,7 +34,7 @@ export function RequestsModalDeletionConfirmation({ handleClose }: Props) {
       .then((res) => {
         setUsers(res.data.users);
         setRequests(res.data.requests);
-        toast.success("Solicitação deletada com sucesso");
+        toast.success(RequestsModalText.successMessage);
         handleClose();
       })
       .catch((error) => {
@@ -56,11 +57,11 @@ export function RequestsModalDeletionConfirmation({ handleClose }: Props) {
     >
       <div className="flex flex-col gap-1 mb-6">
         <h2 className="text-gray-primary font-semibold text-2xl sm:text-3xl text-left">
-          Deseja deletar essa solicitação?
+          {RequestsModalText.delTitle}
         </h2>
 
         <p className="text-gray-primary text-base text-left">
-          Essa ação não pode ser desfeita.
+          {RequestsModalText.delDescription}
         </p>
       </div>
 
@@ -71,7 +72,7 @@ export function RequestsModalDeletionConfirmation({ handleClose }: Props) {
           variant="outline"
           className="w-full sm:w-1/2"
         >
-          CANCELAR
+          {RequestsModalText.cancelBtn}
         </Button>
 
         <Button
@@ -80,7 +81,7 @@ export function RequestsModalDeletionConfirmation({ handleClose }: Props) {
           className="w-full sm:w-1/2 flex items-center gap-2"
         >
           {isLoading && <Loader2 className="animate-spin" />}
-          DELETAR
+          {RequestsModalText.delBtn}
         </Button>
       </div>
     </motion.div>

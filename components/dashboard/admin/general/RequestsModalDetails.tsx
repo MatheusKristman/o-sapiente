@@ -9,6 +9,7 @@ import { FormAnimation } from "@/constants/framer-animations/modal";
 import useAdminRequestsModalStore from "@/stores/useAdminRequestsModalStore";
 import { formatPrice } from "@/libs/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { RequestsModalText } from "@/constants/dashboard/admin-general-br";
 
 export function RequestsModalDetails() {
   const { setDeleteConfirmation, requestSelected, isModalOpen, setRequestId } =
@@ -35,22 +36,22 @@ export function RequestsModalDetails() {
 
   switch (requestSelected?.status) {
     case Status.searchingProfessor:
-      status = "Em busca de professor";
+      status = RequestsModalText.status.searchingProfessor;
       break;
     case Status.support:
-      status = "Em suporte";
+      status = RequestsModalText.status.support;
       break;
     case Status.finished:
-      status = "Finalizado";
+      status = RequestsModalText.status.finished;
       break;
     case Status.finishing:
-      status = "Finalizando";
+      status = RequestsModalText.status.finishing;
       break;
     case Status.inProgress:
-      status = "Em andamento";
+      status = RequestsModalText.status.inProgress;
       break;
     default:
-      status = "Invalido";
+      status = RequestsModalText.status.invalid;
   }
 
   return (
@@ -62,13 +63,13 @@ export function RequestsModalDetails() {
       className="w-full"
     >
       <h1 className="text-2xl sm:text-3xl font-semibold text-gray-primary text-left mb-4">
-        Solicitação
+        {RequestsModalText.title}
       </h1>
 
       <div className="w-full flex flex-col gap-2 mb-6">
         <div className="w-full flex gap-2">
           <span className="text-green-primary font-semibold text-left text-lg">
-            Aluno:
+            {RequestsModalText.studentLabel}
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
@@ -78,7 +79,7 @@ export function RequestsModalDetails() {
 
         <div className="w-full flex gap-2">
           <span className="text-green-primary font-semibold text-left text-lg">
-            Matéria:
+            {RequestsModalText.subjectLabel}
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
@@ -88,7 +89,7 @@ export function RequestsModalDetails() {
 
         <div className="w-full flex gap-2">
           <span className="text-green-primary font-semibold text-left text-lg">
-            Descrição:
+            {RequestsModalText.descriptionLabel}
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
@@ -98,7 +99,7 @@ export function RequestsModalDetails() {
 
         <div className="w-full flex gap-2">
           <span className="text-green-primary font-semibold text-left text-lg">
-            Data de criação:
+            {RequestsModalText.createdAtLabel}
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
@@ -110,7 +111,7 @@ export function RequestsModalDetails() {
 
         <div className="w-full flex gap-2">
           <span className="text-green-primary font-semibold text-left text-lg">
-            Status:
+            {RequestsModalText.statusLabel}
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
@@ -120,7 +121,7 @@ export function RequestsModalDetails() {
 
         <div className="w-full flex gap-2">
           <span className="text-green-primary font-semibold text-left text-lg">
-            Certificado:
+            {RequestsModalText.certificateLabel}
           </span>
 
           <span className="text-gray-primary font-medium text-left text-base mt-1">
@@ -133,7 +134,7 @@ export function RequestsModalDetails() {
         {professor !== undefined && (
           <div className="w-full flex gap-2">
             <span className="text-green-primary font-semibold text-left text-lg">
-              Professor:
+              {RequestsModalText.professorLabel}
             </span>
 
             <span className="text-gray-primary font-medium text-left text-base mt-1">
@@ -145,7 +146,7 @@ export function RequestsModalDetails() {
         {requestSelected && requestSelected.lessonPrice && (
           <div className="w-full flex gap-2">
             <span className="text-green-primary font-semibold text-left text-lg">
-              Valor da aula:
+              {RequestsModalText.lessonPriceLabel}
             </span>
 
             <span className="text-gray-primary font-medium text-left text-base mt-1">
@@ -157,7 +158,7 @@ export function RequestsModalDetails() {
         {requestSelected && requestSelected.lessonDate && (
           <div className="w-full flex gap-2">
             <span className="text-green-primary font-semibold text-left text-lg">
-              Data da aula:
+              {RequestsModalText.lessonDateLabel}
             </span>
 
             <span className="text-gray-primary font-medium text-left text-base mt-1">
@@ -169,7 +170,7 @@ export function RequestsModalDetails() {
         {requestSelected && requestSelected.beginLessonDate && (
           <div className="w-full flex gap-2">
             <span className="text-green-primary font-semibold text-left text-lg">
-              Data de finalização:
+              {RequestsModalText.finishLessonDateLabel}
             </span>
 
             <span className="text-gray-primary font-medium text-left text-base mt-1">
@@ -185,7 +186,7 @@ export function RequestsModalDetails() {
       </div>
 
       <Button onClick={handleDelete} variant="destructive" className="w-full">
-        DELETAR
+        {RequestsModalText.delBtn}
       </Button>
     </motion.div>
   );
