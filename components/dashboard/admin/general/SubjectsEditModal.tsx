@@ -1,38 +1,47 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { BsXLg } from "react-icons/bs";
-import { ChangeEvent, useState } from "react";
 import { Loader2, Plus, Trash } from "lucide-react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { BsXLg } from "react-icons/bs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   ModalAnimation,
   OverlayAnimation,
 } from "@/constants/framer-animations/modal";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import useAdminSubjectsModalStore from "@/stores/useAdminSubjectsModalStore";
+import useAdminSubjectsEditModalStore from "@/stores/useAdminSubjectsEditModalStore";
 import useAdminStore from "@/stores/useAdminStore";
 
-export function SubjectsModal() {
+export function SubjectsEditModal() {
   const [subValue, setSubValue] = useState<string>("");
-
   const {
-    main,
-    setMain,
-    subs,
-    addSubs,
-    removeSubs,
-    resetSubs,
-    isLoading,
-    setLoading,
     isModalOpen,
     closeModal,
-  } = useAdminSubjectsModalStore();
+    setMain,
+    main,
+    setSubs,
+    addSubs,
+    subs,
+    removeSubs,
+    isLoading,
+    resetSubs,
+    setLoading,
+    subjectSelected,
+    setSubjectSelected,
+  } = useAdminSubjectsEditModalStore();
   const { setSubjects } = useAdminStore();
   const buttonDisabled = main.length < 3 || subs.length === 0 || isLoading;
+
+  useEffect(() => {
+    if (subjectSelected) {
+      setMain(subjectSelected.main);
+      setSubs(subjectSelected.subs);
+    }
+  }, [subjectSelected]);
 
   function handleClose() {
     closeModal();
@@ -40,6 +49,7 @@ export function SubjectsModal() {
     setTimeout(() => {
       setMain("");
       resetSubs();
+      setSubjectSelected(null);
     }, 350);
   }
 
@@ -51,14 +61,19 @@ export function SubjectsModal() {
   }
 
   function Submit() {
-    if (main.length >= 3 && subs.length > 0) {
+    if (main.length >= 3 && subs.length > 0 && subjectSelected) {
       setLoading(true);
 
       axios
-        .post("/api/adm/subject/create", { main, subs, lang: "br" })
+        .put("/api/adm/subject/edit", {
+          subjectId: subjectSelected.id,
+          main,
+          subs,
+          lang: "br",
+        })
         .then((res) => {
-          setSubjects(res.data);
-          toast.success("Nova matéria cadastrada com sucesso");
+          setSubjects(res.data.subjects);
+          toast.success("Matéria editada com sucesso");
           handleClose();
         })
         .catch((error) => {
@@ -142,7 +157,10 @@ export function SubjectsModal() {
 
                 <div className="w-full flex flex-wrap gap-x-2 gap-y-4">
                   {subs.map((sub) => (
-                    <span className="relative bg-green-primary px-4 py-2 rounded-md text-white text-sm font-medium group">
+                    <span
+                      key={sub}
+                      className="relative bg-green-primary px-4 py-2 rounded-md text-white text-sm font-medium group"
+                    >
                       {sub}
                       <div
                         onClick={() => removeSubs(sub)}

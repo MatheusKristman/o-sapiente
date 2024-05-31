@@ -5,6 +5,8 @@ import { UsersModal } from "@/components/dashboard/admin/general/UsersModal";
 import { RequestsModal } from "@/components/dashboard/admin/general/RequestsModal";
 import { SubjectsBox } from "@/components/dashboard/admin/general/SubjectsBox";
 import { SubjectsModal } from "@/components/dashboard/admin/general/SubjectsModal";
+import { SubjectsEditModal } from "@/components/dashboard/admin/general/SubjectsEditModal";
+import { SubjectsDeleteModal } from "@/components/dashboard/admin/general/SubjectsDeleteModal";
 
 export default function AdminGeneralPage() {
   return (
@@ -14,7 +16,7 @@ export default function AdminGeneralPage() {
           {AdminGeneralText.title}
         </h1>
 
-        <div className="w-full grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-x-6 gap-y-12">
+        <div className="w-full flex flex-col lg:flex-row gap-x-6 gap-y-12">
           <UsersBox />
 
           <div className="w-full flex flex-col gap-12">
@@ -28,6 +30,8 @@ export default function AdminGeneralPage() {
       <UsersModal />
       <RequestsModal />
       <SubjectsModal />
+      <SubjectsEditModal />
+      <SubjectsDeleteModal />
     </>
   );
 }

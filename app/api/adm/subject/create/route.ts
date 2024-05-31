@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-
 import { prisma } from "@/libs/prismadb";
+import getCurrentUser from "@/app/action/getCurrentUser";
+import { AccountRole } from "@prisma/client";
 
 function checkIfArrayIsUnique(arr: string[]) {
   return arr.length !== new Set(arr).size;
@@ -10,15 +10,23 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { main, lang, subs } = body;
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser || currentUser.accountType !== AccountRole.ADMIN) {
+      return new Response("Usuário não autorizado", { status: 401 });
+    }
 
     if (checkIfArrayIsUnique(subs)) {
-      return new NextResponse(
+      return new Response(
         "Opções tem itens duplicados, verifique e tente novamente",
+        { status: 401 },
       );
     }
 
     if (!main || !lang || subs.length === 0) {
-      return new NextResponse("Dados inválidos, verifique e tente novamente");
+      return new Response("Dados inválidos, verifique e tente novamente", {
+        status: 401,
+      });
     }
 
     const subjectExists = await prisma.subject.findFirst({
@@ -36,11 +44,11 @@ export async function POST(req: Request) {
     });
 
     if (subjectExists) {
-      return new NextResponse("Matéria já está cadastrada");
+      return new Response("Matéria já está cadastrada", { status: 401 });
     }
 
     if (optionsExists) {
-      return new NextResponse("Opções já estão cadastradas");
+      return new Response("Opções já estão cadastradas", { status: 401 });
     }
 
     await prisma.subject.create({
@@ -53,9 +61,9 @@ export async function POST(req: Request) {
 
     const subjects = await prisma.subject.findMany({});
 
-    return NextResponse.json(subjects);
+    return Response.json(subjects, { status: 200 });
   } catch (error: any) {
     console.log("[ERROR_CREATE_SUBJECT]", error);
-    return new NextResponse("Ocorreu um erro na criação das matérias", error);
+    return new Response("Ocorreu um erro na criação das matérias", error);
   }
 }
