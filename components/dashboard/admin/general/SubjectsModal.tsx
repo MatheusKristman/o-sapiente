@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useAdminSubjectsModalStore from "@/stores/useAdminSubjectsModalStore";
 import useAdminStore from "@/stores/useAdminStore";
+import { SubjectsModalText } from "@/constants/dashboard/admin-general-br";
 
 export function SubjectsModal() {
   const [subValue, setSubValue] = useState<string>("");
@@ -101,13 +102,13 @@ export function SubjectsModal() {
             </div>
 
             <h1 className="text-gray-primary text-2xl sm:text-3xl text-left font-semibold mb-6">
-              Adicione uma nova matéria
+              {SubjectsModalText.title}
             </h1>
 
             <div className="w-full flex flex-col gap-4 mb-6">
               <div className="w-full flex flex-col gap-2">
                 <label className="text-lg text-gray-primary font-medium text-left">
-                  Matéria
+                  {SubjectsModalText.mainLabel}
                 </label>
 
                 <Input
@@ -122,7 +123,7 @@ export function SubjectsModal() {
 
               <div className="w-full flex flex-col gap-2">
                 <label className="text-lg text-gray-primary font-medium text-left">
-                  Temas
+                  {SubjectsModalText.subsLabel}
                 </label>
 
                 <div className="w-full flex items-center gap-2">
@@ -162,7 +163,7 @@ export function SubjectsModal() {
               className="w-full flex items-center gap-2"
             >
               {isLoading && <Loader2 className="animate-spin" />}
-              SALVAR
+              {SubjectsModalText.saveBtn}
             </Button>
           </motion.div>
         </motion.div>

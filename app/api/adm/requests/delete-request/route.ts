@@ -1,11 +1,19 @@
-import { prisma } from "@/libs/prismadb";
 import { AccountRole } from "@prisma/client";
 import { getServerSession } from "next-auth";
+import nodemailer from "nodemailer";
+import { render } from "@react-email/render";
+
+import { prisma } from "@/libs/prismadb";
+import EmailRequestDeleted from "@/emails/EmailRequestDeleted";
 
 export async function POST(req: Request) {
   try {
     const { userId, requestId } = await req.json();
     const session = getServerSession();
+    const emailHost: string = process.env.EMAIL_SMTP!;
+    const emailUser: string = process.env.EMAIL_USER!;
+    const emailPass: string = process.env.EMAIL_PASS!;
+    const emailPort: number = Number(process.env.EMAIL_PORT!);
 
     if (!userId || !requestId) {
       return new Response("Dados inválidos", { status: 400 });
@@ -48,10 +56,54 @@ export async function POST(req: Request) {
       },
     });
 
-    await prisma.request.delete({
+    const requestDeleted = await prisma.request.delete({
       where: {
         id: requestId,
       },
+      include: {
+        users: {
+          where: {
+            accountType: AccountRole.STUDENT,
+          },
+        },
+      },
+    });
+
+    const student = requestDeleted.users[0];
+
+    const transport = nodemailer.createTransport({
+      host: emailHost,
+      port: emailPort,
+      auth: {
+        user: emailUser,
+        pass: emailPass,
+      },
+    });
+
+    const emailHtml = render(
+      EmailRequestDeleted({
+        userName: `${student.firstName} ${student.lastName}`,
+      }),
+    );
+
+    const options = {
+      from: emailUser,
+      to: student.email,
+      subject: "Solicitação removida - O Sapiente",
+      html: emailHtml,
+    };
+
+    transport.sendMail(options, (error) => {
+      if (error) {
+        console.log("[ERROR_ON_ADMIN_REQUEST_DELETED_EMAIL]", error);
+
+        return new Response(
+          "Ocorreu um erro no envio do e-mail sobre a remoção da solicitação do usuário",
+          {
+            status: 400,
+          },
+        );
+      }
     });
 
     const newRequests = await prisma.request.findMany({

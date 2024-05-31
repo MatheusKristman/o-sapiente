@@ -1,9 +1,18 @@
-import { prisma } from "@/libs/prismadb";
 import { AccountRole, Status } from "@prisma/client";
+import { render } from "@react-email/render";
+import nodemailer from "nodemailer";
+
+import EmailUserBaned from "@/emails/EmailUserBaned";
+import { prisma } from "@/libs/prismadb";
+import EmailRequestDeleted from "@/emails/EmailRequestDeleted";
 
 export async function POST(req: Request) {
   try {
     const { adminId, userId } = await req.json();
+    const emailHost: string = process.env.EMAIL_SMTP!;
+    const emailUser: string = process.env.EMAIL_USER!;
+    const emailPass: string = process.env.EMAIL_PASS!;
+    const emailPort: number = Number(process.env.EMAIL_PORT!);
 
     if (!userId || !adminId) {
       return new Response("Dados inválidos", { status: 400 });
@@ -42,6 +51,41 @@ export async function POST(req: Request) {
           },
         },
       });
+
+      const transport = nodemailer.createTransport({
+        host: emailHost,
+        port: emailPort,
+        auth: {
+          user: emailUser,
+          pass: emailPass,
+        },
+      });
+
+      const emailHtml = render(
+        EmailRequestDeleted({
+          userName: `${userSelected.firstName} ${userSelected.lastName}`,
+        }),
+      );
+
+      const options = {
+        from: emailUser,
+        to: userSelected.email,
+        subject: "Solicitação removida - O Sapiente",
+        html: emailHtml,
+      };
+
+      transport.sendMail(options, (error) => {
+        if (error) {
+          console.log("[ERROR_ON_ADMIN_REQUEST_DELETED_EMAIL]", error);
+
+          return new Response(
+            "Ocorreu um erro no envio do e-mail sobre a remoção da solicitação do usuário",
+            {
+              status: 400,
+            },
+          );
+        }
+      });
     }
 
     if (userSelected.accountType === AccountRole.PROFESSOR) {
@@ -79,10 +123,46 @@ export async function POST(req: Request) {
       });
     }
 
-    await prisma.user.delete({
+    const deletedUser = await prisma.user.delete({
       where: {
         id: userId,
       },
+    });
+
+    const transport = nodemailer.createTransport({
+      host: emailHost,
+      port: emailPort,
+      auth: {
+        user: emailUser,
+        pass: emailPass,
+      },
+    });
+
+    const emailHtml = render(
+      EmailUserBaned({
+        userName: `${deletedUser.firstName} ${deletedUser.lastName}`,
+        banDate: new Date(),
+      }),
+    );
+
+    const options = {
+      from: emailUser,
+      to: deletedUser.email,
+      subject: "Conta banida - O Sapiente",
+      html: emailHtml,
+    };
+
+    transport.sendMail(options, (error) => {
+      if (error) {
+        console.log("[ERROR_ON_ADMIN_BAN_USER_EMAIL]", error);
+
+        return new Response(
+          "Ocorreu um erro no envio do e-mail sobre o banimento da conta do usuário",
+          {
+            status: 400,
+          },
+        );
+      }
     });
 
     const users = await prisma.user.findMany({

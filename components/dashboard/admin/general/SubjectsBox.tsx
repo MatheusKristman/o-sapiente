@@ -117,7 +117,7 @@ export function SubjectsBox() {
                     <div className="w-full flex flex-col gap-6">
                       <div className="w-full flex flex-col gap-2">
                         <span className="text-base text-gray-primary font-medium text-left">
-                          Temas
+                          {AdminGeneralText.subjectsThemesLabel}
                         </span>
 
                         <div className="w-full flex flex-wrap gap-x-2 gap-y-3">
@@ -137,7 +137,7 @@ export function SubjectsBox() {
                           onClick={() => handleEdit(subject)}
                           className="w-full"
                         >
-                          EDITAR
+                          {AdminGeneralText.subjectsEditBtn}
                         </Button>
 
                         <Button
@@ -145,7 +145,7 @@ export function SubjectsBox() {
                           variant="destructive"
                           className="w-full"
                         >
-                          DELETAR
+                          {AdminGeneralText.subjectsDeleteBtn}
                         </Button>
                       </div>
                     </div>
@@ -165,7 +165,7 @@ export function SubjectsBox() {
                   <div className="w-full flex flex-col gap-6">
                     <div className="w-full flex flex-col gap-2">
                       <span className="text-base text-gray-primary font-medium text-left">
-                        Temas
+                        {AdminGeneralText.subjectsThemesLabel}
                       </span>
 
                       <div className="w-full flex flex-wrap gap-x-2 gap-y-3">
@@ -185,7 +185,7 @@ export function SubjectsBox() {
                         onClick={() => handleEdit(subject)}
                         className="w-full"
                       >
-                        EDITAR
+                        {AdminGeneralText.subjectsEditBtn}
                       </Button>
 
                       <Button
@@ -193,7 +193,7 @@ export function SubjectsBox() {
                         variant="destructive"
                         className="w-full"
                       >
-                        DELETAR
+                        {AdminGeneralText.subjectsDeleteBtn}
                       </Button>
                     </div>
                   </div>
@@ -203,8 +203,10 @@ export function SubjectsBox() {
           </Accordion>
         )
       ) : (
-        <div>
-          <span>Nenhuma matéria cadastrada</span>
+        <div className="mt-6 flex items-center justify-center">
+          <span className="text-gray-primary/70 text-center font-medium text-base">
+            {AdminGeneralText.subjectsNotFound}
+          </span>
         </div>
       )}
     </div>

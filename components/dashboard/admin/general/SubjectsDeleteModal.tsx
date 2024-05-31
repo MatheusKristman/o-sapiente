@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import useAdminSubjectsDeleteModalStore from "@/stores/useAdminSubjectsDeleteModalStore";
 import useAdminStore from "@/stores/useAdminStore";
+import { SubjectsDeleteModalText } from "@/constants/dashboard/admin-general-br";
 
 export function SubjectsDeleteModal() {
   const {
@@ -80,11 +81,11 @@ export function SubjectsDeleteModal() {
 
             <div className="w-full flex flex-col gap-1 mb-6">
               <h2 className="text-xl sm:text-2xl text-gray-primary text-left font-semibold">
-                Deseja deletar a matéria?
+                {SubjectsDeleteModalText.title}
               </h2>
 
               <p className="text-base text-gray-primary text-left">
-                Essa ação não pode ser desfeita.
+                {SubjectsDeleteModalText.desc}
               </p>
             </div>
 
@@ -95,7 +96,7 @@ export function SubjectsDeleteModal() {
                 variant="outline"
                 className="w-full sm:w-1/2"
               >
-                CANCELAR
+                {SubjectsDeleteModalText.cancelBtn}
               </Button>
 
               <Button
@@ -104,7 +105,7 @@ export function SubjectsDeleteModal() {
                 className="w-full sm:w-1/2 flex items-center gap-2"
               >
                 {isLoading && <Loader2 className="animate-spin" />}
-                CONFIRMAR
+                {SubjectsDeleteModalText.confirmBtn}
               </Button>
             </div>
           </motion.div>

@@ -12,6 +12,10 @@ export const AdminGeneralText = {
   requestsNotFound: "Nenhuma solicitação no momento",
   requestBtn: "VER SOLICITAÇÃO",
   subjectsBoxTitle: "Matérias e temas",
+  subjectsThemesLabel: "Temas",
+  subjectsEditBtn: "EDITAR",
+  subjectsDeleteBtn: "DELETAR",
+  subjectsNotFound: "Nenhuma matéria cadastrada",
 };
 
 export const UsersModalText = {
@@ -62,4 +66,25 @@ export const RequestsModalText = {
   delDescription: "Essa ação não pode ser desfeita.",
   cancelBtn: "CANCELAR",
   successMessage: "Solicitação deletada com sucesso",
+};
+
+export const SubjectsModalText = {
+  title: "Adicione uma nova matéria",
+  mainLabel: "Matéria",
+  subsLabel: "Temas",
+  saveBtn: "SALVAR",
+};
+
+export const SubjectsEditModalText = {
+  title: "Edite sua matéria",
+  mainLabel: "Matéria",
+  subsLabel: "Temas",
+  saveBtn: "SALVAR",
+};
+
+export const SubjectsDeleteModalText = {
+  title: "Deseja deletar a matéria?",
+  desc: "Essa ação não pode ser desfeita.",
+  cancelBtn: "CANCELAR",
+  confirmBtn: "CONFIRMAR",
 };
