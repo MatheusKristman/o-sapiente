@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Search } from "lucide-react";
+import { Loader2, Plus, Search } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -23,6 +23,7 @@ import useAdminSubjectsDeleteModalStore from "@/stores/useAdminSubjectsDeleteMod
 
 export function SubjectsBox() {
   const [subjectFilter, setSubjectFilter] = useState<string>("");
+  const [subjectsLoading, setSubjectsLoading] = useState<boolean>(false);
 
   const { openModal } = useAdminSubjectsModalStore();
   const { setSubjectSelected, openModal: openEditModal } =
@@ -35,6 +36,8 @@ export function SubjectsBox() {
 
   useEffect(() => {
     if (userId && session.status === "authenticated") {
+      setSubjectsLoading(true);
+
       axios
         .get(`/api/adm/subject/get/${userId}`)
         .then((res) => {
@@ -43,6 +46,9 @@ export function SubjectsBox() {
         })
         .catch((error) => {
           console.error(error);
+        })
+        .finally(() => {
+          setSubjectsLoading(false);
         });
     }
   }, [session, userId]);
@@ -91,7 +97,11 @@ export function SubjectsBox() {
         </div>
       </div>
 
-      {subjects && subjects.length > 0 ? (
+      {subjectsLoading ? (
+        <div className="w-full flex items-center justify-center">
+          <Loader2 size={50} color="#03C988" className="animate-spin" />
+        </div>
+      ) : subjects && subjects.length > 0 ? (
         subjectFilter.length > 3 ? (
           <Accordion type="single" collapsible>
             {subjects

@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarIcon, ChevronDown, Search } from "lucide-react";
+import { CalendarIcon, ChevronDown, Loader2, Search } from "lucide-react";
 import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -36,6 +36,7 @@ export function RequestsBox() {
   const [filterDateValue, setFilterDateValue] = useState<Date | undefined>(
     undefined,
   );
+  const [requestsLoading, setRequestsLoading] = useState<boolean>(false);
 
   const { requests, setRequests } = useAdminStore();
   const { userId } = useUserStore();
@@ -44,6 +45,8 @@ export function RequestsBox() {
 
   useEffect(() => {
     if (userId && session.status === "authenticated") {
+      setRequestsLoading(true);
+
       axios
         .get(`/api/adm/requests/get-requests/${userId}`)
         .then((res) => {
@@ -51,6 +54,9 @@ export function RequestsBox() {
         })
         .catch((error) => {
           console.error(error);
+        })
+        .finally(() => {
+          setRequestsLoading(false);
         });
     }
   }, [userId, session]);
@@ -177,25 +183,63 @@ export function RequestsBox() {
         </div>
       </div>
 
-      <div className="relative w-full max-h-[600px] lg:max-h-[450px] overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
-        {requests && filterType === "subject" && filterValue.length > 3 ? (
-          <>
-            <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
+      {requestsLoading ? (
+        <div className="w-full mt-4 flex items-center justify-center">
+          <Loader2 size={50} color="#FFFFFF" className="animate-spin" />
+        </div>
+      ) : (
+        <div className="relative w-full max-h-[600px] lg:max-h-[450px] overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
+          {requests && filterType === "subject" && filterValue.length > 3 ? (
+            <>
+              <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-            {requests
-              .filter((request) =>
-                request.subject
-                  .toLowerCase()
-                  .normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, "")
-                  .includes(
-                    filterValue
-                      .normalize("NFD")
-                      .replace(/[\u0300-\u036f]/g, "")
-                      .toLowerCase(),
-                  ),
-              )
-              .map((request, index) => (
+              {requests
+                .filter((request) =>
+                  request.subject
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .includes(
+                      filterValue
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .toLowerCase(),
+                    ),
+                )
+                .map((request, index) => (
+                  <RequestItem
+                    key={request.id}
+                    last={index === requests.length - 1}
+                    request={request}
+                  />
+                ))}
+
+              <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
+            </>
+          ) : requests && filterType === "date" && filterDateValue ? (
+            <>
+              <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
+
+              {requests
+                .filter(
+                  (request) =>
+                    compareAsc(filterDateValue, request.createdAt) <= 0,
+                )
+                .map((request, index) => (
+                  <RequestItem
+                    key={request.id}
+                    last={index === requests.length - 1}
+                    request={request}
+                  />
+                ))}
+
+              <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
+            </>
+          ) : requests && requests.length > 0 ? (
+            <>
+              <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
+
+              {requests.map((request, index) => (
                 <RequestItem
                   key={request.id}
                   last={index === requests.length - 1}
@@ -203,49 +247,17 @@ export function RequestsBox() {
                 />
               ))}
 
-            <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
-          </>
-        ) : requests && filterType === "date" && filterDateValue ? (
-          <>
-            <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
-
-            {requests
-              .filter(
-                (request) =>
-                  compareAsc(filterDateValue, request.createdAt) <= 0,
-              )
-              .map((request, index) => (
-                <RequestItem
-                  key={request.id}
-                  last={index === requests.length - 1}
-                  request={request}
-                />
-              ))}
-
-            <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
-          </>
-        ) : requests && requests.length > 0 ? (
-          <>
-            <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
-
-            {requests.map((request, index) => (
-              <RequestItem
-                key={request.id}
-                last={index === requests.length - 1}
-                request={request}
-              />
-            ))}
-
-            <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
-          </>
-        ) : (
-          <div className="mt-6 flex items-center justify-center">
-            <span className="text-gray-primary/70 text-center font-medium text-lg">
-              {AdminGeneralText.requestsNotFound}
-            </span>
-          </div>
-        )}
-      </div>
+              <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
+            </>
+          ) : (
+            <div className="mt-6 flex items-center justify-center">
+              <span className="text-gray-primary/70 text-center font-medium text-lg">
+                {AdminGeneralText.requestsNotFound}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarIcon, ChevronDown, Search } from "lucide-react";
+import { CalendarIcon, ChevronDown, Loader2, Search } from "lucide-react";
 import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -51,6 +51,7 @@ export function UsersBox() {
   const [filterDateValue, setFilterDateValue] = useState<DateRange | undefined>(
     initialRange,
   );
+  const [usersLoading, setUsersLoading] = useState<boolean>(false);
 
   const { userId } = useUserStore();
   const { setUsers, users } = useAdminStore();
@@ -58,8 +59,8 @@ export function UsersBox() {
   const currentYear = getYear(new Date());
 
   useEffect(() => {
-    console.log(userId);
     if (userId && session.status === "authenticated") {
+      setUsersLoading(true);
       axios
         .get(`/api/adm/users/get-users/${userId}`)
         .then((res) => {
@@ -69,13 +70,12 @@ export function UsersBox() {
           console.error(error);
 
           toast.error(error.response.data);
+        })
+        .finally(() => {
+          setUsersLoading(false);
         });
     }
   }, [userId, session]);
-
-  useEffect(() => {
-    console.log(filterDateValue);
-  }, [filterDateValue]);
 
   function handleFilter(value: string) {
     setFilterValue("");
@@ -247,116 +247,135 @@ export function UsersBox() {
         </div>
       </div>
 
-      <div className="relative w-full max-h-[640px] lg:max-h-[450px] overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
-        {!users ? null : filterType === "name" && filterValue.length > 3 ? (
-          <>
-            <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />
+      {usersLoading ? (
+        <div className="w-full mt-4 flex items-center justify-center">
+          <Loader2 size={50} color="#03C988" className="animate-spin" />
+        </div>
+      ) : (
+        <div className="relative w-full max-h-[640px] lg:max-h-[450px] overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
+          {!users ? null : filterType === "name" && filterValue.length > 3 ? (
+            <>
+              <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />
 
-            {users
-              .filter((user) =>
-                `${user.firstName} ${user.lastName}`
-                  .toLowerCase()
-                  .normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, "")
-                  .includes(
-                    filterValue
-                      .normalize("NFD")
-                      .replace(/[\u0300-\u036f]/g, "")
-                      .toLowerCase(),
-                  ),
-              )
-              .map((user, index) => (
-                <UserItem
-                  key={user.id}
-                  last={index === users.length - 1}
-                  user={user}
-                />
-              ))}
+              {users
+                .filter((user) =>
+                  `${user.firstName} ${user.lastName}`
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .includes(
+                      filterValue
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .toLowerCase(),
+                    ),
+                )
+                .map((user, index) => (
+                  <UserItem
+                    key={user.id}
+                    last={index === users.length - 1}
+                    user={user}
+                  />
+                ))}
 
-            <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent" />
-          </>
-        ) : filterType === "email" && filterValue.length > 3 ? (
-          <>
-            <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />
+              <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent" />
+            </>
+          ) : filterType === "email" && filterValue.length > 3 ? (
+            <>
+              <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />
 
-            {users
-              .filter((user) =>
-                user.email
-                  .toLowerCase()
-                  .normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, "")
-                  .includes(
-                    filterValue
-                      .normalize("NFD")
-                      .replace(/[\u0300-\u036f]/g, "")
-                      .toLowerCase(),
-                  ),
-              )
-              .map((user, index) => (
-                <UserItem
-                  key={user.id}
-                  last={index === users.length - 1}
-                  user={user}
-                />
-              ))}
+              {users
+                .filter((user) =>
+                  user.email
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .includes(
+                      filterValue
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .toLowerCase(),
+                    ),
+                )
+                .map((user, index) => (
+                  <UserItem
+                    key={user.id}
+                    last={index === users.length - 1}
+                    user={user}
+                  />
+                ))}
 
-            <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent" />
-          </>
-        ) : filterType === "type" && filterValue.length > 0 ? (
-          <>
-            <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />
+              <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent" />
+            </>
+          ) : filterType === "type" && filterValue.length > 0 ? (
+            <>
+              <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />
 
-            {users
-              .filter((user) => {
-                if (filterValue === "PROFESSOR") {
-                  return user.accountType === AccountRole.PROFESSOR;
-                } else if (filterValue === "STUDENT") {
-                  return user.accountType === AccountRole.STUDENT;
-                }
-              })
-              .map((user, index) => (
-                <UserItem
-                  key={user.id}
-                  last={index === users.length - 1}
-                  user={user}
-                />
-              ))}
-
-            <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent" />
-          </>
-        ) : filterType === "date" &&
-          filterDateValue &&
-          filterDateValue.from &&
-          filterDateValue.to ? (
-          <>
-            <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />
-
-            {users
-              .filter((user) => {
-                if (
-                  filterDateValue &&
-                  filterDateValue.from &&
-                  filterDateValue.to
-                ) {
-                  if (
-                    isAfter(
-                      new Date(user.createdAt),
-                      new Date(filterDateValue.from),
-                    ) &&
-                    isBefore(
-                      new Date(user.createdAt),
-                      new Date(filterDateValue.to),
-                    )
-                  ) {
-                    return user;
-                  } else {
-                    return null;
+              {users
+                .filter((user) => {
+                  if (filterValue === "PROFESSOR") {
+                    return user.accountType === AccountRole.PROFESSOR;
+                  } else if (filterValue === "STUDENT") {
+                    return user.accountType === AccountRole.STUDENT;
                   }
-                } else {
-                  return user;
-                }
-              })
-              .map((user, index) => (
+                })
+                .map((user, index) => (
+                  <UserItem
+                    key={user.id}
+                    last={index === users.length - 1}
+                    user={user}
+                  />
+                ))}
+
+              <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent" />
+            </>
+          ) : filterType === "date" &&
+            filterDateValue &&
+            filterDateValue.from &&
+            filterDateValue.to ? (
+            <>
+              <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />
+
+              {users
+                .filter((user) => {
+                  if (
+                    filterDateValue &&
+                    filterDateValue.from &&
+                    filterDateValue.to
+                  ) {
+                    if (
+                      isAfter(
+                        new Date(user.createdAt),
+                        new Date(filterDateValue.from),
+                      ) &&
+                      isBefore(
+                        new Date(user.createdAt),
+                        new Date(filterDateValue.to),
+                      )
+                    ) {
+                      return user;
+                    } else {
+                      return null;
+                    }
+                  } else {
+                    return user;
+                  }
+                })
+                .map((user, index) => (
+                  <UserItem
+                    key={user.id}
+                    last={index === users.length - 1}
+                    user={user}
+                  />
+                ))}
+
+              <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent" />
+            </>
+          ) : users.length > 0 ? (
+            <>
+              <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />
+
+              {users.map((user, index) => (
                 <UserItem
                   key={user.id}
                   last={index === users.length - 1}
@@ -364,30 +383,17 @@ export function UsersBox() {
                 />
               ))}
 
-            <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent" />
-          </>
-        ) : users.length > 0 ? (
-          <>
-            <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-white to-transparent" />
-
-            {users.map((user, index) => (
-              <UserItem
-                key={user.id}
-                last={index === users.length - 1}
-                user={user}
-              />
-            ))}
-
-            <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent" />
-          </>
-        ) : (
-          <div className="mt-6 flex items-center justify-center">
-            <span className="text-gray-primary/70 text-center font-medium text-base">
-              Nenhuma usuário cadastrado no momento
-            </span>
-          </div>
-        )}
-      </div>
+              <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-white to-transparent" />
+            </>
+          ) : (
+            <div className="mt-6 flex items-center justify-center">
+              <span className="text-gray-primary/70 text-center font-medium text-base">
+                Nenhuma usuário cadastrado no momento
+              </span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
