@@ -143,7 +143,10 @@ export function SubjectsModal() {
 
                 <div className="w-full flex flex-wrap gap-x-2 gap-y-4">
                   {subs.map((sub) => (
-                    <span className="relative bg-green-primary px-4 py-2 rounded-md text-white text-sm font-medium group">
+                    <span
+                      key={sub}
+                      className="relative bg-green-primary px-4 py-2 rounded-md text-white text-sm font-medium group"
+                    >
                       {sub}
                       <div
                         onClick={() => removeSubs(sub)}

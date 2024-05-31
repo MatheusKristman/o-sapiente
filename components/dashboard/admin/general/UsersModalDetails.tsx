@@ -195,7 +195,11 @@ export function UsersModalDetails() {
 
             if (otherUser) {
               return (
-                <AccordionItem value={request.id} className="px-4">
+                <AccordionItem
+                  key={request.id}
+                  value={request.id}
+                  className="px-4"
+                >
                   <AccordionTrigger>
                     <div className="flex items-center gap-x-4">
                       <div className="relative w-12 min-w-[48px] max-w-[48px] h-12 min-h-[48px] max-h-[48px] rounded-full overflow-hidden">
@@ -339,7 +343,11 @@ export function UsersModalDetails() {
               const student = request.users[0];
 
               return (
-                <AccordionItem value={request.id} className="px-4">
+                <AccordionItem
+                  key={request.id}
+                  value={request.id}
+                  className="px-4"
+                >
                   <AccordionTrigger>
                     <div className="flex items-center gap-x-4">
                       <div className="relative w-12 min-w-[48px] max-w-[48px] h-12 min-h-[48px] max-h-[48px] rounded-full overflow-hidden">
