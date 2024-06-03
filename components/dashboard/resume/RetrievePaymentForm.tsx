@@ -233,8 +233,10 @@ export function RetrievePaymentForm() {
               </Button>
 
               <div className="w-full flex flex-col gap-2">
-                {retrievePaymentModalInfo.disclaimer.map((text) => (
-                  <span className="w-full text-center text-sm text-gray-primary/50">{text}</span>
+                {retrievePaymentModalInfo.disclaimer.map((text, index) => (
+                  <span key={`p-${index}`} className="w-full text-center text-sm text-gray-primary/50">
+                    {text}
+                  </span>
                 ))}
               </div>
             </form>
