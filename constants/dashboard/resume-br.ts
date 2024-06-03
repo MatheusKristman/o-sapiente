@@ -69,6 +69,11 @@ export const retrievePaymentModalInfo = {
   successTitle: "Solicitação enviada com sucesso!",
   successDesc: "Dentro de 24 horas você receberá seu pix!",
   closeBtn: "FECHAR",
+  disclaimer: [
+    "Embora você tenha fornecido sua chave PIX, informamos que o processamento do pagamento poderá levar até um dia útil. Esse prazo é necessário para que possamos analisar o pedido e prevenir fraudes.",
+    "É importante que a chave PIX informada esteja registrada em seu nome.",
+    "Você está apenas solicitando ao O Sapiente que credite em sua conta bancária os valores referentes às suas aulas."
+  ]
 };
 
 export const currentLessonModalInfo = {

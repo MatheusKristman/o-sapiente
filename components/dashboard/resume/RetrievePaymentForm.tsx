@@ -228,9 +228,15 @@ export function RetrievePaymentForm() {
                 )}
               />
 
-              <Button disabled={isSubmitting} type="submit">
+              <Button disabled={isSubmitting} type="submit" className="mb-4">
                 {retrievePaymentModalInfo.btn}
               </Button>
+
+              <div className="w-full flex flex-col gap-2">
+                {retrievePaymentModalInfo.disclaimer.map((text) => (
+                  <span className="w-full text-center text-sm text-gray-primary/50">{text}</span>
+                ))}
+              </div>
             </form>
           </Form>
         )}

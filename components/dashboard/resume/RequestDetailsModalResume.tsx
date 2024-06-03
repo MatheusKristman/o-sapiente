@@ -66,11 +66,13 @@ const RequestDetailsModalResume = ({
         <span className="text-base text-gray-primary mt-1">{subject}</span>
       </div>
 
-      <div className="w-full flex gap-x-2 mb-6">
-        <span className="text-lg font-semibold text-green-primary">{requestDetailsInfo.message}</span>
+      {type === "Professor" && plan && (
+        <div className="w-full flex gap-x-2 mb-6">
+          <span className="text-lg font-semibold text-green-primary">{requestDetailsInfo.message}</span>
 
-        <span className="text-base text-gray-primary text-left mt-1">{message}</span>
-      </div>
+          <span className="text-base text-gray-primary text-left mt-1">{message}</span>
+        </div>
+      )}
 
       <Button className="w-full" disabled={type === "Professor" && !plan} onClick={AcceptRequest}>
         {requestDetailsInfo.btn}
