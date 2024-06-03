@@ -256,30 +256,33 @@ export async function PUT(req: Request) {
       }
     }
 
-    const transport = nodemailer.createTransport({
-      host: emailHost,
-      port: emailPort,
-      auth: {
-        user: emailUser,
-        pass: emailPass,
-      },
-    });
+    if (requestFiltered.usersIdsVotedToFinish.length === 0) {
 
-    const emailHtml = render(
-      EmailFinishingLessonNotification({
-        name: `${currentUser.firstName} ${currentUser.lastName}`,
-        otherUserName: `${otherUser.firstName} ${otherUser.lastName}`,
-      })
-    );
+      const transport = nodemailer.createTransport({
+        host: emailHost,
+        port: emailPort,
+        auth: {
+          user: emailUser,
+          pass: emailPass,
+        },
+      });
 
-    const options = {
-      from: emailUser,
-      to: emailUser,
-      subject: "Nova mensagem de contato - O Sapiente",
-      html: emailHtml,
-    };
+      const emailHtml = render(
+        EmailFinishingLessonNotification({
+          name: `${otherUser.firstName} ${otherUser.lastName}`,
+          otherUserName: `${currentUser.firstName} ${currentUser.lastName}`,
+        })
+      );
 
-    await transport.sendMail(options);
+      const options = {
+        from: emailUser,
+        to: otherUser.email,
+        subject: "Nova mensagem de contato - O Sapiente",
+        html: emailHtml,
+      };
+
+      await transport.sendMail(options);
+    }
 
     return Response.json(newRequests, { status: 200 });
   } catch (error) {
