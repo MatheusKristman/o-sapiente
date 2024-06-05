@@ -29,10 +29,12 @@ export async function POST(req: Request) {
       planId,
       paymentMethod,
     } = await req.json();
-    const pagarMeSecretKey =
-      process.env.NODE_ENV === "development"
-        ? process.env.PAGARME_SECRET_KEY_DEV!
-        : process.env.PAGARME_SECRET_KEY!;
+    // const pagarMeSecretKey =
+    //   process.env.NODE_ENV === "development"
+    //     ? process.env.PAGARME_SECRET_KEY_DEV!
+    //     : process.env.PAGARME_SECRET_KEY!;
+    const pagarMeSecretKey = process.env.PAGARME_SECRET_KEY_DEV!
+
 
     if (
       !birth ||
