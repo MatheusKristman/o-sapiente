@@ -41,6 +41,48 @@ export async function POST(req: Request) {
       return new Response("Usuário não encontrado", { status: 404 });
     }
 
+    const conversations = await prisma.conversation.findMany({
+      where: {
+        users: {
+          some: {
+            id: userSelected.id,
+          },
+        },
+      },
+    });
+
+    if (conversations.length > 0) {
+      const conversationIds = conversations.map((conversation) => conversation.id);
+
+      const messages = await prisma.message.findMany({
+        where: {
+          conversationId: {
+            in: conversationIds,
+          },
+        },
+      });
+
+      if (messages.length > 0) {
+        await prisma.message.deleteMany({
+          where: {
+            conversationId: {
+              in: conversationIds,
+            },
+          },
+        });
+      }
+
+      await prisma.conversation.deleteMany({
+        where: {
+          users: {
+            some: {
+              id: userSelected.id,
+            },
+          },
+        },
+      });
+    }
+
     if (userSelected.accountType === AccountRole.STUDENT) {
       const requestIds = userSelected.requests.map((request) => request.id);
 
@@ -64,7 +106,7 @@ export async function POST(req: Request) {
       const emailHtml = render(
         EmailRequestDeleted({
           userName: `${userSelected.firstName} ${userSelected.lastName}`,
-        }),
+        })
       );
 
       const options = {
@@ -78,12 +120,9 @@ export async function POST(req: Request) {
         if (error) {
           console.log("[ERROR_ON_ADMIN_REQUEST_DELETED_EMAIL]", error);
 
-          return new Response(
-            "Ocorreu um erro no envio do e-mail sobre a remoção da solicitação do usuário",
-            {
-              status: 400,
-            },
-          );
+          return new Response("Ocorreu um erro no envio do e-mail sobre a remoção da solicitação do usuário", {
+            status: 400,
+          });
         }
       });
     }
@@ -142,7 +181,7 @@ export async function POST(req: Request) {
       EmailUserBaned({
         userName: `${deletedUser.firstName} ${deletedUser.lastName}`,
         banDate: new Date(),
-      }),
+      })
     );
 
     const options = {
@@ -156,12 +195,9 @@ export async function POST(req: Request) {
       if (error) {
         console.log("[ERROR_ON_ADMIN_BAN_USER_EMAIL]", error);
 
-        return new Response(
-          "Ocorreu um erro no envio do e-mail sobre o banimento da conta do usuário",
-          {
-            status: 400,
-          },
-        );
+        return new Response("Ocorreu um erro no envio do e-mail sobre o banimento da conta do usuário", {
+          status: 400,
+        });
       }
     });
 

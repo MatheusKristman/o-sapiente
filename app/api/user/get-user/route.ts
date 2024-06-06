@@ -54,17 +54,16 @@ export async function GET() {
         plan: user.plan,
         paymentRetrievable: user.paymentRetrievable,
         pixCode: user.pixCode,
+        planActivationDate: user.planActivationDate,
+        planValidationDate: user.planValidationDate,
         offers,
       });
     }
   } catch (error: any) {
     console.log(error, "GET-USER-ERROR");
 
-    return new NextResponse(
-      "Ocorreu um erro durante a requisição, tente novamente",
-      {
-        status: 400,
-      },
-    );
+    return new NextResponse("Ocorreu um erro durante a requisição, tente novamente", {
+      status: 400,
+    });
   }
 }

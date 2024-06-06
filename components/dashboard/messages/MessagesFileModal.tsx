@@ -42,7 +42,7 @@ function MessagesFileModal({ conversationId }: Props) {
 
   const { startUpload, isUploading, permittedFileInfo } = useUploadThing("archiveMessage", {
     onClientUploadComplete: () => {
-      toast.success("Imagem enviada com sucesso");
+      toast.success("Documento enviado com sucesso");
       handleDeleteButton();
       closeFileModal();
     },

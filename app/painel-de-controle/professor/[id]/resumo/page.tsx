@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Request, Status } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { format, isAfter } from "date-fns";
 
 import ResumeProfilePhoto from "@/components/dashboard/resume/ResumeProfilePhoto";
 import ResumeRequestBox from "@/components/dashboard/resume/ResumeRequestBox";
@@ -59,8 +60,21 @@ const ResumePage = () => {
           setProfilePhoto(userResponse.data.profilePhoto);
         }
 
-        if (userResponse.data.plan) {
-          setPlan(userResponse.data.plan.planName);
+        if (userResponse.data.plan && userResponse.data.planActivationDate && userResponse.data.planValidationDate) {
+          const actualDate: Date = new Date();
+          const validationDate: Date = new Date(userResponse.data.planValidationDate);
+
+          if (isAfter(actualDate, validationDate)) {
+            const planExpiredResponse = await axios.put("/api/plan/expired");
+
+            toast.error(planExpiredResponse.data);
+
+            setPlan("");
+          } else {
+            setPlan(userResponse.data.plan.planName);
+          }
+        } else {
+          setPlan("");
         }
 
         setOffers(userResponse.data.offers);

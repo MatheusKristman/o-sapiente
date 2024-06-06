@@ -99,6 +99,14 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
     setIsPopoverOpen(open);
   }
 
+  function isValidUrl(url: string) {
+    try {
+      return Boolean(new URL(url));
+    } catch (error) {
+      return false;
+    }
+  }
+
   return (
     <div className={cn("w-full flex flex-row-reverse items-center justify-start group", { "flex-row": otherMessage })}>
       {message.videoUrl && !message.isDeleted ? (
@@ -163,6 +171,38 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
 
           <span className="text-gray-primary font-medium text-[10px]">{format(new Date(message.createdAt), "p")}</span>
         </div>
+      ) : isValidUrl(message.content) ? (
+        <>
+          <div
+            className={cn(
+              "w-2/3 px-6 relative pt-6 pb-2 rounded-tl-lg rounded-br-lg rounded-bl-lg bg-green-primary xl:w-2/5",
+              {
+                "bg-[#C8D6DF] rounded-tl-none rounded-tr-lg": otherMessage,
+                "pointer-events-none select-none": message.isDeleted,
+              }
+            )}
+          >
+            <a
+              href={message.content}
+              rel="noreferrer noopener"
+              target="_blank"
+              className={cn("block text-white text-base break-words whitespace-pre-wrap underline mr-2", {
+                "text-gray-primary": otherMessage,
+                "text-opacity-80": message.isDeleted,
+              })}
+            >
+              {message.content}
+            </a>
+
+            <span
+              className={cn("text-white font-medium text-[10px] mb-1", {
+                "text-gray-primary/90": otherMessage,
+              })}
+            >
+              {format(new Date(message.createdAt), "p")}
+            </span>
+          </div>
+        </>
       ) : (
         <>
           <div
@@ -203,7 +243,7 @@ const MessagesBox = ({ otherMessage, message, isLast }: Props) => {
               </div>
             ) : (
               <p
-                className={cn("text-white text-base", {
+                className={cn("text-white text-base break-words whitespace-pre-wrap", {
                   "text-gray-primary": otherMessage,
                   "text-opacity-80": message.isDeleted,
                 })}

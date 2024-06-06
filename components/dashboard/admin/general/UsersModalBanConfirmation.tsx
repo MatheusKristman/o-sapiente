@@ -17,8 +17,7 @@ interface Props {
 }
 
 export function UsersModalBanConfirmation({ handleClose }: Props) {
-  const { setUserBanConfirmation, isLoading, setLoading, userSelected } =
-    useAdminUsersModalStore();
+  const { setUserBanConfirmation, isLoading, setLoading, userSelected } = useAdminUsersModalStore();
   const { setUsers, setRequests } = useAdminStore();
   const { userId } = useUserStore();
 
@@ -56,38 +55,21 @@ export function UsersModalBanConfirmation({ handleClose }: Props) {
   }
 
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={FormAnimation}
-      className="w-full"
-    >
+    <motion.div initial="initial" animate="animate" exit="exit" variants={FormAnimation} className="w-full">
       <div className="w-full flex flex-col gap-1 mb-6">
         <h2 className="text-xl sm:text-2xl text-gray-primary text-left font-semibold">
           {UsersModalText.banConfirmationTitle}
         </h2>
 
-        <p className="text-base text-gray-primary text-left">
-          {UsersModalText.banConfirmationDesc}
-        </p>
+        <p className="text-base text-gray-primary text-left">{UsersModalText.banConfirmationDesc}</p>
       </div>
 
       <div className="w-full flex flex-col sm:flex-row sm:items-center gap-4">
-        <Button
-          disabled={isLoading}
-          onClick={handleCancel}
-          variant="outline"
-          className="w-full sm:w-1/2"
-        >
+        <Button disabled={isLoading} onClick={handleCancel} variant="outline" className="w-full sm:w-1/2">
           {UsersModalText.banConfirmationCancelBtn}
         </Button>
 
-        <Button
-          disabled={isLoading}
-          onClick={handleConfirm}
-          className="w-full sm:w-1/2 flex items-center gap-2"
-        >
+        <Button disabled={isLoading} onClick={handleConfirm} className="w-full sm:w-1/2 flex items-center gap-2">
           {isLoading && <Loader2 className="animate-spin" />}
           {UsersModalText.banConfirmationConfirmBtn}
         </Button>
