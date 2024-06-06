@@ -7,9 +7,12 @@ import RecentsRequestsCard from "./RecentsRequestsCard";
 import useHomeStore from "@/stores/useHomeStore";
 
 import "swiper/css";
+import { AccountRole } from "@prisma/client";
 
 const RecentsRequestsSlider = () => {
   const { recentsRequests } = useHomeStore();
+
+  console.log(recentsRequests);
 
   return (
     <Swiper
@@ -36,52 +39,20 @@ const RecentsRequestsSlider = () => {
       }}
       modules={[Autoplay]}
     >
-      {recentsRequests.map((request, index) => (
-        <SwiperSlide key={request.id + index}>
-          <RecentsRequestsCard
-            title={request.subject}
-            desc={request.description}
-            createdAt={request.createdAt}
-            student={`${request.users[0].firstName} ${request.users[0].lastName}`}
-          />
-        </SwiperSlide>
-      ))}
+      {recentsRequests.map((request, index) => {
+        const student = request.users.filter((user) => user.accountType === AccountRole.STUDENT)[0];
 
-      {/* <SwiperSlide> */}
-      {/*     <RecentsRequestsCard /> */}
-      {/* </SwiperSlide> */}
-      {/**/}
-      {/* <SwiperSlide> */}
-      {/*     <RecentsRequestsCard /> */}
-      {/* </SwiperSlide> */}
-      {/**/}
-      {/* <SwiperSlide> */}
-      {/*     <RecentsRequestsCard /> */}
-      {/* </SwiperSlide> */}
-      {/**/}
-      {/* <SwiperSlide> */}
-      {/*     <RecentsRequestsCard /> */}
-      {/* </SwiperSlide> */}
-      {/**/}
-      {/* <SwiperSlide> */}
-      {/*     <RecentsRequestsCard /> */}
-      {/* </SwiperSlide> */}
-      {/**/}
-      {/* <SwiperSlide> */}
-      {/*     <RecentsRequestsCard /> */}
-      {/* </SwiperSlide> */}
-      {/**/}
-      {/* <SwiperSlide> */}
-      {/*     <RecentsRequestsCard /> */}
-      {/* </SwiperSlide> */}
-      {/**/}
-      {/* <SwiperSlide> */}
-      {/*     <RecentsRequestsCard /> */}
-      {/* </SwiperSlide> */}
-      {/**/}
-      {/* <SwiperSlide> */}
-      {/*     <RecentsRequestsCard /> */}
-      {/* </SwiperSlide> */}
+        return (
+          <SwiperSlide key={request.id + index}>
+            <RecentsRequestsCard
+              title={request.subject}
+              desc={request.description}
+              createdAt={request.createdAt}
+              student={`${student.firstName} ${student.lastName}`}
+            />
+          </SwiperSlide>
+        );
+      })}
     </Swiper>
   );
 };
