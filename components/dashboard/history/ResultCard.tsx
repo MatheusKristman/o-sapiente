@@ -25,13 +25,14 @@ const ResultCard = ({ request }: Props) => {
 
   const hasOtherUser: boolean = request.users.length === 2;
   const otherUser = request.users.filter((user) => user.id !== userId)[0];
-  const otherUserHasPhoto: boolean = hasOtherUser && request.users[1].profilePhoto !== null;
+  const otherUserHasPhoto: boolean = hasOtherUser && otherUser.profilePhoto !== null;
 
   const profileImageUrl = hasOtherUser
     ? otherUserHasPhoto
       ? otherUser.profilePhoto!
       : "/assets/images/default-user-photo.svg"
     : "/assets/images/default-user-photo.svg";
+
   const profileName = hasOtherUser ? `${otherUser.firstName} ${otherUser.lastName}` : "Não definido";
   const startDate: Date | null = request.beginLessonDate;
   const endDate: Date | null = request.finishLessonDate;

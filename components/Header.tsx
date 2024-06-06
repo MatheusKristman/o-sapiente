@@ -137,7 +137,7 @@ const Header = () => {
               type="button"
               disabled={isLoading}
               onClick={handleLogOut}
-              className="flex gap-2 items-center justify-center text-green-primary text-lg"
+              className="flex gap-2 items-center justify-center text-green-primary text-base"
             >
               <LogOut className="h-6 w-6" />
               {headerTexts.logoutBtn}
@@ -147,7 +147,7 @@ const Header = () => {
               type="button"
               disabled={isLoading}
               onClick={handleDashboardBtn}
-              className="bg-green-primary flex gap-2 items-center justify-center text-white text-lg px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
+              className="bg-green-primary flex gap-2 items-center justify-center text-white text-base px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
             >
               <Image src="/assets/icons/user.svg" alt="Usuário" width={24} height={24} className="object-contain" />
               {headerTexts.dashboardBtn}

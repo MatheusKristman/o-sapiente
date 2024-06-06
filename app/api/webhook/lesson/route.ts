@@ -336,6 +336,8 @@ export async function POST(req: Request) {
 
       return new Response("Webhook de pagamento negado", { status: 200 });
     }
+
+    return new Response("Webhook de pagamento executado, sem evento", { status: 200 });
   } catch (error) {
     console.log("[ERROR_ON_WEBHOOK]", error);
 

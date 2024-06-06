@@ -110,6 +110,8 @@ export async function POST(req: Request) {
           );
         }
       });
+
+      return new Response("Webhook de planos executado com sucesso", { status: 200 });
     }
 
     if (
@@ -135,6 +137,8 @@ export async function POST(req: Request) {
         status: 200,
       });
     }
+
+    return new Response("Webhook de pagamento executado, sem evento", { status: 200 });
   } catch (error) {
     console.log("[ERROR_WEBHOOK_PLAN]", error);
 

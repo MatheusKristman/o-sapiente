@@ -47,6 +47,8 @@ const DashboardPage = () => {
 
         if (userResponse.data.profilePhoto) {
           setProfilePhoto(userResponse.data.profilePhoto);
+        } else {
+          setProfilePhoto("");
         }
 
         setName(`${userResponse.data.firstName} ${userResponse.data.lastName}`);

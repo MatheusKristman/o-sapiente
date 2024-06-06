@@ -12,7 +12,7 @@ export const professorHeaderButton = {
 export const headerTexts = {
   logoutBtn: "SAIR",
   loginBtn: "ENTRAR NA CONTA",
-  dashboardBtn: "ACESSAR DASHBOARD",
+  dashboardBtn: "PAINEL DE CONTROLE",
   professorRegister: "DAR AULAS",
 }
 

@@ -4,12 +4,14 @@ import { Status } from "@prisma/client";
 
 import { RequestWithUsersAndOffers } from "@/types";
 import { formatPrice } from "@/libs/utils";
+import useUserStore from "@/stores/useUserStore";
 
 interface Props {
   request: RequestWithUsersAndOffers;
 }
 
 const TableRow = ({ request }: Props) => {
+  const { userId } = useUserStore();
   const statusStyles: { [key: string]: string } = {
     finished: "text-green-800 bg-green-200 rounded-lg bg-opacity-50",
     inProgress: "text-[#8A8A8A] bg-[#E8E8E8] rounded-lg bg-opacity-50",
@@ -19,14 +21,15 @@ const TableRow = ({ request }: Props) => {
   };
 
   const hasOtherUser: boolean = request.users.length === 2;
-  const otherUserHasPhoto: boolean = hasOtherUser && request.users[1].profilePhoto !== null;
+  const otherUser = request.users.filter((user) => user.id !== userId)[0];
+  const otherUserHasPhoto: boolean = hasOtherUser && otherUser.profilePhoto !== null;
 
   const profileImageUrl = hasOtherUser
     ? otherUserHasPhoto
-      ? request.users[1].profilePhoto!
+      ? otherUser.profilePhoto!
       : "/assets/images/default-user-photo.svg"
     : "/assets/images/default-user-photo.svg";
-  const profileName = hasOtherUser ? `${request.users[1].firstName} ${request.users[1].lastName}` : "Não definido";
+  const profileName = hasOtherUser ? `${otherUser.firstName} ${otherUser.lastName}` : "Não definido";
   const startDate: Date | null = request.beginLessonDate;
   const endDate: Date | null = request.finishLessonDate;
   const status: Status = request.status;
