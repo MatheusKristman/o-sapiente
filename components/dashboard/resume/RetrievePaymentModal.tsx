@@ -6,11 +6,9 @@ import { BsXLg } from "react-icons/bs";
 import { RetrievePaymentMessage } from "./RetrievePaymentMessage";
 import { RetrievePaymentForm } from "./RetrievePaymentForm";
 import useRetrievePaymentModalStore from "@/stores/useRetrievePaymentModalStore";
-import {
-  ModalAnimation,
-  OverlayAnimation,
-} from "@/constants/framer-animations/modal";
+import { ModalAnimation, OverlayAnimation } from "@/constants/framer-animations/modal";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export function RetrievePaymentModal() {
   const {
@@ -33,6 +31,7 @@ export function RetrievePaymentModal() {
 
     setTimeout(() => {
       setIsMessage(false);
+      location.reload();
     }, 350);
   }
 
@@ -70,12 +69,8 @@ export function RetrievePaymentModal() {
                 </div>
 
                 <AnimatePresence>
-                  {isForm && (
-                    <RetrievePaymentForm key="retrieve-payment-form" />
-                  )}
-                  {isMessage && (
-                    <RetrievePaymentMessage key="retrieve-payment-message" />
-                  )}
+                  {isForm && <RetrievePaymentForm key="retrieve-payment-form" />}
+                  {isMessage && <RetrievePaymentMessage key="retrieve-payment-message" />}
                 </AnimatePresence>
               </div>
             </motion.div>

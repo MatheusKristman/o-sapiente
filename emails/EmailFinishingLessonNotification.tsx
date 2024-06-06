@@ -8,9 +8,10 @@ const imageURL =
 interface Props {
   name: string;
   otherUserName: string;
+  baseUrl: string;
 }
 
-export default function EmailFinishingLessonNotification({ name, otherUserName }: Props) {
+export default function EmailFinishingLessonNotification({ name, otherUserName, baseUrl }: Props) {
   return (
     <Html>
       <Head />
@@ -36,7 +37,7 @@ export default function EmailFinishingLessonNotification({ name, otherUserName }
               continuar a aula, entre me contato com o suporte.
             </Text>
 
-            <Button href="http://localhost:3000" style={buttonStyle}>
+            <Button href={baseUrl} style={buttonStyle}>
               Finalizar Aula
             </Button>
 

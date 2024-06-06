@@ -70,7 +70,7 @@ const RequestDetailsModalResume = ({
         <div className="w-full flex gap-x-2 mb-6">
           <span className="text-lg font-semibold text-green-primary">{requestDetailsInfo.message}</span>
 
-          <span className="text-base text-gray-primary text-left mt-1">{message}</span>
+          <span className="text-base text-gray-primary text-left mt-1 whitespace-pre-wrap break-word">{message}</span>
         </div>
       )}
 

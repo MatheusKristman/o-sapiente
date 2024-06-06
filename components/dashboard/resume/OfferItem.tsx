@@ -79,7 +79,9 @@ const OfferItem = ({ offer }: OfferItemProps) => {
               <div className="w-full flex gap-2">
                 <span className="text-base font-medium text-gray-primary">Proposta:</span>
 
-                <span className="text-base text-left text-gray-primary">{offer.details}</span>
+                <span className="text-base text-left text-gray-primary whitespace-pre-wrap break-all">
+                  {offer.details}
+                </span>
               </div>
 
               <div className="w-full flex gap-2">

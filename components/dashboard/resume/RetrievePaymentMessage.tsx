@@ -7,10 +7,10 @@ import { retrievePaymentModalInfo } from "@/constants/dashboard/resume-br";
 import { newRequestMessageAnimation } from "@/constants/framer-animations/new-request-modal";
 import { Button } from "@/components/ui/button";
 import useRetrievePaymentModalStore from "@/stores/useRetrievePaymentModalStore";
+import { useRouter } from "next/navigation";
 
 export function RetrievePaymentMessage() {
-  const { closeModal, setIsForm, setIsMessage } =
-    useRetrievePaymentModalStore();
+  const { closeModal, setIsForm, setIsMessage } = useRetrievePaymentModalStore();
 
   function handleClose() {
     closeModal();
@@ -18,6 +18,7 @@ export function RetrievePaymentMessage() {
 
     setTimeout(() => {
       setIsMessage(false);
+      location.reload();
     }, 350);
   }
 
@@ -25,12 +26,7 @@ export function RetrievePaymentMessage() {
     <>
       <div className="w-full flex flex-col items-center">
         <div className="relative w-36 h-36 mb-9">
-          <Image
-            src="/assets/icons/confirm.gif"
-            alt="Confirmado"
-            fill
-            className="object-cover"
-          />
+          <Image src="/assets/icons/confirm.gif" alt="Confirmado" fill className="object-cover" />
         </div>
 
         <motion.h4

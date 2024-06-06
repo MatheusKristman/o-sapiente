@@ -72,11 +72,7 @@ export async function PUT(req: Request) {
         },
       });
 
-      if (
-        requests.filter(
-          (request: RequestWithUsersAndOffers) => request.id === requestId
-        ).length === 0
-      ) {
+      if (requests.filter((request: RequestWithUsersAndOffers) => request.id === requestId).length === 0) {
         return new Response("Solicitação inválida", {
           status: 401,
         });
@@ -135,14 +131,9 @@ export async function PUT(req: Request) {
       });
     }
 
-    const requestFiltered = requests.filter(
-      (request) => request.id === requestId
-    )[0];
+    const requestFiltered = requests.filter((request) => request.id === requestId)[0];
 
-    if (
-      requestFiltered.usersIdsVotedToFinish.length === 2 ||
-      requestFiltered.isConcluded
-    ) {
+    if (requestFiltered.usersIdsVotedToFinish.length === 2 || requestFiltered.isConcluded) {
       return new Response("Solicitação já foi finalizada", {
         status: 401,
       });
@@ -154,14 +145,8 @@ export async function PUT(req: Request) {
       },
       data: {
         isConcluded: requestFiltered.usersIdsVotedToFinish.length === 1,
-        status:
-          requestFiltered.usersIdsVotedToFinish.length === 1
-            ? Status.finished
-            : Status.finishing,
-        finishLessonDate:
-          requestFiltered.usersIdsVotedToFinish.length === 1
-            ? new Date()
-            : null,
+        status: requestFiltered.usersIdsVotedToFinish.length === 1 ? Status.finished : Status.finishing,
+        finishLessonDate: requestFiltered.usersIdsVotedToFinish.length === 1 ? new Date() : null,
         usersVotedToFinish: {
           connect: {
             id: currentUser.id,
@@ -222,19 +207,14 @@ export async function PUT(req: Request) {
 
     newRequests.push(requestUpdated);
 
-    const otherUser = requestUpdated.users.filter(
-      (user) => user.id !== currentUser.id
-    )[0];
+    const otherUser = requestUpdated.users.filter((user) => user.id !== currentUser.id)[0];
 
     if (requestFiltered.usersIdsVotedToFinish.length === 1) {
-      const professor = requestUpdated.users.filter(
-        (user) => user.accountType === AccountRole.PROFESSOR
-      )[0];
+      const professor = requestUpdated.users.filter((user) => user.accountType === AccountRole.PROFESSOR)[0];
       let payment: number;
 
       if (requestUpdated.certificateRequested) {
-        payment =
-          professor.paymentRetrievable + (requestUpdated.lessonPrice! + 20);
+        payment = professor.paymentRetrievable + (requestUpdated.lessonPrice! + 20);
       } else {
         payment = professor.paymentRetrievable + requestUpdated.lessonPrice!;
       }
@@ -249,15 +229,11 @@ export async function PUT(req: Request) {
       });
 
       if (!professorUpdated) {
-        return new Response(
-          "Ocorreu um erro ao enviar o valor para o professor",
-          { status: 401 }
-        );
+        return new Response("Ocorreu um erro ao enviar o valor para o professor", { status: 401 });
       }
     }
 
     if (requestFiltered.usersIdsVotedToFinish.length === 0) {
-
       const transport = nodemailer.createTransport({
         host: emailHost,
         port: emailPort,
@@ -266,11 +242,16 @@ export async function PUT(req: Request) {
           pass: emailPass,
         },
       });
+      const baseUrl =
+        process.env.NODE_ENV === "development"
+          ? process.env.NEXT_PUBLIC_BASEURL_DEV!
+          : process.env.NEXT_PUBLIC_BASEURL!;
 
       const emailHtml = render(
         EmailFinishingLessonNotification({
           name: `${otherUser.firstName} ${otherUser.lastName}`,
           otherUserName: `${currentUser.firstName} ${currentUser.lastName}`,
+          baseUrl,
         })
       );
 

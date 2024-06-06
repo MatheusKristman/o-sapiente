@@ -14,29 +14,11 @@ export async function POST(req: Request) {
     const emailPass: string = process.env.EMAIL_PASS!;
     const emailPort: number = Number(process.env.EMAIL_PORT!);
     const body = await req.json();
-    const {
-      firstName,
-      lastName,
-      email,
-      tel,
-      password,
-      passwordConfirm,
-      accountType,
-    } = body;
+    const { firstName, lastName, email, tel, password, passwordConfirm, accountType } = body;
     const baseUrl =
-      process.env.NODE_ENV === "development"
-        ? process.env.NEXT_PUBLIC_BASEURL_DEV
-        : process.env.NEXT_PUBLIC_BASEURL;
+      process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_BASEURL_DEV : process.env.NEXT_PUBLIC_BASEURL;
 
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !tel ||
-      !password ||
-      !passwordConfirm ||
-      !accountType
-    ) {
+    if (!firstName || !lastName || !email || !tel || !password || !passwordConfirm || !accountType) {
       return new NextResponse("Dados inválidos, verifique e tente novamente", {
         status: 401,
       });
@@ -55,10 +37,7 @@ export async function POST(req: Request) {
     }
 
     if (password !== passwordConfirm) {
-      return new NextResponse(
-        "Senhas não coincidem, verifique e tente novamente",
-        { status: 401 }
-      );
+      return new NextResponse("Senhas não coincidem, verifique e tente novamente", { status: 401 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -83,8 +62,8 @@ export async function POST(req: Request) {
           password: hashedPassword,
           accountType: AccountRole.ADMIN,
           isConfirmed: true,
-        }
-      })
+        },
+      });
     }
 
     if (accountType === "Student") {
@@ -104,7 +83,11 @@ export async function POST(req: Request) {
           data: {
             subject: body.subject,
             description: body.description,
-            userIds: [user.id],
+            users: {
+              connect: {
+                id: user.id,
+              },
+            },
           },
         });
       }
@@ -112,7 +95,7 @@ export async function POST(req: Request) {
       const emailHtml = render(
         EmailConfirmAccount({
           userName: `${user.firstName} ${user.lastName}`,
-          url: `${baseUrl}/?id=${user.id}&confirmed=true&type=student`
+          url: `${baseUrl}/?id=${user.id}&confirmed=true&type=student`,
         })
       );
 
@@ -127,12 +110,9 @@ export async function POST(req: Request) {
         if (error) {
           console.log("[ERROR_ON_CONFIRMATION_ACCOUNT_EMAIL]", error);
 
-          return new NextResponse(
-            "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-            {
-              status: 400,
-            }
-          );
+          return new NextResponse("Ocorreu um erro no envio do e-mail de confirmação da sua conta", {
+            status: 400,
+          });
         }
       });
     }
@@ -152,7 +132,7 @@ export async function POST(req: Request) {
       const emailHtml = render(
         EmailConfirmAccount({
           userName: `${user.firstName} ${user.lastName}`,
-          url: `${baseUrl}/?id=${user.id}&confirmed=true&type=professor`
+          url: `${baseUrl}/?id=${user.id}&confirmed=true&type=professor`,
         })
       );
 
@@ -167,33 +147,24 @@ export async function POST(req: Request) {
         if (error) {
           console.log("[ERROR_ON_CONFIRMATION_ACCOUNT_EMAIL]", error);
 
-          return new NextResponse(
-            "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-            {
-              status: 400,
-            }
-          );
+          return new NextResponse("Ocorreu um erro no envio do e-mail de confirmação da sua conta", {
+            status: 400,
+          });
         }
       });
     }
 
     if (!user) {
-      return new NextResponse(
-        "Ocorreu um erro durante a criação da conta, tente novamente",
-        {
-          status: 400,
-        }
-      );
+      return new NextResponse("Ocorreu um erro durante a criação da conta, tente novamente", {
+        status: 400,
+      });
     }
 
     return NextResponse.json({ id: user.id });
   } catch (error: any) {
     console.log("[ERROR_PROFESSOR_PRE_REGISTER]", error);
-    return new NextResponse(
-      "Ocorreu um erro durante o cadastro, tente novamente!",
-      {
-        status: 400,
-      }
-    );
+    return new NextResponse("Ocorreu um erro durante o cadastro, tente novamente!", {
+      status: 400,
+    });
   }
 }

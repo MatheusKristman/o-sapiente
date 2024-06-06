@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChangeEvent, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
@@ -21,6 +22,13 @@ const retrievePaymentSchema = z.object({
 });
 
 export function RetrievePaymentForm() {
+  const [pixValue, setPixValue] = useState<string>("");
+  const [pixEditValue, setPixEditValue] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isPixValueError, setPixValueError] = useState<boolean>(false);
+  const [isPixEditValueError, setPixEditValueError] = useState<boolean>(false);
+  const [isPasswordError, setPasswordError] = useState<boolean>(false);
+
   const { setIsForm, setIsMessage, pixCode, setPixCode, isEditing, setIsEditing, isSubmitting, setIsSubmitting } =
     useRetrievePaymentModalStore();
 
@@ -33,21 +41,47 @@ export function RetrievePaymentForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof retrievePaymentSchema>) {
+  function onSubmit() {
+    let pixError: boolean;
+    let pixEditError: boolean;
+    let passwordError: boolean;
     setIsSubmitting(true);
 
     if (isEditing) {
+      if (pixEditValue.length < 11) {
+        pixEditError = true;
+      } else {
+        pixEditError = false;
+      }
+
+      if (password.length === 0) {
+        passwordError = true;
+      } else {
+        passwordError = false;
+      }
+
+      setPixEditValueError(pixEditError);
+      setPasswordError(passwordError);
+
+      if (pixEditError || passwordError) {
+        setIsSubmitting(false);
+        return;
+      }
+
       axios
-        .post("/api/request/retrieve-payment-auth", values)
+        .post("/api/request/retrieve-payment-auth", { password })
         .then(() => {
           setIsEditing(false);
 
           axios
-            .post("/api/user/retrieve-payment", { pixCode: values.pixValue })
+            .post("/api/user/retrieve-payment", { pixCode: pixEditValue })
             .then((res) => {
               setPixCode(res.data.pixCode);
               setIsForm(false);
               setIsEditing(false);
+
+              setPixEditValue("");
+              setPassword("");
 
               setTimeout(() => {
                 setIsMessage(true);
@@ -70,8 +104,21 @@ export function RetrievePaymentForm() {
         });
     }
 
+    if (pixValue.length < 11) {
+      pixError = true;
+    } else {
+      pixError = false;
+    }
+
+    setPixValueError(pixError);
+
+    if (pixError) {
+      setIsSubmitting(false);
+      return;
+    }
+
     axios
-      .post("/api/user/retrieve-payment", { pixCode: values.pixValue })
+      .post("/api/user/retrieve-payment", { pixCode: pixValue })
       .then((res) => {
         setPixCode(res.data.pixCode);
         setIsForm(false);
@@ -92,26 +139,27 @@ export function RetrievePaymentForm() {
   }
 
   function RetrievePaymentWithSavedPix() {
-    setIsSubmitting(true);
+    console.log("executando");
+    // setIsSubmitting(true);
 
-    axios
-      .post("/api/user/retrieve-payment", { pixCode })
-      .then((res) => {
-        setPixCode(res.data.pixCode);
-        setIsForm(false);
+    // axios
+    //   .post("/api/user/retrieve-payment", { pixCode })
+    //   .then((res) => {
+    //     setPixCode(res.data.pixCode);
+    //     setIsForm(false);
 
-        setTimeout(() => {
-          setIsMessage(true);
-        }, 350);
-      })
-      .catch((error) => {
-        console.error(error);
+    //     setTimeout(() => {
+    //       setIsMessage(true);
+    //     }, 350);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
 
-        toast.error(error.response.data);
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
+    //     toast.error(error.response.data);
+    //   })
+    //   .finally(() => {
+    //     setIsSubmitting(false);
+    //   });
   }
 
   return (
@@ -156,91 +204,74 @@ export function RetrievePaymentForm() {
         </div>
 
         {isEditing ? (
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="pixValue"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        disabled={isSubmitting}
-                        className="input"
-                        placeholder={retrievePaymentModalInfo.inputPlaceholder}
-                        {...field}
-                      />
-                    </FormControl>
-
-                    <FormMessage className="text-sm text-[#FF7373] font-medium" />
-                  </FormItem>
-                )}
+          <div className="w-full flex flex-col gap-4">
+            <div className="w-full flex flex-col gap-1">
+              <Input
+                disabled={isSubmitting}
+                className="input"
+                value={pixEditValue}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPixEditValue(e.target.value)}
+                placeholder={retrievePaymentModalInfo.inputPlaceholder}
               />
 
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        disabled={isSubmitting}
-                        className="input"
-                        placeholder={retrievePaymentModalInfo.passwordPlaceholder}
-                        {...field}
-                      />
-                    </FormControl>
+              {isPixEditValueError && (
+                <span className="text-sm text-[#FF7373] font-medium">
+                  Código do Pix inválido, verifique e tente novamente
+                </span>
+              )}
+            </div>
 
-                    <FormMessage className="text-sm text-[#FF7373] font-medium" />
-                  </FormItem>
-                )}
+            <div className="w-full flex flex-col gap-1">
+              <Input
+                disabled={isSubmitting}
+                className="input"
+                type="password"
+                value={password}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                placeholder={retrievePaymentModalInfo.passwordPlaceholder}
               />
 
-              <Button disabled={isSubmitting} type="submit">
-                {retrievePaymentModalInfo.passwordBtn}
-              </Button>
-            </form>
-          </Form>
+              {isPasswordError && <span className="text-sm text-[#FF7373] font-medium">Senha é obrigatória</span>}
+            </div>
+
+            <Button onClick={onSubmit} disabled={isSubmitting}>
+              {retrievePaymentModalInfo.btn}
+            </Button>
+          </div>
         ) : !isEditing && pixCode ? (
           <Button disabled={isSubmitting} onClick={RetrievePaymentWithSavedPix}>
             {retrievePaymentModalInfo.btn}
           </Button>
         ) : (
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="pixValue"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        disabled={isSubmitting}
-                        className="input"
-                        placeholder={retrievePaymentModalInfo.inputPlaceholder}
-                        {...field}
-                      />
-                    </FormControl>
-
-                    <FormMessage className="text-sm text-[#FF7373] font-medium" />
-                  </FormItem>
-                )}
+          <div className="w-full flex flex-col gap-4">
+            <div className="w-full flex flex-col gap-1">
+              <Input
+                disabled={isSubmitting}
+                className="input"
+                value={pixValue}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPixValue(e.target.value)}
+                placeholder={retrievePaymentModalInfo.inputPlaceholder}
               />
 
-              <Button disabled={isSubmitting} type="submit" className="mb-4">
-                {retrievePaymentModalInfo.btn}
-              </Button>
+              {isPixValueError && (
+                <span className="text-sm text-[#FF7373] font-medium">
+                  Código do Pix inválido, verifique e tente novamente
+                </span>
+              )}
+            </div>
 
-              <div className="w-full flex flex-col gap-2">
-                {retrievePaymentModalInfo.disclaimer.map((text, index) => (
-                  <span key={`p-${index}`} className="w-full text-center text-sm text-gray-primary/50">
-                    {text}
-                  </span>
-                ))}
-              </div>
-            </form>
-          </Form>
+            <Button onClick={onSubmit} disabled={isSubmitting}>
+              {retrievePaymentModalInfo.btn}
+            </Button>
+
+            <div className="w-full flex flex-col gap-2">
+              {retrievePaymentModalInfo.disclaimer.map((text, index) => (
+                <span key={`p-${index}`} className="w-full text-center text-sm text-gray-primary/50">
+                  {text}
+                </span>
+              ))}
+            </div>
+          </div>
         )}
       </motion.div>
     </>
