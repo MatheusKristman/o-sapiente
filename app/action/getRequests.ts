@@ -18,8 +18,6 @@ const getRequests = async () => {
     });
 
     if (teacherUser) {
-      console.log("ID: ", currentUser.id);
-
       const request = await prisma.request.findMany({
         where: {
           users: {
@@ -72,8 +70,6 @@ const getRequests = async () => {
           },
         },
       });
-
-      console.log("Requests: ", request);
 
       if (request) {
         return request;

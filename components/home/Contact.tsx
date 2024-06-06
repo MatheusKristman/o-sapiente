@@ -49,7 +49,7 @@ const Contact = () => {
         form.reset({ name: "", email: "", message: "" });
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         toast.error("Ocorreu um erro ao enviar a mensagem");
       })
       .finally(() => setIsSending(false));

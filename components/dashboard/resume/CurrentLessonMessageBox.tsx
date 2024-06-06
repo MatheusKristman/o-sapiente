@@ -25,7 +25,6 @@ const CurrentLessonMessageBox = ({ lesson, last }: CurrentLessonMessageBoxProps)
   const filteredUser = lesson.users.filter((user) => user.id !== userId)[0];
 
   function handleOpenCurrentLessonModal() {
-    console.log(lesson);
     setLesson(lesson);
     openModal();
   }
