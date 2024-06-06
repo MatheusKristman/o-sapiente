@@ -7,6 +7,7 @@ import EmailProfessorPlanPayed from "@/emails/EmailProfessorPlanPayed";
 
 interface IGenerateEmailOptions {
   emailUser: string;
+  emailToSend: string;
   userName: string;
   planActivationDate: Date;
   planValidationDate: Date;
@@ -14,6 +15,7 @@ interface IGenerateEmailOptions {
 
 function generateEmailOptions({
   emailUser,
+  emailToSend,
   userName,
   planActivationDate,
   planValidationDate,
@@ -28,7 +30,7 @@ function generateEmailOptions({
 
   return {
     from: emailUser,
-    to: emailUser,
+    to: emailToSend,
     subject: "Pagamento do plano confirmado - O Sapiente",
     html: emailHtml,
   };
@@ -54,10 +56,7 @@ export async function POST(req: Request) {
       });
 
       if (!plan) {
-        return new Response(
-          "Ocorreu um erro na aprovação do pagamento do plano",
-          { status: 401 }
-        );
+        return new Response("Ocorreu um erro na aprovação do pagamento do plano", { status: 401 });
       }
 
       const userUpdated = await prisma.user.update({
@@ -76,10 +75,7 @@ export async function POST(req: Request) {
       });
 
       if (!userUpdated) {
-        return new Response(
-          "Ocorreu um erro ao achar o professor dentro do webhook do plano",
-          { status: 404 }
-        );
+        return new Response("Ocorreu um erro ao achar o professor dentro do webhook do plano", { status: 404 });
       }
 
       const transport = nodemailer.createTransport({
@@ -93,6 +89,7 @@ export async function POST(req: Request) {
 
       const options = generateEmailOptions({
         emailUser,
+        emailToSend: userUpdated.email,
         userName: `${userUpdated.firstName} ${userUpdated.lastName}`,
         planActivationDate: userUpdated.planActivationDate!,
         planValidationDate: userUpdated.planValidationDate!,
@@ -102,22 +99,16 @@ export async function POST(req: Request) {
         if (error) {
           console.log("[ERROR_WEBHOOK_PLAN]", error);
 
-          return new Response(
-            "Ocorreu um erro no envio do e-mail de confirmação de pagamento do plano",
-            {
-              status: 400,
-            }
-          );
+          return new Response("Ocorreu um erro no envio do e-mail de confirmação de pagamento do plano", {
+            status: 400,
+          });
         }
       });
 
       return new Response("Webhook de planos executado com sucesso", { status: 200 });
     }
 
-    if (
-      body.type === "order.payment_failed" ||
-      body.type === "order.canceled"
-    ) {
+    if (body.type === "order.payment_failed" || body.type === "order.canceled") {
       const customerId: string = body.data.customer.code;
 
       const userUpdated = await prisma.user.update({
