@@ -61,13 +61,16 @@ export const authOptions: AuthOptions = {
             },
           });
 
-          const userType = user.accountType === AccountRole.PROFESSOR ? "professor" : "student";
+          const userType =
+            user.accountType === AccountRole.PROFESSOR
+              ? "professor"
+              : "student";
 
           const emailHtml = render(
             EmailConfirmAccount({
               userName: `${user.firstName} ${user.lastName}`,
-              url: `${baseUrl}/?id=${user.id}&confirmed=true&type=${userType}`
-            })
+              url: `${baseUrl}/?id=${user.id}&confirmed=true&type=${userType}`,
+            }),
           );
 
           const options = {
@@ -77,13 +80,7 @@ export const authOptions: AuthOptions = {
             html: emailHtml,
           };
 
-          transport.sendMail(options, (error) => {
-            if (error) {
-              console.log("[ERROR_ON_CONFIRMATION_ACCOUNT_EMAIL]", error);
-
-              return new Response("Ocorreu um erro ao enviar o e-mail de confirmação da sua conta", { status: 400 })
-            }
-          });
+          await transport.sendMail(options);
 
           throw new Error(
             "Cadastro não confirmado, verifique seu e-mail e confirme sua conta",

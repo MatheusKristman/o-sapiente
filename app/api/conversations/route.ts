@@ -37,7 +37,7 @@ function generateEmailOptions({
       studentContact,
       professorName,
       professorContact,
-    })
+    }),
   );
 
   return {
@@ -148,7 +148,7 @@ export async function POST(request: Request) {
           pusherServer.trigger(
             user.email,
             "conversation:new",
-            singleConversation
+            singleConversation,
           );
         }
       });
@@ -164,18 +164,7 @@ export async function POST(request: Request) {
         professorContact: request.users[1].tel!,
       });
 
-      transport.sendMail(options, (error) => {
-        if (error) {
-          console.log("[ERROR_ON_CONVERSATION]", error);
-
-          return new Response(
-            "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-            {
-              status: 400,
-            }
-          );
-        }
-      });
+      await transport.sendMail(options);
 
       return Response.json({ id: singleConversation.id });
     }
@@ -257,18 +246,7 @@ export async function POST(request: Request) {
       professorContact: requestUpdated.users[1].tel!,
     });
 
-    transport.sendMail(options, (error) => {
-      if (error) {
-        console.log("[ERROR_ON_CONVERSATION]", error);
-
-        return new Response(
-          "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-          {
-            status: 400,
-          }
-        );
-      }
-    });
+    await transport.sendMail(options);
 
     return Response.json({ id: newConversation.id });
   } catch (error) {

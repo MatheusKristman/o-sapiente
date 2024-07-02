@@ -52,7 +52,9 @@ export async function POST(req: Request) {
     });
 
     if (conversations.length > 0) {
-      const conversationIds = conversations.map((conversation) => conversation.id);
+      const conversationIds = conversations.map(
+        (conversation) => conversation.id,
+      );
 
       const messages = await prisma.message.findMany({
         where: {
@@ -106,7 +108,7 @@ export async function POST(req: Request) {
       const emailHtml = render(
         EmailRequestDeleted({
           userName: `${userSelected.firstName} ${userSelected.lastName}`,
-        })
+        }),
       );
 
       const options = {
@@ -116,15 +118,7 @@ export async function POST(req: Request) {
         html: emailHtml,
       };
 
-      transport.sendMail(options, (error) => {
-        if (error) {
-          console.log("[ERROR_ON_ADMIN_REQUEST_DELETED_EMAIL]", error);
-
-          return new Response("Ocorreu um erro no envio do e-mail sobre a remoção da solicitação do usuário", {
-            status: 400,
-          });
-        }
-      });
+      await transport.sendMail(options);
     }
 
     if (userSelected.accountType === AccountRole.PROFESSOR) {
@@ -181,7 +175,7 @@ export async function POST(req: Request) {
       EmailUserBaned({
         userName: `${deletedUser.firstName} ${deletedUser.lastName}`,
         banDate: new Date(),
-      })
+      }),
     );
 
     const options = {
@@ -191,15 +185,7 @@ export async function POST(req: Request) {
       html: emailHtml,
     };
 
-    transport.sendMail(options, (error) => {
-      if (error) {
-        console.log("[ERROR_ON_ADMIN_BAN_USER_EMAIL]", error);
-
-        return new Response("Ocorreu um erro no envio do e-mail sobre o banimento da conta do usuário", {
-          status: 400,
-        });
-      }
-    });
+    await transport.sendMail(options);
 
     const users = await prisma.user.findMany({
       where: {

@@ -32,18 +32,7 @@ export async function POST(req: Request) {
       html: emailHtml,
     };
 
-    transport.sendMail(options, (error) => {
-      if (error) {
-        console.log("[ERROR_ON_CONVERSATION]", error);
-
-        return new Response(
-          "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-          {
-            status: 400,
-          },
-        );
-      }
-    });
+    await transport.sendMail(options);
 
     return Response.json(
       { message: "Mensagem enviada para o suporte, aguarde o contato" },

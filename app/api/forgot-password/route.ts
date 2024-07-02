@@ -55,7 +55,7 @@ export async function POST(req: Request) {
         url: `${baseUrl}?id=${user.id}&recover-password=${user.passwordRecoverRequested}&recover-date=${user.passwordRecoverDate}`,
         userName: `${user.firstName} ${user.lastName}`,
         hoursLeft: user.passwordRecoverDate!,
-      })
+      }),
     );
 
     const options = {
@@ -65,22 +65,11 @@ export async function POST(req: Request) {
       html: emailHtml,
     };
 
-    transport.sendMail(options, (error) => {
-      if (error) {
-        console.log("[ERROR_ON_FORGOT_PASSWORD]", error);
-
-        return new Response(
-          "Ocorreu um erro no envio do e-mail de solicitação de troca da senha",
-          {
-            status: 400,
-          }
-        );
-      }
-    });
+    await transport.sendMail(options);
 
     return Response.json(
       { message: "E-mail enviado para recuperar a senha" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.log("[ERROR_ON_FORGOT_PASSWORD]", error);

@@ -93,18 +93,7 @@ export async function POST(req: Request) {
       html: emailHtml,
     };
 
-    transport.sendMail(options, (error) => {
-      if (error) {
-        console.log("[ERROR_ON_ADMIN_REQUEST_DELETED_EMAIL]", error);
-
-        return new Response(
-          "Ocorreu um erro no envio do e-mail sobre a remoção da solicitação do usuário",
-          {
-            status: 400,
-          },
-        );
-      }
-    });
+    await transport.sendMail(options);
 
     const newRequests = await prisma.request.findMany({
       include: { users: true },

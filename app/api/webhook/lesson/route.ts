@@ -36,7 +36,7 @@ function generateEmailOptions({
       studentContact,
       professorName,
       professorContact,
-    })
+    }),
   );
 
   return {
@@ -151,16 +151,16 @@ export async function POST(req: Request) {
             pusherServer.trigger(
               user.email,
               "conversation:new",
-              singleConversation
+              singleConversation,
             );
           }
         });
 
         const student = request.users.filter(
-          (user) => user.accountType === AccountRole.STUDENT
+          (user) => user.accountType === AccountRole.STUDENT,
         )[0];
         const professor = request.users.filter(
-          (user) => user.accountType === AccountRole.PROFESSOR
+          (user) => user.accountType === AccountRole.PROFESSOR,
         )[0];
 
         const options = generateEmailOptions({
@@ -174,18 +174,7 @@ export async function POST(req: Request) {
           professorContact: professor.tel!,
         });
 
-        transport.sendMail(options, (error) => {
-          if (error) {
-            console.log("[ERROR_ON_CONVERSATION]", error);
-
-            return new Response(
-              "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-              {
-                status: 400,
-              }
-            );
-          }
-        });
+        await transport.sendMail(options);
 
         return new Response("Webhook de pagamento da aula confirmado.", {
           status: 200,
@@ -261,10 +250,10 @@ export async function POST(req: Request) {
       });
 
       const student = requestUpdated.users.filter(
-        (user) => user.accountType === AccountRole.STUDENT
+        (user) => user.accountType === AccountRole.STUDENT,
       )[0];
       const professor = requestUpdated.users.filter(
-        (user) => user.accountType === AccountRole.PROFESSOR
+        (user) => user.accountType === AccountRole.PROFESSOR,
       )[0];
 
       const options = generateEmailOptions({
@@ -278,18 +267,7 @@ export async function POST(req: Request) {
         professorContact: professor.tel!,
       });
 
-      transport.sendMail(options, (error) => {
-        if (error) {
-          console.log("[ERROR_ON_CONVERSATION]", error);
-
-          return new Response(
-            "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-            {
-              status: 400,
-            }
-          );
-        }
-      });
+      await transport.sendMail(options);
 
       return new Response("Webhook de pagamento da aula confirmado.", {
         status: 200,
@@ -337,7 +315,9 @@ export async function POST(req: Request) {
       return new Response("Webhook de pagamento negado", { status: 200 });
     }
 
-    return new Response("Webhook de pagamento executado, sem evento", { status: 200 });
+    return new Response("Webhook de pagamento executado, sem evento", {
+      status: 200,
+    });
   } catch (error) {
     console.log("[ERROR_ON_WEBHOOK]", error);
 

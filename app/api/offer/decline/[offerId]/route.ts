@@ -98,15 +98,7 @@ export async function PUT(
       subject: offer.request.subject,
     });
 
-    transport.sendMail(options, (error) => {
-      if (error) {
-        console.log("[ERROR_DECLINE_OFFER]", error);
-
-        return new Response("Ocorreu um erro no envio do e-mail", {
-          status: 400,
-        });
-      }
-    });
+    await transport.sendMail(options);
 
     await prisma.offer.delete({
       where: {

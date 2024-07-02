@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
@@ -54,8 +53,8 @@ export async function PATCH(req: NextRequest) {
     const emailHtml = render(
       EmailConfirmAccount({
         userName: `${updatedProfessor.firstName} ${updatedProfessor.lastName}`,
-        url: `${baseUrl}/?id=${updatedProfessor.id}&confirmed=true&type=professor`
-      })
+        url: `${baseUrl}/?id=${updatedProfessor.id}&confirmed=true&type=professor`,
+      }),
     );
 
     const options = {
@@ -65,18 +64,7 @@ export async function PATCH(req: NextRequest) {
       html: emailHtml,
     };
 
-    transport.sendMail(options, (error) => {
-      if (error) {
-        console.log("[ERROR_ON_CONFIRMATION_ACCOUNT_EMAIL]", error);
-
-        return new NextResponse(
-          "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-          {
-            status: 400,
-          }
-        );
-      }
-    });
+    await transport.sendMail(options);
 
     return NextResponse.json({
       firstName: updatedProfessor.firstName,

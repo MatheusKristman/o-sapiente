@@ -52,7 +52,7 @@ export async function POST(req: Request) {
         professorName: `${currentUser.firstName} ${currentUser.lastName}`,
         professorEmail: currentUser.email,
         professorCel: currentUser.tel!,
-      })
+      }),
     );
 
     const options = {
@@ -62,18 +62,7 @@ export async function POST(req: Request) {
       html: emailHtml,
     };
 
-    transport.sendMail(options, (error) => {
-      if (error) {
-        console.log("[ERROR_RETRIEVE_PAYMENT]", error);
-
-        return new Response(
-          "Ocorreu um erro no envio do e-mail de solicitação de resgate",
-          {
-            status: 400,
-          }
-        );
-      }
-    });
+    await transport.sendMail(options);
 
     return Response.json({ pixCode }, { status: 200 });
   } catch (error) {

@@ -90,18 +90,7 @@ export async function POST(
       html: emailHtml,
     };
 
-    transport.sendMail(options, (error) => {
-      if (error) {
-        console.log("[ERROR_ON_CONVERSATION]", error);
-
-        return new Response(
-          "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-          {
-            status: 400,
-          },
-        );
-      }
-    });
+    await transport.sendMail(options);
 
     if (currentUser.accountType === AccountRole.PROFESSOR) {
       requests = await prisma.request.findMany({
