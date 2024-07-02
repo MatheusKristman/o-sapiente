@@ -127,18 +127,7 @@ export async function POST(req: Request) {
         html: emailHtml,
       };
 
-      transport.sendMail(options, (error) => {
-        if (error) {
-          console.log("[ERROR_ON_CONFIRMATION_ACCOUNT_EMAIL]", error);
-
-          return new NextResponse(
-            "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-            {
-              status: 400,
-            },
-          );
-        }
-      });
+      await transport.sendMail(options);
 
       console.log(emailUser);
       console.log(emailPass);
@@ -171,18 +160,7 @@ export async function POST(req: Request) {
         html: emailHtml,
       };
 
-      transport.sendMail(options, (error) => {
-        if (error) {
-          console.log("[ERROR_ON_CONFIRMATION_ACCOUNT_EMAIL]", error);
-
-          return new NextResponse(
-            "Ocorreu um erro no envio do e-mail de confirmação da sua conta",
-            {
-              status: 400,
-            },
-          );
-        }
-      });
+      await transport.sendMail(options);
 
       console.log(emailUser);
       console.log(emailPass);
