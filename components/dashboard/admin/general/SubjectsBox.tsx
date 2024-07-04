@@ -8,7 +8,12 @@ import { useSession } from "next-auth/react";
 import { Input } from "@/components/ui/input";
 import { AdminGeneralText } from "@/constants/dashboard/admin-general-br";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import useAdminSubjectsModalStore from "@/stores/useAdminSubjectsModalStore";
 import useAdminStore from "@/stores/useAdminStore";
 import useUserStore from "@/stores/useUserStore";
@@ -21,8 +26,10 @@ export function SubjectsBox() {
   const [subjectsLoading, setSubjectsLoading] = useState<boolean>(false);
 
   const { openModal } = useAdminSubjectsModalStore();
-  const { setSubjectSelected, openModal: openEditModal } = useAdminSubjectsEditModalStore();
-  const { setSubjectId, openModal: openDeleteModal } = useAdminSubjectsDeleteModalStore();
+  const { setSubjectSelected, openModal: openEditModal } =
+    useAdminSubjectsEditModalStore();
+  const { setSubjectId, openModal: openDeleteModal } =
+    useAdminSubjectsDeleteModalStore();
   const { setSubjects, subjects } = useAdminStore();
   const { userId } = useUserStore();
   const session = useSession();
@@ -68,7 +75,9 @@ export function SubjectsBox() {
               type="text"
               name="filter"
               value={subjectFilter}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setSubjectFilter(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSubjectFilter(e.target.value)
+              }
               placeholder={AdminGeneralText.requestsPlaceholder}
               className="bg-transparent outline-none w-full"
             />
@@ -104,12 +113,14 @@ export function SubjectsBox() {
                     subjectFilter
                       .toLowerCase()
                       .normalize("NFD")
-                      .replace(/[\u0300-\u036f]/g, "")
-                  )
+                      .replace(/[\u0300-\u036f]/g, ""),
+                  ),
               )
               .map((subject) => (
                 <AccordionItem key={subject.id} value={subject.id}>
-                  <AccordionTrigger className="text-gray-primary text-lg text-left">{subject.main}</AccordionTrigger>
+                  <AccordionTrigger className="text-gray-primary text-lg text-left">
+                    {subject.main}
+                  </AccordionTrigger>
 
                   <AccordionContent>
                     <div className="w-full flex flex-col gap-6">
@@ -131,11 +142,18 @@ export function SubjectsBox() {
                       </div>
 
                       <div className="w-full flex flex-col sm:flex-row gap-2">
-                        <Button onClick={() => handleEdit(subject)} className="w-full">
+                        <Button
+                          onClick={() => handleEdit(subject)}
+                          className="w-full"
+                        >
                           {AdminGeneralText.subjectsEditBtn}
                         </Button>
 
-                        <Button onClick={() => handleDelete(subject.id)} variant="destructive" className="w-full">
+                        <Button
+                          onClick={() => handleDelete(subject.id)}
+                          variant="destructive"
+                          className="w-full"
+                        >
                           {AdminGeneralText.subjectsDeleteBtn}
                         </Button>
                       </div>
@@ -148,7 +166,9 @@ export function SubjectsBox() {
           <Accordion type="single" collapsible>
             {subjects.map((subject) => (
               <AccordionItem key={subject.id} value={subject.id}>
-                <AccordionTrigger className="text-gray-primary text-lg text-left">{subject.main}</AccordionTrigger>
+                <AccordionTrigger className="text-gray-primary text-lg text-left">
+                  {subject.main}
+                </AccordionTrigger>
 
                 <AccordionContent>
                   <div className="w-full flex flex-col gap-6">
@@ -170,11 +190,18 @@ export function SubjectsBox() {
                     </div>
 
                     <div className="w-full flex flex-col sm:flex-row gap-2">
-                      <Button onClick={() => handleEdit(subject)} className="w-full">
+                      <Button
+                        onClick={() => handleEdit(subject)}
+                        className="w-full"
+                      >
                         {AdminGeneralText.subjectsEditBtn}
                       </Button>
 
-                      <Button onClick={() => handleDelete(subject.id)} variant="destructive" className="w-full">
+                      <Button
+                        onClick={() => handleDelete(subject.id)}
+                        variant="destructive"
+                        className="w-full"
+                      >
                         {AdminGeneralText.subjectsDeleteBtn}
                       </Button>
                     </div>
@@ -186,7 +213,7 @@ export function SubjectsBox() {
         )
       ) : (
         <div className="mt-6 flex items-center justify-center">
-          <span className="text-gray-primary/70 text-center font-medium text-base">
+          <span className="text-gray-primary/70 text-center font-medium text-lg">
             {AdminGeneralText.subjectsNotFound}
           </span>
         </div>
