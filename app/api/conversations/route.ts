@@ -37,7 +37,7 @@ function generateEmailOptions({
       studentContact,
       professorName,
       professorContact,
-    }),
+    })
   );
 
   return {
@@ -56,13 +56,7 @@ export async function POST(request: Request) {
     const emailPort: number = Number(process.env.EMAIL_PORT!);
     const currentUser = await getCurrentUser();
     const body = await request.json();
-    const {
-      otherUserId,
-      requestId,
-      lessonDate,
-      lessonPrice,
-      certificateRequested,
-    } = body;
+    const { otherUserId, requestId, lessonDate, lessonPrice, certificateRequested } = body;
 
     if (!currentUser?.id || !currentUser?.email) {
       return new Response("Não autorizado", { status: 400 });
@@ -145,11 +139,7 @@ export async function POST(request: Request) {
 
       singleConversation.users.map((user) => {
         if (user.email) {
-          pusherServer.trigger(
-            user.email,
-            "conversation:new",
-            singleConversation,
-          );
+          pusherServer.trigger(user.email, "conversation:new", singleConversation);
         }
       });
 
@@ -165,6 +155,15 @@ export async function POST(request: Request) {
       });
 
       await transport.sendMail(options);
+      transport.sendMail(options, (error) => {
+        if (error) {
+          console.log("[ERROR_ON_CONVERSATION]", error);
+
+          return new Response("Ocorreu um erro no envio do e-mail de criação da conversa", {
+            status: 400,
+          });
+        }
+      });
 
       return Response.json({ id: singleConversation.id });
     }
@@ -246,7 +245,15 @@ export async function POST(request: Request) {
       professorContact: requestUpdated.users[1].tel!,
     });
 
-    await transport.sendMail(options);
+    transport.sendMail(options, (error) => {
+      if (error) {
+        console.log("[ERROR_ON_CONVERSATION]", error);
+
+        return new Response("Ocorreu um erro no envio do e-mail de criação da conversa", {
+          status: 400,
+        });
+      }
+    });
 
     return Response.json({ id: newConversation.id });
   } catch (error) {
