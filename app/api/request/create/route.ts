@@ -5,6 +5,7 @@ import { AccountRole } from "@prisma/client";
 
 import { prisma } from "@/libs/prismadb";
 import EmailRequestNotification from "@/emails/EmailRequestNotification";
+import EmailAdminNewRequest from "@/emails/EmailAdminNewRequest";
 
 interface IGenerateOptions {
   emailUser: string;
@@ -14,6 +15,14 @@ interface IGenerateOptions {
   studentName: string;
   subject: string;
   linkUrl: string;
+}
+
+interface IGenerateAdminOptions {
+  emailUser: string;
+  studentName: string;
+  studentContact: string;
+  subject: string;
+  description: string;
 }
 
 function generateOptions({
@@ -32,12 +41,30 @@ function generateOptions({
       studentName,
       subject,
       linkUrl,
-    }),
+    })
   );
 
   return {
     from: emailUser,
     to: professorEmail,
+    subject: "Nova Solicitação de Aluno Criada - O Sapiente",
+    html: emailHtml,
+  };
+}
+
+function generateAdminOptions({ emailUser, studentName, studentContact, subject, description }: IGenerateAdminOptions) {
+  const emailHtml = render(
+    EmailAdminNewRequest({
+      studentName,
+      studentContact,
+      subject,
+      description,
+    })
+  );
+
+  return {
+    from: emailUser,
+    to: emailUser,
     subject: "Nova Solicitação de Aluno Criada - O Sapiente",
     html: emailHtml,
   };
@@ -51,9 +78,7 @@ export async function POST(req: NextRequest) {
     const emailPass: string = process.env.EMAIL_PASS!;
     const emailPort: number = Number(process.env.EMAIL_PORT!);
     const baseUrl =
-      process.env.NODE_ENV === "development"
-        ? process.env.NEXT_PUBLIC_BASEURL_DEV
-        : process.env.NEXT_PUBLIC_BASEURL;
+      process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_BASEURL_DEV : process.env.NEXT_PUBLIC_BASEURL;
     const transport = nodemailer.createTransport({
       host: emailHost,
       port: emailPort,
@@ -96,6 +121,7 @@ export async function POST(req: NextRequest) {
             id: true,
             firstName: true,
             lastName: true,
+            tel: true,
           },
         },
       },
@@ -141,27 +167,39 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    professors.map(async (professor) => {
-      try {
-        const options = generateOptions({
-          emailUser,
-          userName: `${professor.firstName} ${professor.lastName}`,
-          professorEmail: professor.email,
-          message: description,
-          subject,
-          studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
-          linkUrl: `${baseUrl}/painel-de-controle/professor/${professor.id}/resumo`,
-        });
+    try {
+      await Promise.all(
+        professors.map(async (professor) => {
+          const options = generateOptions({
+            emailUser,
+            userName: `${professor.firstName} ${professor.lastName}`,
+            professorEmail: professor.email,
+            message: description,
+            subject,
+            studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
+            linkUrl: `${baseUrl}/painel-de-controle/professor/${professor.id}/resumo`,
+          });
 
-        await transport.sendMail(options);
-      } catch (error) {
-        console.log("[ERROR_POST_REQUEST]", error);
+          await transport.sendMail(options);
+        })
+      );
+    } catch (error) {
+      console.log("[ERROR_POST_REQUEST]", error);
 
-        return new NextResponse("Ocorreu um erro ao enviar o e-mail", {
-          status: 400,
-        });
-      }
+      return new NextResponse("Ocorreu um erro ao enviar o e-mail", {
+        status: 400,
+      });
+    }
+
+    const options = generateAdminOptions({
+      emailUser,
+      studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
+      studentContact: `${newRequest.users[0].tel}`,
+      subject: newRequest.subject,
+      description: newRequest.description,
     });
+
+    await transport.sendMail(options);
 
     return NextResponse.json({ sended: true, requests: newRequests });
   } catch (error) {

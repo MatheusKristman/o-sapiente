@@ -6,6 +6,10 @@ import getCurrentUser from "@/app/action/getCurrentUser";
 import { prisma } from "@/libs/prismadb";
 import EmailFinishingLessonNotification from "@/emails/EmailFinishingLessonNotification";
 import { RequestWithUsersAndOffers } from "@/types";
+import EmailAdminLessonFinishing from "@/emails/EmailAdminLessonFinishing";
+import EmailProfessorLessonFinishPaymentNotification from "@/emails/EmailProfessorPaymentAvailableNotification";
+import EmailProfessorLessonFinishNotification from "@/emails/EmailProfessorLessonFinishNotification";
+import EmailStudentLessonFinishNotification from "@/emails/EmailStudentLessonFinishNotification";
 
 export async function PUT(req: Request) {
   try {
@@ -15,6 +19,16 @@ export async function PUT(req: Request) {
     const emailPass: string = process.env.EMAIL_PASS!;
     const emailPort: number = Number(process.env.EMAIL_PORT!);
     const currentUser = await getCurrentUser();
+    const transport = nodemailer.createTransport({
+      host: emailHost,
+      port: emailPort,
+      auth: {
+        user: emailUser,
+        pass: emailPass,
+      },
+    });
+    const baseUrl =
+      process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_BASEURL_DEV! : process.env.NEXT_PUBLIC_BASEURL!;
 
     let requests;
 
@@ -203,6 +217,9 @@ export async function PUT(req: Request) {
       });
     }
 
+    const student = requestUpdated.users.filter((user) => user.accountType === AccountRole.STUDENT)[0];
+    const professor = requestUpdated.users.filter((user) => user.accountType === AccountRole.PROFESSOR)[0];
+
     const newRequests = requests.filter((request) => request.id !== requestId);
 
     newRequests.push(requestUpdated);
@@ -231,22 +248,93 @@ export async function PUT(req: Request) {
       if (!professorUpdated) {
         return new Response("Ocorreu um erro ao enviar o valor para o professor", { status: 401 });
       }
+
+      if (requestUpdated.lessonPrice! > 0) {
+        const professorEmailHtml = render(
+          EmailProfessorLessonFinishPaymentNotification({
+            name: `${professorUpdated.firstName} ${professorUpdated.lastName}`,
+            lessonPrice: requestUpdated.lessonPrice!,
+            baseUrl: `${baseUrl}/painel-de-controle/professor/${professorUpdated.id}/resumo`,
+          })
+        );
+
+        const professorOptions = {
+          from: emailUser,
+          to: professorUpdated.email,
+          subject: "Notificação de pagamento disponível para resgate - O Sapiente",
+          html: professorEmailHtml,
+        };
+
+        await transport.sendMail(professorOptions);
+      } else {
+        const professorEmailHtml = render(
+          EmailProfessorLessonFinishNotification({
+            name: professorUpdated.firstName,
+            subject: requestUpdated.subject,
+            description: requestUpdated.description,
+            studentName: `${student.firstName} ${student.lastName}`,
+            beginLessonDate: requestUpdated.beginLessonDate!,
+            finishLessonDate: requestUpdated.finishLessonDate!,
+          })
+        );
+
+        const professorOptions = {
+          from: emailUser,
+          to: professorUpdated.email,
+          subject: "Notificação de finalização da aula - O Sapiente",
+          html: professorEmailHtml,
+        };
+
+        await transport.sendMail(professorOptions);
+      }
+
+      const studentEmailHtml = render(
+        EmailStudentLessonFinishNotification({
+          name: student.firstName,
+          subject: requestUpdated.subject,
+          description: requestUpdated.description,
+          professorName: `${professorUpdated.firstName} ${professorUpdated.lastName}`,
+          beginLessonDate: requestUpdated.beginLessonDate!,
+          finishLessonDate: requestUpdated.finishLessonDate!,
+        })
+      );
+
+      const studentOptions = {
+        from: emailUser,
+        to: student.email,
+        subject: "Notificação de finalização da aula - O Sapiente",
+        html: studentEmailHtml,
+      };
+
+      await transport.sendMail(studentOptions);
+
+      const adminEmailHtml = render(
+        EmailAdminLessonFinishing({
+          baseUrl: `${baseUrl}/painel-de-controle/admin/geral`,
+          lessonDate: requestUpdated.lessonDate!,
+          finishLessonDate: requestUpdated.finishLessonDate!,
+          lessonPrice: requestUpdated.lessonPrice!,
+          certificateRequested: requestUpdated.certificateRequested,
+          studentName: `${student.firstName} ${student.lastName}`,
+          studentContact: student.tel!,
+          professorName: `${professor.firstName} ${professor.lastName}`,
+          professorContact: professor.tel!,
+          status: "Finalizado",
+          userWhoVoted: `${currentUser.firstName} ${currentUser.lastName}`,
+        })
+      );
+
+      const adminOptions = {
+        from: emailUser,
+        to: emailUser,
+        subject: "Status da aula atualizado - O Sapiente",
+        html: adminEmailHtml,
+      };
+
+      await transport.sendMail(adminOptions);
     }
 
     if (requestFiltered.usersIdsVotedToFinish.length === 0) {
-      const transport = nodemailer.createTransport({
-        host: emailHost,
-        port: emailPort,
-        auth: {
-          user: emailUser,
-          pass: emailPass,
-        },
-      });
-      const baseUrl =
-        process.env.NODE_ENV === "development"
-          ? process.env.NEXT_PUBLIC_BASEURL_DEV!
-          : process.env.NEXT_PUBLIC_BASEURL!;
-
       const emailHtml = render(
         EmailFinishingLessonNotification({
           name: `${otherUser.firstName} ${otherUser.lastName}`,
@@ -255,14 +343,37 @@ export async function PUT(req: Request) {
         })
       );
 
+      const adminEmailHtml = render(
+        EmailAdminLessonFinishing({
+          baseUrl: `${baseUrl}/painel-de-controle/admin/geral`,
+          lessonDate: requestUpdated.lessonDate!,
+          lessonPrice: requestUpdated.lessonPrice!,
+          certificateRequested: requestUpdated.certificateRequested,
+          studentName: `${student.firstName} ${student.lastName}`,
+          studentContact: student.tel!,
+          professorName: `${professor.firstName} ${professor.lastName}`,
+          professorContact: professor.tel!,
+          status: "Finalizando",
+          userWhoVoted: `${currentUser.firstName} ${currentUser.lastName}`,
+        })
+      );
+
       const options = {
         from: emailUser,
         to: otherUser.email,
-        subject: "Nova mensagem de contato - O Sapiente",
+        subject: "Atualização do status da aula - O Sapiente",
         html: emailHtml,
       };
 
+      const adminOptions = {
+        from: emailUser,
+        to: emailUser,
+        subject: "Status da aula atualizado - O Sapiente",
+        html: adminEmailHtml,
+      };
+
       await transport.sendMail(options);
+      await transport.sendMail(adminOptions);
     }
 
     return Response.json(newRequests, { status: 200 });

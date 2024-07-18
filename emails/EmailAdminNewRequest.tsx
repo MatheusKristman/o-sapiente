@@ -9,29 +9,18 @@ const imageURL =
     : "/static/email-logo.png";
 
 interface Props {
-  lessonDate: Date;
-  lessonPrice: number;
-  certificateRequested: boolean;
   studentName: string;
   studentContact: string;
-  professorName: string;
-  professorContact: string;
+  subject: string;
+  description: string;
 }
 
-export default function EmailAdminNewLesson({
-  lessonDate,
-  lessonPrice,
-  certificateRequested,
-  studentName,
-  studentContact,
-  professorName,
-  professorContact,
-}: Props) {
+export default function EmailAdminNewRequest({ studentName, studentContact, subject, description }: Props) {
   return (
     <Html>
       <Head />
 
-      <Preview>Nova aula criada - O Sapiente</Preview>
+      <Preview>Nova solicitação criada - O Sapiente</Preview>
 
       <Tailwind>
         <Body style={main}>
@@ -43,26 +32,11 @@ export default function EmailAdminNewLesson({
             <Text className="text-base">Espero que esteja tudo bem!</Text>
 
             <Text className="text-base">
-              Gostaria de informar que uma <strong>nova aula</strong> foi iniciada na plataforma,{" "}
+              Gostaria de informar que uma <strong>nova solicitação de aula</strong> foi criada na plataforma,{" "}
               <strong>O Sapiente</strong>. Abaixo estão os detalhes:
             </Text>
 
             <Section style={{ marginBottom: "35px" }}>
-              <Row>
-                <strong>Data da aula: </strong>
-                {format(new Date(lessonDate), "dd/MM/yyyy")}
-              </Row>
-
-              <Row>
-                <strong>Valor: </strong>
-                {formatPrice(lessonPrice)}
-              </Row>
-
-              <Row className="mb-4">
-                <strong>Certificado: </strong>
-                {certificateRequested ? "Solicitado" : "Não solicitado"}
-              </Row>
-
               <Row>
                 <strong>Nome do aluno: </strong>
                 {studentName}
@@ -74,13 +48,13 @@ export default function EmailAdminNewLesson({
               </Row>
 
               <Row>
-                <strong>Nome do professor: </strong>
-                {professorName}
+                <strong>Matéria/Assunto: </strong>
+                {subject}
               </Row>
 
               <Row>
-                <strong>Contato do professor: </strong>
-                {professorContact}
+                <strong>Descrição da Solicitação: </strong>
+                {description}
               </Row>
             </Section>
 

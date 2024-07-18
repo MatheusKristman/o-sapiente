@@ -1,5 +1,18 @@
 import { format } from "date-fns";
-import { Html, Head, Preview, Body, Container, Img, Text, Section, Row, Hr, Tailwind } from "@react-email/components";
+import {
+  Html,
+  Head,
+  Preview,
+  Body,
+  Container,
+  Img,
+  Text,
+  Section,
+  Row,
+  Hr,
+  Tailwind,
+  Button,
+} from "@react-email/components";
 
 import { formatPrice } from "@/libs/utils";
 
@@ -10,28 +23,36 @@ const imageURL =
 
 interface Props {
   lessonDate: Date;
+  finishLessonDate?: Date;
   lessonPrice: number;
   certificateRequested: boolean;
   studentName: string;
   studentContact: string;
   professorName: string;
   professorContact: string;
+  status: string;
+  userWhoVoted: string;
+  baseUrl: string;
 }
 
-export default function EmailAdminNewLesson({
+export default function EmailAdminLessonFinishing({
   lessonDate,
   lessonPrice,
+  finishLessonDate,
   certificateRequested,
   studentName,
   studentContact,
   professorName,
   professorContact,
+  status,
+  userWhoVoted,
+  baseUrl,
 }: Props) {
   return (
     <Html>
       <Head />
 
-      <Preview>Nova aula criada - O Sapiente</Preview>
+      <Preview>Status da aula atualizado - O Sapiente</Preview>
 
       <Tailwind>
         <Body style={main}>
@@ -43,8 +64,8 @@ export default function EmailAdminNewLesson({
             <Text className="text-base">Espero que esteja tudo bem!</Text>
 
             <Text className="text-base">
-              Gostaria de informar que uma <strong>nova aula</strong> foi iniciada na plataforma,{" "}
-              <strong>O Sapiente</strong>. Abaixo estão os detalhes:
+              Gostaria de informar que uma <strong>aula</strong> foi alterado para o status <strong>{status}</strong>.
+              Abaixo estão os detalhes:
             </Text>
 
             <Section style={{ marginBottom: "35px" }}>
@@ -52,6 +73,13 @@ export default function EmailAdminNewLesson({
                 <strong>Data da aula: </strong>
                 {format(new Date(lessonDate), "dd/MM/yyyy")}
               </Row>
+
+              {finishLessonDate ? (
+                <Row>
+                  <strong>Data da finalização da aula: </strong>
+                  {format(new Date(finishLessonDate), "dd/MM/yyyy")}
+                </Row>
+              ) : null}
 
               <Row>
                 <strong>Valor: </strong>
@@ -82,7 +110,21 @@ export default function EmailAdminNewLesson({
                 <strong>Contato do professor: </strong>
                 {professorContact}
               </Row>
+
+              <Row>
+                <strong>Status: </strong>
+                {status}
+              </Row>
+
+              <Row>
+                <strong>Quem iniciou: </strong>
+                {userWhoVoted}
+              </Row>
             </Section>
+
+            <Button href={baseUrl} style={buttonStyle}>
+              Painel de controle
+            </Button>
 
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
