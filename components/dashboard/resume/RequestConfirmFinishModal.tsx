@@ -67,17 +67,29 @@ export function RequestConfirmFinishModal() {
       .put("/api/request/finish", { requestId: requestSelected.id })
       .then((res) => {
         setRequests(
-          res.data.filter(
+          res.data.newRequests.filter(
             (request: RequestWithUsersAndOffers) =>
               !request.isConcluded && !request.isOfferAccepted,
           ),
         );
-        setCurrentLesson(
-          res.data.filter(
-            (request: RequestWithUsersAndOffers) =>
-              !request.isConcluded && request.isOfferAccepted,
-          ),
-        );
+
+        if (res.data.isProfessor) {
+          setCurrentLesson(
+            res.data.newRequests.filter(
+              (request: RequestWithUsersAndOffers) =>
+                request.isOfferAccepted &&
+                !request.isConcluded &&
+                request.userIds.includes(userId),
+            ),
+          );
+        } else {
+          setCurrentLesson(
+            res.data.newRequests.filter(
+              (request: RequestWithUsersAndOffers) =>
+                !request.isConcluded && request.isOfferAccepted,
+            ),
+          );
+        }
         closeModal();
         router.refresh();
       })
