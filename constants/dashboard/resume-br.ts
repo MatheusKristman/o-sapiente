@@ -40,10 +40,8 @@ export const studentNewRequestInfo = {
 
 export const finishModalInfo = {
   title: "Deseja finalizar a aula?",
-  descProfessor:
-    "Antes de finalizar, deixe avisa com o aluno que irá finalizar a aula.",
-  descStudent:
-    "Antes de finalizar, deixe avisa com o professor que irá finalizar a aula.",
+  descProfessor: "Antes de finalizar, notifique o aluno que irá finalizar a aula.",
+  descStudent: "Antes de finalizar, notifique o professor que irá finalizar a aula.",
   cancelBtn: "CANCELAR",
   confirmBtn: "FINALIZAR",
 };
@@ -53,8 +51,7 @@ export const confirmFinishModalInfo = {
   desc: "finalizou a aula",
   confirmBtn: "CONFIRMAR",
   cancelBtn: "CANCELAR",
-  supportDesc:
-    "Não foi informado sobre a finalização da aula pelo outro usuário?",
+  supportDesc: "Não foi informado sobre a finalização da aula pelo outro usuário?",
   supportBtn: "SUPORTE",
 };
 
@@ -72,8 +69,8 @@ export const retrievePaymentModalInfo = {
   disclaimer: [
     "Embora você tenha fornecido sua chave PIX, informamos que o processamento do pagamento poderá levar até um dia útil. Esse prazo é necessário para que possamos analisar o pedido e prevenir fraudes.",
     "É importante que a chave PIX informada esteja registrada em seu nome.",
-    "Você está apenas solicitando ao O Sapiente que credite em sua conta bancária os valores referentes às suas aulas."
-  ]
+    "Você está apenas solicitando ao O Sapiente que credite em sua conta bancária os valores referentes às suas aulas.",
+  ],
 };
 
 export const currentLessonModalInfo = {
