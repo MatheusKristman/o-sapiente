@@ -1,6 +1,6 @@
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
-import { AccountRole, Status } from "@prisma/client";
+import { AccountRole, PaymentMethod, Status } from "@prisma/client";
 
 import getCurrentUser from "@/app/action/getCurrentUser";
 import { prisma } from "@/libs/prismadb";
@@ -258,11 +258,15 @@ export async function PUT(req: Request) {
       )[0];
       let payment: number;
 
-      if (requestUpdated.certificateRequested) {
-        payment =
-          professor.paymentRetrievable + (requestUpdated.lessonPrice! + 20);
+      if (requestUpdated.paymentMethod === PaymentMethod.platform) {
+        if (requestUpdated.certificateRequested) {
+          payment =
+            professor.paymentRetrievable + (requestUpdated.lessonPrice! + 20);
+        } else {
+          payment = professor.paymentRetrievable + requestUpdated.lessonPrice!;
+        }
       } else {
-        payment = professor.paymentRetrievable + requestUpdated.lessonPrice!;
+        payment = professor.paymentRetrievable;
       }
 
       const professorUpdated = await prisma.user.update({
@@ -281,7 +285,7 @@ export async function PUT(req: Request) {
         );
       }
 
-      if (requestUpdated.lessonPrice! > 0) {
+      if (requestUpdated.paymentMethod === PaymentMethod.platform) {
         const professorEmailHtml = render(
           EmailProfessorLessonFinishPaymentNotification({
             name: `${professorUpdated.firstName} ${professorUpdated.lastName}`,
