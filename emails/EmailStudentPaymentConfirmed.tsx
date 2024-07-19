@@ -1,19 +1,19 @@
-import { format } from "date-fns";
-import {
-  Html,
-  Head,
-  Preview,
-  Body,
-  Container,
-  Img,
-  Text,
-  Section,
-  Row,
-  Hr,
-  Tailwind,
-} from "@react-email/components";
-
 import { formatPrice } from "@/libs/utils";
+import {
+  Body,
+  Button,
+  Container,
+  Head,
+  Hr,
+  Html,
+  Img,
+  Preview,
+  Row,
+  Section,
+  Tailwind,
+  Text,
+} from "@react-email/components";
+import { format } from "date-fns";
 
 const imageURL =
   process.env.NODE_ENV === "production"
@@ -21,31 +21,33 @@ const imageURL =
     : "/static/email-logo.png";
 
 interface Props {
+  userName: string;
+  url: string;
+  description: string;
+  subject: string;
+  professorName: string;
   lessonDate: Date;
   lessonPrice: number;
-  certificateRequested: boolean;
-  studentName: string;
-  studentContact: string;
-  professorName: string;
-  professorContact: string;
   paymentMethod: string;
+  certificateRequested: boolean;
 }
 
-export default function EmailAdminNewLesson({
+export function EmailStudentPaymentConfirmed({
+  userName,
+  url,
+  description,
+  subject,
+  professorName,
   lessonDate,
   lessonPrice,
-  certificateRequested,
-  studentName,
-  studentContact,
-  professorName,
-  professorContact,
   paymentMethod,
+  certificateRequested,
 }: Props) {
   return (
     <Html>
       <Head />
 
-      <Preview>Nova aula criada - O Sapiente</Preview>
+      <Preview>Pagamento da aula confirmado - O Sapiente</Preview>
 
       <Tailwind>
         <Body style={main}>
@@ -58,45 +60,25 @@ export default function EmailAdminNewLesson({
               style={image}
             />
 
-            <Text className="text-base">Ola administrador,</Text>
+            <Text className="text-base">Ola {userName},</Text>
 
-            <Text className="text-base">Espero que esteja tudo bem!</Text>
+            <Text className="text-base">Espero que esteja bem!</Text>
 
             <Text className="text-base">
-              Gostaria de informar que uma <strong>nova aula</strong> foi
-              iniciada na plataforma, <strong>O Sapiente</strong>. Abaixo estão
-              os detalhes:
+              Gostaríamos de informar que o pagamento da aula com o professor{" "}
+              <strong>{professorName}</strong> foi confirmada. Segue os detalhes
+              da aula:
             </Text>
 
             <Section style={{ marginBottom: "35px" }}>
               <Row>
-                <strong>Data da aula: </strong>
-                {format(new Date(lessonDate), "dd/MM/yyyy")}
+                <strong>Descrição da solicitação: </strong>
+                {description}
               </Row>
 
               <Row>
-                <strong>Valor: </strong>
-                {formatPrice(lessonPrice)}
-              </Row>
-
-              <Row className="mb-4">
-                <strong>Forma de pagamento: </strong>
-                {paymentMethod}
-              </Row>
-
-              <Row className="mb-4">
-                <strong>Certificado: </strong>
-                {certificateRequested ? "Solicitado" : "Não solicitado"}
-              </Row>
-
-              <Row>
-                <strong>Nome do aluno: </strong>
-                {studentName}
-              </Row>
-
-              <Row className="mb-4">
-                <strong>Contato do aluno: </strong>
-                {studentContact}
+                <strong>Matéria/Assunto: </strong>
+                {subject}
               </Row>
 
               <Row>
@@ -105,15 +87,39 @@ export default function EmailAdminNewLesson({
               </Row>
 
               <Row>
-                <strong>Contato do professor: </strong>
-                {professorContact}
+                <strong>Data combinada da aula: </strong>
+                {format(lessonDate, "dd/MM/yyyy")}
+              </Row>
+
+              <Row>
+                <strong>Valor combinado da aula: </strong>
+                {formatPrice(lessonPrice)}
+              </Row>
+
+              <Row>
+                <strong>Forma de pagamento: </strong>
+                {paymentMethod}
+              </Row>
+
+              <Row>
+                <strong>Solicitado certificado: </strong>
+                {certificateRequested ? "Sim" : "Não"}
               </Row>
             </Section>
+
+            <Text className="text-base">
+              O professor irá entrar em contato com você na data confirmada, ou
+              mande uma mensagem através do botão abaixo.
+            </Text>
+
+            <Button href={url} style={buttonStyle}>
+              Enviar mensagem
+            </Button>
 
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
             <Text className="text-[#666666] text-[12px] leading-[24px]">
-              Se você não estava esperando por esta mensagem, você pode ignorar
+              Se você não estava esperando por este mensagem, você pode ignorar
               este e-mail. Se você estiver preocupado com a segurança de sua
               conta, por favor responda a este e-mail para entrar em contato
               conosco.

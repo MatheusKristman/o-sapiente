@@ -1,13 +1,15 @@
 import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
-import { Status } from "@prisma/client";
+import { AccountRole, PaymentMethod, Status } from "@prisma/client";
 
 import getCurrentUser from "@/app/action/getCurrentUser";
 import { prisma } from "@/libs/prismadb";
 import { pusherServer } from "@/libs/pusher";
 import EmailAdminNewLesson from "@/emails/EmailAdminNewLesson";
+import EmailOfferAccepted from "@/emails/EmailOfferAccepted";
+import { EmailStudentLessonBeginNotification } from "@/emails/EmailStudentLessonBeginNotification";
 
-interface IGenerateEmailOptions {
+interface IGenerateAdminEmailOptions {
   emailUser: string;
   lessonDate: Date;
   lessonPrice: number;
@@ -16,9 +18,34 @@ interface IGenerateEmailOptions {
   studentContact: string;
   professorName: string;
   professorContact: string;
+  paymentMethod: string;
 }
 
-function generateEmailOptions({
+interface IGenerateProfessorEmailOptions {
+  emailUser: string;
+  professorEmail: string;
+  userName: string;
+  studentName: string;
+  subject: string;
+  message: string;
+  url: string;
+}
+
+interface IGenerateStudentEmailOptions {
+  emailUser: string;
+  studentEmail: string;
+  userName: string;
+  url: string;
+  description: string;
+  subject: string;
+  professorName: string;
+  lessonDate: Date;
+  lessonPrice: number;
+  paymentMethod: string;
+  certificateRequested: boolean;
+}
+
+function generateAdminEmailOptions({
   emailUser,
   lessonDate,
   lessonPrice,
@@ -27,7 +54,8 @@ function generateEmailOptions({
   studentContact,
   professorName,
   professorContact,
-}: IGenerateEmailOptions) {
+  paymentMethod,
+}: IGenerateAdminEmailOptions) {
   const emailHtml = render(
     EmailAdminNewLesson({
       lessonDate,
@@ -37,13 +65,76 @@ function generateEmailOptions({
       studentContact,
       professorName,
       professorContact,
-    })
+      paymentMethod,
+    }),
   );
 
   return {
     from: emailUser,
     to: emailUser,
     subject: "Nova aula criada - O Sapiente",
+    html: emailHtml,
+  };
+}
+
+function generateProfessorEmailOptions({
+  emailUser,
+  studentName,
+  subject,
+  message,
+  userName,
+  url,
+  professorEmail,
+}: IGenerateProfessorEmailOptions) {
+  const emailHtml = render(
+    EmailOfferAccepted({
+      studentName,
+      subject,
+      message,
+      userName,
+      url,
+    }),
+  );
+
+  return {
+    from: emailUser,
+    to: professorEmail,
+    subject: "Proposta aceita - O Sapiente",
+    html: emailHtml,
+  };
+}
+
+function generateStudentEmailOptions({
+  emailUser,
+  studentEmail,
+  userName,
+  url,
+  description,
+  subject,
+  professorName,
+  lessonDate,
+  lessonPrice,
+  paymentMethod,
+  certificateRequested,
+}: IGenerateStudentEmailOptions) {
+  const emailHtml = render(
+    EmailStudentLessonBeginNotification({
+      description,
+      subject,
+      userName,
+      url,
+      professorName,
+      lessonDate,
+      lessonPrice,
+      paymentMethod,
+      certificateRequested,
+    }),
+  );
+
+  return {
+    from: emailUser,
+    to: studentEmail,
+    subject: "Notificação sobre a sua solicitação - O Sapiente",
     html: emailHtml,
   };
 }
@@ -56,7 +147,11 @@ export async function POST(request: Request) {
     const emailPort: number = Number(process.env.EMAIL_PORT!);
     const currentUser = await getCurrentUser();
     const body = await request.json();
-    const { otherUserId, requestId, lessonDate, lessonPrice, certificateRequested } = body;
+    const { otherUserId, requestId, lessonDate, lessonPrice } = body;
+    const baseUrl =
+      process.env.NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_BASEURL_DEV
+        : process.env.NEXT_PUBLIC_BASEURL;
 
     if (!currentUser?.id || !currentUser?.email) {
       return new Response("Não autorizado", { status: 400 });
@@ -106,6 +201,7 @@ export async function POST(request: Request) {
           isOfferAccepted: true,
           status: Status.inProgress,
           beginLessonDate: new Date(),
+          paymentMethod: PaymentMethod.agreed,
           lessonDate,
           lessonPrice,
           users: {
@@ -125,7 +221,9 @@ export async function POST(request: Request) {
               id: true,
               firstName: true,
               lastName: true,
+              email: true,
               tel: true,
+              accountType: true,
             },
           },
         },
@@ -139,31 +237,58 @@ export async function POST(request: Request) {
 
       singleConversation.users.map((user) => {
         if (user.email) {
-          pusherServer.trigger(user.email, "conversation:new", singleConversation);
+          pusherServer.trigger(
+            user.email,
+            "conversation:new",
+            singleConversation,
+          );
         }
       });
 
-      const options = generateEmailOptions({
+      const student = request.users.filter(
+        (user) => user.accountType === AccountRole.STUDENT,
+      )[0];
+      const professor = request.users.filter(
+        (user) => user.accountType === AccountRole.PROFESSOR,
+      )[0];
+
+      const adminOptions = generateAdminEmailOptions({
         emailUser,
         lessonDate,
         lessonPrice,
-        certificateRequested: JSON.parse(certificateRequested),
-        studentName: `${request.users[0].firstName} ${request.users[0].lastName}`,
-        studentContact: request.users[0].tel!,
-        professorName: `${request.users[1].firstName} ${request.users[1].lastName}`,
-        professorContact: request.users[1].tel!,
+        certificateRequested: request.certificateRequested,
+        studentName: `${student.firstName} ${student.lastName}`,
+        studentContact: student.tel!,
+        professorName: `${professor.firstName} ${professor.lastName}`,
+        professorContact: professor.tel!,
+        paymentMethod: "A Combinar",
+      });
+      const professorOptions = generateProfessorEmailOptions({
+        emailUser,
+        professorEmail: professor.email,
+        url: `${baseUrl}/painel-de-controle/professor/${professor.id}/mensagens/${singleConversation.id}`,
+        userName: professor.firstName,
+        message: request.description,
+        subject: request.subject,
+        studentName: `${student.firstName} ${student.lastName}`,
+      });
+      const studentOptions = generateStudentEmailOptions({
+        emailUser,
+        studentEmail: student.email,
+        userName: student.firstName,
+        url: `${baseUrl}/painel-de-controle/aluno/${student.id}/mensagens/${singleConversation.id}`,
+        description: request.description,
+        subject: request.subject,
+        professorName: `${professor.firstName} ${professor.lastName}`,
+        lessonDate: request.lessonDate!,
+        lessonPrice: request.lessonPrice!,
+        paymentMethod: "A Combinar",
+        certificateRequested: request.certificateRequested,
       });
 
-      await transport.sendMail(options);
-      transport.sendMail(options, (error) => {
-        if (error) {
-          console.log("[ERROR_ON_CONVERSATION]", error);
-
-          return new Response("Ocorreu um erro no envio do e-mail de criação da conversa", {
-            status: 400,
-          });
-        }
-      });
+      await transport.sendMail(adminOptions);
+      await transport.sendMail(professorOptions);
+      await transport.sendMail(studentOptions);
 
       return Response.json({ id: singleConversation.id });
     }
@@ -205,6 +330,9 @@ export async function POST(request: Request) {
         isOfferAccepted: true,
         status: Status.inProgress,
         beginLessonDate: new Date(),
+        lessonDate,
+        lessonPrice,
+        paymentMethod: PaymentMethod.agreed,
         users: {
           connect: {
             id: otherUserId,
@@ -222,7 +350,9 @@ export async function POST(request: Request) {
             id: true,
             firstName: true,
             lastName: true,
+            email: true,
             tel: true,
+            accountType: true,
           },
         },
       },
@@ -234,26 +364,50 @@ export async function POST(request: Request) {
       }
     });
 
-    const options = generateEmailOptions({
+    const student = requestUpdated.users.filter(
+      (user) => user.accountType === AccountRole.STUDENT,
+    )[0];
+    const professor = requestUpdated.users.filter(
+      (user) => user.accountType === AccountRole.PROFESSOR,
+    )[0];
+
+    const adminOptions = generateAdminEmailOptions({
       emailUser,
       lessonDate,
       lessonPrice,
-      certificateRequested: JSON.parse(certificateRequested),
-      studentName: `${requestUpdated.users[0].firstName} ${requestUpdated.users[0].lastName}`,
-      studentContact: requestUpdated.users[0].tel!,
-      professorName: `${requestUpdated.users[1].firstName} ${requestUpdated.users[1].lastName}`,
-      professorContact: requestUpdated.users[1].tel!,
+      certificateRequested: requestUpdated.certificateRequested,
+      studentName: `${student.firstName} ${student.lastName}`,
+      studentContact: student.tel!,
+      professorName: `${professor.firstName} ${professor.lastName}`,
+      professorContact: professor.tel!,
+      paymentMethod: "A Combinar",
+    });
+    const professorOptions = generateProfessorEmailOptions({
+      emailUser,
+      professorEmail: professor.email,
+      url: `${baseUrl}/painel-de-controle/professor/${professor.id}/mensagens/${newConversation.id}`,
+      userName: professor.firstName,
+      message: requestUpdated.description,
+      subject: requestUpdated.subject,
+      studentName: `${student.firstName} ${student.lastName}`,
+    });
+    const studentOptions = generateStudentEmailOptions({
+      emailUser,
+      studentEmail: student.email,
+      userName: student.firstName,
+      url: `${baseUrl}/painel-de-controle/aluno/${student.id}/mensagens/${newConversation.id}`,
+      description: requestUpdated.description,
+      subject: requestUpdated.subject,
+      professorName: `${professor.firstName} ${professor.lastName}`,
+      lessonDate: requestUpdated.lessonDate!,
+      lessonPrice: requestUpdated.lessonPrice!,
+      paymentMethod: "A Combinar",
+      certificateRequested: requestUpdated.certificateRequested,
     });
 
-    transport.sendMail(options, (error) => {
-      if (error) {
-        console.log("[ERROR_ON_CONVERSATION]", error);
-
-        return new Response("Ocorreu um erro no envio do e-mail de criação da conversa", {
-          status: 400,
-        });
-      }
-    });
+    await transport.sendMail(adminOptions);
+    await transport.sendMail(professorOptions);
+    await transport.sendMail(studentOptions);
 
     return Response.json({ id: newConversation.id });
   } catch (error) {

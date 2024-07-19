@@ -28,6 +28,11 @@ enum Status {
   support
 }
 
+enum PaymentMethod {
+  platform
+  agreed
+}
+
 model User {
   id                       String      @id @default(auto()) @map("_id") @db.ObjectId
   firstName                String
@@ -79,18 +84,19 @@ model User {
 }
 
 model Request {
-  id                   String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                   String         @id @default(auto()) @map("_id") @db.ObjectId
   subject              String
   description          String
-  isConcluded          Boolean   @default(false)
-  isOfferAccepted      Boolean   @default(false)
+  isConcluded          Boolean        @default(false)
+  isOfferAccepted      Boolean        @default(false)
   beginLessonDate      DateTime?
   finishLessonDate     DateTime?
-  status               Status    @default(searchingProfessor)
+  status               Status         @default(searchingProfessor)
   previousStatus       Status?
   lessonDate           DateTime?
   lessonPrice          Float?
-  certificateRequested Boolean   @default(false)
+  certificateRequested Boolean        @default(false)
+  paymentMethod        PaymentMethod?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

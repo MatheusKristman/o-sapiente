@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import {
   Html,
   Head,
@@ -7,13 +6,12 @@ import {
   Container,
   Img,
   Text,
-  Section,
   Row,
+  Section,
   Hr,
   Tailwind,
+  Button,
 } from "@react-email/components";
-
-import { formatPrice } from "@/libs/utils";
 
 const imageURL =
   process.env.NODE_ENV === "production"
@@ -21,31 +19,25 @@ const imageURL =
     : "/static/email-logo.png";
 
 interface Props {
-  lessonDate: Date;
-  lessonPrice: number;
-  certificateRequested: boolean;
+  userName: string;
   studentName: string;
-  studentContact: string;
-  professorName: string;
-  professorContact: string;
-  paymentMethod: string;
+  subject: string;
+  message: string;
+  url: string;
 }
 
-export default function EmailAdminNewLesson({
-  lessonDate,
-  lessonPrice,
-  certificateRequested,
+export default function EmailOfferAccepted({
+  userName,
   studentName,
-  studentContact,
-  professorName,
-  professorContact,
-  paymentMethod,
+  subject,
+  message,
+  url,
 }: Props) {
   return (
     <Html>
       <Head />
 
-      <Preview>Nova aula criada - O Sapiente</Preview>
+      <Preview>Proposta aceita - O Sapiente</Preview>
 
       <Tailwind>
         <Body style={main}>
@@ -58,62 +50,45 @@ export default function EmailAdminNewLesson({
               style={image}
             />
 
-            <Text className="text-base">Ola administrador,</Text>
+            <Text className="text-base">Ola {userName},</Text>
 
-            <Text className="text-base">Espero que esteja tudo bem!</Text>
+            <Text className="text-base">Espero que esteja bem!</Text>
 
             <Text className="text-base">
-              Gostaria de informar que uma <strong>nova aula</strong> foi
-              iniciada na plataforma, <strong>O Sapiente</strong>. Abaixo estão
-              os detalhes:
+              Gostaríamos de informar que a sua proposta para a solicitação de
+              aula de <strong>{studentName}</strong> foi aceita.
             </Text>
 
             <Section style={{ marginBottom: "35px" }}>
-              <Row>
-                <strong>Data da aula: </strong>
-                {format(new Date(lessonDate), "dd/MM/yyyy")}
-              </Row>
-
-              <Row>
-                <strong>Valor: </strong>
-                {formatPrice(lessonPrice)}
-              </Row>
-
-              <Row className="mb-4">
-                <strong>Forma de pagamento: </strong>
-                {paymentMethod}
-              </Row>
-
-              <Row className="mb-4">
-                <strong>Certificado: </strong>
-                {certificateRequested ? "Solicitado" : "Não solicitado"}
-              </Row>
-
               <Row>
                 <strong>Nome do aluno: </strong>
                 {studentName}
               </Row>
 
-              <Row className="mb-4">
-                <strong>Contato do aluno: </strong>
-                {studentContact}
+              <Row>
+                <strong>Disciplina: </strong>
+                {subject}
               </Row>
 
               <Row>
-                <strong>Nome do professor: </strong>
-                {professorName}
-              </Row>
-
-              <Row>
-                <strong>Contato do professor: </strong>
-                {professorContact}
+                <strong>Mensagem: </strong>
+                {message}
               </Row>
             </Section>
+
+            <Text className="text-base">
+              Você pode começar a aula pela nossa plataforma clicando no botão
+              abaixo.
+            </Text>
+
+            <Button href={url} style={buttonStyle}>
+              Iniciar aula
+            </Button>
 
             <Hr className="border border-solid border-[#eaeaea] my-[35px] mx-0 w-full" />
 
             <Text className="text-[#666666] text-[12px] leading-[24px]">
-              Se você não estava esperando por esta mensagem, você pode ignorar
+              Se você não estava esperando por este mensagem, você pode ignorar
               este e-mail. Se você estiver preocupado com a segurança de sua
               conta, por favor responda a este e-mail para entrar em contato
               conosco.

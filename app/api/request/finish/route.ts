@@ -1,6 +1,6 @@
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
-import { AccountRole, Status } from "@prisma/client";
+import { AccountRole, PaymentMethod, Status } from "@prisma/client";
 
 import getCurrentUser from "@/app/action/getCurrentUser";
 import { prisma } from "@/libs/prismadb";
@@ -28,9 +28,12 @@ export async function PUT(req: Request) {
       },
     });
     const baseUrl =
-      process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_BASEURL_DEV! : process.env.NEXT_PUBLIC_BASEURL!;
+      process.env.NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_BASEURL_DEV!
+        : process.env.NEXT_PUBLIC_BASEURL!;
 
     let requests;
+    let isProfessor = false;
 
     if (!currentUser?.id) {
       return new Response("Usuário não encontrado", { status: 404 });
@@ -86,7 +89,11 @@ export async function PUT(req: Request) {
         },
       });
 
-      if (requests.filter((request: RequestWithUsersAndOffers) => request.id === requestId).length === 0) {
+      if (
+        requests.filter(
+          (request: RequestWithUsersAndOffers) => request.id === requestId,
+        ).length === 0
+      ) {
         return new Response("Solicitação inválida", {
           status: 401,
         });
@@ -94,6 +101,8 @@ export async function PUT(req: Request) {
     }
 
     if (currentUser.accountType === AccountRole.PROFESSOR) {
+      isProfessor = true;
+
       requests = await prisma.request.findMany({
         include: {
           users: {
@@ -145,9 +154,14 @@ export async function PUT(req: Request) {
       });
     }
 
-    const requestFiltered = requests.filter((request) => request.id === requestId)[0];
+    const requestFiltered = requests.filter(
+      (request) => request.id === requestId,
+    )[0];
 
-    if (requestFiltered.usersIdsVotedToFinish.length === 2 || requestFiltered.isConcluded) {
+    if (
+      requestFiltered.usersIdsVotedToFinish.length === 2 ||
+      requestFiltered.isConcluded
+    ) {
       return new Response("Solicitação já foi finalizada", {
         status: 401,
       });
@@ -159,8 +173,14 @@ export async function PUT(req: Request) {
       },
       data: {
         isConcluded: requestFiltered.usersIdsVotedToFinish.length === 1,
-        status: requestFiltered.usersIdsVotedToFinish.length === 1 ? Status.finished : Status.finishing,
-        finishLessonDate: requestFiltered.usersIdsVotedToFinish.length === 1 ? new Date() : null,
+        status:
+          requestFiltered.usersIdsVotedToFinish.length === 1
+            ? Status.finished
+            : Status.finishing,
+        finishLessonDate:
+          requestFiltered.usersIdsVotedToFinish.length === 1
+            ? new Date()
+            : null,
         usersVotedToFinish: {
           connect: {
             id: currentUser.id,
@@ -217,23 +237,36 @@ export async function PUT(req: Request) {
       });
     }
 
-    const student = requestUpdated.users.filter((user) => user.accountType === AccountRole.STUDENT)[0];
-    const professor = requestUpdated.users.filter((user) => user.accountType === AccountRole.PROFESSOR)[0];
+    const student = requestUpdated.users.filter(
+      (user) => user.accountType === AccountRole.STUDENT,
+    )[0];
+    const professor = requestUpdated.users.filter(
+      (user) => user.accountType === AccountRole.PROFESSOR,
+    )[0];
 
     const newRequests = requests.filter((request) => request.id !== requestId);
 
     newRequests.push(requestUpdated);
 
-    const otherUser = requestUpdated.users.filter((user) => user.id !== currentUser.id)[0];
+    const otherUser = requestUpdated.users.filter(
+      (user) => user.id !== currentUser.id,
+    )[0];
 
     if (requestFiltered.usersIdsVotedToFinish.length === 1) {
-      const professor = requestUpdated.users.filter((user) => user.accountType === AccountRole.PROFESSOR)[0];
+      const professor = requestUpdated.users.filter(
+        (user) => user.accountType === AccountRole.PROFESSOR,
+      )[0];
       let payment: number;
 
-      if (requestUpdated.certificateRequested) {
-        payment = professor.paymentRetrievable + (requestUpdated.lessonPrice! + 20);
+      if (requestUpdated.paymentMethod === PaymentMethod.platform) {
+        if (requestUpdated.certificateRequested) {
+          payment =
+            professor.paymentRetrievable + (requestUpdated.lessonPrice! + 20);
+        } else {
+          payment = professor.paymentRetrievable + requestUpdated.lessonPrice!;
+        }
       } else {
-        payment = professor.paymentRetrievable + requestUpdated.lessonPrice!;
+        payment = professor.paymentRetrievable;
       }
 
       const professorUpdated = await prisma.user.update({
@@ -246,22 +279,26 @@ export async function PUT(req: Request) {
       });
 
       if (!professorUpdated) {
-        return new Response("Ocorreu um erro ao enviar o valor para o professor", { status: 401 });
+        return new Response(
+          "Ocorreu um erro ao enviar o valor para o professor",
+          { status: 401 },
+        );
       }
 
-      if (requestUpdated.lessonPrice! > 0) {
+      if (requestUpdated.paymentMethod === PaymentMethod.platform) {
         const professorEmailHtml = render(
           EmailProfessorLessonFinishPaymentNotification({
             name: `${professorUpdated.firstName} ${professorUpdated.lastName}`,
             lessonPrice: requestUpdated.lessonPrice!,
             baseUrl: `${baseUrl}/painel-de-controle/professor/${professorUpdated.id}/resumo`,
-          })
+          }),
         );
 
         const professorOptions = {
           from: emailUser,
           to: professorUpdated.email,
-          subject: "Notificação de pagamento disponível para resgate - O Sapiente",
+          subject:
+            "Notificação de pagamento disponível para resgate - O Sapiente",
           html: professorEmailHtml,
         };
 
@@ -275,7 +312,7 @@ export async function PUT(req: Request) {
             studentName: `${student.firstName} ${student.lastName}`,
             beginLessonDate: requestUpdated.beginLessonDate!,
             finishLessonDate: requestUpdated.finishLessonDate!,
-          })
+          }),
         );
 
         const professorOptions = {
@@ -296,7 +333,7 @@ export async function PUT(req: Request) {
           professorName: `${professorUpdated.firstName} ${professorUpdated.lastName}`,
           beginLessonDate: requestUpdated.beginLessonDate!,
           finishLessonDate: requestUpdated.finishLessonDate!,
-        })
+        }),
       );
 
       const studentOptions = {
@@ -321,7 +358,7 @@ export async function PUT(req: Request) {
           professorContact: professor.tel!,
           status: "Finalizado",
           userWhoVoted: `${currentUser.firstName} ${currentUser.lastName}`,
-        })
+        }),
       );
 
       const adminOptions = {
@@ -340,7 +377,7 @@ export async function PUT(req: Request) {
           name: `${otherUser.firstName} ${otherUser.lastName}`,
           otherUserName: `${currentUser.firstName} ${currentUser.lastName}`,
           baseUrl,
-        })
+        }),
       );
 
       const adminEmailHtml = render(
@@ -355,7 +392,7 @@ export async function PUT(req: Request) {
           professorContact: professor.tel!,
           status: "Finalizando",
           userWhoVoted: `${currentUser.firstName} ${currentUser.lastName}`,
-        })
+        }),
       );
 
       const options = {
@@ -376,7 +413,7 @@ export async function PUT(req: Request) {
       await transport.sendMail(adminOptions);
     }
 
-    return Response.json(newRequests, { status: 200 });
+    return Response.json({ newRequests, isProfessor }, { status: 200 });
   } catch (error) {
     console.log("[ERROR_FINISH_REQUEST]", error);
     return new Response("Ocorreu um erro ao finalizar a solicitação", {

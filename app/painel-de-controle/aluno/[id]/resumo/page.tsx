@@ -23,7 +23,8 @@ import useResumeStore from "@/stores/useResumeStore";
 // TODO: ajustar pagina de login quando o usuário tenta entrar no painel sem estar logado
 
 const DashboardPage = () => {
-  const { setProfilePhoto, setName, setCurrentLesson, setRequests, requests } = useResumeStore();
+  const { setProfilePhoto, setName, setCurrentLesson, setRequests, requests } =
+    useResumeStore();
 
   const session = useSession();
   const router = useRouter();
@@ -56,10 +57,23 @@ const DashboardPage = () => {
         const requestResponse = await axios.get("/api/request/get-requests");
 
         setRequests(
-          requestResponse.data.filter((request: Request) => !request.isConcluded && !request.isOfferAccepted)
+          requestResponse.data.filter(
+            (request: Request) =>
+              !request.isConcluded && !request.isOfferAccepted,
+          ),
         );
         setCurrentLesson(
-          requestResponse.data.filter((request: Request) => request.isOfferAccepted && !request.isConcluded)
+          requestResponse.data.filter(
+            (request: Request) =>
+              request.isOfferAccepted && !request.isConcluded,
+          ),
+        );
+
+        console.log(
+          requestResponse.data.filter(
+            (request: Request) =>
+              request.isOfferAccepted && !request.isConcluded,
+          ),
         );
       } catch (error) {
         console.error(error);
@@ -67,7 +81,13 @@ const DashboardPage = () => {
     };
 
     fetchData();
-  }, [session?.data?.user?.email, setCurrentLesson, setName, setProfilePhoto, setRequests]);
+  }, [
+    session?.data?.user?.email,
+    setCurrentLesson,
+    setName,
+    setProfilePhoto,
+    setRequests,
+  ]);
 
   return (
     <>

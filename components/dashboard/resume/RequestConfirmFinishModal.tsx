@@ -6,26 +6,45 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { OverlayAnimation, ModalAnimation } from "@/constants/framer-animations/modal";
+import {
+  OverlayAnimation,
+  ModalAnimation,
+} from "@/constants/framer-animations/modal";
 import { Button } from "@/components/ui/button";
 import { confirmFinishModalInfo } from "@/constants/dashboard/resume-br";
 import useConfirmFinishModalStore from "@/stores/useConfirmFinishModalStore";
 import useResumeStore from "@/stores/useResumeStore";
-import { RequestWithUsersAndOffers } from "@/types";
+import { RequestWithUsersAndOffers, UserFromRequest } from "@/types";
 import useUserStore from "@/stores/useUserStore";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function RequestConfirmFinishModal() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [filteredUser, setFilteredUser] = useState<UserFromRequest | null>(
+    null,
+  );
 
   const { setRequests, setCurrentLesson } = useResumeStore();
-  const { isModalOpen, closeModal, requestSelected, setRequestSelected } = useConfirmFinishModalStore();
+  const { isModalOpen, closeModal, requestSelected, setRequestSelected } =
+    useConfirmFinishModalStore();
   const { userId } = useUserStore();
-  const filteredUser = requestSelected?.usersVotedToFinish.filter((user) => user.id !== userId)[0];
   const router = useRouter();
+
+  useEffect(() => {
+    console.log(requestSelected);
+    console.log(userId);
+
+    if (requestSelected && userId) {
+      setFilteredUser(
+        requestSelected.usersVotedToFinish.filter(
+          (user) => user.id !== userId,
+        )[0],
+      );
+    }
+  }, [requestSelected, userId]);
 
   if (isModalOpen && !requestSelected && !filteredUser) {
     return <RequestConfirmFinishModalSkeleton handleClose={handleClose} />;
@@ -48,11 +67,29 @@ export function RequestConfirmFinishModal() {
       .put("/api/request/finish", { requestId: requestSelected.id })
       .then((res) => {
         setRequests(
-          res.data.filter((request: RequestWithUsersAndOffers) => !request.isConcluded && !request.isOfferAccepted)
+          res.data.newRequests.filter(
+            (request: RequestWithUsersAndOffers) =>
+              !request.isConcluded && !request.isOfferAccepted,
+          ),
         );
-        setCurrentLesson(
-          res.data.filter((request: RequestWithUsersAndOffers) => !request.isConcluded && request.isOfferAccepted)
-        );
+
+        if (res.data.isProfessor) {
+          setCurrentLesson(
+            res.data.newRequests.filter(
+              (request: RequestWithUsersAndOffers) =>
+                request.isOfferAccepted &&
+                !request.isConcluded &&
+                request.userIds.includes(userId),
+            ),
+          );
+        } else {
+          setCurrentLesson(
+            res.data.newRequests.filter(
+              (request: RequestWithUsersAndOffers) =>
+                !request.isConcluded && request.isOfferAccepted,
+            ),
+          );
+        }
         closeModal();
         router.refresh();
       })
@@ -135,7 +172,12 @@ export function RequestConfirmFinishModal() {
                 </div>
 
                 <div className="w-full flex flex-col sm:flex-row gap-4 mb-6">
-                  <Button disabled={isSubmitting} variant="outline" onClick={closeModal} className="w-full sm:w-1/2">
+                  <Button
+                    disabled={isSubmitting}
+                    variant="outline"
+                    onClick={closeModal}
+                    className="w-full sm:w-1/2"
+                  >
                     {confirmFinishModalInfo.cancelBtn}
                   </Button>
 
@@ -157,18 +199,29 @@ export function RequestConfirmFinishModal() {
   );
 }
 
-function RequestConfirmFinishModalSkeleton({ handleClose }: { handleClose: () => void }) {
+function RequestConfirmFinishModalSkeleton({
+  handleClose,
+}: {
+  handleClose: () => void;
+}) {
   return (
     <div className="w-screen h-screen bg-[#2C383F]/75 fixed top-0 left-0 right-0 bottom-0 z-[9999] text-center overflow-auto p-6 after:h-full after:content-[''] after:inline-block after:align-middle">
       <div className="w-full max-w-[650px] bg-white shadow-lg shadow-black/25 p-9 overflow-x-hidden rounded-2xl inline-block align-middle">
         <div className="w-full flex flex-col">
           <div className="w-full flex items-center justify-end">
-            <Button variant="link" size="icon" className="text-green-primary" onClick={handleClose}>
+            <Button
+              variant="link"
+              size="icon"
+              className="text-green-primary"
+              onClick={handleClose}
+            >
               <BsXLg size={26} />
             </Button>
           </div>
 
-          <h1 className="text-2xl text-gray-primary font-semibold text-left mb-12">{confirmFinishModalInfo.title}</h1>
+          <h1 className="text-2xl text-gray-primary font-semibold text-left mb-12">
+            {confirmFinishModalInfo.title}
+          </h1>
 
           <div className="w-full flex items-center justify-center mb-12">
             <div className="bg-green-primary p-4 flex items-center gap-4 rounded-xl">
