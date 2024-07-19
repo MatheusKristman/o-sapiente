@@ -103,6 +103,20 @@ export async function GET() {
               seenMessageIds: true,
             },
           },
+          usersVotedToFinish: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              tel: true,
+              accountType: true,
+              profilePhoto: true,
+              subjectIds: true,
+              requestIds: true,
+              seenMessageIds: true,
+            },
+          },
           offers: {
             include: {
               user: {
