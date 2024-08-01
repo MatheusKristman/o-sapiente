@@ -6,6 +6,44 @@ import { AccountRole } from "@prisma/client";
 
 import { prisma } from "@/libs/prismadb";
 import EmailConfirmAccount from "@/emails/EmailConfirmAccount";
+import EmailRequestNotification from "@/emails/EmailRequestNotification";
+
+interface IGenerateOptions {
+  emailUser: string;
+  userName: string;
+  professorEmail: string;
+  message: string;
+  studentName: string;
+  subject: string;
+  linkUrl: string;
+}
+
+function generateOptions({
+  emailUser,
+  userName,
+  professorEmail,
+  message,
+  studentName,
+  subject,
+  linkUrl,
+}: IGenerateOptions) {
+  const emailHtml = render(
+    EmailRequestNotification({
+      userName,
+      message,
+      studentName,
+      subject,
+      linkUrl,
+    })
+  );
+
+  return {
+    from: emailUser,
+    to: professorEmail,
+    subject: "Nova Solicitação de Aluno Criada - O Sapiente",
+    html: emailHtml,
+  };
+}
 
 export async function POST(req: Request) {
   try {
@@ -100,7 +138,7 @@ export async function POST(req: Request) {
       });
 
       if (body.subject && body.description) {
-        await prisma.request.create({
+        const newRequest = await prisma.request.create({
           data: {
             subject: body.subject,
             description: body.description,
@@ -110,7 +148,47 @@ export async function POST(req: Request) {
               },
             },
           },
+          include: {
+            users: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                tel: true,
+              },
+            },
+          },
         });
+
+        const professors = await prisma.user.findMany({
+          where: {
+            accountType: AccountRole.PROFESSOR,
+          },
+        });
+
+        try {
+          await Promise.all(
+            professors.map(async (professor) => {
+              const options = generateOptions({
+                emailUser,
+                userName: `${professor.firstName} ${professor.lastName}`,
+                professorEmail: professor.email,
+                message: body.description,
+                subject: body.subject,
+                studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
+                linkUrl: `${baseUrl}/painel-de-controle/professor/${professor.id}/resumo`,
+              });
+
+              await transport.sendMail(options);
+            })
+          );
+        } catch (error) {
+          console.log("[ERROR_POST_REQUEST]", error);
+
+          return new NextResponse("Ocorreu um erro ao enviar o e-mail", {
+            status: 400,
+          });
+        }
       }
 
       const emailHtml = render(
