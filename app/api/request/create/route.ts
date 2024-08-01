@@ -9,8 +9,7 @@ import EmailAdminNewRequest from "@/emails/EmailAdminNewRequest";
 
 interface IGenerateOptions {
   emailUser: string;
-  userName: string;
-  professorEmail: string;
+  professorEmails: string[];
   message: string;
   studentName: string;
   subject: string;
@@ -25,18 +24,9 @@ interface IGenerateAdminOptions {
   description: string;
 }
 
-function generateOptions({
-  emailUser,
-  userName,
-  professorEmail,
-  message,
-  studentName,
-  subject,
-  linkUrl,
-}: IGenerateOptions) {
+function generateOptions({ emailUser, professorEmails, message, studentName, subject, linkUrl }: IGenerateOptions) {
   const emailHtml = render(
     EmailRequestNotification({
-      userName,
       message,
       studentName,
       subject,
@@ -46,7 +36,7 @@ function generateOptions({
 
   return {
     from: emailUser,
-    to: professorEmail,
+    bcc: professorEmails,
     subject: "Nova Solicitação de Aluno Criada - O Sapiente",
     html: emailHtml,
   };
@@ -94,16 +84,25 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const user = await prisma.user.findFirst({
+    const users = await prisma.user.findMany({
       where: {
-        email,
-        accountType: AccountRole.STUDENT,
+        OR: [
+          {
+            email,
+            accountType: AccountRole.STUDENT,
+          },
+          {
+            accountType: AccountRole.PROFESSOR,
+          },
+        ],
       },
     });
 
-    if (!user) {
+    if (!users) {
       return new NextResponse("Usuário não encontrado", { status: 404 });
     }
+
+    const student = users.filter((user) => user.accountType === "STUDENT")[0];
 
     const newRequest = await prisma.request.create({
       data: {
@@ -111,7 +110,7 @@ export async function POST(req: NextRequest) {
         description,
         users: {
           connect: {
-            id: user.id,
+            id: student.id,
           },
         },
       },
@@ -130,7 +129,7 @@ export async function POST(req: NextRequest) {
     const newRequests = await prisma.request.findMany({
       where: {
         userIds: {
-          has: user.id,
+          has: student.id,
         },
       },
       include: {
@@ -161,35 +160,20 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const professors = await prisma.user.findMany({
-      where: {
-        accountType: AccountRole.PROFESSOR,
-      },
+    const professorEmails = users
+      .filter((user) => user.accountType === "PROFESSOR")
+      .map((professor) => professor.email);
+
+    const professorOptions = generateOptions({
+      emailUser,
+      professorEmails,
+      message: description,
+      subject,
+      studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
+      linkUrl: `${baseUrl}/`,
     });
 
-    try {
-      await Promise.all(
-        professors.map(async (professor) => {
-          const options = generateOptions({
-            emailUser,
-            userName: `${professor.firstName} ${professor.lastName}`,
-            professorEmail: professor.email,
-            message: description,
-            subject,
-            studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
-            linkUrl: `${baseUrl}/painel-de-controle/professor/${professor.id}/resumo`,
-          });
-
-          await transport.sendMail(options);
-        })
-      );
-    } catch (error) {
-      console.log("[ERROR_POST_REQUEST]", error);
-
-      return new NextResponse("Ocorreu um erro ao enviar o e-mail", {
-        status: 400,
-      });
-    }
+    await transport.sendMail(professorOptions);
 
     const options = generateAdminOptions({
       emailUser,
