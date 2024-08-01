@@ -11,6 +11,10 @@ interface useNewRequestStoreProps {
   activateForm: () => void;
   deactivateForm: () => void;
   resetModalContent: () => void;
+  isSubmitting: boolean;
+  setIsSubmitting: (value: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
 }
 
 const useNewRequestStore = create<useNewRequestStoreProps>((set) => ({
@@ -24,6 +28,10 @@ const useNewRequestStore = create<useNewRequestStoreProps>((set) => ({
   activateForm: () => set(() => ({ isForm: true })),
   deactivateForm: () => set(() => ({ isForm: false })),
   resetModalContent: () => set(() => ({ isForm: true, isMessage: false })),
+  isSubmitting: false,
+  setIsSubmitting: (value) => set({ isSubmitting: value }),
+  isLoading: false,
+  setIsLoading: (value) => set({ isLoading: value }),
 }));
 
 export default useNewRequestStore;
