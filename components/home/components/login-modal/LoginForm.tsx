@@ -21,8 +21,6 @@ import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 //TODO: ajustar para login de todos os tipos
 
 const LoginForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
   const router = useRouter();
 
   const {
@@ -35,6 +33,8 @@ const LoginForm = () => {
     setDescription,
     deactivateBackBtn,
     setToRecoverPassword,
+    isSubmitting,
+    setIsSubmitting,
   } = useLoginModalStore();
 
   const form = useForm<z.infer<typeof studentLoginSchema>>({

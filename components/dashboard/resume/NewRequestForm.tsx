@@ -21,11 +21,10 @@ import { RequestWithUsersAndOffers } from "@/types";
 
 const NewRequestForm = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const { setRequests, setCurrentLesson } = useResumeStore();
-  const { activateMessage, deactivateForm } = useNewRequestStore();
+  const { activateMessage, deactivateForm, isLoading, setIsLoading, isSubmitting, setIsSubmitting } =
+    useNewRequestStore();
   const form = useForm({
     defaultValues: {
       subject: studentNewRequestInfo.themePlaceholder,

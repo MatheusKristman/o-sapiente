@@ -17,9 +17,8 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/libs/utils";
 
 function ForgotPasswordForm() {
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-  const { setToNotRecoverPassword, setToLogin, setToRecoverPasswordMessage } = useLoginModalStore();
+  const { setToNotRecoverPassword, setToLogin, setToRecoverPasswordMessage, isSubmitting, setIsSubmitting } =
+    useLoginModalStore();
 
   const form = useForm<z.infer<typeof studentForgotPasswordSchema>>({
     defaultValues: {

@@ -17,10 +17,10 @@ import { Form, FormField, FormItem, FormControl, FormMessage } from "@/component
 
 const RequestForm = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isNextEnabled, setIsNextEnabled] = useState(true);
 
-  const { setToNotRequest, setToRegister, setSubject, setDescription, activateBackBtn } = useLoginModalStore();
+  const { setToNotRequest, setToRegister, setSubject, setDescription, activateBackBtn, isLoading, setIsLoading } =
+    useLoginModalStore();
   const form = useForm<z.infer<typeof studentNewRequestSchema>>({
     // @ts-ignore
     resolver: zodResolver(studentNewRequestSchema),

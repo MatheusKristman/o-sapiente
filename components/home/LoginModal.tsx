@@ -33,6 +33,8 @@ const LoginModal = () => {
     isRecoverPasswordMessage,
     setToNotRecoverPasswordMessage,
     setToNotRecoverPassword,
+    isLoading,
+    isSubmitting,
   } = useLoginModalStore();
 
   function handleCloseButton() {
@@ -94,6 +96,7 @@ const LoginModal = () => {
                     className="text-green-primary"
                     variant="link"
                     size="icon"
+                    disabled={isLoading || isSubmitting}
                     onClick={handleBackButton}
                   >
                     <HiChevronLeft size={34} />
@@ -104,6 +107,7 @@ const LoginModal = () => {
                   variant="link"
                   size="icon"
                   type="button"
+                  disabled={isLoading || isSubmitting}
                   className="text-green-primary"
                   onClick={handleCloseButton}
                 >

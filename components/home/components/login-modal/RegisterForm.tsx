@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
-import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -20,8 +19,6 @@ import { Form, FormField, FormItem, FormControl, FormMessage } from "@/component
 import { cn } from "@/libs/utils";
 
 const RegisterForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
   const {
     setToLogin,
     setToNotRegister,
@@ -31,6 +28,8 @@ const RegisterForm = () => {
     setSubject,
     setDescription,
     deactivateBackBtn,
+    isSubmitting,
+    setIsSubmitting,
   } = useLoginModalStore();
 
   const form = useForm<z.infer<typeof studentRegisterSchema>>({

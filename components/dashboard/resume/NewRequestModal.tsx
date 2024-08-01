@@ -9,7 +9,8 @@ import NewRequestSuccess from "./NewRequestSuccess";
 import { Button } from "@/components/ui/button";
 
 const NewRequestModal = () => {
-  const { isModalOpen, closeModal, isForm, isMessage, resetModalContent } = useNewRequestStore();
+  const { isModalOpen, closeModal, isForm, isMessage, resetModalContent, isLoading, isSubmitting } =
+    useNewRequestStore();
   const router = useRouter();
 
   function handleCloseButton() {
@@ -42,7 +43,14 @@ const NewRequestModal = () => {
               className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
             >
               <div className="w-full flex justify-end items-center">
-                <Button variant="link" size="icon" type="button" onClick={handleCloseButton} className="mb-6">
+                <Button
+                  disabled={isLoading || isSubmitting}
+                  variant="link"
+                  size="icon"
+                  type="button"
+                  onClick={handleCloseButton}
+                  className="mb-6"
+                >
                   <BsXLg size={26} className="text-green-primary" />
                 </Button>
               </div>

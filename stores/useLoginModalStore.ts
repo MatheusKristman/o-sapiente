@@ -26,6 +26,10 @@ interface useLoginModalInter {
   isBackBtnActive: boolean;
   activateBackBtn: () => void;
   deactivateBackBtn: () => void;
+  isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
+  isSubmitting: boolean;
+  setIsSubmitting: (value: boolean) => void;
 }
 
 const useLoginModalStore = create<useLoginModalInter>((set) => ({
@@ -45,10 +49,8 @@ const useLoginModalStore = create<useLoginModalInter>((set) => ({
   setToRecoverPassword: () => set(() => ({ forgotPassword: true })),
   setToNotRecoverPassword: () => set(() => ({ forgotPassword: false })),
   isRecoverPasswordMessage: false,
-  setToRecoverPasswordMessage: () =>
-    set(() => ({ isRecoverPasswordMessage: true })),
-  setToNotRecoverPasswordMessage: () =>
-    set(() => ({ isRecoverPasswordMessage: false })),
+  setToRecoverPasswordMessage: () => set(() => ({ isRecoverPasswordMessage: true })),
+  setToNotRecoverPasswordMessage: () => set(() => ({ isRecoverPasswordMessage: false })),
   subject: "",
   setSubject: (value) => set(() => ({ subject: value })),
   description: "",
@@ -56,6 +58,10 @@ const useLoginModalStore = create<useLoginModalInter>((set) => ({
   isBackBtnActive: false,
   activateBackBtn: () => set(() => ({ isBackBtnActive: true })),
   deactivateBackBtn: () => set(() => ({ isBackBtnActive: false })),
+  isLoading: false,
+  setIsLoading: (value) => set({ isLoading: value }),
+  isSubmitting: false,
+  setIsSubmitting: (value) => set({ isSubmitting: value }),
 }));
 
 export default useLoginModalStore;
