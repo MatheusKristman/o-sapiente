@@ -19,14 +19,13 @@ const imageURL =
     : "/static/email-logo.png";
 
 interface Props {
-  userName: string;
   message: string;
   studentName: string;
   subject: string;
   linkUrl: string;
 }
 
-export default function EmailRequestNotification({ userName, message, studentName, subject, linkUrl }: Props) {
+export default function EmailRequestNotification({ message, studentName, subject, linkUrl }: Props) {
   return (
     <Html>
       <Head />
@@ -37,7 +36,7 @@ export default function EmailRequestNotification({ userName, message, studentNam
           <Container style={container}>
             <Img src={imageURL} width="145" height="30" alt="O Sapiente" style={image} />
 
-            <Text className="text-base">Ola {userName},</Text>
+            <Text className="text-base">Ola,</Text>
 
             <Text className="text-base">
               Gostaríamos de informar que um novo <strong>pedido</strong> de aula foi criado por um aluno em nossa

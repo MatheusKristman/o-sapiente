@@ -10,26 +10,16 @@ import EmailRequestNotification from "@/emails/EmailRequestNotification";
 
 interface IGenerateOptions {
   emailUser: string;
-  userName: string;
-  professorEmail: string;
+  professorEmails: string[];
   message: string;
   studentName: string;
   subject: string;
   linkUrl: string;
 }
 
-function generateOptions({
-  emailUser,
-  userName,
-  professorEmail,
-  message,
-  studentName,
-  subject,
-  linkUrl,
-}: IGenerateOptions) {
+function generateOptions({ emailUser, professorEmails, message, studentName, subject, linkUrl }: IGenerateOptions) {
   const emailHtml = render(
     EmailRequestNotification({
-      userName,
       message,
       studentName,
       subject,
@@ -39,7 +29,7 @@ function generateOptions({
 
   return {
     from: emailUser,
-    to: professorEmail,
+    bcc: professorEmails,
     subject: "Nova Solicitação de Aluno Criada - O Sapiente",
     html: emailHtml,
   };
@@ -166,29 +156,20 @@ export async function POST(req: Request) {
           },
         });
 
-        try {
-          await Promise.all(
-            professors.map(async (professor) => {
-              const options = generateOptions({
-                emailUser,
-                userName: `${professor.firstName} ${professor.lastName}`,
-                professorEmail: professor.email,
-                message: body.description,
-                subject: body.subject,
-                studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
-                linkUrl: `${baseUrl}/painel-de-controle/professor/${professor.id}/resumo`,
-              });
+        const professorEmails = professors
+          .filter((professor) => professor.accountType === "PROFESSOR")
+          .map((professor) => professor.email);
 
-              await transport.sendMail(options);
-            })
-          );
-        } catch (error) {
-          console.log("[ERROR_POST_REQUEST]", error);
+        const professorOptions = generateOptions({
+          emailUser,
+          professorEmails,
+          message: body.description,
+          subject: body.subject,
+          studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
+          linkUrl: `${baseUrl}/`,
+        });
 
-          return new NextResponse("Ocorreu um erro ao enviar o e-mail", {
-            status: 400,
-          });
-        }
+        await transport.sendMail(professorOptions);
       }
 
       const emailHtml = render(
