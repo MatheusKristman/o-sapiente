@@ -5,3 +5,7 @@ export const coursePaymentInfo = {
   subtotal: "Subtotal",
   total: "Total",
 };
+
+export const clientDataInfo = {
+  title: "Dados do cliente",
+};
