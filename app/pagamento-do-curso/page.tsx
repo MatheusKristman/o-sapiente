@@ -54,6 +54,7 @@ const formSchema = z
     creditOwner: z.string(),
     creditExpiry: z.string(),
     creditCvc: z.string(),
+    installments: z.string(),
   })
   .superRefine(
     (
@@ -98,8 +99,6 @@ const formSchema = z
     },
   );
 
-//TODO: criar formulário para o pagamento
-
 export default function CoursePaymentPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -122,6 +121,7 @@ export default function CoursePaymentPage() {
       creditOwner: "",
       creditExpiry: "",
       creditCvc: "",
+      installments: "1",
     },
   });
 
@@ -131,11 +131,11 @@ export default function CoursePaymentPage() {
 
   return (
     <Form {...form}>
-      <form className="w-full flex flex-col relative">
-        <div className="w-full px-6 flex flex-col-reverse gap-12">
+      <form className="w-full flex flex-col relative mt-24">
+        <div className="w-full px-6 flex flex-col-reverse gap-12 sm:px-16 lg:container lg:mx-auto lg:grid lg:grid-cols-[1fr_500px]">
           <CoursePaymentForm form={form} />
 
-          <div className="bg-[#E2EBEF] px-6 py-9 rounded-2xl flex flex-col gap-8">
+          <div className="h-fit bg-[#E2EBEF] px-6 py-9 rounded-2xl flex flex-col gap-8">
             <div className="w-full flex flex-col items-center">
               <span className="text-gray-primary text-base font-medium">
                 {coursePaymentInfo.totalCostLabel}

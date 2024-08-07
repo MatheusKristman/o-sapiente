@@ -1,21 +1,17 @@
-"use client";
-
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CopyIcon, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
-import { info } from "@/constants/after-payment/paymentPix-br";
-import { Input } from "@/components/ui/input";
+import useUserStore from "@/stores/useUserStore";
+import { CopyIcon, Loader2 } from "lucide-react";
+import { Input } from "../ui/input";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import useUserStore from "@/stores/useUserStore";
+} from "../ui/tooltip";
+import { Button } from "../ui/button";
 
 interface Props {
   qrCodeUrl: string | null | undefined;
@@ -24,7 +20,12 @@ interface Props {
   userType: string | null | undefined;
 }
 
-export function PaymentPix({ qrCodeUrl, pixCode, expiresAt, userType }: Props) {
+export function CoursePaymentPix({
+  qrCodeUrl,
+  pixCode,
+  expiresAt,
+  userType,
+}: Props) {
   const [copied, setCopied] = useState<boolean>(false);
 
   const { userId } = useUserStore();
@@ -51,29 +52,30 @@ export function PaymentPix({ qrCodeUrl, pixCode, expiresAt, userType }: Props) {
 
   return (
     <div className="w-full px-6 h-full mt-12 mb-24 sm:px-16 lg:container lg:mx-auto">
-      <div className="w-full my-auto flex flex-col items-center gap-6">
-        <div className="w-full flex flex-col gap-4 items-center justify-center">
+      <div className="w-full flex flex-col items-center gap-9">
+        <div className="w-full flex flex-col items-center gap-6">
           <Image
             src="/assets/icons/confirm-payment.gif"
-            alt={info.altImg}
+            alt="Aguardando Pagamento"
             width={150}
             height={150}
             className="object-center object-contain"
           />
-        </div>
 
-        <div className="w-full flex flex-col gap-4 items-center justify-center lg:max-w-3xl">
           <h1 className="text-2xl font-semibold text-gray-primary text-center sm:text-3xl">
-            <strong className="font-semibold text-green-primary">
-              {info.titleGreen}
-            </strong>{" "}
-            {info.titleGray}
+            Aguardando{" "}
+            <strong className="text-green-primary font-semibold">
+              pagamento
+            </strong>
           </h1>
 
-          <p className="text-base text-gray-primary text-center sm:text-lg">
-            {info.desc}
+          <p className="text-base text-gray-primary text-center font-medium max-w-prose sm:text-lg">
+            Após realizar o pagamento, você receberá um e-mail de confirmação do
+            pagamento.
           </p>
         </div>
+
+        <div className="w-full h-px bg-[#C8D6DF] max-w-prose" />
 
         <div className="flex flex-col items-center gap-4">
           <div className="w-[300px] h-[300px] relative bg-[#C8D6DF] rounded-xl overflow-hidden flex items-center justify-center">
@@ -123,19 +125,26 @@ export function PaymentPix({ qrCodeUrl, pixCode, expiresAt, userType }: Props) {
           ) : null}
         </div>
 
-        <div className="w-full flex items-center justify-center gap-6 flex-col sm:flex-row">
-          <Button asChild>
-            <Link
-              href={
-                userType === "Professor"
-                  ? `${menuItems[0].professorHref}${userId}${menuItems[0].pageHref}`
-                  : `${menuItems[0].studentHref}${userId}${menuItems[0].pageHref}`
-              }
-              className="text-center w-full sm:w-fit"
-            >
-              {info.backBtn}
-            </Link>
-          </Button>
+        <div className="w-full flex items-center justify-center gap-6 flex-col sm:flex-row"></div>
+
+        <div className="w-full h-px bg-[#C8D6DF] max-w-prose" />
+
+        <div className="w-full flex flex-col items-center gap-6">
+          <p className="text-base text-center text-gray-primary max-w-md">
+            Aproveite e inscreva-se agora para receber aulas incríveis com
+            nossos professores!
+          </p>
+
+          <div className="flex items-center justify-center gap-4">
+            <Button variant="outline" asChild>
+              <Link href="/">Voltar para início</Link>
+            </Button>
+
+            {/* TODO: adicionar link para cadastro do aluno */}
+            <Button asChild>
+              <Link href="/">Cadastre-se agora</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

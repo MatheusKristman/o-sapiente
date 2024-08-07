@@ -8,7 +8,12 @@ import { ArrowDownToLineIcon, CopyIcon, Loader2 } from "lucide-react";
 import { info } from "@/constants/after-payment/paymentBoleto-br";
 import { Button } from "@/components/ui/button";
 import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Input } from "@/components/ui/input";
 import useUserStore from "@/stores/useUserStore";
 
@@ -58,10 +63,15 @@ export function PaymentBoleto({ pdf, boletoCode, userType }: Props) {
 
         <div className="w-full flex flex-col gap-4 items-center justify-center lg:max-w-3xl">
           <h1 className="text-2xl font-semibold text-gray-primary text-center sm:text-3xl">
-            <strong className="font-semibold text-green-primary">{info.titleGreen}</strong> {info.titleGray}
+            <strong className="font-semibold text-green-primary">
+              {info.titleGreen}
+            </strong>{" "}
+            {info.titleGray}
           </h1>
 
-          <p className="text-base text-gray-primary text-center sm:text-lg">{info.desc}</p>
+          <p className="text-base text-gray-primary text-center sm:text-lg">
+            {info.desc}
+          </p>
         </div>
 
         {boletoCode ? (
@@ -75,8 +85,16 @@ export function PaymentBoleto({ pdf, boletoCode, userType }: Props) {
 
             <TooltipProvider>
               <Tooltip open={copied}>
-                <TooltipTrigger className="absolute top-1/2 -translate-y-1/2 right-2">
-                  <Button disabled={!boletoCode} variant="link" size="icon" onClick={copyCode}>
+                <TooltipTrigger
+                  asChild
+                  className="absolute top-1/2 -translate-y-1/2 right-2"
+                >
+                  <Button
+                    disabled={!boletoCode}
+                    variant="link"
+                    size="icon"
+                    onClick={copyCode}
+                  >
                     <CopyIcon className="text-gray-primary" />
                   </Button>
                 </TooltipTrigger>
@@ -104,14 +122,22 @@ export function PaymentBoleto({ pdf, boletoCode, userType }: Props) {
           </Button>
 
           {pdf ? (
-            <Button variant="outline" className="w-full sm:w-fit flex items-center gap-1" asChild>
+            <Button
+              variant="outline"
+              className="w-full sm:w-fit flex items-center gap-1"
+              asChild
+            >
               <a href={pdf} target="_blank" rel="noreferrer noopener">
                 {info.downloadBtn}
                 <ArrowDownToLineIcon />
               </a>
             </Button>
           ) : (
-            <Button variant="outline" className="w-full sm:w-fit flex items-center gap-1" asChild>
+            <Button
+              variant="outline"
+              className="w-full sm:w-fit flex items-center gap-1"
+              asChild
+            >
               Carregando pdf
               <Loader2 className="w-4 h-4 animate-spin" />
             </Button>
