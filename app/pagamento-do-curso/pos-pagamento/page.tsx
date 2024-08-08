@@ -27,9 +27,7 @@ const validStatuses = [
 ];
 
 export default function CourseAfterPaymentPage() {
-  const [transactionType, setTransactionType] = useState<
-    string | null | undefined
-  >(null);
+  const [transactionType, setTransactionType] = useState<string | null | undefined>(null);
   const [status, setStatus] = useState<string | null | undefined>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null | undefined>(null);
   const [qrCode, setQrCode] = useState<string | null | undefined>(null);
@@ -61,33 +59,26 @@ export default function CourseAfterPaymentPage() {
 
   useEffect(() => {
     if (status && !validStatuses.includes(status)) {
-      toast.error(
-        "Ocorreu um erro, pagamento apresentou status fora do esperado! Verifique com o suporte.",
-      );
+      toast.error("Ocorreu um erro, pagamento apresentou status fora do esperado! Verifique com o suporte.");
       router.push("/");
     }
   }, [status]);
 
-  if (!status || !transactionType) {
-    return <LoadingComponent />;
-  }
+  // if (!status || !transactionType) {
+  //   return <LoadingComponent />;
+  // }
 
   return (
     <div className="w-full flex items-center justify-center sm:min-h-[700px]">
       {transactionType === "credit_card" &&
-        (status === "authorized_pending_capture" ||
-          status === "waiting_capture" ||
-          status === "partial_capture") && (
+        (status === "authorized_pending_capture" || status === "waiting_capture" || status === "partial_capture") && (
           <CoursePaymentProcessing userType={userType} />
         )}
 
-      {transactionType === "credit_card" && status === "captured" && (
-        <CoursePaymentConfirmed userType={userType} />
-      )}
+      {transactionType === "credit_card" && status === "captured" && <CoursePaymentConfirmed userType={userType} />}
+      <CoursePaymentConfirmed userType={userType} />
 
-      {(transactionType === "credit_card" ||
-        transactionType === "pix" ||
-        transactionType === "boleto") &&
+      {(transactionType === "credit_card" || transactionType === "pix" || transactionType === "boleto") &&
         (status === "not_authorized" ||
           status === "voided" ||
           status === "error_on_voiding" ||
@@ -96,20 +87,11 @@ export default function CourseAfterPaymentPage() {
           status === "failed") && <CoursePaymentDenied userType={userType} />}
 
       {transactionType === "boleto" && status === "generated" && (
-        <CoursePaymentBoleto
-          pdf={pdf}
-          boletoCode={boletoCode}
-          userType={userType}
-        />
+        <CoursePaymentBoleto pdf={pdf} boletoCode={boletoCode} userType={userType} />
       )}
 
       {transactionType === "pix" && status === "waiting_payment" && (
-        <CoursePaymentPix
-          qrCodeUrl={qrCodeUrl}
-          pixCode={qrCode}
-          expiresAt={expiresAt}
-          userType={userType}
-        />
+        <CoursePaymentPix qrCodeUrl={qrCodeUrl} pixCode={qrCode} expiresAt={expiresAt} userType={userType} />
       )}
     </div>
   );

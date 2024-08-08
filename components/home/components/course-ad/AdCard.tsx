@@ -1,21 +1,33 @@
 import Link from "next/link";
+import Image from "next/image";
+import { MoveRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { courseAdInfo } from "@/constants/courseAd-br";
 import { Button } from "@/components/ui/button";
-import { MoveRight } from "lucide-react";
-import Image from "next/image";
 import { cn } from "@/libs/utils";
+import { leftCardAnimation, rightCardAnimation } from "@/constants/framer-animations/course-ad";
 
 interface Props {
   title: string;
   price: string;
   themes?: string[];
   benefits: string[];
+  isRight?: boolean;
 }
 
-export function AdCard({ title, price, themes, benefits }: Props) {
+export function AdCard({ title, price, themes, benefits, isRight }: Props) {
   return (
-    <div className="w-full px-9 py-10 bg-white rounded-2xl shadow-lg flex flex-col gap-10">
+    <motion.div
+      initial="offscreen"
+      whileInView="onscreen"
+      viewport={{ once: true, amount: 0.1 }}
+      variants={isRight ? rightCardAnimation : leftCardAnimation}
+      className={cn("w-full px-9 py-10 bg-white rounded-2xl shadow-lg flex flex-col gap-10", {
+        "right-card-animation": isRight,
+        "left-card-animation": !isRight,
+      })}
+    >
       <div className="w-full flex flex-col items-center gap-6">
         <h3 className="text-2xl text-gray-primary font-semibold text-center">{title}</h3>
 
@@ -88,6 +100,6 @@ export function AdCard({ title, price, themes, benefits }: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
