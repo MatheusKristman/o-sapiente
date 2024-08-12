@@ -5,27 +5,16 @@ import Link from "next/link";
 import useUserStore from "@/stores/useUserStore";
 import { CopyIcon, Loader2 } from "lucide-react";
 import { Input } from "../ui/input";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Button } from "../ui/button";
 
 interface Props {
   qrCodeUrl: string | null | undefined;
   pixCode: string | null | undefined;
   expiresAt: Date | null | undefined;
-  userType: string | null | undefined;
 }
 
-export function CoursePaymentPix({
-  qrCodeUrl,
-  pixCode,
-  expiresAt,
-  userType,
-}: Props) {
+export function CoursePaymentPix({ qrCodeUrl, pixCode, expiresAt }: Props) {
   const [copied, setCopied] = useState<boolean>(false);
 
   const { userId } = useUserStore();
@@ -63,15 +52,11 @@ export function CoursePaymentPix({
           />
 
           <h1 className="text-2xl font-semibold text-gray-primary text-center sm:text-3xl">
-            Aguardando{" "}
-            <strong className="text-green-primary font-semibold">
-              pagamento
-            </strong>
+            Aguardando <strong className="text-green-primary font-semibold">pagamento</strong>
           </h1>
 
           <p className="text-base text-gray-primary text-center font-medium max-w-prose sm:text-lg">
-            Após realizar o pagamento, você receberá um e-mail de confirmação do
-            pagamento.
+            Após realizar o pagamento, você receberá um e-mail de confirmação do pagamento.
           </p>
         </div>
 
@@ -80,12 +65,7 @@ export function CoursePaymentPix({
         <div className="flex flex-col items-center gap-4">
           <div className="w-[300px] h-[300px] relative bg-[#C8D6DF] rounded-xl overflow-hidden flex items-center justify-center">
             {qrCodeUrl !== null || qrCodeUrl !== undefined ? (
-              <Image
-                alt="QRCode Pix"
-                src={qrCodeUrl ?? ""}
-                fill
-                className="object-contain object-center"
-              />
+              <Image alt="QRCode Pix" src={qrCodeUrl ?? ""} fill className="object-contain object-center" />
             ) : (
               <Loader2 color="#2C383F" className="w-20 h-20 animate-spin" />
             )}
@@ -102,16 +82,8 @@ export function CoursePaymentPix({
 
               <TooltipProvider>
                 <Tooltip open={copied}>
-                  <TooltipTrigger
-                    asChild
-                    className="absolute top-1/2 -translate-y-1/2 right-2"
-                  >
-                    <Button
-                      disabled={!pixCode}
-                      variant="link"
-                      size="icon"
-                      onClick={copyCode}
-                    >
+                  <TooltipTrigger asChild className="absolute top-1/2 -translate-y-1/2 right-2">
+                    <Button disabled={!pixCode} variant="link" size="icon" onClick={copyCode}>
                       <CopyIcon className="text-gray-primary" />
                     </Button>
                   </TooltipTrigger>
@@ -131,8 +103,7 @@ export function CoursePaymentPix({
 
         <div className="w-full flex flex-col items-center gap-6">
           <p className="text-base text-center text-gray-primary max-w-md">
-            Aproveite e inscreva-se agora para receber aulas incríveis com
-            nossos professores!
+            Aproveite e inscreva-se agora para receber aulas incríveis com nossos professores!
           </p>
 
           <div className="flex items-center justify-center gap-4">
@@ -140,9 +111,8 @@ export function CoursePaymentPix({
               <Link href="/">Voltar para início</Link>
             </Button>
 
-            {/* TODO: adicionar link para cadastro do aluno */}
             <Button asChild>
-              <Link href="/">Cadastre-se agora</Link>
+              <Link href="/?redirected_ad=true">Cadastre-se agora</Link>
             </Button>
           </div>
         </div>

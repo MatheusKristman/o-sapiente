@@ -22,9 +22,8 @@ import useRecoverPasswordModalStore from "@/stores/useRecoverPasswordModalStore"
 export default function Home() {
   const [successMessage, setSuccessMessage] = useState<string>("");
 
-  const { openModal, setToLogin } = useLoginModalStore();
-  const { openModal: openRecoverPasswordModal, setIdUser } =
-    useRecoverPasswordModalStore();
+  const { openModal, setToLogin, setToRegister } = useLoginModalStore();
+  const { openModal: openRecoverPasswordModal, setIdUser } = useRecoverPasswordModalStore();
 
   const searchParams = useSearchParams();
   const id = searchParams?.get("id");
@@ -33,6 +32,7 @@ export default function Home() {
   const recoverPassword = searchParams?.get("recover-password");
   const recoverDate = searchParams?.get("recover-date");
   let redirected = searchParams?.get("redirected");
+  let redirectedAd = searchParams?.get("redirected_ad");
 
   const router = useRouter();
 
@@ -86,6 +86,15 @@ export default function Home() {
       redirected = "";
     }
   }, [redirected]);
+
+  useEffect(() => {
+    if (redirectedAd) {
+      openModal();
+      setToRegister();
+
+      redirectedAd = "";
+    }
+  }, [redirectedAd]);
 
   return (
     <>

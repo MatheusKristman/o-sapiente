@@ -5,20 +5,14 @@ import { ArrowDownToLineIcon, CopyIcon, Loader2 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 interface Props {
   pdf: string | null | undefined;
   boletoCode: string | null | undefined;
-  userType: string | null | undefined;
 }
 
-export function CoursePaymentBoleto({ pdf, boletoCode, userType }: Props) {
+export function CoursePaymentBoleto({ pdf, boletoCode }: Props) {
   const [copied, setCopied] = useState<boolean>(false);
 
   function copyCode() {
@@ -46,15 +40,12 @@ export function CoursePaymentBoleto({ pdf, boletoCode, userType }: Props) {
           />
 
           <h1 className="text-2xl font-semibold text-gray-primary text-center sm:text-3xl">
-            Aguardando{" "}
-            <strong className="text-green-primary font-semibold">
-              pagamento
-            </strong>
+            Aguardando <strong className="text-green-primary font-semibold">pagamento</strong>
           </h1>
 
           <p className="text-base text-gray-primary text-center font-medium max-w-prose sm:text-lg">
-            Após realizar o pagamento, você receberá um e-mail de confirmação do
-            pagamento junto com as instruções do acesso ao curso.
+            Após realizar o pagamento, você receberá um e-mail de confirmação do pagamento junto com as instruções do
+            acesso ao curso.
           </p>
         </div>
 
@@ -70,16 +61,8 @@ export function CoursePaymentBoleto({ pdf, boletoCode, userType }: Props) {
 
               <TooltipProvider>
                 <Tooltip open={copied}>
-                  <TooltipTrigger
-                    asChild
-                    className="absolute top-1/2 -translate-y-1/2 right-2"
-                  >
-                    <Button
-                      disabled={!boletoCode}
-                      variant="link"
-                      size="icon"
-                      onClick={copyCode}
-                    >
+                  <TooltipTrigger asChild className="absolute top-1/2 -translate-y-1/2 right-2">
+                    <Button disabled={!boletoCode} variant="link" size="icon" onClick={copyCode}>
                       <CopyIcon className="text-gray-primary" />
                     </Button>
                   </TooltipTrigger>
@@ -92,10 +75,7 @@ export function CoursePaymentBoleto({ pdf, boletoCode, userType }: Props) {
             </div>
 
             {pdf ? (
-              <Button
-                className="w-full sm:w-fit flex items-center gap-1"
-                asChild
-              >
+              <Button className="w-full sm:w-fit flex items-center gap-1" asChild>
                 <a href={pdf} target="_blank" rel="noreferrer noopener">
                   Baixar PDF
                   <ArrowDownToLineIcon />
@@ -114,8 +94,7 @@ export function CoursePaymentBoleto({ pdf, boletoCode, userType }: Props) {
 
         <div className="w-full flex flex-col items-center gap-6">
           <p className="text-base text-center text-gray-primary max-w-md">
-            Aproveite e inscreva-se agora para receber aulas incríveis com
-            nossos professores!
+            Aproveite e inscreva-se agora para receber aulas incríveis com nossos professores!
           </p>
 
           <div className="w-full flex flex-col-reverse items-center justify-center gap-4 sm:flex-row">
@@ -126,7 +105,7 @@ export function CoursePaymentBoleto({ pdf, boletoCode, userType }: Props) {
             </Button>
 
             <Button asChild>
-              <Link href="/" className="w-full sm:w-fit">
+              <Link href="/?redirected_ad=true" className="w-full sm:w-fit">
                 Cadastre-se agora
               </Link>
             </Button>

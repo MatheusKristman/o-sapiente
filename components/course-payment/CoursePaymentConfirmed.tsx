@@ -4,10 +4,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 interface Props {
-  userType: string | null | undefined;
+  courseName: string | null | undefined;
 }
 
-export function CoursePaymentConfirmed({ userType }: Props) {
+export function CoursePaymentConfirmed({ courseName }: Props) {
   return (
     <div className="w-full px-6 h-full my-12 sm:px-16 lg:container lg:mx-auto">
       <div className="w-full flex flex-col items-center gap-9">
@@ -28,12 +28,8 @@ export function CoursePaymentConfirmed({ userType }: Props) {
           </h1>
 
           <p className="text-lg font-medium text-gray-primary text-center max-w-prose">
-            Parabéns por adquirir o curso{" "}
-            <strong className="font-medium text-green-primary">
-              Constitucional do Zero!
-            </strong>{" "}
-            Estamos muito felizes em tê-lo(a) como parte da nossa comunidade de
-            estudantes.
+            Parabéns por adquirir o curso <strong className="font-medium text-green-primary">{courseName}!</strong>{" "}
+            Estamos muito felizes em tê-lo(a) como parte da nossa comunidade de estudantes.
           </p>
         </div>
 
@@ -47,12 +43,11 @@ export function CoursePaymentConfirmed({ userType }: Props) {
 
         <div className="w-full flex flex-col items-center gap-6">
           <p className="text-base text-center text-gray-primary max-w-prose">
-            Aproveite e inscreva-se agora para receber aulas incríveis com
-            nossos professores!
+            Aproveite e inscreva-se agora para receber aulas incríveis com nossos professores!
           </p>
 
           <Button asChild>
-            <Link href="/">Cadastre-se agora</Link>
+            <Link href="/?redirected_ad=true">Cadastre-se agora</Link>
           </Button>
         </div>
       </div>

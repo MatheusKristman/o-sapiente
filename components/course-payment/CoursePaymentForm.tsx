@@ -46,7 +46,7 @@ interface Props {
       cep: string;
       district: string;
       complement: string;
-      paymentMethod: "pix" | "credit" | "boleto";
+      paymentMethod: "pix" | "credit_card" | "boleto";
       creditNumber: string;
       creditOwner: string;
       creditExpiry: string;
@@ -478,7 +478,7 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
 
       <div
         className={cn("w-full flex flex-col gap-4 sm:grid sm:grid-cols-3", {
-          "mb-12 lg:mb-24": paymentMethod !== "credit",
+          "mb-12 lg:mb-24": paymentMethod !== "credit_card",
         })}
       >
         <Toggle
@@ -509,10 +509,10 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
 
         <Toggle
           disabled={isSubmitting}
-          pressed={paymentMethod === "credit"}
-          onPressedChange={() => form.setValue("paymentMethod", "credit")}
+          pressed={paymentMethod === "credit_card"}
+          onPressedChange={() => form.setValue("paymentMethod", "credit_card")}
         >
-          {paymentMethod === "credit" ? (
+          {paymentMethod === "credit_card" ? (
             <Image src="/assets/icons/card-active-icon.svg" alt="Cartão de Crédito" width={35} height={35} />
           ) : (
             <Image src="/assets/icons/card-icon.svg" alt="Cartão de Crédito" width={35} height={35} />
@@ -523,7 +523,7 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
 
       <div
         className={cn("w-full mb-12 flex flex-col gap-9 lg:mb-24", {
-          hidden: paymentMethod !== "credit",
+          hidden: paymentMethod !== "credit_card",
         })}
       >
         <Cards number={creditNumber} expiry={creditExpiry} cvc={creditCvc} name={creditOwner} focused={state.focus} />

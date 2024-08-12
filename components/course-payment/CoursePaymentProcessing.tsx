@@ -4,11 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import useUserStore from "@/stores/useUserStore";
 
-interface Props {
-  userType: string | null | undefined;
-}
-
-export function CoursePaymentProcessing({ userType }: Props) {
+export function CoursePaymentProcessing() {
   const { userId } = useUserStore();
 
   return (
@@ -24,45 +20,35 @@ export function CoursePaymentProcessing({ userType }: Props) {
           />
 
           <h1 className="text-2xl font-semibold text-gray-primary text-center !leading-tight sm:text-3xl">
-            <strong className="font-semibold text-green-primary">
-              Processando
-            </strong>{" "}
-            Pagamento
+            <strong className="font-semibold text-green-primary">Processando</strong> Pagamento
           </h1>
 
           <p className="text-base font-medium text-gray-primary text-center sm:text-lg sm:max-w-prose">
-            Estamos verificando os detalhes do seu pagamento. Este processo pode
-            levar{" "}
-            <strong className="font-medium text-green-primary">
-              alguns minutos
-            </strong>
-            .
+            Estamos verificando os detalhes do seu pagamento. Este processo pode levar{" "}
+            <strong className="font-medium text-green-primary">alguns minutos</strong>.
           </p>
         </div>
 
         <div className="w-fit bg-[#C8D6DF] rounded-lg px-4 py-3 max-w-prose">
           <span className="text-base font-medium text-[#5A727D] block text-center">
-            Você receberá um e-mail de confirmação assim que o pagamento for
-            aprovado, junto com todas as instruções necessárias para acessar o
-            curso
+            Você receberá um e-mail de confirmação assim que o pagamento for aprovado, junto com todas as instruções
+            necessárias para acessar o curso
           </span>
         </div>
 
         <p className="text-base text-gray-primary text-center sm:text-lg sm:max-w-prose">
-          Agradecemos pela sua paciência e estamos ansiosos para ajudá-lo a
-          começar sua jornada de aprendizado!
+          Agradecemos pela sua paciência e estamos ansiosos para ajudá-lo a começar sua jornada de aprendizado!
         </p>
 
         <div className="w-full h-px bg-[#C8D6DF]" />
 
         <div className="w-full flex flex-col items-center gap-6">
           <p className="text-base text-center text-gray-primary max-w-md">
-            Aproveite e inscreva-se agora para receber aulas incríveis com
-            nossos professores!
+            Aproveite e inscreva-se agora para receber aulas incríveis com nossos professores!
           </p>
 
           <Button asChild>
-            <Link href="/">Cadastre-se agora</Link>
+            <Link href="/?redirected_ad=true">Cadastre-se agora</Link>
           </Button>
         </div>
       </div>

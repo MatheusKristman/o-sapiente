@@ -4,10 +4,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 interface Props {
-  userType: string | null | undefined;
+  courseId: string | null | undefined;
 }
 
-export function CoursePaymentDenied({ userType }: Props) {
+export function CoursePaymentDenied({ courseId }: Props) {
   return (
     <div className="w-full px-6 h-full my-12 sm:px-16 lg:container lg:mx-auto">
       <div className="w-full flex flex-col items-center gap-9">
@@ -21,13 +21,11 @@ export function CoursePaymentDenied({ userType }: Props) {
           />
 
           <h1 className="text-2xl font-semibold text-gray-primary text-center max-w-md sm:text-3xl sm:max-w-lg">
-            Pagamento{" "}
-            <strong className="text-green-primary font-semibold">negado</strong>
+            Pagamento <strong className="text-green-primary font-semibold">negado</strong>
           </h1>
 
           <p className="text-base font-medium text-gray-primary text-center sm:text-lg max-w-prose">
-            Parece que algo deu errado com o pagamento. Não se preocupe!
-            Verifique os detalhes e tente novamente.
+            Parece que algo deu errado com o pagamento. Não se preocupe! Verifique os detalhes e tente novamente.
           </p>
         </div>
 
@@ -39,7 +37,7 @@ export function CoursePaymentDenied({ userType }: Props) {
           </Button>
 
           <Button className="w-full" asChild>
-            <Link href="/">Tentar novamente</Link>
+            <Link href={`/pagamento-do-curso/${courseId}`}>Tentar novamente</Link>
           </Button>
         </div>
       </div>

@@ -37,7 +37,7 @@ const formSchema = z
     cep: z.string().min(1, { message: "CEP obrigatório" }),
     district: z.string().min(1, { message: "Bairro obrigatório" }),
     complement: z.string(),
-    paymentMethod: z.enum(["credit", "pix", "boleto"]),
+    paymentMethod: z.enum(["credit_card", "pix", "boleto"]),
     creditNumber: z.string(),
     creditOwner: z.string(),
     creditExpiry: z.string(),
@@ -45,7 +45,7 @@ const formSchema = z
     installments: z.string(),
   })
   .superRefine(({ paymentMethod, creditNumber, creditOwner, creditExpiry, creditCvc }, ctx) => {
-    if (paymentMethod === "credit" && creditNumber.length < 16) {
+    if (paymentMethod === "credit_card" && creditNumber.length < 16) {
       ctx.addIssue({
         path: ["creditNumber"],
         code: "custom",
@@ -53,7 +53,7 @@ const formSchema = z
       });
     }
 
-    if (paymentMethod === "credit" && creditOwner.length < 4) {
+    if (paymentMethod === "credit_card" && creditOwner.length < 4) {
       ctx.addIssue({
         path: ["creditOwner"],
         code: "custom",
@@ -61,7 +61,7 @@ const formSchema = z
       });
     }
 
-    if (paymentMethod === "credit" && creditExpiry.length < 5 && !dateReg.test(creditExpiry)) {
+    if (paymentMethod === "credit_card" && creditExpiry.length < 5 && !dateReg.test(creditExpiry)) {
       ctx.addIssue({
         path: ["creditExpiry"],
         code: "custom",
@@ -69,7 +69,7 @@ const formSchema = z
       });
     }
 
-    if (paymentMethod === "credit" && creditCvc.length < 3) {
+    if (paymentMethod === "credit_card" && creditCvc.length < 3) {
       ctx.addIssue({
         path: ["creditCvc"],
         code: "custom",
@@ -131,30 +131,30 @@ export default function CoursePaymentPage({ params }: { params: { courseId: stri
     setIsSubmitting(true);
 
     axios
-      .post("/api/payment/plan", {
+      .post("/api/payment/course", {
         ...values,
-        planName: course.courseName,
-        planPrice: course.price,
-        planId: course.id,
+        courseName: course.courseName,
+        coursePrice: course.price,
+        courseId: course.id,
         paymentMethod: form.getValues("paymentMethod"),
       })
       .then((res) => {
         if (res.data.charges[0].payment_method === "pix") {
           router.replace(
-            `/pagamento-do-curso/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&qr_code_url=${res.data.charges[0].last_transaction.qr_code_url}&pix_code=${res.data.charges[0].last_transaction.qr_code}&expires_at=${res.data.charges[0].last_transaction.expires_at}`
+            `/pagamento-do-curso/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&qr_code_url=${res.data.charges[0].last_transaction.qr_code_url}&pix_code=${res.data.charges[0].last_transaction.qr_code}&expires_at=${res.data.charges[0].last_transaction.expires_at}&course_name=${course.courseName}&course_id=${course.id}`
           );
           return;
         }
 
         if (res.data.charges[0].payment_method === "boleto") {
           router.replace(
-            `/pagamento-do-curso/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&pdf=${res.data.charges[0].last_transaction.pdf}&boleto_code=${res.data.charges[0].last_transaction.line}`
+            `/pagamento-do-curso/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&pdf=${res.data.charges[0].last_transaction.pdf}&boleto_code=${res.data.charges[0].last_transaction.line}&course_name=${course.courseName}&course_id=${course.id}`
           );
           return;
         }
 
         router.replace(
-          `/pagamento-do-curso/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}`
+          `/pagamento-do-curso/pos-pagamento?transaction_type=${res.data.charges[0].payment_method}&status=${res.data.charges[0].last_transaction.status}&course_name=${course.courseName}&course_id=${course.id}`
         );
       })
       .catch((error) => {
