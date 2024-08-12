@@ -10,13 +10,15 @@ import { leftCardAnimation, rightCardAnimation } from "@/constants/framer-animat
 
 interface Props {
   title: string;
-  price: string;
+  price: number;
   themes?: string[];
   benefits: string[];
   isRight?: boolean;
+  courseLink: string;
+  courseId: string;
 }
 
-export function AdCard({ title, price, themes, benefits, isRight }: Props) {
+export function AdCard({ title, price, themes, benefits, isRight, courseLink, courseId }: Props) {
   return (
     <motion.div
       initial="offscreen"
@@ -40,7 +42,9 @@ export function AdCard({ title, price, themes, benefits, isRight }: Props) {
             <div className="flex gap-1 items-end">
               <span className="text-lg text-green-primary mb-1">{courseAdInfo.adCardPriceBox[1]}</span>
 
-              <span className="text-green-primary text-3xl font-semibold">{price}</span>
+              <span className="text-green-primary text-3xl font-semibold">
+                {(price / 100).toString().replace(".", ",")}
+              </span>
             </div>
 
             <span className="text-base text-gray-primary/60 text-center font-medium !leading-none">
@@ -50,11 +54,15 @@ export function AdCard({ title, price, themes, benefits, isRight }: Props) {
 
           <div className="w-full flex flex-col gap-6 items-center">
             <Button asChild className="w-full">
-              <Link href="/pagamento-do-curso">{courseAdInfo.paymentButton}</Link>
+              <Link href={`/pagamento-do-curso/${courseId}`}>{courseAdInfo.paymentButton}</Link>
             </Button>
 
             <Button variant="outline" asChild className="w-full flex items-center gap-2">
-              <a href="#" rel="noreferrer noopener" target="_blank">
+              <a
+                href={`https://wa.me/557996475310?text=Ol%C3%A1,%20gostaria%20de%20tirar%20duvidas%20sobre%20o%20curso%20${courseLink}`}
+                rel="noreferrer noopener"
+                target="_blank"
+              >
                 <Image src="/assets/icons/whatsapp.svg" alt="Whatsapp" width={25} height={25} />
                 {courseAdInfo.contactButton}
               </a>
