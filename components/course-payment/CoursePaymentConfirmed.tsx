@@ -21,10 +21,10 @@ export function CoursePaymentConfirmed({ courseName }: Props) {
           />
 
           <h1 className="text-2xl font-semibold text-gray-primary text-center max-w-md sm:text-3xl sm:max-w-lg">
-            <strong className="font-semibold text-green-primary relative after:content-[''] after:w-4 after:h-4 after:block after:bg-highlight after:bg-contain after:bg-no-repeat after:absolute after:top-1 after:-left-3 after:-rotate-90 sm:after:top-1.5">
-              Obrigado
-            </strong>{" "}
-            por usa compra!
+            Pagamento <strong className="font-semibold text-green-primary">confirmado</strong> com{" "}
+            <strong className="font-semibold text-green-primary relative after:content-[''] after:w-4 after:h-4 after:block after:bg-highlight after:bg-contain after:bg-no-repeat after:absolute after:top-1 after:-right-3 sm:after:top-2">
+              sucesso
+            </strong>
           </h1>
 
           <p className="text-lg font-medium text-gray-primary text-center max-w-prose">
