@@ -11,6 +11,7 @@ import {
   Section,
   Row,
 } from "@react-email/components";
+import { formatPhoneNumber } from "react-phone-number-input";
 
 const imageURL =
   process.env.NODE_ENV === "production"
@@ -62,7 +63,7 @@ export default function EmailAdminCourseNotification({
 
               <Row>
                 <strong>Telefone: </strong>
-                {tel}
+                {formatPhoneNumber(tel)}
               </Row>
             </Section>
 
