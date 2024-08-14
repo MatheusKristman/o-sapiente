@@ -125,11 +125,7 @@ export async function POST(req: Request) {
       const installments = body.data.charges[0].last_transaction.installments;
       const clientEmail = body.data.customer.email;
       const clientName = body.data.customer.name;
-      const clientTel =
-        "+" +
-        body.data.customer.phones.home_phone.country_code +
-        body.data.customer.phones.home_phone.area_code +
-        body.data.customer.phones.home_phone.number;
+      const clientTel = `+${body.data.customer.phones.home_phone.country_code} (${body.data.customer.phones.home_phone.area_code}) ${body.data.customer.phones.home_phone.number}`;
 
       const adminOptions = generateAdminEmailOptions({
         emailUser,
