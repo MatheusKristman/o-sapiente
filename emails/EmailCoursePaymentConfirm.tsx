@@ -12,7 +12,7 @@ import {
   Tailwind,
 } from "@react-email/components";
 
-import { formatPrice } from "@/libs/utils";
+import { cn, formatPrice } from "@/libs/utils";
 
 const imageURL =
   process.env.NODE_ENV === "production"
@@ -73,10 +73,10 @@ export default function EmailCoursePaymentConfirm({
 
               <Row>
                 <strong>Valor: </strong>
-                {formatPrice(courseAmount)}
+                {formatPrice(Number(courseAmount) / 100)}
               </Row>
 
-              <Row className="mb-4">
+              <Row className={cn(paymentMethod === "credit_card" && "mb-4")}>
                 <strong>Forma de pagamento: </strong>
                 {paymentMethod}
               </Row>
