@@ -113,6 +113,8 @@ export async function POST(req: Request) {
       },
     });
 
+    console.log(body);
+
     if (body.type === "order.paid") {
       const courseName = body.data.items[0].description;
       const courseAmount = body.data.items[0].amount;
