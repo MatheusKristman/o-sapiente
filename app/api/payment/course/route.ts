@@ -1,6 +1,8 @@
 import axios from "axios";
 import { addDays } from "date-fns";
 
+//test
+
 export async function POST(req: Request) {
   try {
     const {
@@ -28,7 +30,9 @@ export async function POST(req: Request) {
       installments,
     } = await req.json();
     const pagarMeSecretKey =
-      process.env.NODE_ENV === "development" ? process.env.PAGARME_SECRET_KEY_DEV! : process.env.PAGARME_SECRET_KEY!;
+      process.env.NODE_ENV === "development"
+        ? process.env.PAGARME_SECRET_KEY_DEV!
+        : process.env.PAGARME_SECRET_KEY!;
 
     if (
       !birthDate ||
@@ -51,7 +55,11 @@ export async function POST(req: Request) {
 
     if (
       paymentMethod === "credit_card" &&
-      (!creditNumber || !creditOwner || !creditExpiry || !creditCvc || !installments)
+      (!creditNumber ||
+        !creditOwner ||
+        !creditExpiry ||
+        !creditCvc ||
+        !installments)
     ) {
       return new Response("Dados inválidos, verifique e tente novamente", {
         status: 404,
@@ -111,7 +119,8 @@ export async function POST(req: Request) {
       paymentOptions = {
         payment_method: "boleto",
         boleto: {
-          instructions: "Sr.Caixa, favor não aceitar o pagamento após o vencimento",
+          instructions:
+            "Sr.Caixa, favor não aceitar o pagamento após o vencimento",
           due_at: addDays(new Date(), 3),
         },
       };
@@ -123,7 +132,8 @@ export async function POST(req: Request) {
       headers: {
         accept: "application/json",
         "content-type": "application/json",
-        authorization: "Basic " + Buffer.from(`${pagarMeSecretKey}:`).toString("base64"),
+        authorization:
+          "Basic " + Buffer.from(`${pagarMeSecretKey}:`).toString("base64"),
       },
       data: {
         customer: {
@@ -180,7 +190,7 @@ export async function POST(req: Request) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
