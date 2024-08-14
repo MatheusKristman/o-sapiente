@@ -100,13 +100,6 @@ function generateErrorEmailOptions({
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const courseName = body.data.items[0].description;
-    const courseAmount = body.data.items[0].amount;
-    const paymentMethod = body.data.charges[0].payment_method;
-    const installments = body.data.charges[0].last_transaction.installments;
-    const clientEmail = body.data.customer.email;
-    const clientName = body.data.customer.name;
-    const clientTel = body.data.customer.phones.home_phone;
     const emailHost: string = process.env.EMAIL_SMTP!;
     const emailUser: string = process.env.EMAIL_USER!;
     const emailPass: string = process.env.EMAIL_PASS!;
@@ -121,6 +114,14 @@ export async function POST(req: Request) {
     });
 
     if (body.type === "order.paid") {
+      const courseName = body.data.items[0].description;
+      const courseAmount = body.data.items[0].amount;
+      const paymentMethod = body.data.charges[0].payment_method;
+      const installments = body.data.charges[0].last_transaction.installments;
+      const clientEmail = body.data.customer.email;
+      const clientName = body.data.customer.name;
+      const clientTel = body.data.customer.phones.home_phone;
+
       const adminOptions = generateAdminEmailOptions({
         emailUser,
         email: clientEmail,
@@ -149,6 +150,9 @@ export async function POST(req: Request) {
       body.type === "order.payment_failed" ||
       body.type === "order.canceled"
     ) {
+      const courseName = body.data.items[0].description;
+      const clientName = body.data.customer.name;
+
       const errorEmailOptions = generateErrorEmailOptions({
         emailUser,
         name: clientName,
