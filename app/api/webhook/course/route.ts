@@ -114,6 +114,9 @@ export async function POST(req: Request) {
     });
 
     console.log(body);
+    console.log(body.data.items);
+    console.log(body.data.customer.phones);
+    console.log(body.data.charges);
 
     if (body.type === "order.paid") {
       const courseName = body.data.items[0].description;
