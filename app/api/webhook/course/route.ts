@@ -16,6 +16,7 @@ interface IEmailOptions {
   emailUser: string;
   courseName: string;
   name: string;
+  email: string;
   courseAmount: string;
   paymentMethod: string;
   installments: string;
@@ -25,6 +26,7 @@ interface IErrorEmailOptions {
   emailUser: string;
   courseName: string;
   name: string;
+  email: string;
 }
 
 function generateAdminEmailOptions({
@@ -54,6 +56,7 @@ function generateAdminEmailOptions({
 function generateEmailOptions({
   emailUser,
   name,
+  email,
   courseName,
   courseAmount,
   paymentMethod,
@@ -71,7 +74,7 @@ function generateEmailOptions({
 
   return {
     from: emailUser,
-    to: emailUser,
+    to: email,
     subject: "Pagamento do curso confirmado - O Sapiente",
     html: emailHtml,
   };
@@ -80,6 +83,7 @@ function generateEmailOptions({
 function generateErrorEmailOptions({
   emailUser,
   name,
+  email,
   courseName,
 }: IErrorEmailOptions) {
   const emailHtml = render(
@@ -91,7 +95,7 @@ function generateErrorEmailOptions({
 
   return {
     from: emailUser,
-    to: emailUser,
+    to: email,
     subject: "Pagamento do curso negado - O Sapiente",
     html: emailHtml,
   };
@@ -138,6 +142,7 @@ export async function POST(req: Request) {
         emailUser,
         courseName,
         name: clientName,
+        email: clientEmail,
         courseAmount,
         installments,
         paymentMethod,
@@ -157,10 +162,12 @@ export async function POST(req: Request) {
     ) {
       const courseName = body.data.items[0].description;
       const clientName = body.data.customer.name;
+      const clientEmail = body.data.customer.email;
 
       const errorEmailOptions = generateErrorEmailOptions({
         emailUser,
         name: clientName,
+        email: clientEmail,
         courseName,
       });
 
