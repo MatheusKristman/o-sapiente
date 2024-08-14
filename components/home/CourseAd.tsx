@@ -45,7 +45,11 @@ export function CourseAd() {
               price={course.price}
               themes={course.themes}
               benefits={course.benefits}
-              courseLink="Constitucional%20do%20Zero"
+              courseLink={
+                course.courseName === "Constitucional do Zero"
+                  ? "Constitucional%20do%20Zero"
+                  : "Repescagem"
+              }
               courseId={course.id}
               isRight={course.courseName === "Repescagem"}
             />
