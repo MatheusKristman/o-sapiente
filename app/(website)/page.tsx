@@ -15,14 +15,14 @@ import RecentsRequests from "@/components/home/RecentsRequests";
 import Contact from "@/components/home/Contact";
 import ProfessorModal from "@/components/home/components/professor-login/ProfessorModal";
 import RecoverPasswordModal from "@/components/home/RecoverPasswordModal";
-import useProfessorModalStore from "@/stores/useProfessorModalStore";
+import { CourseAd } from "@/components/home/CourseAd";
 import useLoginModalStore from "@/stores/useLoginModalStore";
 import useRecoverPasswordModalStore from "@/stores/useRecoverPasswordModalStore";
 
 export default function Home() {
   const [successMessage, setSuccessMessage] = useState<string>("");
 
-  const { openModal, setToLogin } = useLoginModalStore();
+  const { openModal, setToLogin, setToRegister } = useLoginModalStore();
   const { openModal: openRecoverPasswordModal, setIdUser } = useRecoverPasswordModalStore();
 
   const searchParams = useSearchParams();
@@ -32,6 +32,7 @@ export default function Home() {
   const recoverPassword = searchParams?.get("recover-password");
   const recoverDate = searchParams?.get("recover-date");
   let redirected = searchParams?.get("redirected");
+  let redirectedAd = searchParams?.get("redirected_ad");
 
   const router = useRouter();
 
@@ -86,6 +87,15 @@ export default function Home() {
     }
   }, [redirected]);
 
+  useEffect(() => {
+    if (redirectedAd) {
+      openModal();
+      setToRegister();
+
+      redirectedAd = "";
+    }
+  }, [redirectedAd]);
+
   return (
     <>
       <ProfessorModal />
@@ -93,6 +103,7 @@ export default function Home() {
       <RecoverPasswordModal />
       <Hero />
       <Banner />
+      <CourseAd />
       <div className="before:content-[''] before:w-4/5 before:h-full before:bg-homeLeftShape before:bg-contain before:bg-no-repeat bg-left-top before:block before:absolute before:top-0 before:left-0 before:z-[9] after:content-[''] after:w-4/5 after:h-full after:bg-homeRightShape after:bg-contain after:bg-no-repeat after:bg-right-bottom after:block after:absolute after:bottom-36 after:right-0 after:z-[9] relative sm:before:w-[45%] sm:after:w-2/5 lg:before:w-1/4 lg:after:w-1/4 lg:after:bottom-0">
         <Steps />
         <Benefits />

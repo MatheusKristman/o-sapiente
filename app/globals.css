@@ -179,3 +179,39 @@ body {
     padding-right: 24px !important;
   }
 }
+
+.left-card-animation {
+  --y-initial: -50px;
+  --x-initial: 0px;
+  --opacity-initial: 0;
+  --y-animate: 0px;
+  --x-animate: 0px;
+  --opacity-animate: 1;
+
+  @media (min-width: 640px) {
+    --x-initial: -100px;
+    --y-initial: 0px;
+    --opacity-initial: 0;
+    --x-animate: 0px;
+    --y-animate: 0px;
+    --opacity-animate: 1;
+  }
+}
+
+.right-card-animation {
+  --y-initial: -50px;
+  --x-initial: 0px;
+  --opacity-initial: 0;
+  --y-animate: 0px;
+  --x-animate: 0px;
+  --opacity-animate: 1;
+
+  @media (min-width: 640px) {
+    --x-initial: 100px;
+    --y-initial: 0px;
+    --opacity-initial: 0;
+    --x-animate: 0px;
+    --y-animate: 0px;
+    --opacity-animate: 1;
+  }
+}
