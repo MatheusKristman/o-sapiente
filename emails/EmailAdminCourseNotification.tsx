@@ -48,7 +48,7 @@ export default function EmailAdminCourseNotification({
             />
 
             <Text className="text-base">
-              Olá, {name} acabou de comprar seu curso{" "}
+              Olá, Administrador! {name} acabou de comprar seu curso{" "}
               <strong>{courseName}</strong>
             </Text>
 

@@ -51,13 +51,13 @@ export default function EmailCoursePaymentConfirm({
               style={image}
             />
 
-            <Text className="text-base">Ola {name},</Text>
+            <Text className="text-base">Ola {name.split(" ")[0]},</Text>
 
             <Text className="text-base">Espero que esteja tudo bem!</Text>
 
             <Text className="text-base">
               Gostaria de informar que o pagamento do curso{" "}
-              <strong>{courseName}</strong> foi confirmado. Em breve entraremos
+              <strong>{courseName}</strong> foi confirmado. Em breve, entraremos
               em contato para lhe enviar o acesso do curso.
             </Text>
 

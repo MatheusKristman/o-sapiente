@@ -38,7 +38,7 @@ export default function EmailCoursePaymentFailed({ name, courseName }: Props) {
               style={image}
             />
 
-            <Text className="text-base">Ola {name},</Text>
+            <Text className="text-base">Ola {name.split(" ")[0]},</Text>
 
             <Text className="text-base">Espero que esteja tudo bem!</Text>
 
