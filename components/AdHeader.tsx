@@ -2,6 +2,8 @@
 
 import { usePathname, useRouter } from "next/navigation";
 
+import { cn } from "@/libs/utils";
+
 export default function AdHeader() {
   const router = useRouter();
   const pathname = usePathname();
@@ -21,14 +23,11 @@ export default function AdHeader() {
   }
 
   return (
-    <section className="w-full bg-green-primary/20 py-4">
+    <section className={cn("w-full bg-green-primary/20 py-4", pathname !== "/" && "hidden")}>
       <div className="w-full px-6 flex items-center justify-center sm:px-16">
         <span className="text-sm text-gray-primary text-center">
           Explore nossos cursos de Direito Constitucional - 2° Fase para OAB!{" "}
-          <strong
-            onClick={() => scrollTo("cursos")}
-            className="font-medium underline cursor-pointer"
-          >
+          <strong onClick={() => scrollTo("cursos")} className="font-medium underline cursor-pointer">
             Inscreva-se
           </strong>{" "}
           agora e aprimore seus conhecimentos com especialistas na área.
