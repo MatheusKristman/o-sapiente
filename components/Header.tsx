@@ -56,7 +56,7 @@ const Header = () => {
       const element = document.getElementById(id);
 
       if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "center" });
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }, 100);
   }
@@ -89,7 +89,7 @@ const Header = () => {
   }
 
   return (
-    <header className="lg:container mx-auto py-5 px-6 md:px-16 flex justify-between items-center w-full lg:w-auto">
+    <header className="lg:container mx-auto py-5 px-6 md:px-16 flex justify-between items-center gap-4 w-full lg:w-auto">
       <Link href="/">
         <Image
           src="/assets/images/logo-colored.svg"
@@ -101,26 +101,42 @@ const Header = () => {
         />
       </Link>
 
+      <div
+        onClick={() => scrollTo("cursos")}
+        className="hidden sm:block lg:hidden text-gray-primary font-medium cursor-pointer text-base xl:text-base hover:opacity-70 transition duration-200 whitespace-nowrap relative before:content-[''] before:bg-bubbleEllipse before:w-full before:h-36 before:opacity-20 before:bg-contain before:bg-center before:bg-no-repeat before:block before:absolute before:top-1/2 before:left-1/2 before:-translate-y-1/2 before:-translate-x-1/2"
+      >
+        Cursos de Direito
+      </div>
+
       <Button
         variant="link"
         size="icon"
         type="button"
         disabled={isLoading}
         onClick={openMobileMenu}
-        className={cn("flex lg:hidden items-center justify-center cursor-pointer", {
-          "opacity-0 pointer-events-none": isMobileMenuOpen,
-        })}
+        className={cn(
+          "flex lg:hidden items-center justify-center cursor-pointer",
+          {
+            "opacity-0 pointer-events-none": isMobileMenuOpen,
+          },
+        )}
       >
         <IoIosMenu size={35} className="text-green-primary" />
       </Button>
 
       {pathname === "/" && (
         <ul className="hidden lg:flex items-center justify-between gap-x-12">
+          <li
+            onClick={() => scrollTo("cursos")}
+            className="text-gray-primary font-medium cursor-pointer text-base xl:text-base hover:opacity-70 transition duration-200 whitespace-nowrap relative before:content-[''] before:bg-bubbleEllipse before:w-full before:h-36 before:opacity-20 before:bg-contain before:bg-center before:bg-no-repeat before:block before:absolute before:top-1/2 before:left-1/2 before:-translate-y-1/2 before:-translate-x-1/2"
+          >
+            Cursos de Direito
+          </li>
           {navLinks.map((link) => (
             <li
               key={link.href}
               onClick={() => scrollTo(link.href)}
-              className="text-gray-primary cursor-pointer text-base xl:text-lg hover:opacity-70 transition duration-200 whitespace-nowrap"
+              className="text-gray-primary cursor-pointer text-base xl:text-base hover:opacity-70 transition duration-200 whitespace-nowrap"
             >
               {link.label}
             </li>
@@ -149,14 +165,22 @@ const Header = () => {
               onClick={handleDashboardBtn}
               className="bg-green-primary flex gap-2 items-center justify-center text-white text-base px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
             >
-              <Image src="/assets/icons/user.svg" alt="Usuário" width={24} height={24} className="object-contain" />
+              <Image
+                src="/assets/icons/user.svg"
+                alt="Usuário"
+                width={24}
+                height={24}
+                className="object-contain"
+              />
               {headerTexts.dashboardBtn}
             </Button>
           </>
         ) : (
           <>
             <Button variant="outline" disabled={isLoading} asChild>
-              <Link href="/cadastro/professor">{headerTexts.professorRegister}</Link>
+              <Link href="/cadastro/professor">
+                {headerTexts.professorRegister}
+              </Link>
             </Button>
 
             <Button disabled={isLoading} onClick={openLoginModal}>

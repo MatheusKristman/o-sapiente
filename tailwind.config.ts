@@ -52,8 +52,8 @@ export default withUt({
         contactDesktop: "url('/assets/images/contact-bg-desktop.png')",
         contactTablet: "url('/assets/images/contact-bg-tablet.png')",
         contactMobile: "url('/assets/images/contact-bg-mobile.png')",
-        registerLeftShape:
-          "url('/assets/images/register-left-shape.svg')",
+        bubbleEllipse: "url('/assets/images/bubble-ellipse.png')",
+        registerLeftShape: "url('/assets/images/register-left-shape.svg')",
         briefcase: "url('/assets/icons/briefcase.svg')",
         close: "url('/assets/icons/close.svg')",
         hat: "url('/assets/icons/hat.svg')",
@@ -65,8 +65,7 @@ export default withUt({
         highlight: "url('/assets/icons/highlight.svg')",
         registerStepShadow:
           "url('/assets/icons/register-about-shadow-step.svg')",
-        lightGrayArrowDown:
-          "url('/assets/icons/light-gray-arrow-down.svg')",
+        lightGrayArrowDown: "url('/assets/icons/light-gray-arrow-down.svg')",
         sendIcon: "url('/assets/icons/send-icon.svg')",
         micOnIcon: "url('/assets/icons/mic-on.svg')",
         micOffIcon: "url('/assets/icons/mic-off.svg')",

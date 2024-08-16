@@ -25,7 +25,7 @@ export function CourseAd() {
   }, []);
 
   return (
-    <section className="w-full bg-[#E5ECF0] mt-12">
+    <section id="cursos" className="w-full bg-[#E5ECF0] mt-12">
       <div className="w-full px-6 py-12 flex flex-col gap-12 sm:px-16 lg:container lg:mx-auto">
         <motion.h2
           initial="offscreen"

@@ -1,6 +1,6 @@
 export const navLinks = [
   { href: "como-funciona", label: "Como funciona" },
-  { href: "beneficios", label: "Benefícios" },
+  // { href: "beneficios", label: "Benefícios" },
   { href: "contato", label: "Contato" },
 ];
 
@@ -14,6 +14,6 @@ export const headerTexts = {
   loginBtn: "ENTRAR NA CONTA",
   dashboardBtn: "PAINEL DE CONTROLE",
   professorRegister: "DAR AULAS",
-}
+};
 
 export const studentHeaderButton = { label: "ALUNO", href: "/cadastro-aluno" };

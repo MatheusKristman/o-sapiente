@@ -9,7 +9,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { navLinks, professorHeaderButton, studentHeaderButton, headerTexts } from "@/constants/header-br";
+import {
+  navLinks,
+  professorHeaderButton,
+  studentHeaderButton,
+  headerTexts,
+} from "@/constants/header-br";
 import { mobileMenuAnimation } from "@/constants/framer-animations/header";
 import useHeaderStore from "@/stores/useHeaderStore";
 import useLoginModalStore from "@/stores/useLoginModalStore";
@@ -122,6 +127,13 @@ const HeaderMobile = () => {
 
             <nav>
               <ul className="lg:hidden flex flex-col items-end justify-between gap-y-6">
+                <li
+                  onClick={() => scrollTo("cursos")}
+                  className="text-white cursor-pointer text-lg whitespace-nowrap sm:hidden"
+                >
+                  Cursos de Direito
+                </li>
+
                 {navLinks.map((link) => (
                   <li
                     key={link.href}
@@ -166,11 +178,19 @@ const HeaderMobile = () => {
                 </>
               ) : (
                 <>
-                  <Button variant="secondary" className="w-full" onClick={handleProfessorRegister}>
+                  <Button
+                    variant="secondary"
+                    className="w-full"
+                    onClick={handleProfessorRegister}
+                  >
                     {headerTexts.professorRegister}
                   </Button>
 
-                  <Button variant="secondary" className="w-full" onClick={openLoginModal}>
+                  <Button
+                    variant="secondary"
+                    className="w-full"
+                    onClick={openLoginModal}
+                  >
                     {headerTexts.loginBtn}
                   </Button>
                 </>
