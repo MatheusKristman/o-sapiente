@@ -29,25 +29,21 @@ interface IErrorEmailOptions {
   email: string;
 }
 
-function generateAdminEmailOptions({
-  emailUser,
-  courseName,
-  tel,
-  name,
-  email,
-}: IAdminEmailOptions) {
+function generateAdminEmailOptions({ emailUser, courseName, tel, name, email }: IAdminEmailOptions) {
+  const emailTest = process.env.EMAIL_TEST!;
+
   const emailHtml = render(
     EmailAdminCourseNotification({
       courseName,
       tel,
       name,
       email,
-    }),
+    })
   );
 
   return {
     from: emailUser,
-    to: emailUser,
+    to: [emailUser, emailTest],
     subject: "Notificação de compra do curso - O Sapiente",
     html: emailHtml,
   };
@@ -69,7 +65,7 @@ function generateEmailOptions({
       courseName,
       courseAmount,
       installments,
-    }),
+    })
   );
 
   return {
@@ -80,17 +76,12 @@ function generateEmailOptions({
   };
 }
 
-function generateErrorEmailOptions({
-  emailUser,
-  name,
-  email,
-  courseName,
-}: IErrorEmailOptions) {
+function generateErrorEmailOptions({ emailUser, name, email, courseName }: IErrorEmailOptions) {
   const emailHtml = render(
     EmailCoursePaymentFailed({
       name,
       courseName,
-    }),
+    })
   );
 
   return {
@@ -156,10 +147,7 @@ export async function POST(req: Request) {
       });
     }
 
-    if (
-      body.type === "order.payment_failed" ||
-      body.type === "order.canceled"
-    ) {
+    if (body.type === "order.payment_failed" || body.type === "order.canceled") {
       const courseName = body.data.items[0].description;
       const clientName = body.data.customer.name;
       const clientEmail = body.data.customer.email;
