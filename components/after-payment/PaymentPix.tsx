@@ -102,15 +102,19 @@ export function PaymentPix({ qrCodeUrl, pixCode, expiresAt, userType }: Props) {
                 <Tooltip open={copied}>
                   <TooltipTrigger
                     asChild
-                    className="absolute top-1/2 -translate-y-1/2 right-2"
+                    className="absolute top-1/2 -translate-y-1/2 right-0"
                   >
                     <Button
                       disabled={!pixCode}
-                      variant="link"
-                      size="icon"
                       onClick={copyCode}
+                      className="flex items-center gap-2 rounded-tl-none rounded-bl-none"
                     >
-                      <CopyIcon className="text-gray-primary" />
+                      <CopyIcon
+                        className="text-gray-primary"
+                        color="#FFF"
+                        strokeWidth={1.5}
+                      />
+                      Copiar
                     </Button>
                   </TooltipTrigger>
 
