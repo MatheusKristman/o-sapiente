@@ -12,15 +12,32 @@ import PhoneInput from "react-phone-number-input";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { clientDataInfo } from "@/constants/course-payment";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/libs/utils";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn, formatPrice } from "@/libs/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Toggle } from "../ui/toggle";
 
 import "react-phone-number-input/style.css";
+import { Course } from "@prisma/client";
 
 type stateType = {
   creditNumber: string;
@@ -57,9 +74,10 @@ interface Props {
     undefined
   >;
   isSubmitting: boolean;
+  course: Course | null;
 }
 
-export function CoursePaymentForm({ form, isSubmitting }: Props) {
+export function CoursePaymentForm({ form, isSubmitting, course }: Props) {
   const [state, setState] = useState<stateType>({
     creditNumber: "",
     creditExpiry: "",
@@ -84,14 +102,20 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
 
   function handleCPFFormat(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 14);
-    const formattedNumber = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    const formattedNumber = value.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{2})/,
+      "$1.$2.$3-$4",
+    );
 
     form.setValue("cpf", formattedNumber);
   }
 
   function handleCreditNumberFormat(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 16);
-    const formattedNumber = value.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, "$1 $2 $3 $4");
+    const formattedNumber = value.replace(
+      /(\d{4})(\d{4})(\d{4})(\d{4})/,
+      "$1 $2 $3 $4",
+    );
 
     form.setValue("creditNumber", formattedNumber);
   }
@@ -139,7 +163,9 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
   return (
     <div className="w-full flex flex-col gap-9">
       <div className="w-full bg-white rounded-2xl shadow-xl px-6 py-9 flex flex-col gap-2">
-        <h4 className="text-xl font-semibold text-gray-primary text-left">{clientDataInfo.title}</h4>
+        <h4 className="text-xl font-semibold text-gray-primary text-left">
+          {clientDataInfo.title}
+        </h4>
 
         <div className="w-full flex flex-col gap-4">
           <FormField
@@ -224,14 +250,19 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
                         <Button
                           disabled={isSubmitting}
                           variant="datePicker"
-                          className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground",
+                          )}
                         >
                           {field.value ? (
                             format(field.value, "PPP", {
                               locale: ptBR,
                             })
                           ) : (
-                            <span className="text-gray-primary/50">Data de Nascimento</span>
+                            <span className="text-gray-primary/50">
+                              Data de Nascimento
+                            </span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50 flex-shrink-0" />
                         </Button>
@@ -244,7 +275,9 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
                         locale={ptBR}
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date("1900-01-01")
+                        }
                         captionLayout="dropdown"
                         fromYear={1900}
                         toYear={currentYear}
@@ -487,9 +520,19 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
           onPressedChange={() => form.setValue("paymentMethod", "pix")}
         >
           {paymentMethod === "pix" ? (
-            <Image src="/assets/icons/pix-active-icon.svg" alt="Pix" width={35} height={35} />
+            <Image
+              src="/assets/icons/pix-active-icon.svg"
+              alt="Pix"
+              width={35}
+              height={35}
+            />
           ) : (
-            <Image src="/assets/icons/pix-icon.svg" alt="Pix" width={35} height={35} />
+            <Image
+              src="/assets/icons/pix-icon.svg"
+              alt="Pix"
+              width={35}
+              height={35}
+            />
           )}
           PIX
         </Toggle>
@@ -500,9 +543,19 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
           onPressedChange={() => form.setValue("paymentMethod", "boleto")}
         >
           {paymentMethod === "boleto" ? (
-            <Image src="/assets/icons/boleto-active-icon.svg" alt="Boleto" width={35} height={35} />
+            <Image
+              src="/assets/icons/boleto-active-icon.svg"
+              alt="Boleto"
+              width={35}
+              height={35}
+            />
           ) : (
-            <Image src="/assets/icons/boleto-icon.svg" alt="Boleto" width={35} height={35} />
+            <Image
+              src="/assets/icons/boleto-icon.svg"
+              alt="Boleto"
+              width={35}
+              height={35}
+            />
           )}
           BOLETO
         </Toggle>
@@ -513,9 +566,19 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
           onPressedChange={() => form.setValue("paymentMethod", "credit_card")}
         >
           {paymentMethod === "credit_card" ? (
-            <Image src="/assets/icons/card-active-icon.svg" alt="Cartão de Crédito" width={35} height={35} />
+            <Image
+              src="/assets/icons/card-active-icon.svg"
+              alt="Cartão de Crédito"
+              width={35}
+              height={35}
+            />
           ) : (
-            <Image src="/assets/icons/card-icon.svg" alt="Cartão de Crédito" width={35} height={35} />
+            <Image
+              src="/assets/icons/card-icon.svg"
+              alt="Cartão de Crédito"
+              width={35}
+              height={35}
+            />
           )}
           CARTÃO
         </Toggle>
@@ -526,11 +589,19 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
           hidden: paymentMethod !== "credit_card",
         })}
       >
-        <Cards number={creditNumber} expiry={creditExpiry} cvc={creditCvc} name={creditOwner} focused={state.focus} />
+        <Cards
+          number={creditNumber}
+          expiry={creditExpiry}
+          cvc={creditCvc}
+          name={creditOwner}
+          focused={state.focus}
+        />
 
         <div className="w-full flex flex-col gap-12">
           <div className="w-full bg-white px-6 py-9 rounded-2xl shadow-md shadow-black/25 flex flex-col gap-2 ">
-            <h4 className="text-xl font-semibold text-gray-primary text-left">Dados do cartão</h4>
+            <h4 className="text-xl font-semibold text-gray-primary text-left">
+              Dados do cartão
+            </h4>
 
             <div className="w-full flex flex-col gap-4">
               <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -645,17 +716,39 @@ export function CoursePaymentForm({ form, isSubmitting }: Props) {
                 name="installments"
                 render={({ field }) => (
                   <FormItem>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      value={field.value}
+                    >
                       <FormControl>
-                        <SelectTrigger disabled={isSubmitting} className="input">
+                        <SelectTrigger
+                          disabled={isSubmitting}
+                          className="input"
+                        >
                           <SelectValue placeholder="Selecione as parcelas" />
                         </SelectTrigger>
                       </FormControl>
 
                       <SelectContent>
-                        <SelectItem value="1">1x - R$499,99</SelectItem>
-                        <SelectItem value="2">2x - R$249,99</SelectItem>
-                        <SelectItem value="3">3x - R$166,66</SelectItem>
+                        <SelectItem value="1">
+                          1x -{" "}
+                          {course!.courseName === "Constitucional do Zero"
+                            ? "R$ 499,99"
+                            : "R$ 199,99"}
+                        </SelectItem>
+                        <SelectItem value="2">
+                          2x -{" "}
+                          {course!.courseName === "Constitucional do Zero"
+                            ? "R$ 249,99"
+                            : "R$ 99,99"}
+                        </SelectItem>
+                        <SelectItem value="3">
+                          3x -{" "}
+                          {course!.courseName === "Constitucional do Zero"
+                            ? "R$ 166,66"
+                            : "R$ 66,66"}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
 
