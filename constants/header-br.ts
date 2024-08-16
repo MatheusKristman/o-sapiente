@@ -1,6 +1,6 @@
 export const navLinks = [
   { href: "como-funciona", label: "Como funciona" },
-  // { href: "beneficios", label: "Benefícios" },
+  { href: "beneficios", label: "Benefícios" },
   { href: "contato", label: "Contato" },
 ];
 

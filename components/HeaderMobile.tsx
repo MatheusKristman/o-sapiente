@@ -127,13 +127,6 @@ const HeaderMobile = () => {
 
             <nav>
               <ul className="lg:hidden flex flex-col items-end justify-between gap-y-6">
-                <li
-                  onClick={() => scrollTo("cursos")}
-                  className="text-white cursor-pointer text-lg whitespace-nowrap sm:hidden"
-                >
-                  Cursos de Direito
-                </li>
-
                 {navLinks.map((link) => (
                   <li
                     key={link.href}

@@ -56,7 +56,7 @@ const Header = () => {
       const element = document.getElementById(id);
 
       if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }, 100);
   }
@@ -126,12 +126,6 @@ const Header = () => {
 
       {pathname === "/" && (
         <ul className="hidden lg:flex items-center justify-between gap-x-12">
-          <li
-            onClick={() => scrollTo("cursos")}
-            className="text-gray-primary font-medium cursor-pointer text-base xl:text-base hover:opacity-70 transition duration-200 whitespace-nowrap relative before:content-[''] before:bg-bubbleEllipse before:w-full before:h-36 before:opacity-20 before:bg-contain before:bg-center before:bg-no-repeat before:block before:absolute before:top-1/2 before:left-1/2 before:-translate-y-1/2 before:-translate-x-1/2"
-          >
-            Cursos de Direito
-          </li>
           {navLinks.map((link) => (
             <li
               key={link.href}

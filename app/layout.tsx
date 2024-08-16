@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 
 import Header from "@/components/Header";
 import HeaderMobile from "@/components/HeaderMobile";
+import AdHeader from "@/components/AdHeader";
 import AuthContext from "@/context/AuthContext";
 import ActiveStatus from "@/components/ActiveStatus";
 
@@ -15,15 +16,24 @@ export const metadata: Metadata = {
     "Conecte-se para aprender e ensinar! Nossa plataforma une professores apaixonados a alunos em busca de conhecimento. Junte-se a nós para uma jornada educacional enriquecedora e colaborativa.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="pt-BR">
       <body>
         <AuthContext>
           <Header />
           <HeaderMobile />
+          <AdHeader />
           <ActiveStatus />
-          <Toaster position="top-center" reverseOrder containerStyle={{ zIndex: "99999" }} />
+          <Toaster
+            position="top-center"
+            reverseOrder
+            containerStyle={{ zIndex: "99999" }}
+          />
           {children}
         </AuthContext>
       </body>
