@@ -16,6 +16,7 @@ export async function POST(req: Request) {
     const emailUser: string = process.env.EMAIL_USER!;
     const emailPass: string = process.env.EMAIL_PASS!;
     const emailPort: number = Number(process.env.EMAIL_PORT!);
+    const emailAdmin: string = process.env.EMAIL_ADMIN!;
 
     if (!currentUser) {
       return new Response("Usuário não autorizado", { status: 401 });
@@ -57,7 +58,7 @@ export async function POST(req: Request) {
 
     const options = {
       from: emailUser,
-      to: emailUser,
+      bcc: [emailUser, emailAdmin],
       subject: `Nova solicitação de resgate - O Sapiente`,
       html: emailHtml,
     };

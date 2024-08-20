@@ -68,9 +68,11 @@ function generateAdminEmailOptions({
     }),
   );
 
+  const emailAdmin: string = process.env.EMAIL_ADMIN!;
+
   return {
     from: emailUser,
-    to: emailUser,
+    bcc: [emailUser, emailAdmin],
     subject: "Nova aula criada - O Sapiente",
     html: emailHtml,
   };

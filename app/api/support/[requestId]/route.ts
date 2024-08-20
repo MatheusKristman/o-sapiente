@@ -18,6 +18,7 @@ export async function POST(
     const emailUser: string = process.env.EMAIL_USER!;
     const emailPass: string = process.env.EMAIL_PASS!;
     const emailPort: number = Number(process.env.EMAIL_PORT!);
+    const emailAdmin: string = process.env.EMAIL_ADMIN!;
     const transport = nodemailer.createTransport({
       host: emailHost,
       port: emailPort,
@@ -85,7 +86,7 @@ export async function POST(
 
     const options = {
       from: emailUser,
-      to: emailUser,
+      bcc: [emailUser, emailAdmin],
       subject: `Nova mensagem de suporte - Assunto: ${subject} - O Sapiente`,
       html: emailHtml,
     };

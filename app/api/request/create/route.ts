@@ -24,14 +24,21 @@ interface IGenerateAdminOptions {
   description: string;
 }
 
-function generateOptions({ emailUser, professorEmails, message, studentName, subject, linkUrl }: IGenerateOptions) {
+function generateOptions({
+  emailUser,
+  professorEmails,
+  message,
+  studentName,
+  subject,
+  linkUrl,
+}: IGenerateOptions) {
   const emailHtml = render(
     EmailRequestNotification({
       message,
       studentName,
       subject,
       linkUrl,
-    })
+    }),
   );
 
   return {
@@ -42,19 +49,27 @@ function generateOptions({ emailUser, professorEmails, message, studentName, sub
   };
 }
 
-function generateAdminOptions({ emailUser, studentName, studentContact, subject, description }: IGenerateAdminOptions) {
+function generateAdminOptions({
+  emailUser,
+  studentName,
+  studentContact,
+  subject,
+  description,
+}: IGenerateAdminOptions) {
   const emailHtml = render(
     EmailAdminNewRequest({
       studentName,
       studentContact,
       subject,
       description,
-    })
+    }),
   );
+
+  const emailAdmin: string = process.env.EMAIL_ADMIN!;
 
   return {
     from: emailUser,
-    to: emailUser,
+    bcc: [emailUser, emailAdmin],
     subject: "Nova Solicitação de Aluno Criada - O Sapiente",
     html: emailHtml,
   };
@@ -68,7 +83,9 @@ export async function POST(req: NextRequest) {
     const emailPass: string = process.env.EMAIL_PASS!;
     const emailPort: number = Number(process.env.EMAIL_PORT!);
     const baseUrl =
-      process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_BASEURL_DEV : process.env.NEXT_PUBLIC_BASEURL;
+      process.env.NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_BASEURL_DEV
+        : process.env.NEXT_PUBLIC_BASEURL;
     const transport = nodemailer.createTransport({
       host: emailHost,
       port: emailPort,
