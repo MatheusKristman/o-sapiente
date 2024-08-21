@@ -177,30 +177,30 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // const professorEmails = users
-    //   .filter((user) => user.accountType === "PROFESSOR")
-    //   .map((professor) => professor.email);
+    const professorEmails = users
+      .filter((user) => user.accountType === "PROFESSOR")
+      .map((professor) => professor.email);
 
-    // const professorOptions = generateOptions({
-    //   emailUser,
-    //   professorEmails,
-    //   message: description,
-    //   subject,
-    //   studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
-    //   linkUrl: `${baseUrl}/`,
-    // });
+    const professorOptions = generateOptions({
+      emailUser,
+      professorEmails,
+      message: description,
+      subject,
+      studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
+      linkUrl: `${baseUrl}/`,
+    });
 
-    // await transport.sendMail(professorOptions);
+    await transport.sendMail(professorOptions);
 
-    // const options = generateAdminOptions({
-    //   emailUser,
-    //   studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
-    //   studentContact: `${newRequest.users[0].tel}`,
-    //   subject: newRequest.subject,
-    //   description: newRequest.description,
-    // });
+    const options = generateAdminOptions({
+      emailUser,
+      studentName: `${newRequest.users[0].firstName} ${newRequest.users[0].lastName}`,
+      studentContact: `${newRequest.users[0].tel}`,
+      subject: newRequest.subject,
+      description: newRequest.description,
+    });
 
-    // await transport.sendMail(options);
+    await transport.sendMail(options);
 
     return NextResponse.json({ sended: true, requests: newRequests });
   } catch (error) {
