@@ -6,6 +6,7 @@ import nodemailer from "nodemailer";
 
 interface IAdminEmailOptions {
   emailUser: string;
+  emailAdmin: string;
   courseName: string;
   tel: string;
   name: string;
@@ -29,21 +30,26 @@ interface IErrorEmailOptions {
   email: string;
 }
 
-function generateAdminEmailOptions({ emailUser, courseName, tel, name, email }: IAdminEmailOptions) {
-  const emailTest = process.env.EMAIL_TEST!;
-
+function generateAdminEmailOptions({
+  emailUser,
+  emailAdmin,
+  courseName,
+  tel,
+  name,
+  email,
+}: IAdminEmailOptions) {
   const emailHtml = render(
     EmailAdminCourseNotification({
       courseName,
       tel,
       name,
       email,
-    })
+    }),
   );
 
   return {
     from: emailUser,
-    to: [emailUser, emailTest],
+    to: [emailUser, emailAdmin],
     subject: "Notificação de compra do curso - O Sapiente",
     html: emailHtml,
   };
@@ -65,7 +71,7 @@ function generateEmailOptions({
       courseName,
       courseAmount,
       installments,
-    })
+    }),
   );
 
   return {
@@ -76,12 +82,17 @@ function generateEmailOptions({
   };
 }
 
-function generateErrorEmailOptions({ emailUser, name, email, courseName }: IErrorEmailOptions) {
+function generateErrorEmailOptions({
+  emailUser,
+  name,
+  email,
+  courseName,
+}: IErrorEmailOptions) {
   const emailHtml = render(
     EmailCoursePaymentFailed({
       name,
       courseName,
-    })
+    }),
   );
 
   return {
@@ -97,6 +108,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const emailHost: string = process.env.EMAIL_SMTP!;
     const emailUser: string = process.env.EMAIL_USER!;
+    const emailAdmin: string = process.env.EMAIL_ADMIN!;
     const emailPass: string = process.env.EMAIL_PASS!;
     const emailPort: number = Number(process.env.EMAIL_PORT!);
     const transport = nodemailer.createTransport({
@@ -124,6 +136,7 @@ export async function POST(req: Request) {
 
       const adminOptions = generateAdminEmailOptions({
         emailUser,
+        emailAdmin,
         email: clientEmail,
         name: clientName,
         tel: clientTel,
@@ -147,7 +160,10 @@ export async function POST(req: Request) {
       });
     }
 
-    if (body.type === "order.payment_failed" || body.type === "order.canceled") {
+    if (
+      body.type === "order.payment_failed" ||
+      body.type === "order.canceled"
+    ) {
       const courseName = body.data.items[0].description;
       const clientName = body.data.customer.name;
       const clientEmail = body.data.customer.email;
