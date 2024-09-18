@@ -108,6 +108,10 @@
   @apply w-full h-12 px-4 py-3 bg-[#EBEFF1] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
 }
 
+.input-courses-search {
+  @apply w-full h-12 px-4 py-3 bg-[#E5ECF0] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
+}
+
 .input-light {
   @apply w-full h-12 px-4 py-3 bg-[#FFF] text-base text-gray-primary rounded-lg transition-all outline-none outline-offset-0 focus-visible:ring-2 focus-visible:ring-[#9DA5AA];
 }

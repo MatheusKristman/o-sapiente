@@ -50,6 +50,14 @@ const Header = () => {
   function scrollTo(id: string) {
     if (pathname !== "/") {
       router.push("/");
+
+      return;
+    }
+
+    if (id === "cursos") {
+      router.push("/cursos");
+
+      return;
     }
 
     setTimeout(() => {
@@ -101,13 +109,6 @@ const Header = () => {
         />
       </Link>
 
-      <div
-        onClick={() => scrollTo("cursos")}
-        className="hidden sm:block lg:hidden text-gray-primary font-medium cursor-pointer text-base xl:text-base hover:opacity-70 transition duration-200 whitespace-nowrap relative before:content-[''] before:bg-bubbleEllipse before:w-full before:h-36 before:opacity-20 before:bg-contain before:bg-center before:bg-no-repeat before:block before:absolute before:top-1/2 before:left-1/2 before:-translate-y-1/2 before:-translate-x-1/2"
-      >
-        Cursos de Direito
-      </div>
-
       <Button
         variant="link"
         size="icon"
@@ -115,7 +116,7 @@ const Header = () => {
         disabled={isLoading}
         onClick={openMobileMenu}
         className={cn(
-          "flex lg:hidden items-center justify-center cursor-pointer",
+          "flex xl:hidden items-center justify-center cursor-pointer",
           {
             "opacity-0 pointer-events-none": isMobileMenuOpen,
           },
@@ -125,7 +126,7 @@ const Header = () => {
       </Button>
 
       {pathname === "/" && (
-        <ul className="hidden lg:flex items-center justify-between gap-x-12">
+        <ul className="hidden xl:flex items-center justify-between gap-x-12">
           {navLinks.map((link) => (
             <li
               key={link.href}
@@ -138,7 +139,7 @@ const Header = () => {
         </ul>
       )}
 
-      <div className="hidden lg:flex items-center justify-center gap-x-6">
+      <div className="hidden xl:flex items-center justify-center gap-x-6">
         {session.status === "authenticated" ? (
           <>
             <Button

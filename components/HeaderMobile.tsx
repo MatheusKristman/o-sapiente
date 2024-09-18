@@ -52,6 +52,16 @@ const HeaderMobile = () => {
       return;
     }
 
+    if (id === "cursos") {
+      closeMobileMenu();
+
+      setTimeout(() => {
+        router.push("/cursos");
+      }, 500);
+
+      return;
+    }
+
     closeMobileMenu();
     const element = document.getElementById(id);
 
@@ -113,7 +123,7 @@ const HeaderMobile = () => {
             initial="offscreen"
             animate="onscreen"
             exit="exit"
-            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex lg:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999]"
+            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex xl:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999]"
           >
             <Button
               variant="link"
@@ -126,7 +136,7 @@ const HeaderMobile = () => {
             </Button>
 
             <nav>
-              <ul className="lg:hidden flex flex-col items-end justify-between gap-y-6">
+              <ul className="xl:hidden flex flex-col items-end justify-between gap-y-6">
                 {navLinks.map((link) => (
                   <li
                     key={link.href}
@@ -139,7 +149,7 @@ const HeaderMobile = () => {
               </ul>
             </nav>
 
-            <div className="lg:hidden flex flex-col items-end justify-center gap-y-4 w-full">
+            <div className="xl:hidden flex flex-col items-end justify-center gap-y-4 w-full">
               {session.status === "authenticated" ? (
                 <>
                   <Button
