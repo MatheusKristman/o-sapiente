@@ -84,7 +84,7 @@ export function RequestsBox() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   setFilterValue(e.target.value)
                 }
-                placeholder={AdminGeneralText.requestsPlaceholder}
+                placeholder={AdminGeneralText.placeholder}
                 className="bg-transparent placeholder:text-green-primary outline-none w-full"
               />
 

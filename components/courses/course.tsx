@@ -65,7 +65,7 @@ export function Course({
         </div>
 
         <Dialog>
-          <DialogTrigger className="w-full h-fit md:w-fit bg-[#F0F5F8] px-2 py-1 rounded-full text-gray-primary/70 self-center md:self-auto text-sm font-medium md:transition-all md:hover:bg-green-primary md:hover:text-white">
+          <DialogTrigger className="w-full h-fit md:w-fit bg-[#F0F5F8] px-3 py-1 rounded-full text-gray-primary/70 self-center md:self-auto text-sm font-medium md:transition-all md:hover:bg-green-primary md:hover:text-white">
             ver mais
           </DialogTrigger>
 

@@ -181,9 +181,10 @@ model Message {
 }
 
 model Course {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  courseName String
-  price      Int
-  benefits   String[]
-  themes     String[]
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  courseName  String
+  courseImage String
+  price       Int
+  benefits    String[]
+  themes      String[]
 }

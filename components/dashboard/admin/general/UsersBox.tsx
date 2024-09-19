@@ -84,7 +84,7 @@ export function UsersBox() {
   }
 
   return (
-    <div className="w-full h-full lg:max-w-[350px] rounded-lg bg-white p-9 mb-5 shadow-md shadow-[rgba(0,0,0,0.25)]">
+    <div className="w-full h-full rounded-lg bg-white p-9 shadow-md shadow-[rgba(0,0,0,0.25)]">
       <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:gap-6 lg:flex-col lg:justify-start lg:gap-2 gap-2">
         <h2 className="text-gray-primary text-xl font-semibold lg:whitespace-nowrap whitespace-normal">
           {AdminGeneralText.usersBoxTitle}
@@ -100,7 +100,7 @@ export function UsersBox() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   setFilterValue(e.target.value)
                 }
-                placeholder={AdminGeneralText.usersPlaceholder}
+                placeholder={AdminGeneralText.placeholder}
                 className="bg-transparent outline-none w-full"
               />
 
@@ -120,7 +120,7 @@ export function UsersBox() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   setFilterValue(e.target.value)
                 }
-                placeholder={AdminGeneralText.usersPlaceholder}
+                placeholder={AdminGeneralText.placeholder}
                 className="bg-transparent outline-none w-full"
               />
 

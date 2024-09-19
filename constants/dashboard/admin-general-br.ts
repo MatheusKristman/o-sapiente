@@ -1,11 +1,11 @@
 export const AdminGeneralText = {
   title: "Painel do Administrador",
+  placeholder: "Pesquise...",
   usersBoxTitle: "Usuários",
-  usersPlaceholder: "Pesquise...",
   usersTypePlaceholder: "Selecione o tipo...",
   usersDropdownLabel: "Selecione seu filtro",
+  coursesBoxTitle: "Cursos",
   requestsBoxTitle: "Solicitações pendentes",
-  requestsPlaceholder: "Pesquise...",
   requestsDatePlaceholder: "Data de nascimento",
   requestsDropdownSubject: "Matéria",
   requestsDropdownDate: "Data de criação",

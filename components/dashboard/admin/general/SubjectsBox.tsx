@@ -78,7 +78,7 @@ export function SubjectsBox() {
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setSubjectFilter(e.target.value)
               }
-              placeholder={AdminGeneralText.requestsPlaceholder}
+              placeholder={AdminGeneralText.placeholder}
               className="bg-transparent outline-none w-full"
             />
 

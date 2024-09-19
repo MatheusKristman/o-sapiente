@@ -1,4 +1,5 @@
 import { UsersBox } from "@/components/dashboard/admin/general/UsersBox";
+import { CoursesBox } from "@/components/dashboard/admin/general/CoursesBox";
 import { RequestsBox } from "@/components/dashboard/admin/general/RequestsBox";
 import { AdminGeneralText } from "@/constants/dashboard/admin-general-br";
 import { UsersModal } from "@/components/dashboard/admin/general/UsersModal";
@@ -17,11 +18,13 @@ export default function AdminGeneralPage() {
         </h1>
 
         <div className="w-full flex flex-col lg:flex-row gap-x-6 gap-y-12">
-          <UsersBox />
+          <div className="w-full lg:max-w-[350px] h-fit flex flex-col gap-12">
+            <UsersBox />
+            <CoursesBox />
+          </div>
 
           <div className="w-full flex flex-col gap-12">
             <RequestsBox />
-
             <SubjectsBox />
           </div>
         </div>
