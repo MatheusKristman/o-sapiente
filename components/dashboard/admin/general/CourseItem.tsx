@@ -22,7 +22,7 @@ export function CourseItem({ last, course }: CourseItemProps) {
   return (
     <div
       className={cn(
-        "w-full bg-white p-4 rounded-lg flex flex-col sm:flex-row sm:justify-between lg:flex-col lg:justify-start items-center gap-6 mb-4",
+        "w-full bg-white p-4 rounded-lg flex flex-col items-center gap-6",
         last && "mb-0",
       )}
     >
@@ -58,23 +58,30 @@ export function CourseItem({ last, course }: CourseItemProps) {
             </DialogTitle>
 
             <div className="w-full flex flex-col gap-4">
-              <h5 className="text-lg font-semibold text-gray-primary text-left">
-                Conteúdo do Curso
-              </h5>
+              {course.themes.length > 0 && (
+                <>
+                  <h5 className="text-lg font-semibold text-gray-primary text-left">
+                    Conteúdo do Curso
+                  </h5>
 
-              <ul className="flex flex-col sm:grid sm:grid-cols-2 gap-2">
-                {course.themes.map((content, index) => (
-                  <li key={`content-${index}`} className="flex gap-2">
-                    <MoveRight color="#03C988" className="shrink-0 w-6 h-6" />
+                  <ul className="flex flex-col sm:grid sm:grid-cols-2 gap-2">
+                    {course.themes.map((content, index) => (
+                      <li key={`content-${index}`} className="flex gap-2">
+                        <MoveRight
+                          color="#03C988"
+                          className="shrink-0 w-6 h-6"
+                        />
 
-                    <span className="text-sm font-medium text-gray-primary text-left mt-[2px]">
-                      {content}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                        <span className="text-sm font-medium text-gray-primary text-left mt-[2px]">
+                          {content}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
 
-              {course.benefits && (
+              {course.benefits.length > 0 && (
                 <div className="w-full sm:w-fit border-2 border-green-primary rounded-xl p-5 flex flex-col items-center sm:mx-auto">
                   <p className="text-lg font-semibold text-green-primary text-center">
                     Mais Vantagens

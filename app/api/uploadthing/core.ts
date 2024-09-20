@@ -16,7 +16,6 @@ const f = createUploadthing({
 });
 
 export const ourFileRouter = {
-
   profilePhotoUploader: f({ image: { maxFileSize: "2MB" } })
     .input(
       z.object({
@@ -33,6 +32,27 @@ export const ourFileRouter = {
         },
         data: {
           profilePhoto: file.url,
+        },
+      });
+
+      return {};
+    }),
+  saveCourseImage: f({ image: { maxFileSize: "2MB" } })
+    .input(
+      z.object({
+        courseId: z.string().min(1, "É preciso passar o ID do curso"),
+      }),
+    )
+    .middleware(async ({ req, input }) => {
+      return { courseId: input.courseId };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      await prisma.course.update({
+        where: {
+          id: metadata.courseId,
+        },
+        data: {
+          courseImage: file.url,
         },
       });
 

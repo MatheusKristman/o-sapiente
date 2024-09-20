@@ -1,12 +1,17 @@
 "use client";
 
 import { Loader2, Search } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import { AdminGeneralText } from "@/constants/dashboard/admin-general-br";
 import { Input } from "@/components/ui/input";
 import { CourseItem } from "./CourseItem";
 import { CoursesModalForm } from "./CoursesModalForm";
+import useUserStore from "@/stores/useUserStore";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import { Course } from "@prisma/client";
+import toast from "react-hot-toast";
 
 const COURSE_TEST = [
   {
@@ -109,16 +114,45 @@ const COURSE_TEST = [
 
 export function CoursesBox() {
   const [filterValue, setFilterValue] = useState<string>("");
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [coursesLoading, setCoursesLoading] = useState<boolean>(false);
+
+  const { userId } = useUserStore();
+  const session = useSession();
+
+  useEffect(() => {
+    if (userId && session.status === "authenticated") {
+      setCoursesLoading(true);
+
+      axios
+        .get("/api/courses/get")
+        .then((res) => {
+          setCourses(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+
+          toast.error(error.response.data);
+        })
+        .finally(() => {
+          setCoursesLoading(false);
+        });
+    }
+  }, [userId, session]);
+
+  useEffect(() => {
+    console.log({ courses });
+  }, [courses]);
 
   return (
     <div className="w-full h-full rounded-lg bg-green-primary p-9 shadow-md shadow-[rgba(0,0,0,0.25)]">
-      <div className="w-full flex flex-col gap-2">
+      <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center lg:flex-col lg:justify-start lg:items-start gap-2">
         <h2 className="text-white text-xl font-semibold lg:whitespace-nowrap whitespace-normal">
           {AdminGeneralText.coursesBoxTitle}
         </h2>
 
-        <div className="w-full flex items-center gap-4 pb-1">
-          <div className="basis-full flex items-center justify-between input-admin-requests-search focus-within:ring-2 focus-within:ring-[#9DA5AA] peer">
+        <div className="w-full sm:max-w-md flex items-center gap-4 pb-1">
+          <div className="basis-full flex items-center justify-between input-admin-requests-search focus-within:ring-2 focus-within:ring-[#00FFAB] peer">
             <Input
               type="text"
               name="filter"
@@ -142,24 +176,26 @@ export function CoursesBox() {
         </div>
       </div>
 
-      {false ? (
+      {coursesLoading ? (
         <div className="w-full mt-4 flex items-center justify-center">
           <Loader2 size={50} color="#FFF" className="animate-spin" />
         </div>
       ) : (
         <div className="relative w-full max-h-[640px] lg:max-h-[450px] overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
           <>
-            <div className="sticky z-10 top-0 left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
+            <div className="sticky z-10 -top-px left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-            {COURSE_TEST.map((course, index) => (
-              <CourseItem
-                key={course.id}
-                last={index === COURSE_TEST.length - 1}
-                course={course}
-              />
-            ))}
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+              {courses.map((course, index) => (
+                <CourseItem
+                  key={course.id}
+                  last={index === COURSE_TEST.length - 1}
+                  course={course}
+                />
+              ))}
+            </div>
 
-            <div className="sticky z-10 bottom-0 left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
+            <div className="sticky z-10 -bottom-px left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
           </>
         </div>
       )}

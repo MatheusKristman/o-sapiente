@@ -4,10 +4,12 @@ import { Plus, XIcon } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useCallback, useRef, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Dialog,
   DialogTrigger,
@@ -22,12 +24,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { useDropzone } from "@uploadthing/react";
+import { generateClientDropzoneAccept } from "uploadthing/client";
+import toast from "react-hot-toast";
+import { useUploadThing } from "@/libs/uploadthing";
 
 const formSchema = z.object({
   courseName: z.string().min(1, { message: "Nome do curso é obrigatório" }),
-  courseImage: z.string(),
   themes: z
     .array(z.string().min(1, { message: "O conteúdo não pode ser vazio" }))
     .min(1, { message: "É preciso informar ao menos um conteúdo" }),
@@ -40,16 +45,61 @@ const formSchema = z.object({
 export function CoursesModalForm() {
   const [themeValue, setThemeValue] = useState<string>("");
   const [benefitValue, setBenefitValue] = useState<string>("");
+  const [courseImage, setCourseImage] = useState<File[] | null>(null);
+  const [courseImageUrl, setCourseImageUrl] = useState<string>("");
+
+  const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
+    "saveCourseImage",
+    {
+      onClientUploadComplete: () => {
+        toast.success("Curso adicionado com sucesso");
+      },
+      onUploadError: (error) => {
+        console.error(error);
+        console.error(error.data);
+
+        if (error.data?.message === "Unable to get presigned urls") {
+          toast.error(
+            "Tipo ou tamanho da imagem inválido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)",
+          );
+
+          return;
+        }
+
+        toast.error(
+          "Ocorreu um erro ao enviar a imagem do curso, tente novamente mais tarde",
+        );
+      },
+    },
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       courseName: "",
-      courseImage: "",
       themes: [],
       benefits: [],
       price: 0,
     },
+  });
+
+  const fileInput = useRef<HTMLInputElement | null>(null);
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      setCourseImage(acceptedFiles);
+      setCourseImageUrl(URL.createObjectURL(acceptedFiles[0]));
+    },
+    [setCourseImageUrl],
+  );
+
+  const fileTypes = permittedFileInfo?.config
+    ? Object.keys(permittedFileInfo?.config)
+    : [];
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
   });
 
   const themes = form.watch("themes");
@@ -99,7 +149,7 @@ export function CoursesModalForm() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="h-full overflow-y-auto">
+      <DialogContent className="h-full sm:h-fit sm:max-h-[650px] overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
         <DialogHeader>
           <DialogTitle className="w-1/2 text-left text-xl font-semibold text-gray-primary !leading-tight mb-12">
             Adicione seu novo curso
@@ -261,17 +311,17 @@ export function CoursesModalForm() {
                   control={form.control}
                   name="price"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col items-start">
+                    <FormItem className="w-full flex flex-col items-start">
                       <FormLabel className="text-gray-primary text-sm font-semibold text-left">
                         Valor do curso
                       </FormLabel>
 
                       <FormControl>
-                        <div className="relative">
+                        <div className="w-full relative">
                           <CurrencyInput
                             name={field.name}
                             placeholder="Insira o valor do curso"
-                            defaultValue={10}
+                            defaultValue={0}
                             decimalsLimit={2}
                             onValueChange={(value, name) =>
                               form.setValue(name as "price", Number(value))
@@ -284,6 +334,10 @@ export function CoursesModalForm() {
                           </span>
                         </div>
                       </FormControl>
+
+                      <FormDescription>
+                        Use o ponto para representar os centavos
+                      </FormDescription>
 
                       <FormMessage />
                     </FormItem>
