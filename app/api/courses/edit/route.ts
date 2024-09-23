@@ -3,9 +3,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { courseId, courseName, themes, benefits, price } = await req.json();
+    const {
+      courseId,
+      courseName,
+      themes,
+      benefits,
+      price,
+      lessonsCount,
+      hoursCount,
+    } = await req.json();
 
-    if (!courseId || !courseName || !price) {
+    if (!courseId || !courseName || !price || !lessonsCount || !hoursCount) {
       return new NextResponse("Dados inválidos", { status: 401 });
     }
 
@@ -18,6 +26,8 @@ export async function POST(req: NextRequest) {
         themes: themes && themes.length > 0 ? themes : [],
         benefits: benefits && benefits.length > 0 ? benefits : [],
         price: price * 100,
+        lessonsCount: Number(lessonsCount),
+        hoursCount: Number(hoursCount),
       },
     });
 
