@@ -17,7 +17,11 @@ export function CourseAd() {
     axios
       .get("/api/courses/get")
       .then((res) => {
-        setCourses(res.data);
+        // TODO: adicionar propriedade de adShow para mostrar apenas dois cursos destacados na home
+        const adCourses = res.data.filter(
+          (course: Course) => course.courseName === "Constitucional do Zero" || course.courseName === "Repescagem"
+        );
+        setCourses(adCourses);
       })
       .catch((error) => {
         console.error(error);
@@ -45,11 +49,7 @@ export function CourseAd() {
               price={course.price}
               themes={course.themes}
               benefits={course.benefits}
-              courseLink={
-                course.courseName === "Constitucional do Zero"
-                  ? "Constitucional%20do%20Zero"
-                  : "Repescagem"
-              }
+              courseLink={course.courseName === "Constitucional do Zero" ? "Constitucional%20do%20Zero" : "Repescagem"}
               courseId={course.id}
               isRight={course.courseName === "Repescagem"}
             />
