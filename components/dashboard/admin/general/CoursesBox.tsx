@@ -157,9 +157,7 @@ export function CoursesBox() {
               type="text"
               name="filter"
               value={filterValue}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setFilterValue(e.target.value)
-              }
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setFilterValue(e.target.value)}
               placeholder={AdminGeneralText.placeholder}
               className="bg-transparent placeholder:text-green-primary outline-none w-full"
             />
@@ -172,7 +170,7 @@ export function CoursesBox() {
             />
           </div>
 
-          <CoursesModalForm />
+          <CoursesModalForm setCourses={setCourses} />
         </div>
       </div>
 
@@ -187,11 +185,7 @@ export function CoursesBox() {
 
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
               {courses.map((course, index) => (
-                <CourseItem
-                  key={course.id}
-                  last={index === COURSE_TEST.length - 1}
-                  course={course}
-                />
+                <CourseItem key={course.id} last={index === COURSE_TEST.length - 1} course={course} />
               ))}
             </div>
 

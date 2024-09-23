@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
     const course = await prisma.course.create({
       data: {
         courseName,
-        courseImage: "",
         themes: themes && themes.length > 0 ? themes : [],
         benefits: benefits && benefits.length > 0 ? benefits : [],
         price: price * 100,
@@ -33,7 +32,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ newCourses }, { status: 200 });
+    return NextResponse.json({ id: course.id }, { status: 200 });
   } catch (error) {
     console.log("[ERROR_CREATE_COURSE]", error);
 
