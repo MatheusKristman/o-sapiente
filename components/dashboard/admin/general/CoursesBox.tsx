@@ -6,12 +6,13 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { AdminGeneralText } from "@/constants/dashboard/admin-general-br";
 import { Input } from "@/components/ui/input";
 import { CourseItem } from "./CourseItem";
-import { CoursesModalForm } from "./CoursesModalForm";
+import { CourseModalForm } from "./CourseModalForm";
 import useUserStore from "@/stores/useUserStore";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { Course } from "@prisma/client";
 import toast from "react-hot-toast";
+import useAdminStore from "@/stores/useAdminStore";
 
 const COURSE_TEST = [
   {
@@ -114,10 +115,10 @@ const COURSE_TEST = [
 
 export function CoursesBox() {
   const [filterValue, setFilterValue] = useState<string>("");
-  const [courses, setCourses] = useState<Course[]>([]);
   const [coursesLoading, setCoursesLoading] = useState<boolean>(false);
 
   const { userId } = useUserStore();
+  const { courses, setCourses } = useAdminStore();
   const session = useSession();
 
   useEffect(() => {
@@ -170,7 +171,7 @@ export function CoursesBox() {
             />
           </div>
 
-          <CoursesModalForm setCourses={setCourses} />
+          <CourseModalForm />
         </div>
       </div>
 
@@ -180,17 +181,23 @@ export function CoursesBox() {
         </div>
       ) : (
         <div className="relative w-full max-h-[640px] lg:max-h-[450px] overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
-          <>
-            <div className="sticky z-10 -top-px left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
+          {courses && courses.length > 0 ? (
+            <>
+              <div className="sticky z-10 -top-px left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-              {courses.map((course, index) => (
-                <CourseItem key={course.id} last={index === COURSE_TEST.length - 1} course={course} />
-              ))}
-            </div>
+              <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+                {courses.map((course, index) => (
+                  <CourseItem key={course.id} last={index === COURSE_TEST.length - 1} course={course} />
+                ))}
+              </div>
 
-            <div className="sticky z-10 -bottom-px left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
-          </>
+              <div className="sticky z-10 -bottom-px left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
+            </>
+          ) : (
+            <span className="block mt-6 text-lg font-medium text-[#00744E] text-center">
+              Nenhum curso cadastrado no momento
+            </span>
+          )}
         </div>
       )}
     </div>

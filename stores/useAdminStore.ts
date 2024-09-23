@@ -1,5 +1,5 @@
 import { RequestWithUsers, UsersWithRequests } from "@/types";
-import { Subject } from "@prisma/client";
+import { Subject, Course } from "@prisma/client";
 import { create } from "zustand";
 
 interface IUseAdminStore {
@@ -9,6 +9,8 @@ interface IUseAdminStore {
   setRequests: (requests: RequestWithUsers[]) => void;
   subjects: Subject[] | null;
   setSubjects: (subjects: Subject[]) => void;
+  courses: Course[] | null;
+  setCourses: (courses: Course[]) => void;
 }
 
 const useAdminStore = create<IUseAdminStore>((set) => ({
@@ -18,6 +20,8 @@ const useAdminStore = create<IUseAdminStore>((set) => ({
   setRequests: (requests) => set({ requests }),
   subjects: null,
   setSubjects: (subjects) => set({ subjects }),
+  courses: null,
+  setCourses: (courses) => set({ courses }),
 }));
 
 export default useAdminStore;

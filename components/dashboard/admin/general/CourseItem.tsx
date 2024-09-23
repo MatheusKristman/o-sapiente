@@ -4,6 +4,7 @@ import { Check, Edit, MoveRight, Plus } from "lucide-react";
 
 import { cn, formatPrice } from "@/libs/utils";
 import { Button } from "@/components/ui/button";
+import { CourseEditModalForm } from "./CourseEditModalForm";
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface CourseItemProps {
@@ -76,10 +77,7 @@ export function CourseItem({ last, course }: CourseItemProps) {
               {formatPrice(course.price / 100)}
             </span>
 
-            <Button className="flex items-center gap-2">
-              <Edit size={20} />
-              Editar
-            </Button>
+            <CourseEditModalForm courseSelected={course} />
           </DialogFooter>
         </DialogContent>
       </Dialog>

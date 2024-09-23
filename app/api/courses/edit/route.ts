@@ -3,13 +3,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { courseName, themes, benefits, price } = await req.json();
+    const { courseId, courseName, themes, benefits, price } = await req.json();
 
-    if (!courseName || !price) {
+    if (!courseId || !courseName || !price) {
       return new NextResponse("Dados inválidos", { status: 401 });
     }
 
-    const course = await prisma.course.create({
+    const course = await prisma.course.update({
+      where: {
+        id: courseId,
+      },
       data: {
         courseName,
         themes: themes && themes.length > 0 ? themes : [],
@@ -19,7 +22,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!course) {
-      return new NextResponse("Ocorreu um erro ao adicionar um novo curso", {
+      return new NextResponse("Ocorreu um erro ao editar o curso", {
         status: 400,
       });
     }
