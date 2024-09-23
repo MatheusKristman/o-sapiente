@@ -12,8 +12,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface CourseProps {
+  courseId: string;
   courseName: string;
   courseImage: string;
   lessonsCount: number;
@@ -24,6 +26,7 @@ interface CourseProps {
 }
 
 export function Course({
+  courseId,
   courseName,
   courseImage,
   lessonsCount,
@@ -33,7 +36,7 @@ export function Course({
   benefits,
 }: CourseProps) {
   return (
-    <div className="w-full rounded-2xl bg-white shadow-lg px-8 py-9 flex flex-col gap-4">
+    <div className="w-full rounded-2xl bg-white shadow-lg px-8 py-9 flex flex-col justify-between gap-4">
       <div className="w-full aspect-video rounded-[9.5px] overflow-hidden relative group">
         <Image
           src={courseImage}
@@ -71,8 +74,12 @@ export function Course({
 
           <DialogContent className="h-full sm:h-auto overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-left text-xl text-gray-primary font-semibold mb-6">
+              <DialogTitle className="text-left text-xl text-gray-primary font-semibold mb-6 flex flex-col">
                 {courseName}
+
+                <span className="text-base text-left text-gray-primary/50 font-semibold flex items-center">
+                  Aulas: {lessonsCount} <Dot /> Horas: {hoursCount}
+                </span>
               </DialogTitle>
 
               <div className="w-full flex flex-col gap-4">
@@ -128,7 +135,9 @@ export function Course({
                 </p>
               </div>
 
-              <Button>Comprar</Button>
+              <Button asChild>
+                <Link href={`/pagamento-do-curso/${courseId}`}>Comprar</Link>
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

@@ -9,31 +9,11 @@ import { Course as CourseType } from "@prisma/client";
 import axios from "axios";
 import { cn } from "@/libs/utils";
 
-const contentTest = [
-  "Constitucionalismo",
-  "Organização do Estado",
-  "Teoria da Constituição",
-  "Direito de Nacionalidade",
-  "Ações de Controle Difuso e Concentrado",
-  "Fenômenos Constitucionais",
-  "Poder Constituinte",
-  "Direitos Fundamentais",
-  "Recursos Constitucionais",
-];
-
-const benefitTest = [
-  "Material Gravado",
-  "Oficina de Peças",
-  "Aulas Ao Vivo de Terça a Quinta (2h de duração)",
-  "Oficina de Questões",
-  "Marcação de Vade Mecum",
-  "Correção Individualizada de Peças",
-];
-
 function CoursesPage() {
   const [searchValue, setSearchValue] = useState<string>("");
   const [coursesLoading, setCoursesLoading] = useState<boolean>(false);
   const [courses, setCourses] = useState<CourseType[] | null>(null);
+  const [coursesFiltered, setCoursesFiltered] = useState<CourseType[]>([]);
 
   useEffect(() => {
     setCoursesLoading(true);
@@ -50,6 +30,31 @@ function CoursesPage() {
         setCoursesLoading(false);
       });
   }, [setCourses]);
+
+  useEffect(() => {
+    if (searchValue.length > 3 && courses) {
+      const filter = courses.filter((course) =>
+        course.courseName
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .includes(
+            searchValue
+              .toLowerCase()
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, ""),
+          ),
+      );
+
+      setCoursesFiltered(filter);
+
+      console.log("Busca ativada");
+    } else {
+      setCoursesFiltered([]);
+
+      console.log("Busca desativada");
+    }
+  }, [searchValue, courses]);
 
   return (
     <div className="w-full min-h-[calc(100vh-301.14px)] px-6 sm:px-16 lg:container lg:mx-auto py-12 flex flex-col gap-y-12">
@@ -96,10 +101,25 @@ function CoursesPage() {
               Aguarde um momento...
             </span>
           </div>
+        ) : searchValue.length > 3 && coursesFiltered.length > 0 ? (
+          coursesFiltered.map((course) => (
+            <Course
+              key={course.id}
+              courseId={course.id}
+              courseName={course.courseName}
+              courseImage={course.courseImage!}
+              lessonsCount={course.lessonsCount}
+              hoursCount={course.hoursCount}
+              price={course.price / 100}
+              contents={course.themes}
+              benefits={course.benefits}
+            />
+          ))
         ) : courses && courses.length > 0 ? (
           courses.map((course) => (
             <Course
               key={course.id}
+              courseId={course.id}
               courseName={course.courseName}
               courseImage={course.courseImage!}
               lessonsCount={course.lessonsCount}
