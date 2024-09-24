@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, Loader2, Search } from "lucide-react";
+import { AlertTriangle, Loader2, Search, X } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Course } from "@/components/courses/course";
 import { Course as CourseType } from "@prisma/client";
 import axios from "axios";
 import { cn } from "@/libs/utils";
+import { Button } from "@/components/ui/button";
 
 function CoursesPage() {
   const [searchValue, setSearchValue] = useState<string>("");
@@ -56,6 +57,10 @@ function CoursesPage() {
     }
   }, [searchValue, courses]);
 
+  function clearSearch() {
+    setSearchValue("");
+  }
+
   return (
     <div className="w-full min-h-[calc(100vh-301.14px)] px-6 sm:px-16 lg:container lg:mx-auto py-12 flex flex-col gap-y-12">
       <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-y-4">
@@ -75,12 +80,23 @@ function CoursesPage() {
             className="bg-transparent outline-none w-full"
           />
 
-          <Search
-            className="h-6 w-6 min-h-[24px] min-w-[24px]"
-            style={{
-              color: "#9DA5AA",
-            }}
-          />
+          {searchValue.length > 0 ? (
+            <Button size="icon" variant="link" onClick={clearSearch} asChild>
+              <X
+                className="h-6 w-6 min-h-[24px] min-w-[24px]"
+                style={{
+                  color: "#9DA5AA",
+                }}
+              />
+            </Button>
+          ) : (
+            <Search
+              className="h-6 w-6 min-h-[24px] min-w-[24px]"
+              style={{
+                color: "#9DA5AA",
+              }}
+            />
+          )}
         </div>
       </div>
 
@@ -115,6 +131,17 @@ function CoursesPage() {
               benefits={course.benefits}
             />
           ))
+        ) : searchValue.length > 3 && coursesFiltered.length === 0 ? (
+          <div className="w-full col-span-1 sm:col-span-2 lg:col-span-3 flex flex-col items-center gap-2 my-auto">
+            <AlertTriangle
+              className="w-16 h-16 sm:w-24 sm:h-24 text-green-primary"
+              strokeWidth={1}
+            />
+
+            <span className="text-lg sm:text-xl text-green-primary font-semibold text-center">
+              Nenhum curso encontrado
+            </span>
+          </div>
         ) : courses && courses.length > 0 ? (
           courses.map((course) => (
             <Course
