@@ -13,6 +13,8 @@ export function CourseAd() {
   const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {
+    console.log("Cursos atualizados");
+
     axios
       .get("/api/courses/get-ad")
       .then((res) => {
