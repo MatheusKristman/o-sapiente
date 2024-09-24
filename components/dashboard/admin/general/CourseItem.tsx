@@ -1,6 +1,6 @@
 import { Course } from "@prisma/client";
 import Image from "next/image";
-import { Check, Dot, MoveRight, Plus } from "lucide-react";
+import { Check, CheckCheck, Dot, MoveRight, Plus } from "lucide-react";
 
 import { cn, formatPrice } from "@/libs/utils";
 import { Button } from "@/components/ui/button";
@@ -60,6 +60,12 @@ export function CourseItem({ last, course }: CourseItemProps) {
               <span className="text-base text-left text-gray-primary/50 font-semibold flex items-center">
                 Aulas: {course.lessonsCount} <Dot /> Horas: {course.hoursCount}
               </span>
+
+              {course.isAd && (
+                <span className="text-base text-left text-green-primary font-semibold flex items-center gap-2">
+                  Anúncio <CheckCheck size={20} />
+                </span>
+              )}
             </DialogTitle>
 
             <div className="w-full flex flex-col gap-4">

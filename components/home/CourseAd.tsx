@@ -8,20 +8,15 @@ import axios from "axios";
 import { courseAdInfo } from "@/constants/courseAd-br";
 import { AdCard } from "./components/course-ad/AdCard";
 import { titleAnimation } from "@/constants/framer-animations/course-ad";
-import toast from "react-hot-toast";
 
 export function CourseAd() {
   const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {
     axios
-      .get("/api/courses/get")
+      .get("/api/courses/get-ad")
       .then((res) => {
-        // TODO: adicionar propriedade de adShow para mostrar apenas dois cursos destacados na home
-        const adCourses = res.data.filter(
-          (course: Course) => course.courseName === "Constitucional do Zero" || course.courseName === "Repescagem"
-        );
-        setCourses(adCourses);
+        setCourses(res.data);
       })
       .catch((error) => {
         console.error(error);
@@ -49,7 +44,11 @@ export function CourseAd() {
               price={course.price}
               themes={course.themes}
               benefits={course.benefits}
-              courseLink={course.courseName === "Constitucional do Zero" ? "Constitucional%20do%20Zero" : "Repescagem"}
+              courseLink={
+                course.courseName === "Constitucional do Zero"
+                  ? "Constitucional%20do%20Zero"
+                  : "Repescagem"
+              }
               courseId={course.id}
               isRight={course.courseName === "Repescagem"}
             />

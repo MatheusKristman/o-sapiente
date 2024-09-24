@@ -187,6 +187,7 @@ model Course {
   lessonsCount Int
   hoursCount   Int
   price        Int
+  isAd         Boolean  @default(false)
   benefits     String[]
   themes       String[]
 }

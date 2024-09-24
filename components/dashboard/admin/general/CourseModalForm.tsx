@@ -4,7 +4,7 @@ import { Loader2, Plus, XIcon } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ChangeEvent, useCallback, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import { useDropzone } from "@uploadthing/react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
@@ -15,17 +15,34 @@ import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUploadThing } from "@/libs/uploadthing";
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogHeader } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogHeader,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription,
+} from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/libs/utils";
 import useAdminStore from "@/stores/useAdminStore";
 
 const formSchema = z.object({
   courseName: z.string().min(1, { message: "Nome do curso é obrigatório" }),
-  themes: z
-    .array(z.string().min(1, { message: "O conteúdo não pode ser vazio" }))
-    .min(1, { message: "É preciso informar ao menos um conteúdo" }),
-  benefits: z.array(z.string().min(1, { message: "O conteúdo não pode ser vazio" })),
+  themes: z.array(
+    z.string().min(1, { message: "O conteúdo não pode ser vazio" }),
+  ),
+  benefits: z.array(
+    z.string().min(1, { message: "O conteúdo não pode ser vazio" }),
+  ),
   lessonsCount: z.string().refine((val) => Number(val) > 0, {
     message: "A quantidade de aulas não pode ser zero",
   }),
@@ -33,6 +50,10 @@ const formSchema = z.object({
     message: "A quantidade de horas não pode ser zero",
   }),
   price: z.number().min(1, { message: "Valor é obrigatório" }),
+  isAd: z.enum(["on", "off"], {
+    required_error: "Campo obrigatório",
+    invalid_type_error: "Valor do campo inválido",
+  }),
 });
 
 export function CourseModalForm() {
@@ -45,40 +66,47 @@ export function CourseModalForm() {
 
   const { setCourses } = useAdminStore();
 
-  const { startUpload, isUploading, permittedFileInfo } = useUploadThing("saveCourseImage", {
-    onClientUploadComplete: () => {
-      setIsSubmitting(true);
+  const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
+    "saveCourseImage",
+    {
+      onClientUploadComplete: () => {
+        setIsSubmitting(true);
 
-      axios
-        .get("/api/courses/get")
-        .then((res) => {
-          toast.success("Curso adicionado com sucesso");
-          setCourses(res.data);
-          setIsModalOpen(false);
-          ResetForm();
-        })
-        .catch((error) => {
-          console.error(error);
+        axios
+          .get("/api/courses/get")
+          .then((res) => {
+            toast.success("Curso adicionado com sucesso");
+            setCourses(res.data);
+            setIsModalOpen(false);
+            ResetForm();
+          })
+          .catch((error) => {
+            console.error(error);
 
-          toast.error(error.response.data);
-        })
-        .finally(() => {
-          setIsSubmitting(false);
-        });
+            toast.error(error.response.data);
+          })
+          .finally(() => {
+            setIsSubmitting(false);
+          });
+      },
+      onUploadError: (error) => {
+        console.error(error);
+        console.error(error.data);
+
+        if (error.data?.message === "Unable to get presigned urls") {
+          toast.error(
+            "Tipo ou tamanho da imagem inválido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)",
+          );
+
+          return;
+        }
+
+        toast.error(
+          "Ocorreu um erro ao enviar a imagem do curso, tente novamente mais tarde",
+        );
+      },
     },
-    onUploadError: (error) => {
-      console.error(error);
-      console.error(error.data);
-
-      if (error.data?.message === "Unable to get presigned urls") {
-        toast.error("Tipo ou tamanho da imagem inválido, verifique e tente novamente. (PNG|JPG|JPEG - 1MB)");
-
-        return;
-      }
-
-      toast.error("Ocorreu um erro ao enviar a imagem do curso, tente novamente mais tarde");
-    },
-  });
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -89,6 +117,7 @@ export function CourseModalForm() {
       lessonsCount: "",
       hoursCount: "",
       price: 0,
+      isAd: "off",
     },
   });
 
@@ -97,10 +126,12 @@ export function CourseModalForm() {
       setCourseImage(acceptedFiles);
       setCourseImageUrl(URL.createObjectURL(acceptedFiles[0]));
     },
-    [setCourseImageUrl]
+    [setCourseImageUrl],
   );
 
-  const fileTypes = permittedFileInfo?.config ? Object.keys(permittedFileInfo?.config) : [];
+  const fileTypes = permittedFileInfo?.config
+    ? Object.keys(permittedFileInfo?.config)
+    : [];
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -112,7 +143,9 @@ export function CourseModalForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (!courseImage || !courseImageUrl) {
-      toast.error("É preciso inserir uma imagem para a disponibilização do curso");
+      toast.error(
+        "É preciso inserir uma imagem para a disponibilização do curso",
+      );
       return;
     }
 
@@ -125,6 +158,8 @@ export function CourseModalForm() {
       })
       .catch((error) => {
         console.error(error);
+
+        toast.error(error.response.data);
       })
       .finally(() => {
         setIsSubmitting(false);
@@ -163,6 +198,14 @@ export function CourseModalForm() {
     form.setValue("benefits", benefitsArr);
   }
 
+  function handleAdValue(value: boolean) {
+    if (value) {
+      form.setValue("isAd", "on");
+    } else {
+      form.setValue("isAd", "off");
+    }
+  }
+
   function ResetForm() {
     form.reset();
     setCourseImage(null);
@@ -184,18 +227,24 @@ export function CourseModalForm() {
           </DialogTitle>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-12 flex-1 justify-between">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-12 flex-1 justify-between"
+            >
               <div className="w-full flex flex-col gap-4">
                 <div className="flex flex-col items-start">
-                  <span className="text-gray-primary text-sm font-semibold text-left">Capa do curso</span>
+                  <span className="text-gray-primary text-sm font-semibold text-left">
+                    Capa do curso
+                  </span>
 
                   <div
                     {...getRootProps()}
                     className={cn(
                       "relative w-full min-[510px]:w-2/4 aspect-video cursor-pointer rounded-xl overflow-hidden group",
                       {
-                        "opacity-20 select-none pointer-events-none": isSubmitting || isUploading,
-                      }
+                        "opacity-20 select-none pointer-events-none":
+                          isSubmitting || isUploading,
+                      },
                     )}
                   >
                     <div
@@ -203,7 +252,7 @@ export function CourseModalForm() {
                         "w-full h-full flex items-center justify-center bg-gray-primary/50 p-6 transition group-hover:bg-gray-primary/70",
                         {
                           hidden: !!courseImage,
-                        }
+                        },
                       )}
                     >
                       <span className="text-sm text-white font-medium text-center">
@@ -212,11 +261,19 @@ export function CourseModalForm() {
                     </div>
 
                     {courseImageUrl && (
-                      <Image src={courseImageUrl} alt="Capa do curso" fill className="object-cover w-full h-full" />
+                      <Image
+                        src={courseImageUrl}
+                        alt="Capa do curso"
+                        fill
+                        className="object-cover w-full h-full"
+                      />
                     )}
                   </div>
 
-                  <input {...getInputProps()} disabled={isUploading || isSubmitting} />
+                  <input
+                    {...getInputProps()}
+                    disabled={isUploading || isSubmitting}
+                  />
                 </div>
 
                 <FormField
@@ -224,10 +281,16 @@ export function CourseModalForm() {
                   name="courseName"
                   render={({ field }) => (
                     <FormItem className="flex flex-col items-start">
-                      <FormLabel className="text-gray-primary text-sm font-semibold text-left">Nome do curso</FormLabel>
+                      <FormLabel className="text-gray-primary text-sm font-semibold text-left">
+                        Nome do curso
+                      </FormLabel>
 
                       <FormControl>
-                        <Input disabled={isSubmitting || isUploading} className="input" {...field} />
+                        <Input
+                          disabled={isSubmitting || isUploading}
+                          className="input"
+                          {...field}
+                        />
                       </FormControl>
 
                       <FormMessage />
@@ -252,7 +315,12 @@ export function CourseModalForm() {
                           ref={field.ref}
                           name={field.name}
                           value={field.value}
-                          onChange={(e) => form.setValue("lessonsCount", e.target.value.replace(/[^0-9]/g, ""))}
+                          onChange={(e) =>
+                            form.setValue(
+                              "lessonsCount",
+                              e.target.value.replace(/[^0-9]/g, ""),
+                            )
+                          }
                         />
                       </FormControl>
 
@@ -278,7 +346,12 @@ export function CourseModalForm() {
                           ref={field.ref}
                           name={field.name}
                           value={field.value}
-                          onChange={(e) => form.setValue("hoursCount", e.target.value.replace(/[^0-9]/g, ""))}
+                          onChange={(e) =>
+                            form.setValue(
+                              "hoursCount",
+                              e.target.value.replace(/[^0-9]/g, ""),
+                            )
+                          }
                         />
                       </FormControl>
 
@@ -304,7 +377,9 @@ export function CourseModalForm() {
                               onBlur={field.onBlur}
                               ref={field.ref}
                               value={themeValue}
-                              onChange={(e: ChangeEvent<HTMLInputElement>) => setThemeValue(e.target.value)}
+                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                setThemeValue(e.target.value)
+                              }
                               disabled={isSubmitting || isUploading}
                               className="input w-full"
                             />
@@ -326,7 +401,9 @@ export function CourseModalForm() {
                                   key={`theme-${index}`}
                                   className="bg-[#C8D6DF] px-3 py-1 flex items-center gap-2 rounded-full group"
                                 >
-                                  <span className="text-sm text-gray-primary font-medium">{theme}</span>
+                                  <span className="text-sm text-gray-primary font-medium">
+                                    {theme}
+                                  </span>
 
                                   <Button
                                     type="button"
@@ -355,7 +432,9 @@ export function CourseModalForm() {
                   name="benefits"
                   render={({ field }) => (
                     <FormItem className="flex flex-col items-start">
-                      <FormLabel className="text-gray-primary text-sm font-semibold text-left">Beneficios</FormLabel>
+                      <FormLabel className="text-gray-primary text-sm font-semibold text-left">
+                        Beneficios
+                      </FormLabel>
 
                       <FormControl>
                         <div className="w-full flex flex-col gap-2">
@@ -365,7 +444,9 @@ export function CourseModalForm() {
                               onBlur={field.onBlur}
                               ref={field.ref}
                               value={benefitValue}
-                              onChange={(e: ChangeEvent<HTMLInputElement>) => setBenefitValue(e.target.value)}
+                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                setBenefitValue(e.target.value)
+                              }
                               disabled={isSubmitting || isUploading}
                               className="input w-full"
                             />
@@ -387,7 +468,9 @@ export function CourseModalForm() {
                                   key={`benefit-${index}`}
                                   className="bg-[#C8D6DF] px-3 py-1 flex items-center gap-2 rounded-full group"
                                 >
-                                  <span className="text-sm text-gray-primary font-medium">{benefit}</span>
+                                  <span className="text-sm text-gray-primary font-medium">
+                                    {benefit}
+                                  </span>
 
                                   <Button
                                     type="button"
@@ -427,7 +510,9 @@ export function CourseModalForm() {
                             placeholder="Insira o valor do curso"
                             defaultValue={0}
                             decimalsLimit={2}
-                            onValueChange={(value, name) => form.setValue(name as "price", Number(value))}
+                            onValueChange={(value, name) =>
+                              form.setValue(name as "price", Number(value))
+                            }
                             disabled={isSubmitting || isUploading}
                             className="input !pl-10"
                           />
@@ -438,7 +523,35 @@ export function CourseModalForm() {
                         </div>
                       </FormControl>
 
-                      <FormDescription>Use o ponto para representar os centavos</FormDescription>
+                      <FormDescription>
+                        Use o ponto para representar os centavos
+                      </FormDescription>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="isAd"
+                  render={({ field }) => (
+                    <FormItem className="w-full flex flex-col items-start">
+                      <FormLabel className="text-gray-primary text-sm font-semibold text-left">
+                        O curso será apresentado como anúncio?
+                      </FormLabel>
+
+                      <FormControl>
+                        <Switch
+                          value={field.value}
+                          name={field.name}
+                          defaultChecked={false}
+                          onCheckedChange={handleAdValue}
+                          onBlur={field.onBlur}
+                          ref={field.ref}
+                          disabled={isSubmitting || isUploading}
+                        />
+                      </FormControl>
 
                       <FormMessage />
                     </FormItem>

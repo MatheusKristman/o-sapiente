@@ -1,5 +1,6 @@
-import { prisma } from "@/libs/prismadb";
 import { NextRequest, NextResponse } from "next/server";
+
+import { prisma } from "@/libs/prismadb";
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,10 +12,28 @@ export async function POST(req: NextRequest) {
       price,
       lessonsCount,
       hoursCount,
+      isAd,
     } = await req.json();
 
-    if (!courseId || !courseName || !price || !lessonsCount || !hoursCount) {
+    if (
+      !courseId ||
+      !courseName ||
+      !price ||
+      !lessonsCount ||
+      !hoursCount ||
+      !isAd
+    ) {
       return new NextResponse("Dados inválidos", { status: 401 });
+    }
+
+    const courses = await prisma.course.findMany();
+    const adQuantity = courses.filter((course) => course.isAd).length;
+
+    if (adQuantity === 2 && isAd === "on") {
+      return new NextResponse(
+        "Quantidade de anúncios ultrapassando o limite definido",
+        { status: 401 },
+      );
     }
 
     const course = await prisma.course.update({
@@ -28,6 +47,7 @@ export async function POST(req: NextRequest) {
         price: price * 100,
         lessonsCount: Number(lessonsCount),
         hoursCount: Number(hoursCount),
+        isAd: isAd === "on",
       },
     });
 
