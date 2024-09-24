@@ -15,7 +15,7 @@ export function CourseAd() {
   useEffect(() => {
     console.log("Cursos atualizados");
 
-    fetch("/api/courses/get-ad")
+    fetch("/api/courses/get-ad", { cache: "no-store" })
       .then((res) => {
         if (res.ok) {
           return res.json();
