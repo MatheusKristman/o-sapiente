@@ -74,7 +74,7 @@ interface Props {
     undefined
   >;
   isSubmitting: boolean;
-  course: Course | null;
+  course: Course;
 }
 
 export function CoursePaymentForm({ form, isSubmitting, course }: Props) {
@@ -92,6 +92,9 @@ export function CoursePaymentForm({ form, isSubmitting, course }: Props) {
   const creditExpiry = form.watch("creditExpiry");
   const creditCvc = form.watch("creditCvc");
   const creditOwner = form.watch("creditOwner");
+  const price1x = course.price / 100;
+  const price2x = course.price / 2 / 100;
+  const price3x = course.price / 3 / 100;
 
   function handleCepFormat(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value.replace(/[^0-9]/g, "").substring(0, 8);
@@ -732,22 +735,13 @@ export function CoursePaymentForm({ form, isSubmitting, course }: Props) {
 
                       <SelectContent>
                         <SelectItem value="1">
-                          1x -{" "}
-                          {course!.courseName === "Constitucional do Zero"
-                            ? "R$ 499,99"
-                            : "R$ 199,99"}
+                          1x - {formatPrice(price1x)}
                         </SelectItem>
                         <SelectItem value="2">
-                          2x -{" "}
-                          {course!.courseName === "Constitucional do Zero"
-                            ? "R$ 249,99"
-                            : "R$ 99,99"}
+                          2x - {formatPrice(price2x)}
                         </SelectItem>
                         <SelectItem value="3">
-                          3x -{" "}
-                          {course!.courseName === "Constitucional do Zero"
-                            ? "R$ 166,66"
-                            : "R$ 66,66"}
+                          3x - {formatPrice(price3x)}
                         </SelectItem>
                       </SelectContent>
                     </Select>

@@ -36,13 +36,13 @@ export function Course({
   benefits,
 }: CourseProps) {
   return (
-    <div className="w-full rounded-2xl bg-white shadow-lg px-8 py-9 flex flex-col justify-between gap-4">
-      <div className="w-full aspect-video rounded-[9.5px] overflow-hidden relative group">
+    <div className="w-full rounded-2xl bg-white shadow-lg px-8 py-9 flex flex-col justify-between gap-4 group">
+      <div className="w-full aspect-video rounded-[9.5px] overflow-hidden relative">
         <Image
           src={courseImage}
           alt="Imagem do Curso"
           fill
-          className="object-cover"
+          className="object-cover group-hover:scale-110 transition duration-500"
         />
 
         <div className="absolute bottom-4 right-4 flex items-center gap-2">
@@ -54,7 +54,7 @@ export function Course({
 
       <div className="w-full flex flex-col md:flex-row md:items-end md:justify-between gap-2">
         <div className="flex flex-col gap-1">
-          <h4 className="text-xl font-semibold text-gray-primary">
+          <h4 className="text-xl font-semibold text-gray-primary !leading-tight">
             {courseName}
           </h4>
 

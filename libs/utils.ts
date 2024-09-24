@@ -10,11 +10,13 @@ export function formatPrice(
   options: {
     currency?: "BRL";
     notation?: Intl.NumberFormatOptions["notation"];
-  } = {}
+  } = {},
 ) {
   const { currency = "BRL" } = options;
 
-  const numericPrice = typeof price === "string" ? parseFloat(price) : price;
+  const numericPrice =
+    Math.floor((typeof price === "string" ? parseFloat(price) : price) * 100) /
+    100;
 
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
