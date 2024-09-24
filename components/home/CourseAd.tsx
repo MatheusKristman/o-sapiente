@@ -15,10 +15,16 @@ export function CourseAd() {
   useEffect(() => {
     console.log("Cursos atualizados");
 
-    axios
-      .get("/api/courses/get-ad")
+    fetch("/api/courses/get-ad")
       .then((res) => {
-        setCourses(res.data);
+        if (res.ok) {
+          return res.json();
+        }
+
+        throw new Error("Ocorreu um erro ao resgatar os cursos");
+      })
+      .then((res) => {
+        setCourses(res);
       })
       .catch((error) => {
         console.error(error);
