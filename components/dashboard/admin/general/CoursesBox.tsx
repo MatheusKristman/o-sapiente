@@ -1,17 +1,19 @@
 "use client";
 
-import { Loader2, Search } from "lucide-react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Course } from "@prisma/client";
+import { useSession } from "next-auth/react";
+import { Loader2, Search, X } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 
 import { AdminGeneralText } from "@/constants/dashboard/admin-general-br";
 import { Input } from "@/components/ui/input";
 import { CourseItem } from "./CourseItem";
 import { CourseModalForm } from "./CourseModalForm";
+import { Button } from "@/components/ui/button";
+
 import useUserStore from "@/stores/useUserStore";
-import { useSession } from "next-auth/react";
-import axios from "axios";
-import { Course } from "@prisma/client";
-import toast from "react-hot-toast";
 import useAdminStore from "@/stores/useAdminStore";
 
 const COURSE_TEST = [
@@ -153,8 +155,8 @@ export function CoursesBox() {
             filterValue
               .toLowerCase()
               .normalize("NFD")
-              .replace(/[\u0300-\u036f]/g, "")
-          )
+              .replace(/[\u0300-\u036f]/g, ""),
+          ),
       );
 
       setCoursesFiltered(filter);
@@ -165,6 +167,10 @@ export function CoursesBox() {
       console.log("filtro desativado");
     }
   }, [filterValue, courses]);
+
+  function clearSearch() {
+    setFilterValue("");
+  }
 
   return (
     <div className="w-full h-full rounded-lg bg-green-primary p-9 shadow-md shadow-[rgba(0,0,0,0.25)]">
@@ -179,17 +185,30 @@ export function CoursesBox() {
               type="text"
               name="filter"
               value={filterValue}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setFilterValue(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setFilterValue(e.target.value)
+              }
               placeholder={AdminGeneralText.placeholder}
               className="bg-transparent placeholder:text-green-primary outline-none w-full"
             />
 
-            <Search
-              className="h-6 w-6 min-h-[24px] min-w-[24px]"
-              style={{
-                color: "#03C988",
-              }}
-            />
+            {filterValue.length > 0 ? (
+              <Button size="icon" variant="link" onClick={clearSearch} asChild>
+                <X
+                  className="h-6 w-6 min-h-[24px] min-w-[24px]"
+                  style={{
+                    color: "#03C988",
+                  }}
+                />
+              </Button>
+            ) : (
+              <Search
+                className="h-6 w-6 min-h-[24px] min-w-[24px]"
+                style={{
+                  color: "#03C988",
+                }}
+              />
+            )}
           </div>
 
           <CourseModalForm />
@@ -208,19 +227,31 @@ export function CoursesBox() {
 
               <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
                 {coursesFiltered.map((course, index) => (
-                  <CourseItem key={course.id} last={index === COURSE_TEST.length - 1} course={course} />
+                  <CourseItem
+                    key={course.id}
+                    last={index === COURSE_TEST.length - 1}
+                    course={course}
+                  />
                 ))}
               </div>
 
               <div className="sticky z-10 -bottom-px left-0 w-full h-6 bg-gradient-to-t from-green-primary to-transparent" />
             </>
+          ) : filterValue.length > 3 && coursesFiltered.length === 0 ? (
+            <span className="block mt-6 text-lg font-medium text-[#00744E] text-center">
+              Nenhum curso encontrado
+            </span>
           ) : courses && courses.length > 0 ? (
             <>
               <div className="sticky z-10 -top-px left-0 w-full h-6 bg-gradient-to-b from-green-primary to-transparent" />
 
               <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
                 {courses.map((course, index) => (
-                  <CourseItem key={course.id} last={index === COURSE_TEST.length - 1} course={course} />
+                  <CourseItem
+                    key={course.id}
+                    last={index === COURSE_TEST.length - 1}
+                    course={course}
+                  />
                 ))}
               </div>
 
