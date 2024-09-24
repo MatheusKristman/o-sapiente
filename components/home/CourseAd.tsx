@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Course } from "@prisma/client";
@@ -23,7 +21,7 @@ export function CourseAd() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [setCourses]);
 
   return (
     <section id="cursos" className="w-full bg-[#E5ECF0] mt-12">
