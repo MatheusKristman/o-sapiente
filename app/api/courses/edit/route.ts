@@ -27,9 +27,11 @@ export async function POST(req: NextRequest) {
     }
 
     const courses = await prisma.course.findMany();
-    const adQuantity = courses.filter((course) => course.isAd).length;
+    const ads = courses.filter((course) => course.isAd);
+    const adQuantity = ads.length;
+    const sameAd = ads.filter((course) => course.id === courseId);
 
-    if (adQuantity === 2 && isAd === "on") {
+    if (sameAd.length === 0 && adQuantity === 2 && isAd === "on") {
       return new NextResponse(
         "Quantidade de anúncios ultrapassando o limite definido",
         { status: 401 },
