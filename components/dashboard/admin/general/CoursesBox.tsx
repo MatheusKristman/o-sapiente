@@ -16,105 +16,6 @@ import { Button } from "@/components/ui/button";
 import useUserStore from "@/stores/useUserStore";
 import useAdminStore from "@/stores/useAdminStore";
 
-const COURSE_TEST = [
-  {
-    id: "id1",
-    courseName: "Curso teste 1",
-    courseImage: "/assets/images/profile-test.png",
-    price: 13999,
-    benefits: [
-      "Material Gravado",
-      "Oficina de Questões",
-      "Oficina de Peças",
-      "Marcação de Vade Mecum",
-      "Aulas Ao Vivo de Terça e Quinta (2h de duração)",
-      "Correção Individualizada de Peças",
-    ],
-    themes: [
-      "Constitucionalismo",
-      "Fenômenos Constitucionais",
-      "Organização do Estado",
-      "Poder Constituinte",
-      "Teoria da Constituição",
-      "Direitos de Nacionalidade",
-      "Recursos Constitucionais",
-      "Ações de Controle Difuso e Concentrado",
-    ],
-  },
-  {
-    id: "id2",
-    courseName: "Curso teste 2",
-    courseImage: "/assets/images/profile-test.png",
-    price: 15999,
-    benefits: [
-      "Material Gravado",
-      "Oficina de Questões",
-      "Oficina de Peças",
-      "Marcação de Vade Mecum",
-      "Aulas Ao Vivo de Terça e Quinta (2h de duração)",
-      "Correção Individualizada de Peças",
-    ],
-    themes: [
-      "Constitucionalismo",
-      "Fenômenos Constitucionais",
-      "Organização do Estado",
-      "Poder Constituinte",
-      "Teoria da Constituição",
-      "Direitos de Nacionalidade",
-      "Recursos Constitucionais",
-      "Ações de Controle Difuso e Concentrado",
-    ],
-  },
-  {
-    id: "id3",
-    courseName: "Curso teste 3",
-    courseImage: "/assets/images/profile-test.png",
-    price: 17999,
-    benefits: [
-      "Material Gravado",
-      "Oficina de Questões",
-      "Oficina de Peças",
-      "Marcação de Vade Mecum",
-      "Aulas Ao Vivo de Terça e Quinta (2h de duração)",
-      "Correção Individualizada de Peças",
-    ],
-    themes: [
-      "Constitucionalismo",
-      "Fenômenos Constitucionais",
-      "Organização do Estado",
-      "Poder Constituinte",
-      "Teoria da Constituição",
-      "Direitos de Nacionalidade",
-      "Recursos Constitucionais",
-      "Ações de Controle Difuso e Concentrado",
-    ],
-  },
-  {
-    id: "id4",
-    courseName: "Curso teste 4",
-    courseImage: "/assets/images/profile-test.png",
-    price: 19999,
-    benefits: [
-      "Material Gravado",
-      "Oficina de Questões",
-      "Oficina de Peças",
-      "Marcação de Vade Mecum",
-      "Aulas Ao Vivo de Terça e Quinta (2h de duração)",
-      "Correção Individualizada de Peças",
-    ],
-    themes: [
-      "Constitucionalismo",
-      "Fenômenos Constitucionais",
-      "Organização do Estado",
-      "Poder Constituinte",
-      "Teoria da Constituição",
-      "Direitos de Nacionalidade",
-      "Recursos Constitucionais",
-      "Ações de Controle Difuso e Concentrado",
-    ],
-  },
-];
-
 export function CoursesBox() {
   const [filterValue, setFilterValue] = useState<string>("");
   const [coursesLoading, setCoursesLoading] = useState<boolean>(false);
@@ -229,7 +130,7 @@ export function CoursesBox() {
                 {coursesFiltered.map((course, index) => (
                   <CourseItem
                     key={course.id}
-                    last={index === COURSE_TEST.length - 1}
+                    last={index === coursesFiltered.length - 1}
                     course={course}
                   />
                 ))}
@@ -249,7 +150,7 @@ export function CoursesBox() {
                 {courses.map((course, index) => (
                   <CourseItem
                     key={course.id}
-                    last={index === COURSE_TEST.length - 1}
+                    last={index === courses.length - 1}
                     course={course}
                   />
                 ))}

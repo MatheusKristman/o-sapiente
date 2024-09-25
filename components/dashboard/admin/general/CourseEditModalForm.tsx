@@ -231,7 +231,7 @@ export function CourseEditModalForm({
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2">
+        <Button className="w-full flex items-center gap-2">
           <Edit size={20} />
           Editar
         </Button>
