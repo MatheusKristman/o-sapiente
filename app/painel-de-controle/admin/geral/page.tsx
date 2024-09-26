@@ -18,7 +18,7 @@ export default function AdminGeneralPage() {
         <div className="w-full flex flex-col lg:flex-row gap-x-6 gap-y-12">
           <div className="w-full lg:max-w-[350px] h-fit flex flex-col gap-12">
             <UsersBox />
-            {/* <CoursesBox /> */}
+            <CoursesBox />
           </div>
 
           <div className="w-full flex flex-col gap-12">
