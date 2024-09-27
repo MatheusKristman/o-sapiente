@@ -14,8 +14,6 @@ export function RecentsCourseCard({
   lessonsCount,
   hoursCount,
 }: RecentsCourseCardProps) {
-  console.log(price.toFixed(2).replace(".", ","));
-
   return (
     <div className="w-full h-full rounded-2xl bg-white shadow-lg px-8 py-9 flex flex-col justify-between gap-6 group">
       <div className="w-full flex flex-col gap-2 items-center">

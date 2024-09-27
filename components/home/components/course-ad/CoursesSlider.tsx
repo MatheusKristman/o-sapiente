@@ -11,8 +11,6 @@ import "swiper/css";
 export function CoursesSlider() {
   const { recentsCourses } = useHomeStore();
 
-  console.log(recentsCourses);
-
   return (
     <Swiper
       centeredSlides={true}
