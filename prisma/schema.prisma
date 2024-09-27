@@ -190,4 +190,5 @@ model Course {
   isAd         Boolean  @default(false)
   benefits     String[]
   themes       String[]
+  createdAt    DateTime @default(now())
 }

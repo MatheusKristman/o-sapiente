@@ -7,6 +7,9 @@ export async function GET(req: Request) {
   try {
     const courses = await prisma.course.findMany({
       take: 10,
+      orderBy: {
+        createdAt: "desc",
+      },
       where: {
         isAd: false,
       },
