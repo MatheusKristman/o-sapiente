@@ -5,4 +5,7 @@ export const courseAdInfo = {
   contactButton: "WHATSAPP",
   themesTitle: "Conteúdo do Curso:",
   benefitsTitle: "Mais Vantagens",
+  coursePageTitle: "Veja Mais Oportunidades de Aprendizado",
+  coursePageSubtitle: "Navegue pelos Nossos Cursos Disponíveis",
+  coursePageButton: "CONFIRA NOSSOS CURSOS",
 };
