@@ -2,6 +2,6 @@ export const info = {
   altImg: "Processando",
   titleGreen: "Processando",
   titleGray: "pagamento",
-  desc: "Seu pagamento está sendo processado e em breve será confirmado. Aguarde alguns momentos enquanto trabalhamos para garantir que você tenha acesso a todas as incríveis oportunidades em breve.",
+  desc: "Seu pagamento está sendo processado e em breve será confirmado. Você receberá a confirmação do pagamento no seu e-mail.",
   backBtn: "VOLTAR PARA DASHBOARD",
 };
