@@ -9,12 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  navLinks,
-  professorHeaderButton,
-  studentHeaderButton,
-  headerTexts,
-} from "@/constants/header-br";
+import { navLinks, professorHeaderButton, studentHeaderButton, headerTexts } from "@/constants/header-br";
 import { mobileMenuAnimation } from "@/constants/framer-animations/header";
 import useHeaderStore from "@/stores/useHeaderStore";
 import useLoginModalStore from "@/stores/useLoginModalStore";
@@ -123,7 +118,7 @@ const HeaderMobile = () => {
             initial="offscreen"
             animate="onscreen"
             exit="exit"
-            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex xl:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999]"
+            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex xl:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999] h-full max-h-[calc(444px+32px+32px)]"
           >
             <Button
               variant="link"
@@ -135,7 +130,7 @@ const HeaderMobile = () => {
               <BsXLg size={26} />
             </Button>
 
-            <nav>
+            <nav className="overflow-y-auto flex flex-col gap-y-12">
               <ul className="xl:hidden flex flex-col items-end justify-between gap-y-6">
                 {navLinks.map((link) => (
                   <li
@@ -147,58 +142,50 @@ const HeaderMobile = () => {
                   </li>
                 ))}
               </ul>
+
+              <div className="xl:hidden flex flex-col items-end justify-center gap-y-4 w-full">
+                {session.status === "authenticated" ? (
+                  <>
+                    <Button
+                      variant="link"
+                      size="sm"
+                      type="button"
+                      onClick={handleLogOut}
+                      className="px-0 flex gap-2 items-center justify-center text-white text-lg"
+                    >
+                      <LogOut className="h-6 w-6" />
+                      {headerTexts.logoutBtn}
+                    </Button>
+
+                    <Button
+                      variant="secondary"
+                      type="button"
+                      onClick={() => {}}
+                      className="flex gap-2 items-center justify-center"
+                    >
+                      <Image
+                        src="/assets/icons/user-green.svg"
+                        alt="Usuário"
+                        width={24}
+                        height={24}
+                        className="object-contain"
+                      />
+                      {headerTexts.dashboardBtn}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="secondary" className="w-full" onClick={handleProfessorRegister}>
+                      {headerTexts.professorRegister}
+                    </Button>
+
+                    <Button variant="secondary" className="w-full" onClick={openLoginModal}>
+                      {headerTexts.loginBtn}
+                    </Button>
+                  </>
+                )}
+              </div>
             </nav>
-
-            <div className="xl:hidden flex flex-col items-end justify-center gap-y-4 w-full">
-              {session.status === "authenticated" ? (
-                <>
-                  <Button
-                    variant="link"
-                    size="sm"
-                    type="button"
-                    onClick={handleLogOut}
-                    className="px-0 flex gap-2 items-center justify-center text-white text-lg"
-                  >
-                    <LogOut className="h-6 w-6" />
-                    {headerTexts.logoutBtn}
-                  </Button>
-
-                  <Button
-                    variant="secondary"
-                    type="button"
-                    onClick={() => {}}
-                    className="flex gap-2 items-center justify-center"
-                  >
-                    <Image
-                      src="/assets/icons/user-green.svg"
-                      alt="Usuário"
-                      width={24}
-                      height={24}
-                      className="object-contain"
-                    />
-                    {headerTexts.dashboardBtn}
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    variant="secondary"
-                    className="w-full"
-                    onClick={handleProfessorRegister}
-                  >
-                    {headerTexts.professorRegister}
-                  </Button>
-
-                  <Button
-                    variant="secondary"
-                    className="w-full"
-                    onClick={openLoginModal}
-                  >
-                    {headerTexts.loginBtn}
-                  </Button>
-                </>
-              )}
-            </div>
           </motion.div>
         )}
       </AnimatePresence>
