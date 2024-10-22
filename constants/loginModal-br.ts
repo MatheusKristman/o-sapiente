@@ -35,6 +35,7 @@ export const studentLoginInfo = {
 };
 
 export const studentForgotPasswordInfo = {
+  title: "Recupere a sua senha",
   email: "E-mail para recuperar a senha",
   nextButton: "Enviar",
   rememberedPasswordText: "Lembrou-se da senha?",

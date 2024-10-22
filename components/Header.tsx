@@ -9,15 +9,14 @@ import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
 import { LogOut } from "lucide-react";
 
-import { navLinks, headerTexts } from "@/constants/header-br";
 import { Button } from "@/components/ui/button";
+
+import { navLinks, headerTexts } from "@/constants/header-br";
 import useHeaderStore from "@/stores/useHeaderStore";
 import useLoginModalStore from "@/stores/useLoginModalStore";
-import useProfessorModalStore from "@/stores/useProfessorModalStore";
-import { menuItems } from "@/constants/dashboard/dashboard-nav-br";
 import { cn } from "@/libs/utils";
 import useUserStore from "@/stores/useUserStore";
-import { roundToNearestMinutes } from "date-fns";
+import LoginModal from "./home/LoginModal";
 
 const Header = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -105,7 +104,16 @@ const Header = () => {
           width={160}
           height={30}
           priority
-          className="object-contain"
+          className="object-contain hidden sm:block"
+        />
+
+        <Image
+          src="/assets/images/logo-colored.svg"
+          alt="O Sapiente"
+          width={120}
+          height={26}
+          priority
+          className="object-contain sm:hidden"
         />
       </Link>
 
@@ -115,12 +123,9 @@ const Header = () => {
         type="button"
         disabled={isLoading}
         onClick={openMobileMenu}
-        className={cn(
-          "flex xl:hidden items-center justify-center cursor-pointer",
-          {
-            "opacity-0 pointer-events-none": isMobileMenuOpen,
-          },
-        )}
+        className={cn("flex xl:hidden items-center justify-center cursor-pointer", {
+          "opacity-0 pointer-events-none": isMobileMenuOpen,
+        })}
       >
         <IoIosMenu size={35} className="text-green-primary" />
       </Button>
@@ -160,27 +165,17 @@ const Header = () => {
               onClick={handleDashboardBtn}
               className="bg-green-primary flex gap-2 items-center justify-center text-white text-base px-7 py-2 rounded-lg cursor-pointer transition hover:brightness-90"
             >
-              <Image
-                src="/assets/icons/user.svg"
-                alt="Usuário"
-                width={24}
-                height={24}
-                className="object-contain"
-              />
+              <Image src="/assets/icons/user.svg" alt="Usuário" width={24} height={24} className="object-contain" />
               {headerTexts.dashboardBtn}
             </Button>
           </>
         ) : (
           <>
             <Button variant="outline" disabled={isLoading} asChild>
-              <Link href="/cadastro/professor">
-                {headerTexts.professorRegister}
-              </Link>
+              <Link href="/cadastro/professor">{headerTexts.professorRegister}</Link>
             </Button>
 
-            <Button disabled={isLoading} onClick={openLoginModal}>
-              {headerTexts.loginBtn}
-            </Button>
+            <LoginModal isHeaderLoading={isLoading} openLoginModal={openLoginModal} />
           </>
         )}
       </div>

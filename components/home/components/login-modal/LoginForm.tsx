@@ -138,14 +138,14 @@ const LoginForm = () => {
         initial="initial"
         animate="animate"
         exit="exit"
-        className="text-2xl text-[#2C383F] font-semibold mb-9 sm:text-3xl text-left"
+        className="text-3xl h-fit text-gray-primary font-semibold mb-9 text-left !leading-tight"
       >
         {studentLoginInfo.title}
       </motion.h4>
 
       <div className="w-full flex flex-col gap-9">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full mt-auto">
             <motion.div
               variants={studentFormAnimation}
               initial="initial"
@@ -209,14 +209,14 @@ const LoginForm = () => {
         <div className="w-full h-[1px] bg-[#EBEFF1]" />
 
         <div className="w-full flex flex-col items-center justify-center gap-4">
-          <p className="text-base !leading-tight font-semibold text-[#2C383F]">
+          <p className="text-base text-center !leading-tight font-semibold text-[#2C383F]">
             {studentLoginInfo.noAccountText}{" "}
             <span onClick={handleRegisterLink} className="text-green-primary cursor-pointer">
               {studentLoginInfo.noAccountLink}
             </span>
           </p>
 
-          <p className="text-base !leading-tight font-semibold text-[#2C383F]">
+          <p className="text-base text-center !leading-tight font-semibold text-[#2C383F]">
             {studentLoginInfo.forgotPasswordText}{" "}
             <span onClick={handleForgotPassword} className="text-green-primary cursor-pointer">
               {studentLoginInfo.forgotPasswordLink}

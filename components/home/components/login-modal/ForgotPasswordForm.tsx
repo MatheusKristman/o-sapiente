@@ -63,59 +63,71 @@ function ForgotPasswordForm() {
   }
 
   return (
-    <div className="w-full flex flex-col gap-9">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-          <motion.div
-            variants={studentFormAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="grid grid-cols-1 grid-rows-1 gap-4 mb-6"
-          >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder={studentForgotPasswordInfo.email}
-                      autoComplete="off"
-                      autoCorrect="off"
-                      disabled={isSubmitting}
-                      className={cn("input", form.formState.errors.email && "input-error")}
-                      {...field}
-                    />
-                  </FormControl>
+    <>
+      <motion.h4
+        variants={studentFormAnimation}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="text-3xl text-gray-primary font-semibold mb-9 text-left !leading-tight"
+      >
+        {studentForgotPasswordInfo.title}
+      </motion.h4>
 
-                  <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
-                </FormItem>
-              )}
-            />
-          </motion.div>
+      <div className="w-full flex flex-col gap-9">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full mt-auto">
+            <motion.div
+              variants={studentFormAnimation}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="grid grid-cols-1 grid-rows-1 gap-4 mb-6"
+            >
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder={studentForgotPasswordInfo.email}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        disabled={isSubmitting}
+                        className={cn("input", form.formState.errors.email && "input-error")}
+                        {...field}
+                      />
+                    </FormControl>
 
-          <motion.div variants={studentFormAnimation} initial="initial" animate="animate" exit="exit">
-            <Button type="submit" disabled={isSubmitting} className="w-full flex items-center gap-2">
-              {isSubmitting && <Loader2 className="animate-spin" />}
-              {studentForgotPasswordInfo.nextButton}
-            </Button>
-          </motion.div>
-        </form>
-      </Form>
+                    <FormMessage className="text-sm text-[#FF7373] font-medium text-left" />
+                  </FormItem>
+                )}
+              />
+            </motion.div>
 
-      <div className="w-full h-[1px] bg-[#EBEFF1]" />
+            <motion.div variants={studentFormAnimation} initial="initial" animate="animate" exit="exit">
+              <Button type="submit" disabled={isSubmitting} className="w-full flex items-center gap-2">
+                {isSubmitting && <Loader2 className="animate-spin" />}
+                {studentForgotPasswordInfo.nextButton}
+              </Button>
+            </motion.div>
+          </form>
+        </Form>
 
-      <div className="w-full flex flex-col items-center justify-center gap-4">
-        <p className="text-base font-semibold text-[#2C383F]">
-          {studentForgotPasswordInfo.rememberedPasswordText}{" "}
-          <span onClick={handleLoginLink} className="text-green-primary cursor-pointer">
-            {studentForgotPasswordInfo.rememberedPasswordLink}
-          </span>
-        </p>
+        <div className="w-full h-[1px] bg-[#EBEFF1]" />
+
+        <div className="w-full flex flex-col items-center justify-center gap-4">
+          <p className="text-base font-semibold text-[#2C383F]">
+            {studentForgotPasswordInfo.rememberedPasswordText}{" "}
+            <span onClick={handleLoginLink} className="text-green-primary cursor-pointer">
+              {studentForgotPasswordInfo.rememberedPasswordLink}
+            </span>
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

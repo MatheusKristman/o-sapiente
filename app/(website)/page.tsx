@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 
 import Banner from "@/components/home/Banner";
-import LoginModal from "@/components/home/LoginModal";
 import Hero from "@/components/home/Hero";
 import Steps from "@/components/home/Steps";
 import Benefits from "@/components/home/Benefits";
@@ -99,7 +98,6 @@ export default function Home() {
   return (
     <>
       <ProfessorModal />
-      <LoginModal />
       <RecoverPasswordModal />
       <Hero />
       <Banner />

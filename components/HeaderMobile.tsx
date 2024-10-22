@@ -118,7 +118,7 @@ const HeaderMobile = () => {
             initial="offscreen"
             animate="onscreen"
             exit="exit"
-            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex xl:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999] h-full max-h-[calc(444px+32px+32px)]"
+            className="bg-green-primary rounded-lg py-8 pl-6 pr-8 flex xl:hidden flex-col items-end justify-between gap-y-8 w-fit absolute right-0 top-0 z-[9999] h-full max-h-[calc(452px+32px+32px)]"
           >
             <Button
               variant="link"

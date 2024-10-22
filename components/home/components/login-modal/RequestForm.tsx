@@ -84,7 +84,7 @@ const RequestForm = () => {
         initial="initial"
         animate="animate"
         exit="exit"
-        className="text-2xl text-[#2C383F] font-semibold mb-9 sm:text-3xl text-left"
+        className="text-3xl text-gray-primary font-semibold mb-9 text-left !leading-tight"
       >
         {studentRequestInfo.title}
       </motion.h4>
@@ -108,6 +108,7 @@ const RequestForm = () => {
                 <FormItem className="w-full">
                   <FormControl>
                     <select
+                      disabled={subjects.length === 0}
                       defaultValue={studentRequestInfo.themePlaceholder}
                       className={cn(
                         "w-full h-12 bg-[#EBEFF1] rounded-lg px-4 py-2 text-gray-primary/70 appearance-none outline-none focus:ring-2 focus:ring-green-primary lg:cursor-pointer",

@@ -8,7 +8,6 @@ import LoginModal from "@/components/home/LoginModal";
 const RegisterPage = () => {
   return (
     <>
-      <LoginModal />
       <RegisterLogin />
       <RegisterForm />
       <RegisterAbout />

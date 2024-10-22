@@ -141,7 +141,7 @@ const RegisterForm = () => {
         initial="initial"
         animate="animate"
         exit="exit"
-        className="text-2xl text-[#2C383F] font-semibold mb-9 sm:text-3xl text-left"
+        className="text-3xl text-gray-primary font-semibold mb-9 text-left !leading-tight"
       >
         {studentRegisterInfo.title}
       </motion.h4>
@@ -322,21 +322,21 @@ const RegisterForm = () => {
         <div className="w-full h-[1px] bg-[#EBEFF1]" />
 
         <div className="w-full flex flex-col items-center justify-center gap-4">
-          <p className="text-base !leading-tight font-semibold text-[#2C383F]">
+          <p className="text-base text-center !leading-tight font-semibold text-[#2C383F]">
             {studentRegisterInfo.hasAccountText}{" "}
             <span onClick={handleLoginLink} className="text-green-primary cursor-pointer">
               {studentRegisterInfo.hasAccountLink}
             </span>
           </p>
 
-          <p className="text-base !leading-tight font-semibold text-[#2C383F]">
+          <p className="text-base text-center !leading-tight font-semibold text-[#2C383F]">
             {studentRegisterInfo.professorRegisterText}{" "}
             <span onClick={handleProfessorRegisterLink} className="text-green-primary cursor-pointer">
               {studentRegisterInfo.professorRegisterLink}
             </span>
           </p>
 
-          <span className="text-sm text-[#9DA5AA] font-medium">
+          <span className="text-sm text-center text-[#9DA5AA] font-medium">
             {studentRegisterInfo.termsText}
             <Link href="#" className="underline text-[#5A727D]">
               {studentRegisterInfo.termsLink}

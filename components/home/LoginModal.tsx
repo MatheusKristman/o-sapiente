@@ -4,17 +4,20 @@ import { BsXLg } from "react-icons/bs";
 import { HiChevronLeft } from "react-icons/hi2";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { studentRequestInfo } from "@/constants/loginModal-br";
-import { studentOverlayAnimation, studentModalAnimation } from "@/constants/framer-animations/student-modal";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import RequestForm from "./components/login-modal/RequestForm";
 import RegisterForm from "./components/login-modal/RegisterForm";
 import LoginForm from "./components/login-modal/LoginForm";
 import ForgotPasswordForm from "./components/login-modal/ForgotPasswordForm";
-import useLoginModalStore from "@/stores/useLoginModalStore";
-import { Button } from "@/components/ui/button";
 import RecoverPasswordMessage from "./components/login-modal/RecoverPasswordMessage";
 
-const LoginModal = () => {
+import { studentOverlayAnimation, studentModalAnimation } from "@/constants/framer-animations/student-modal";
+import useLoginModalStore from "@/stores/useLoginModalStore";
+import { headerTexts } from "@/constants/header-br";
+import { cn } from "@/libs/utils";
+
+const LoginModal = ({ isHeaderLoading, openLoginModal }: { isHeaderLoading: boolean; openLoginModal: () => void }) => {
   const {
     isModalOpen,
     isRegister,
@@ -37,16 +40,18 @@ const LoginModal = () => {
     isSubmitting,
   } = useLoginModalStore();
 
-  function handleCloseButton() {
-    closeModal();
-    setToNotLogin();
-    setToNotRequest();
-    setToNotRegister();
-    setToNotRecoverPassword();
-    setToNotRecoverPasswordMessage();
-    setSubject("");
-    setDescription("");
-    deactivateBackBtn();
+  function handleCloseButton(open: boolean) {
+    if (!open) {
+      closeModal();
+      setToNotLogin();
+      setToNotRequest();
+      setToNotRegister();
+      setToNotRecoverPassword();
+      setToNotRecoverPasswordMessage();
+      setSubject("");
+      setDescription("");
+      deactivateBackBtn();
+    }
   }
 
   function handleBackButton() {
@@ -70,63 +75,38 @@ const LoginModal = () => {
   }
 
   return (
-    <>
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            key="modal"
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            variants={studentOverlayAnimation}
-            className="w-screen h-screen bg-[#2C383F]/75 fixed top-0 left-0 right-0 bottom-0 z-[9999] text-center overflow-auto p-6 after:h-full after:content-[''] after:inline-block after:align-middle"
+    <Dialog open={isModalOpen} onOpenChange={handleCloseButton}>
+      <DialogTrigger asChild>
+        <Button disabled={isHeaderLoading} onClick={openLoginModal}>
+          {headerTexts.loginBtn}
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent className="overflow-x-hidden pt-20 h-full min-[510px]:h-fit min-[510px]:rounded-lg min-[510px]:max-h-[700px] overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-gray-primary/40 scrollbar-track-gray-primary/20">
+        {/* <div className={`flex ${isBackBtnActive ? "justify-between" : "justify-end"} `}> */}
+        {isBackBtnActive && (
+          <Button
+            type="button"
+            className="text-green-primary mb-6 absolute left-4 top-4"
+            variant="link"
+            size="iconSm"
+            disabled={isLoading || isSubmitting}
+            onClick={handleBackButton}
           >
-            <motion.div
-              key="modal"
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={studentModalAnimation}
-              className="w-full max-w-[550px] bg-white p-9 rounded-2xl inline-block align-middle overflow-x-hidden"
-            >
-              <div className={`flex ${isBackBtnActive ? "justify-between" : "justify-end"} mb-6`}>
-                {isBackBtnActive && (
-                  <Button
-                    type="button"
-                    className="text-green-primary"
-                    variant="link"
-                    size="icon"
-                    disabled={isLoading || isSubmitting}
-                    onClick={handleBackButton}
-                  >
-                    <HiChevronLeft size={34} />
-                  </Button>
-                )}
-
-                <Button
-                  variant="link"
-                  size="icon"
-                  type="button"
-                  disabled={isLoading || isSubmitting}
-                  className="text-green-primary"
-                  onClick={handleCloseButton}
-                >
-                  <BsXLg size={26} />
-                </Button>
-              </div>
-
-              <AnimatePresence>
-                {isRequest && <RequestForm key="request" />}
-                {isRegister && <RegisterForm key="register" />}
-                {isLogin && <LoginForm key="login" />}
-                {forgotPassword && <ForgotPasswordForm key="forgot-password" />}
-                {isRecoverPasswordMessage && <RecoverPasswordMessage />}
-              </AnimatePresence>
-            </motion.div>
-          </motion.div>
+            <HiChevronLeft size={34} />
+          </Button>
         )}
-      </AnimatePresence>
-    </>
+        {/* </div> */}
+
+        <AnimatePresence>
+          {isRequest && <RequestForm key="request" />}
+          {isRegister && <RegisterForm key="register" />}
+          {isLogin && <LoginForm key="login" />}
+          {forgotPassword && <ForgotPasswordForm key="forgot-password" />}
+          {isRecoverPasswordMessage && <RecoverPasswordMessage />}
+        </AnimatePresence>
+      </DialogContent>
+    </Dialog>
   );
 };
 
