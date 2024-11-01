@@ -24,18 +24,21 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
-        <AuthContext>
-          <Header />
-          <HeaderMobile />
-          <AdHeader />
-          <ActiveStatus />
-          <Toaster
-            position="top-center"
-            reverseOrder
-            containerStyle={{ zIndex: "99999" }}
-          />
-          {children}
-        </AuthContext>
+        {/* <AuthContext> */}
+        {/*   <Header /> */}
+        {/*   <HeaderMobile /> */}
+        {/*   <AdHeader /> */}
+        {/*   <ActiveStatus /> */}
+        {/*   <Toaster */}
+        {/*     position="top-center" */}
+        {/*     reverseOrder */}
+        {/*     containerStyle={{ zIndex: "99999" }} */}
+        {/*   /> */}
+        {/*   {children} */}
+        {/* </AuthContext> */}
+        <div className="w-full h-screen flex items-center justify-center text-center">
+          Em manutenção
+        </div>
       </body>
     </html>
   );
